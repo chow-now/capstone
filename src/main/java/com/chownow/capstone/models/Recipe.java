@@ -42,6 +42,14 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
+    @ManyToMany
+    @JoinTable(
+            name="favorites",
+            joinColumns={@JoinColumn(name="recipe_id")},
+            inverseJoinColumns={@JoinColumn(name="user_id")}
+    )
+    private List<User> favorited_by;
+
     public Recipe(){}
 
     //setter

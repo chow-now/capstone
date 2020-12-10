@@ -43,6 +43,14 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cook")
     private List<Recipe> recipes;
 
+    @ManyToMany
+    @JoinTable(
+            name="favorites",
+            joinColumns={@JoinColumn(name="user_id")},
+            inverseJoinColumns={@JoinColumn(name="recipe_id")}
+    )
+    private List<Recipe> favorites;
+
     public User(){}
 
     // Setter
