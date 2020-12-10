@@ -1,7 +1,6 @@
 package com.chownow.capstone.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.List;
 
 @Entity
@@ -34,6 +33,12 @@ public class Recipe {
     @JoinColumn(name = "cook_id")
     private User cook;
 
+    @OneToMany(mappedBy = "recipe")
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "recipe")
+    private List<Favorite> favorites;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="recipe_ingredients",
@@ -49,17 +54,6 @@ public class Recipe {
             inverseJoinColumns={@JoinColumn(name="category_id")}
     )
     private List<Category> categories;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name="recipe_images",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="image_id")}
-    )
-    private List<Image> images;
-
-    @OneToMany(mappedBy = "recipe")
-    private List<Favorite> favorites;
 
     public Recipe(){}
 

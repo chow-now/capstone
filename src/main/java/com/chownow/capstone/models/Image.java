@@ -13,21 +13,21 @@ public class Image {
     @Column(nullable = false,length = 100)
     private String url;
 
-    @ManyToMany(mappedBy = "images")
-    private List<Recipe> recipes;
+    @ManyToOne
+    private Recipe recipe;
 
 
     public Image(){}
 
-    public Image(long id, String url, List<Recipe> recipes) {
+    public Image(long id, String url, Recipe recipe) {
         this.id = id;
         this.url = url;
-        this.recipes = recipes;
+        this.recipe = recipe;
     }
 
-    public Image(String url, List<Recipe> recipes) {
+    public Image(String url, Recipe recipe) {
         this.url = url;
-        this.recipes = recipes;
+        this.recipe = recipe;
     }
 
     public long getId() {
@@ -46,11 +46,11 @@ public class Image {
         this.url = url;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public Recipe getRecipes() {
+        return recipe;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setRecipes(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

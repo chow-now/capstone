@@ -46,7 +46,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Favorite> favorites;
 
-
     @OneToMany(mappedBy = "followee")
     private List<Follow> followings;
 
