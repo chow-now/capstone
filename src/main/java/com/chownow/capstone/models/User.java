@@ -39,17 +39,16 @@ public class User {
 
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean is_admin;
-
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cook")
     private List<Recipe> recipes;
 
-    @ManyToMany
-    @JoinTable(
-            name="favorites",
-            joinColumns={@JoinColumn(name="user_id")},
-            inverseJoinColumns={@JoinColumn(name="recipe_id")}
-    )
-    private List<Recipe> favorites;
+    @OneToMany(mappedBy = "user")
+    private List<Favorite> favorites;
+
+
+    @OneToMany(mappedBy = "followee")
+    private List<Follow> followings;
 
     public User(){}
 
@@ -142,5 +141,21 @@ public class User {
 
     public void setRecipes(List<Recipe> recipes) {
         this.recipes = recipes;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
+    }
+
+    public List<Follow> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(List<Follow> followings) {
+        this.followings = followings;
     }
 }

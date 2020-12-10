@@ -48,4 +48,20 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Pantry> getPantries() {
+        return pantries;
+    }
+
+    public void setPantries(List<Pantry> pantries) {
+        this.pantries = pantries;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
 }

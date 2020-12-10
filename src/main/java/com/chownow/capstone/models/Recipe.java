@@ -42,13 +42,24 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name="favorites",
+            name="recipe_categories",
             joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="user_id")}
+            inverseJoinColumns={@JoinColumn(name="category_id")}
     )
-    private List<User> favorited_by;
+    private List<Category> categories;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="recipe_images",
+            joinColumns={@JoinColumn(name="recipe_id")},
+            inverseJoinColumns={@JoinColumn(name="image_id")}
+    )
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "recipe")
+    private List<Favorite> favorites;
 
     public Recipe(){}
 
@@ -132,6 +143,38 @@ public class Recipe {
 
     public User getCook() {
         return cook;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
     }
 
     public void setCook(User cook) {
