@@ -32,3 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 src/main/resources/application.properties
+
+### KEYS ###
+com.chownow.capstone.controllers.Config.java
+Config.java
