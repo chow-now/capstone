@@ -43,11 +43,11 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cook")
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "user")
-    private List<Favorite> favorites;
-
     @OneToMany(mappedBy = "followee")
     private List<Follow> followings;
+
+    @ManyToMany(mappedBy = "favorited_by")
+    private List<Recipe> favorites;
 
     public User(){}
 
@@ -142,19 +142,19 @@ public class User {
         this.recipes = recipes;
     }
 
-    public List<Favorite> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<Favorite> favorites) {
-        this.favorites = favorites;
-    }
-
     public List<Follow> getFollowings() {
         return followings;
     }
 
     public void setFollowings(List<Follow> followings) {
         this.followings = followings;
+    }
+
+    public List<Recipe> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Recipe> favorites) {
+        this.favorites = favorites;
     }
 }
