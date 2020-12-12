@@ -21,28 +21,27 @@ public class Recipe {
     private String difficulty;
 
     @Column(nullable = false)
-    private int cook_time;
+    private int cookTime;
 
     @Column(nullable = false)
-    private int prep_time;
+    private int prepTime;
 
     @Column(nullable = false)
     private int servings;
 
     @ManyToOne
     @JoinColumn(name = "cook_id")
-    private User cook;
+    private User chef;
 
     @OneToMany(mappedBy = "recipe")
     private List<Image> images;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name="recipe_ingredients",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="ingredient_id")}
+    @OneToMany(
+            mappedBy = "recipe",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private List<Ingredient> ingredients;
+    private List<RecipeIngredient> RecipeIngredients;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -58,30 +57,30 @@ public class Recipe {
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="user_id")}
     )
-    private List<User> favorited_by;
+    private List<User> favoritedBy;
 
     public Recipe(){}
 
     //setter
-    public Recipe(String title, String directions, String difficulty, int cook_time, int prep_time, int servings, User cook) {
+    public Recipe(String title, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.title = title;
         this.directions = directions;
         this.difficulty = difficulty;
-        this.cook_time = cook_time;
-        this.prep_time = prep_time;
+        this.cookTime = cookTime;
+        this.prepTime = prepTime;
         this.servings = servings;
-        this.cook = cook;
+        this.chef = chef;
     }
     //getter
-    public Recipe(long id, String title, String directions, String difficulty, int cook_time, int prep_time, int servings, User cook) {
+    public Recipe(long id, String title, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.id = id;
         this.title = title;
         this.directions = directions;
         this.difficulty = difficulty;
-        this.cook_time = cook_time;
-        this.prep_time = prep_time;
+        this.cookTime = cookTime;
+        this.prepTime = prepTime;
         this.servings = servings;
-        this.cook = cook;
+        this.chef = chef;
     }
 
     public long getId() {
@@ -116,20 +115,20 @@ public class Recipe {
         this.difficulty = difficulty;
     }
 
-    public int getCook_time() {
-        return cook_time;
+    public int getCookTime() {
+        return cookTime;
     }
 
-    public void setCook_time(int cook_time) {
-        this.cook_time = cook_time;
+    public void setCookTime(int cookTime) {
+        this.cookTime = cookTime;
     }
 
-    public int getPrep_time() {
-        return prep_time;
+    public int getPrepTime() {
+        return prepTime;
     }
 
-    public void setPrep_time(int prep_time) {
-        this.prep_time = prep_time;
+    public void setPrepTime(int prepTime) {
+        this.prepTime = prepTime;
     }
 
     public int getServings() {
@@ -140,16 +139,16 @@ public class Recipe {
         this.servings = servings;
     }
 
-    public User getCook() {
-        return cook;
+    public User getChef() {
+        return chef;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public List<RecipeIngredient> getIngredients() {
+        return RecipeIngredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredients(List<RecipeIngredient> RecipeIngredients) {
+        this.RecipeIngredients = RecipeIngredients;
     }
 
     public List<Category> getCategories() {
@@ -168,15 +167,15 @@ public class Recipe {
         this.images = images;
     }
 
-    public List<User> getFavorited_by() {
-        return favorited_by;
+    public List<User> getFavoritedBy() {
+        return favoritedBy;
     }
 
-    public void setFavorited_by(List<User> favorited_by) {
-        this.favorited_by = favorited_by;
+    public void setFavoritedBy(List<User> favoritedBy) {
+        this.favoritedBy = favoritedBy;
     }
 
-    public void setCook(User cook) {
-        this.cook = cook;
+    public void setChef(User chef) {
+        this.chef = chef;
     }
 }

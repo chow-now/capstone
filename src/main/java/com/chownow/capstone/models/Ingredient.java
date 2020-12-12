@@ -15,11 +15,19 @@ public class Ingredient {
     @NotBlank(message = "Name can't be empty")
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private List<Pantry> pantries;
+    @OneToMany(
+            mappedBy = "ingredient",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PantryIngredient> pantryIngredients;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private List<Recipe> recipes;
+    @OneToMany(
+            mappedBy = "ingredient",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<RecipeIngredient> recipeIngredients;
 
 
     public Ingredient(){}
@@ -49,19 +57,19 @@ public class Ingredient {
         this.name = name;
     }
 
-    public List<Pantry> getPantries() {
-        return pantries;
+    public List<PantryIngredient> getPantryIngredients() {
+        return pantryIngredients;
     }
 
-    public void setPantries(List<Pantry> pantries) {
-        this.pantries = pantries;
+    public void setPantryIngredients(List<PantryIngredient> pantryIngredients) {
+        this.pantryIngredients = pantryIngredients;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public List<RecipeIngredient> getRecipeIngredients() {
+        return recipeIngredients;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
     }
 }
