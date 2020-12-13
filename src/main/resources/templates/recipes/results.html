@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Results')">
     <meta charset="UTF-8">
     <title>Results</title>
 </head>
 <body>
 
-<form class="w-50 mx-auto" action="/recipes/search" method="get">
-    <div class="form-group">
-        <input type="text" class="form-control" id="main_search" placeholder="Search Recipe name" name="term">
-    </div>
+<form class="w-50 mx-auto" th:action="@{/search}" method="get">
+    <input type="text" class="form-control" id="main_search" placeholder="Search Recipe name" name="term">
 </form>
+
+
+
+<div th:each="recipe : ${searchResults}">
+    <div>
+        <p th:text="${recipe.title}"></p>
+        <img th:src="${recipe.images}"/>
+    </div>
+</div>
 
 </body>
 </html>
