@@ -20,11 +20,11 @@ public class User {
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "First name can't be empty")
-    private String first_name;
+    private String firstName;
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "Last name can't be empty")
-    private String last_name;
+    private String lastName;
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Password can't be empty")
@@ -35,39 +35,39 @@ public class User {
     private String avatar;
 
     @Column(columnDefinition = "TEXT")
-    private String about_me;
+    private String aboutMe;
 
     @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean is_admin;
+    private Boolean isAdmin;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cook")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
     private List<Recipe> recipes;
 
     @OneToMany(mappedBy = "followee")
     private List<Follow> followings;
 
-    @ManyToMany(mappedBy = "favorited_by")
+    @ManyToMany(mappedBy = "favoritedBy")
     private List<Recipe> favorites;
 
     public User(){}
 
     // Setter
-    public User(String email, String first_name, String last_name, String password) {
+    public User(String email, String firstName, String lastName, String password) {
         this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
     }
     // Getter
-    public User(long id, String email, String first_name, String last_name, String password, String avatar, String about_me, Boolean is_admin) {
+    public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
         this.id = id;
         this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.avatar = avatar;
-        this.about_me = about_me;
-        this.is_admin = is_admin;
+        this.aboutMe = aboutMe;
+        this.isAdmin = isAdmin;
     }
 
     public long getId() {
@@ -86,20 +86,20 @@ public class User {
         this.email = email;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {
@@ -118,20 +118,20 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getAbout_me() {
-        return about_me;
+    public String getAboutMe() {
+        return aboutMe;
     }
 
-    public void setAbout_me(String about_me) {
-        this.about_me = about_me;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
-    public Boolean getIs_admin() {
-        return is_admin;
+    public Boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setIs_admin(Boolean is_admin) {
-        this.is_admin = is_admin;
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public List<Recipe> getRecipes() {
