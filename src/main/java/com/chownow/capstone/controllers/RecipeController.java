@@ -3,7 +3,6 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
-import org.hibernate.cache.spi.CacheTransactionSynchronization;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,8 +61,8 @@ public class RecipeController {
 
     @PostMapping("/recipe/new")
     public String submitPost(@ModelAttribute Recipe recipeToBeSaved) {
-        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recipeToBeSaved.setChef(userDb);
+//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        recipeToBeSaved.setChef(userDb);
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() ;
     }
@@ -82,8 +81,8 @@ public class RecipeController {
 
     @PostMapping("/recipes/{id}/edit")
     public String editRecipe(Recipe recipeToBeSaved) {
-        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recipeToBeSaved.setChef(userDb);
+//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        recipeToBeSaved.setChef(userDb);
         recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes";
     }
