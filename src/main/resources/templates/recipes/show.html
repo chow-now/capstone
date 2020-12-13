@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
+<nav th:replace="partials/navbar :: nav"></nav>
 
 <main class="container">
     <div class="card">
@@ -15,10 +16,9 @@
         <p th:text="${recipe.prepTime}"></p>
         <p th:text="${recipe.servings}"></p>
         <p th:text="${recipe.directions}"></p>
-
-
     </div>
 </main>
-
+<footer th:replace="partials/partials :: footer"></footer>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>

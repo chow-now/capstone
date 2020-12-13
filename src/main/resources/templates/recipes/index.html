@@ -6,7 +6,6 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: nav"></nav>
-<header th:replace="partials/header :: header('Here are all of the recipes')"></header>
 
 <main class="container">
     <div class="card" th:each="recipe : ${recipes}">

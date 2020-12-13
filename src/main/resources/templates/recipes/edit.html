@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Create a Recipe')">
+<head th:replace="partials/head :: head('Edit a Recipe')">
     <meta charset="UTF-8">
 </head>
 <body>
+<nav th:replace="partials/navbar :: nav"></nav>
 
+<main class="container">
+    <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
+        Title:
+        <input th:field="*{title}" id="name-ipt" th:value="${recipe.title}"/>
+        <br />
+        Description:
+        <input th:field="*{difficulty}" th:value="${recipe.difficulty}"/>
+        <br />
+        <input class="btn btn-success" type="submit" />
+    </form>
+    <form th:action="@{/recipes/{id}/delete(id=${recipe.getId()})}" th:method="post">
+        <button class="btn btn-danger">Delete</button>
+    </form>
+
+</main>
+
+<footer th:replace="partials/partials :: footer"></footer>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>
