@@ -27,9 +27,7 @@ public class SearchExampleController {
         viewModel.addAttribute("term", SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term));
 //        empty[]
         List<ApiTest> listReturned = SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term);
-
         viewModel.addAttribute("searchResults", listReturned);
         return "recipes/results";
     }
-
 }
