@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>Title</title><body>
+</body>
+<div>
+  <!--<form th:action="@{/logout}" th:method="post">-->
+  <!--  <button class="btn-link btn" style="margin-top: 8px">Logout</button>-->
+  <!--</form>-->
+</div>
+
+<form th:action="@{/users/{id}/edit(id=${user.id})}" th:method="POST"><!--(id=${user.id})-->
+  First Name:
+  <input name="fname" id="name-ipt" th:value="${user.first_name}"/>
+  <br />
+  Last Name:
+  <input name="lname" th:value="${user.last_name}"/>
+  <br />
+  Email:
+  <input name="email" th:value="${user.email}"/>
+  <br />
+
+<!--  <br />-->
+<!--    <p>Is Admin?</p>-->
+<!--    <input type="radio" id="admin" name="admintest" value="1" th:field="*{is_admin}">-->
+<!--    <label for="admin">Admin</label><br>-->
+<!--    <input type="radio" id="nadmin" name="admintest" value="0">-->
+<!--    <label for="nadmin">Not Admin</label><br>-->
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<form th:action="@{/users/{id}/delete(id=${user.id})}" th:method="post">
+  <button class="btn btn-danger" type="submit">Delete User</button>
+</form>
+</body>
+</html>

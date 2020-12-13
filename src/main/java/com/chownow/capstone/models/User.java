@@ -14,6 +14,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(length = 20, nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false, length = 100, unique = true)
     @Email(message = "Email can't be empty")
     private String email;
@@ -37,9 +40,10 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String aboutMe;
 
+    /*Can We remove nullable = false b/c I'm lazy and implementing roles anyways*/
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean isAdmin;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
     private List<Recipe> recipes;
 
@@ -52,15 +56,17 @@ public class User {
     public User(){}
 
     // Setter
-    public User(String email, String firstName, String lastName, String password) {
+    public User(String username, String email, String firstName, String lastName, String password) {
+        this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
     }
     // Getter
-    public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
+    public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
         this.id = id;
+        this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,12 +76,27 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
+    public User(User copy) {
+        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+        email = copy.email;
+        username = copy.username;
+        password = copy.password;
+    }
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -157,4 +178,6 @@ public class User {
     public void setFavorites(List<Recipe> favorites) {
         this.favorites = favorites;
     }
+
+
 }
