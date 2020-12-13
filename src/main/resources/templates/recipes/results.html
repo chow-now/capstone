@@ -6,28 +6,11 @@
 </head>
 <body>
 
-
-
-</div>
-<div class="container">
-    <div th:each="result:${searchResults}">
-        <div class="card m-3" style="display: inline-block">
-            <!--Card image-->
-            <div class="view overlay">
-                <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg"
-                     alt="Card image cap">
-                <a href="#">
-                    <div class="mask rgba-white-slight"></div>
-                </a>
-            </div>
-            <div class="card-body">
-                <h3 class="card-title">Search Results</h3>
-                <p>author: <span th:text="${result.id}"></span></p>
-                <p class="card-text" th:text="${result.title}"></p>
-            </div>
-        </div>
+<form class="w-50 mx-auto" action="/recipes/search" method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" id="main_search" placeholder="Search Recipe name" name="term">
     </div>
-</div>
+</form>
 
 </body>
 </html>
