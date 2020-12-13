@@ -27,7 +27,7 @@ public class SearchExampleController {
     public String getRecipes(@RequestParam(required = false, name="term") String term, Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term));
 //        empty[]
-        viewModel.addAttribute("searchResults", recipeRepository.findAllByTitle(term));
+//        viewModel.addAttribute("searchResults", recipeRepository.findAllByTitle(term));
         return "recipes/results";
     }
 
