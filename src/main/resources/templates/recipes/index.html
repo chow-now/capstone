@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="partials/head :: head('All Recipes')">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Roll the Dice</title>
 </head>
 <body>
+<nav th:replace="partials/navbar :: nav"></nav>
 
+<main class="container">
+    <div class="card" th:each="recipe : ${recipes}">
+        <a th:href="@{/recipes/{id}(id=${recipe.getId()})}" class="text-center" th:text="${recipe.title}"></a>
+        <p th:text="${recipe.difficulty}"></p>
+    </div>
+</main>
+
+<footer th:replace="partials/partials :: footer"></footer>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>
