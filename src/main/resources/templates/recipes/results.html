@@ -13,8 +13,8 @@
 
 <div th:each="recipe : ${searchResults}">
     <div>
-        <p th:text="${recipe.title}"></p>
-        <img th:src="${recipe.images}"/>
+        <p th:text="${recipe.getTitle()}"></p>
+        <img th:src="${recipe.getImage()}"/>
     </div>
 </div>
 
