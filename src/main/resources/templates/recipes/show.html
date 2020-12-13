@@ -9,8 +9,14 @@
 <main class="container">
     <div class="card">
         <h3 class="text-center" th:text="${recipe.title}"></h3>
-        <p th:text="${recipe.description}"></p>
-        <p th:text="${username}"></p>
+        <p th:text="${chef}"></p>
+        <p th:text="${recipe.difficulty}"></p>
+        <p th:text="${recipe.cookTime}"></p>
+        <p th:text="${recipe.prepTime}"></p>
+        <p th:text="${recipe.servings}"></p>
+        <p th:text="${recipe.directions}"></p>
+
+
     </div>
 </main>
 

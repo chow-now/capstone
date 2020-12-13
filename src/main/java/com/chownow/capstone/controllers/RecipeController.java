@@ -1,16 +1,15 @@
 package com.chownow.capstone.controllers;
 
-import com.chownow.capstone.models.Category;
-import com.chownow.capstone.models.Image;
-import com.chownow.capstone.models.Recipe;
-import com.chownow.capstone.models.RecipeIngredient;
+import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 import org.hibernate.cache.spi.CacheTransactionSynchronization;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -42,36 +41,55 @@ public class RecipeController {
         String chef = firstName + " " + lastName;
         model.addAttribute("chef", chef);
 
-        String title = recipe.getTitle();
-        model.addAttribute("title", title);
-
-        String directions = recipe.getDirections();
-        model.addAttribute("directions", directions);
-
-        String difficulty = recipe.getDifficulty();
-        model.addAttribute("difficulty", difficulty);
-
-        int cookTime = recipe.getCookTime();
-        model.addAttribute("cookTime", cookTime);
-
-        int prepTime = recipe.getPrepTime();
-        model.addAttribute("prepTime", prepTime);
-
-        int servings = recipe.getServings();
-        model.addAttribute("servings", servings);
-
-        List<Image> images = recipe.getImages();
-        model.addAttribute("images", images);
-
-        List<RecipeIngredient> ingredients = recipe.getIngredients();
-        model.addAttribute("ingredients", ingredients);
-
-        List<Category> categories = recipe.getCategories();
-        model.addAttribute("categories", categories);
+//        List<Image> images = recipe.getImages();
+//        model.addAttribute("images", images);
+//
+//        List<RecipeIngredient> ingredients = recipe.getIngredients();
+//        model.addAttribute("ingredients", ingredients);
+//
+//        List<Category> categories = recipe.getCategories();
+//        model.addAttribute("categories", categories);
 
         return "recipes/show";
 
     }
+
+    @GetMapping("/recipes/new")
+    public String showCreateRecipe(Model model) {
+        model.addAttribute("recipe", new Recipe());
+        return "recipes/new";
+    }
+
+    @PostMapping("/recipe/new")
+    public String submitPost(@ModelAttribute Recipe recipeToBeSaved) {
+        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        recipeToBeSaved.setChef(userDb);
+        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes/" + dbRecipe.getId() ;
+    }
+
+    @PostMapping("/recipes/{id}/delete")
+    public String deleteRecipe(@PathVariable long id) {
+        recipeDao.deleteById(id);
+        return "redirect:/recipes";
+    }
+
+    @GetMapping("/recipes/{id}/edit")
+    public String showEditRecipe(@PathVariable long id, Model model) {
+        model.addAttribute("recipe", recipeDao.getOne(id));
+        return "recipes/edit";
+    }
+
+    @PostMapping("/recipes/{id}/edit")
+    public String editRecipe(Recipe recipeToBeSaved) {
+        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        recipeToBeSaved.setChef(userDb);
+        recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes";
+    }
+
+
+
 
 
 }
