@@ -47,11 +47,11 @@ public class Pantry {
         this.owner = owner;
     }
 
-    public List<PantryIngredient> getIngredients() {
+    public List<PantryIngredient> getPantryIngredients() {
         return pantryIngredients;
     }
 
-    public void setIngredients(List<PantryIngredient> pantryIngredients) {
+    public void setPantryIngredients(List<PantryIngredient> pantryIngredients) {
         this.pantryIngredients = pantryIngredients;
     }
 }

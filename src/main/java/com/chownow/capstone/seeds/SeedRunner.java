@@ -182,7 +182,8 @@ public class SeedRunner {
         int usersSize = userDao.findAll().size();
         for(long i = 1; i<=usersSize; i++){
             Recipe recipe = new Recipe(
-                    faker.food().dish(), // title
+                    faker.food().dish(), // title,
+                    faker.friends().quote(),
                     faker.buffy().quotes(), // directions
                     levels.get(faker.number().numberBetween(0,3)), // difficulty
                     faker.number().numberBetween(1,1200), // cookTime

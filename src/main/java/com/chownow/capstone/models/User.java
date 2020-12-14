@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,23 +16,40 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 100, unique = true)
+
+
     @Email(message = "Email can't be empty")
+    @Pattern(
+            regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
+            message = "Please provide a valid email address"
+    )
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20)
+
     @NotBlank(message = "First name can't be empty")
+    @Size(min = 2,message = "That name is too short")
+    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Name must not contain numbers")
+    @Column(nullable = false, length = 20)
     private String firstName;
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "Last name can't be empty")
+    @Size(min = 2,message = "That last name is too short")
+    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Last name must not contain numbers")
     private String lastName;
 
+
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "Should have 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long"
+    )
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Password can't be empty")
     @JsonIgnore
     private String password;
 
+    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
     @Column(length = 250)
     private String avatar;
 
@@ -54,8 +73,8 @@ public class User {
     // Setter
     public User(String email, String firstName, String lastName, String password) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
         this.password = password;
     }
     // Getter

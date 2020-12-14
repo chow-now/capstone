@@ -2,6 +2,8 @@ package com.chownow.capstone.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,8 +13,10 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message= "Please provide a name")
+    @Size(min = 2, message = "Name should be a bit longer.")
+    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Name must not contain numbers")
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Name can't be empty")
     private String name;
 
     @OneToMany(
