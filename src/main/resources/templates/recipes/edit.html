@@ -11,8 +11,25 @@
         Title:
         <input th:field="*{title}" id="name-ipt" th:value="${recipe.title}"/>
         <br />
-        Description:
-        <input th:field="*{difficulty}" th:value="${recipe.difficulty}"/>
+        Difficulty:
+        <div class="form-group">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="easy" name="easy" class="custom-control-input" value="easy"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="easy">Easy</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="medium" name="medium" class="custom-control-input" value="medium"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="medium">Medium</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="hard" name="hard" class="custom-control-input" value="hard"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="hard">Hard</label>
+            </div>
+        </div>
+<!--        <input th:field="*{difficulty}" th:value="${recipe.difficulty}"/>-->
         <br />
         <input class="btn btn-success" type="submit" />
     </form>
