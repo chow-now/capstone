@@ -1,6 +1,6 @@
-package com.chownow.capstone.services.implementations;
+package com.chownow.capstone.services;
 
-import com.chownow.capstone.models.ApiTest;
+import com.chownow.capstone.models.Recipe;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -34,21 +34,25 @@ public class SpoonApi {
         return (JSONObject) jsonParser.parse(response.body());
     }
 
-    public static List<ApiTest> getRecipes(String uri) throws InterruptedException, ParseException, IOException {
+    public static List<Recipe> getRecipes(String uri) throws InterruptedException, ParseException, IOException {
         JSONObject object = response(uri);
         JSONArray array = (JSONArray) object.get("results");
 
-        List<ApiTest> list = new ArrayList<>();
+        List<Recipe> list = new ArrayList<>();
         for (Object obj : array) {
             JSONObject miniObject = (JSONObject) obj;
-            ApiTest recipe = new ApiTest();
+            Recipe recipe = new Recipe();
             recipe.setId((long) miniObject.get("id"));
             recipe.setTitle((String) miniObject.get("title"));
-            recipe.setImage((String) miniObject.get("image"));
+
+//            Image image = new Image("", recipe);
+//            image.setId((long) miniObject.get(recipe.getId()));
+//            image.setImage((String) miniObject.get());
+
             list.add(recipe);
         }
         System.out.println("list = " + list);
-        // TODO: pass this to view
+
         return list;
     }
 }

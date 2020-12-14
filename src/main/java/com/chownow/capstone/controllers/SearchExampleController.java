@@ -1,9 +1,8 @@
 package com.chownow.capstone.controllers;
 
-import com.chownow.capstone.models.ApiTest;
+import com.chownow.capstone.models.Recipe;
 import com.chownow.capstone.repos.RecipeRepository;
-import com.chownow.capstone.services.implementations.SpoonApi;
-import org.json.simple.parser.JSONParser;
+import com.chownow.capstone.services.SpoonApi;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +23,10 @@ public class SearchExampleController {
 
     @GetMapping("/search")
     public String getRecipes(@RequestParam(required = false, name="term") String term, Model viewModel) throws InterruptedException, ParseException, IOException {
-        viewModel.addAttribute("term", SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term));
+        viewModel.addAttribute("term", SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term + "&number=10&offset=0"));
 //        empty[]
-        List<ApiTest> listReturned = SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term);
+        List<Recipe> listReturned = SpoonApi.getRecipes("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" + term + "&number=10&offset=0");
         viewModel.addAttribute("searchResults", listReturned);
-        return "recipes/results";
+        return "recipes/search";
     }
 }
