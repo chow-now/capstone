@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Navbar Fragment</title>
 </head>
 <body>
-<nav th:fragment="nav">
-    <ul class="nav bg-dark">
-        <li class="nav-item">
-            <a class="nav-link text-light" th:href="@{/}">ChowNow</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" th:href="@{/recipes}">Recipes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" th:href="@{/recipes/create}">Create Recipe</a>
-        </li>
-        <li class="nav-item ml-auto">
-            <a class="nav-link text-light" th:href="@{/users/new}">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" th:href="@{/sessions/login}">Login</a>
-        </li>
-        <li class="nav-item">
-            <form th:action="@{/logout}" th:method="post">
-                <button class="btn-link btn" >Logout</button>
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#" th:href="@{~/}">CHOWNOW</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{~/recipes}"><i class="fa fa-home"></i>Recipes</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{~/users}">Users</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{~/admin/dashboard}">Admin</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+                <button sec:authorize="isAnonymous()" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit"><a th:href="@{/sign-up}">Sign up</a></button>
+                <button sec:authorize="isAnonymous()" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit"><a th:href="@{/login}">Log in</a></button>
             </form>
-        </li>
-    </ul>
-</nav>
+        </div>
+    </nav>
+</div>
 </body>
 </html>
