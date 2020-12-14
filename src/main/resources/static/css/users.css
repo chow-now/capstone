@@ -1,0 +1,34 @@
+body{
+    margin-top:20px;
+}
+
+.people-nearby .google-maps{
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.people-nearby .google-maps .map{
+    height: 300px;
+    width: 100%;
+    border: none;
+}
+
+.people-nearby .nearby-user{
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+.profile-photo{
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+}
+
+.test {
+    background-color: yellow;
+}
+
+.test2 {
+    background-color: red;
+}

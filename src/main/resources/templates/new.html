@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <!--Todo: Figure Out what this means-->
@@ -9,14 +9,24 @@
 
   <!--Icon CDN-->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 
   <!--Local CSS-->
-  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-  <link th:href="@{/css/form.css}" rel="stylesheet" />
+  <link th:href="@{/../css/bootstrap.min.css}" rel="stylesheet" />
+  <link th:href="@{/../css/form.css}" rel="stylesheet" />
 </head>
 <body>
+<header th:insert="partials/navbar.html :: nav"></header>
 
 <!--DisplayErrors-->
+<!--Todo: Upgrade error messages-->
 <div th:if="${param.error}">
   Invalid Username and Password.
 </div>
@@ -60,16 +70,24 @@
       <button type="submit" class="btn btn-block create-account">Create Account</button>
     </div>
   </form>
-  <div class="social-media">
-    <p th:each="url : ${urls}">
-      <a th:text="${url.key}" th:href="${url.value}">Client</a>
-    </p>
-    <h5>Sign up with social media</h5>
-    <div class="social-icons">
-      <a href="#"><i class="icon-social-facebook" title="Facebook"></i></a>
-      <a href="#"><i class="icon-social-google" title="Google"></i></a>
-    </div>
-  </div>
+  <!--Todo: Social Media-->
+<!--  <div class="social-media">-->
+<!--    <p th:each="url : ${urls}">-->
+<!--      <a th:text="${url.key}" th:href="${url.value}">Client</a>-->
+<!--    </p>-->
+<!--    <div class="social-auth-links text-center">-->
+<!--      <p>- OR -</p>-->
+<!--      <a href="#" class="btn btn-block btn-primary">-->
+<!--        <i class="fab fa-facebook mr-2"></i>-->
+<!--        Sign up using Facebook-->
+<!--      </a>-->
+<!--      <a href="#" class="btn btn-block btn-danger">-->
+<!--        <i class="fab fa-google-plus mr-2"></i>-->
+<!--        Sign up using Google+-->
+<!--      </a>-->
+<!--    </div>-->
+<!--    <a href="login.html" class="text-center">I already have a membership</a>-->
+<!--</div>-->
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>

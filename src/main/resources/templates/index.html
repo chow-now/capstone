@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>CHOWNOW</title>
+
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
 </head>
 <body>
-<header th:insert="partials/navbar.html :: nav"> </header>
+<header th:insert="partials/navbar.html :: nav"></header>
 
     <h1>WELCOME TO CHOWNOW</h1>
     <h3>nom nom nom nom .....</h3>
     <div sec:authorize="isAuthenticated()">
         This content is only shown to authenticated users.
-
         User ID: <span th:text="${#authentication.principal.id}"/>
         Username: <span th:text="${#authentication.principal.username}"/>
         Email: <span th:text="${#authentication.principal.email}"/>
