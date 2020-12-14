@@ -6,19 +6,34 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: nav"></nav>
+<div class="container d-flex justify-content-center my-3">
+    <div class="card d-flex justify-content-center" style="width: 80%;">
+        <img th:src="${images[0].url}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${recipe.title}">Recipe title</h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${chef}">Chef</h6>
+            <div th:each ="category : ${categories}">
+                <span class="badge rounded-pill bg-light text-dark" th:text="${category.getName()}">category</span>
+            </div>
+            <p class="card-text">Difficulty: <span th:text="${recipe.difficulty}"></span></p>
+            <p class="card-text">Cook Time: <span th:text="${recipe.cookTime/60}"></span>:<span
+                    th:text="${recipe.cookTime%60}"></span></p>
+            <p class="card-text">Prep Time: <span th:text="${recipe.prepTime/60}"></span>:<span
+                    th:text="${recipe.prepTime%60}"></span></p>
+            <p class="card-text">Servings: <span th:text="${recipe.servings}"></span></p>
+            <ul th:each="ingredient : ${ingredients}">
+                <li class="card-text"><span th:text="${ingredient.getAmount()}"></span> <span
+                        th:text="${ingredient.getUnit()}"></span>
+                    <span th:text="${ingredient.getIngredient().getName()}"></span></li>
+            </ul>
+            <p class="card-text">Directions: <span th:text="${recipe.directions}"></span></p>
 
-<main class="container">
-    <div class="card">
-        <h3 class="text-center" th:text="${recipe.title}"></h3>
-        <p th:text="${chef}"></p>
-        <p th:text="${recipe.difficulty}"></p>
-        <p th:text="${recipe.cookTime}"></p>
-        <p th:text="${recipe.prepTime}"></p>
-        <p th:text="${recipe.servings}"></p>
-        <p th:text="${recipe.directions}"></p>
+            <a href="/recipes" class="btn btn-primary">Back to Recipes</a>
+        </div>
     </div>
-</main>
-<footer th:replace="partials/partials :: footer"></footer>
+</div>
+
+<footer th:replace="partials/footer :: footer"></footer>
 <th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>

@@ -39,15 +39,12 @@ public class RecipeController {
         String lastName = recipe.getChef().getLastName();
         String chef = firstName + " " + lastName;
         model.addAttribute("chef", chef);
-
-//        List<Image> images = recipe.getImages();
-//        model.addAttribute("images", images);
-//
-//        List<RecipeIngredient> ingredients = recipe.getIngredients();
-//        model.addAttribute("ingredients", ingredients);
-//
-//        List<Category> categories = recipe.getCategories();
-//        model.addAttribute("categories", categories);
+        List<Image> images = recipe.getImages();
+        model.addAttribute("images", images);
+        List<RecipeIngredient> ingredients = recipe.getIngredients();
+        model.addAttribute("ingredients", ingredients);
+        List<Category> categories = recipe.getCategories();
+        model.addAttribute("categories", categories);
 
         return "recipes/show";
 
