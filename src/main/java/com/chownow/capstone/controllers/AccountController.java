@@ -1,9 +1,11 @@
 package com.chownow.capstone.controllers;
 
+import com.chownow.capstone.models.Recipe;
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,8 @@ public class AccountController {
 	@Autowired
 	private PantryRepository pantryDao;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/sign-up")
 	public String showSingnupForm(Model model){
@@ -42,8 +44,8 @@ public class AccountController {
 
 	@PostMapping("/sign-up")
 	public String newUser(@ModelAttribute User user) {
-		String hash = passwordEncoder.encode(user.getPassword());
-		user.setPassword(hash);
+		/*String hash = passwordEncoder.encode(user.getPassword());
+		user.setPassword(hash);*/
 		userDao.save(user);
 		return "redirect:/";
 	}
@@ -71,14 +73,28 @@ public class AccountController {
 		model.addAttribute("pantry", pantryDao.findPantryByOwner(user));
 		/*Get Pantry Ingredients*/
 		/*4am trying to do some crazy method chaining is there a better way to declare what I need*/
-		model.addAttribute("pantry", pantryIngredientDao.findPantryIngredientsByPantryId(pantryDao.findPantryByOwner(user)));
+		model.addAttribute("pantryIngredients", pantryIngredientDao.findAllByPantry_Id(4));
 		return "/users/show";
+	}
+
+//	@PostMapping("/users/{id}/edit")
+//	public String editRecipe(User userToBeSaved) {
+//		User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		userToBeSaved.setUser(userDb); /*Todo: make setUser*/
+//		userDao.save(userToBeSaved);
+//		return "redirect:/user";
+//	}
+
+	@GetMapping("users/{id}/edit")
+	public String showEditUser(@PathVariable long id, Model model){
+		model.addAttribute("user",userDao.getOne(id));
+		return "/users/edit";
 	}
 
 	@PostMapping("users/{id}/edit")
 	public String editUser(@PathVariable long id, Model model){
 		model.addAttribute("user",userDao.getOne(id));
-		return "redirect:/users/show";
+		return "redirect:/users/edit";
 	}
 
 	@PostMapping("/users/{id}/delete")

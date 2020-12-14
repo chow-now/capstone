@@ -14,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    /*Todo:Added a username b/c ez*/
     @Column(length = 20, nullable = false, unique = true)
     private String username;
 
@@ -53,6 +54,16 @@ public class User {
     @ManyToMany(mappedBy = "favoritedBy")
     private List<Recipe> favorites;
 
+    /*Todo: I think I need to add a owner column in order to be*/
+
+    /*Todo: Authorization*/
+    /*
+    @Column
+    private boolean disabled = false;
+    public void disable() {
+        this.disabled = true;
+    }*/
+
     public User(){}
 
     // Setter
@@ -63,8 +74,9 @@ public class User {
         this.lastName = lastName;
         this.password = password;
     }
+
     // Getter
-    public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
+    public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -74,12 +86,13 @@ public class User {
         this.avatar = avatar;
         this.aboutMe = aboutMe;
         this.isAdmin = isAdmin;
+        /*this.disabled = disabled;*/
     }
 
     public User(User copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
-        email = copy.email;
         username = copy.username;
+        email = copy.email;
         password = copy.password;
     }
 
