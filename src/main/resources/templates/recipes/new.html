@@ -10,7 +10,41 @@
 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
     Title:
     <input th:field="*{title}"/>
-
+    <br />
+    Difficulty:
+    <div class="form-group">
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="easy" name="easy" class="custom-control-input" value="easy"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="easy">Easy</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="medium" name="medium" class="custom-control-input" value="medium"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="medium">Medium</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="hard" name="hard" class="custom-control-input" value="hard"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="hard">Hard</label>
+        </div>
+    </div>
+    <br />
+    Prep Time:
+    <input th:field="*{prep_time}"/>
+    <br />
+    Cook Time:
+    <input th:field="*{cook_time}"/>
+    <br />
+    Servings:
+    <input th:field="*{servings}"/>
+    <br />
+    Directions:
+    <textarea th:field="*{directions}"/>
+    <br />
+    Ingredients:
+    <textarea th:field="*{ingredients}"/>
+    <br />
     <button>Submit</button>
 </form>
 

@@ -59,11 +59,13 @@ public class RecipeController {
     }
 
     @PostMapping("/recipe/new")
-    public String submitPost(@ModelAttribute Recipe recipeToBeSaved) {
+    public String submitRecipe(@ModelAttribute Recipe recipeToBeSaved) {
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
+        recipeToBeSaved.setChef(userDoa.getOne(1L));
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes/" + dbRecipe.getId() ;
+
+        return "redirect:/recipes/" + dbRecipe.getId();
     }
 
     @PostMapping("/recipes/{id}/delete")
@@ -75,13 +77,22 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
+        Recipe recipe = recipeDao.getOne(id);
+
+//        List<Image> images = recipe.getImages();
+//        model.addAttribute("images", images);
+        List<RecipeIngredient> ingredients = recipe.getIngredients();
+        model.addAttribute("ingredients", ingredients);
+//        List<Category> categories = recipe.getCategories();
+//        model.addAttribute("categories", categories);
         return "recipes/edit";
     }
 
     @PostMapping("/recipes/{id}/edit")
     public String editRecipe(Recipe recipeToBeSaved) {
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        recipeToBeSaved.setChef(userDb);
+        recipeToBeSaved.setChef(userDoa.getOne(1L));
+
         recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes";
     }
