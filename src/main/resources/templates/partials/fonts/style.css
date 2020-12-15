@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Martel:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+
+.font-Boogaloo {
+    font-family: 'Boogaloo', cursive;
+}
+
+.font-Martel{
+    font-family: 'Martel', serif;
+}
+
+.font-Rajdhani {
+    font-family: 'Rajdhani', sans-serif;
+}
+

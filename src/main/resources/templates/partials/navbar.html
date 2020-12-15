@@ -1,33 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Navbar Fragment</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Template</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
 </head>
 <body>
-<div th:fragment="nav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#" th:href="@{~/}">CHOWNOW</a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/recipes}"><i class="fa fa-home"></i>Recipes</a>
-                </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/users}">Users</a>
-                </li>
-                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{~/admin/dashboard}">Admin</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
-                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
-                <button sec:authorize="isAnonymous()" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit"><a th:href="@{/sign-up}">Sign up</a></button>
-                <button sec:authorize="isAnonymous()" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit"><a th:href="@{/login}">Log in</a></button>
-            </form>
-        </div>
-    </nav>
-</div>
+
+<!--Main Navigation-->
+<header th:fragment="headerv1">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
+    <a class="navbar-brand" href="#" th:href="@{~/}"><strong>ChowNow</strong></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" th:href="@{~/about}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" th:href="@{~/recipes}"></i>Recipes</a>
+        </li>
+        <li sec:authorize="isAuthenticated()" class="nav-item active">
+          <a class="nav-link" href="#" th:href="@{~/users}"><span class="sr-only">(current)</span>Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Opinions</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav nav-flex-icons">
+        <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+          <li class="nav-item" sec:authorize="isAnonymous()">
+            <a class="nav-link"><i class="fas fa-user-plus"></i></a>
+          </li>
+          <li class="nav-item" sec:authorize="isAnonymous()">
+            <a class="nav-link"><i class="fas fa-user-lock"></i></i></i></a>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="nav-link"><i class="fas fa-sign-out-alt"></i></i></a>
+          </li>
+        </form>
+      </ul>
+    </div>
+  </nav>
+</header>
+<!--Main Navigation-->
+
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 </body>
 </html>
