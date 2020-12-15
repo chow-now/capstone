@@ -57,9 +57,10 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String aboutMe;
 
+    /*Can We remove nullable = false b/c I'm lazy and implementing roles anyways*/
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean isAdmin;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
     @JsonBackReference
     private List<Recipe> recipes;
@@ -72,18 +73,29 @@ public class User {
     @JsonBackReference
     private List<Recipe> favorites;
 
+    /*Todo: I think I need to add a owner column in order to be*/
+
+    /*Todo: Authorization*/
+    /*
+    @Column
+    private boolean disabled = false;
+    public void disable() {
+        this.disabled = true;
+    }*/
+
     public User(){}
 
     // Setter
-    public User(String email, String firstName, String lastName, String password) {
+    public User(String username, String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
         this.password = password;
         this.isAdmin = false;
     }
+
     // Getter
-    public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
+    public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -92,6 +104,13 @@ public class User {
         this.avatar = avatar;
         this.aboutMe = aboutMe;
         this.isAdmin = isAdmin;
+        /*this.disabled = disabled;*/
+    }
+
+    public User(User copy) {
+        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+        email = copy.email;
+        password = copy.password;
     }
 
     public long getId() {
@@ -101,6 +120,7 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
+
 
     public String getEmail() {
         return email;
@@ -181,4 +201,6 @@ public class User {
     public void setFavorites(List<Recipe> favorites) {
         this.favorites = favorites;
     }
+
+
 }

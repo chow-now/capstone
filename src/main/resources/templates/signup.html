@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Chownow Sign Up</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
+</head>
+<body>
+<p class="text-success">BootStrap Success</p>
+
+<header th:include="partials/navbar.html :: nav"></header>
+
+<!-- Content -->
+<div class="container">
+  <!--Grid row-->
+  <div class="row mt-5">
+    <!--Grid column-->
+    <div class="col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+      <h1 class="h1-responsive font-weight-bold wow fadeInLeft" data-wow-delay="0.3s">Sign up right now! </h1>
+      <hr class="hr-light wow fadeInLeft" data-wow-delay="0.3s">
+      <h6 class="mb-3 wow fadeInLeft" data-wow-delay="0.3s">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga
+        nesciunt dolorum nulla magnam veniam sapiente, fugiat! Commodi sequi non animi ea
+        dolor molestiae, quisquam iste, maiores. Nulla.</h6>
+      <a class="btn btn-outline-white wow fadeInLeft" data-wow-delay="0.3s">Learn more</a>
+    </div>
+    <!--Grid column-->
+    <div class="col-md-6 col-xl-5 mb-4">
+      <!-- Default form register -->
+
+      <form th:action="@{/sign-up}" class="text-center border border-light p-5" th:object="${user}">
+
+        <p class="h4 mb-4">Sign up</p>
+
+        <div class="form-row mb-4">
+          <div class="col">
+            <!-- First name -->
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+          </div>
+          <div class="col">
+            <!-- Last name -->
+            <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name" th:field="*{firstName}">
+          </div>
+        </div>
+
+        <!-- E-mail -->
+        <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+
+        <!-- Password -->
+        <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+        <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+          At least 8 characters and 1 digit
+        </small>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" th:field="*{isAdmin}" value="true">
+          <label class="form-check-label" for="flexRadioDefault2">
+            Admin
+          </label>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
+          <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
+        </div>
+
+        <!-- Sign up button -->
+        <button class="btn btn-info my-4 btn-block" type="submit">Sign in</button>
+
+        <!-- Social register -->
+        <p>or sign up with:</p>
+
+        <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
+        <a href="#" class="mx-2" role="button"><i class="fab fa-twitter light-blue-text"></i></a>
+        <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in light-blue-text"></i></a>
+        <a href="#" class="mx-2" role="button"><i class="fab fa-github light-blue-text"></i></a>
+
+        <hr>
+
+        <!-- Terms of service -->
+        <p>By clicking
+          <em>Sign up</em> you agree to our
+          <a href="" target="_blank">terms of service</a>
+
+      </form>
+      <!-- Default form register -->
+    </div>
+    <!--Grid column-->
+  </div>
+  <!--Grid row-->
+</div>
+<!-- Content -->
+
+<!--/. Sidebar navigation -->
+<!-- /Start your project here-->
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+</body>
+</html>

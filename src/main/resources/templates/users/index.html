@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Users</title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/users.css}" rel="stylesheet" />
 </head>
 <body>
+<!--Partial Navbar-->
+<header th:include="partials/navbar.html :: nav"></header>
 
+<!--Partial Searchbar-->
+<div th:include="partials/searchbar.html :: searchbar"></div>
+
+<!--Loops through all users in db-->
+<div class="card" th:each="user : ${users}">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="people-nearby">
+                <div class="nearby-user">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <div class="col-md-2 col-sm-2">
+                                <img th:attr="src=${user.avatar},title=${user.avatar}" class="profile-photo" alt="user"/>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                            <h5><a href="#" class="profile-link" th:text="${user.username}"></a></h5>
+                            <div class="row">
+                                <p class="col-3"><span th:text="${user.firstName}"> <span th:text="${user.lastName}"></span></span></p>
+                                <p class="col-3">ChefLevel</p>
+                                <p class="col-3">Followers</p>
+                                <p class="col-3">Recipes</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-3"></p>
+                                <p class="col-3">ph_chefLevel</p>
+                                <p class="col-3" th:text="${user.followings.size()}"></p>
+                                <p class="col-3" th:text="${user.recipes.size()}"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-3 col-sm-3">
+                                <button class="btn btn-primary pull-right mb-3"><a href="" th:href="@{/users/{path}(path=${user.id})}">Profile</a></button>
+                            </div>
+                            <!--Todo: Button add friend-->
+                            <div class="col-md-3 col-sm-3">
+                                <button class="btn btn-primary pull-right">Add Friend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>
