@@ -2,6 +2,7 @@ package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -70,18 +71,30 @@ public class User {
     private List<Recipe> recipes;
 
     @OneToMany(
-            mappedBy = "followee",
-            orphanRemoval = true,
-            cascade = CascadeType.PERSIST
+            mappedBy = "user",
+            cascade = CascadeType.ALL
     )
     @JsonBackReference
     private List<Follow> followings;
 
-    @ManyToMany(mappedBy = "favoritedBy")
+    @OneToMany(
+            mappedBy = "friend",
+            cascade = CascadeType.ALL
+    )
+    @JsonBackReference
+    private List<Follow> followers;
+
+
+    @ManyToMany(mappedBy = "favoritedBy",
+            cascade = CascadeType.ALL
+    )
     @JsonBackReference
     private Set<Recipe> favorites = new HashSet<Recipe>();
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(
+            mappedBy="owner",
+            cascade = CascadeType.ALL
+    )
     @JsonBackReference
     private Pantry pantry;
 
@@ -201,5 +214,13 @@ public class User {
 
     public void setPantry(Pantry pantry) {
         this.pantry = pantry;
+    }
+
+    public List<Follow> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Follow> followers) {
+        this.followers = followers;
     }
 }

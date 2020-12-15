@@ -193,7 +193,7 @@ public class SeedRunner {
             LOGGER.info("difficulty = " + difficulty);
             int cooktime = faker.number().numberBetween(1,999);
             LOGGER.info("cooktime = " + cooktime);
-            int preptime = faker.number().numberBetween(0,999);
+            int preptime = faker.number().numberBetween(1,999);
             LOGGER.info("preptime = " + preptime);
             int servings = faker.number().numberBetween(1,20);
             LOGGER.info("servings = " + servings);

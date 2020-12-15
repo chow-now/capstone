@@ -72,9 +72,9 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
-            List<Follow> followResults =followDao.findAllByFollowee(dbUser);
+            List<Follow> followResults =followDao.findAllByUser(dbUser);
             for(Follow follow : followResults){
-                followers.add(follow.getFollower());
+                followers.add(follow.getUser());
             }
             return followers;
         }
@@ -88,9 +88,9 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
-            List<Follow> followResults =followDao.findAllByFollower(dbUser);
+            List<Follow> followResults =followDao.findAllByFriend(dbUser);
             for(Follow follow : followResults){
-                followings.add(follow.getFollowee());
+                followings.add(follow.getFriend());
             }
             return followings;
         }
@@ -126,12 +126,12 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()) {
             User dbUser = user.get();
-//            try{
+            try{
                 userDao.delete(dbUser);
                 return ResponseEntity.ok().build();
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return  null;
     }
