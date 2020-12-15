@@ -7,16 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChowNow Login</title>
 
-  <!--Icon CDN-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
-
-  <!--Local CSS-->
-  <link th:href="@{/../css/bootstrap.min.css}" rel="stylesheet" />
-  <link th:href="@{/../css/form.css}" rel="stylesheet" />
 </head>
 <body>
 
-<header th:insert="partials/navbar.html :: nav"></header>
+<header th:insert="partials/navbar.html :: headerv1"></header>
 <!--DisplayErrors-->
 <div th:if="${param.error}">
   Invalid Username and Password.
