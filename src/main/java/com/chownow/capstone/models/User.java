@@ -8,7 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -36,8 +38,7 @@ public class User {
     )
     @Column(nullable = false, length = 100, unique = true)
     private String email;
-
-
+    
     @NotBlank(message = "First name can't be empty")
     @Size(min = 2,message = "That name is too short")
     @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
@@ -60,17 +61,29 @@ public class User {
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean isAdmin;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
+    @OneToMany(
+            mappedBy = "chef",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST
+    )
     @JsonBackReference
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "followee")
+    @OneToMany(
+            mappedBy = "followee",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST
+    )
     @JsonBackReference
     private List<Follow> followings;
 
     @ManyToMany(mappedBy = "favoritedBy")
     @JsonBackReference
-    private List<Recipe> favorites;
+    private Set<Recipe> favorites = new HashSet<Recipe>();
+
+    @OneToOne(mappedBy = "owner")
+    @JsonBackReference
+    private Pantry pantry;
 
     public User(){}
 
@@ -174,11 +187,19 @@ public class User {
         this.followings = followings;
     }
 
-    public List<Recipe> getFavorites() {
+    public Set<Recipe> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(List<Recipe> favorites) {
+    public void setFavorites(Set<Recipe> favorites) {
         this.favorites = favorites;
+    }
+
+    public Pantry getPantry() {
+        return pantry;
+    }
+
+    public void setPantry(Pantry pantry) {
+        this.pantry = pantry;
     }
 }

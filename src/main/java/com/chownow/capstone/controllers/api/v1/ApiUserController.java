@@ -7,6 +7,7 @@ import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.FollowRepository;
 import com.chownow.capstone.repos.PantryRepository;
 import com.chownow.capstone.repos.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,13 +100,13 @@ public class ApiUserController {
     /* POST MAPPINGS FOR CRUD */
 
     // create user
-    @PostMapping("")
+    @PostMapping("/new")
     public @ResponseBody User createUser(@RequestBody User user){
         return userDao.save(user);
     }
 
     // update user
-    @PutMapping("/{id}")
+    @PostMapping("/{id}/edit")
     public @ResponseBody User updateUser(@RequestBody User requestUser,@PathVariable (value = "id")long userId){
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()) {
@@ -119,13 +120,21 @@ public class ApiUserController {
     }
 
     // delete user
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     public ResponseEntity<User> deleteUser(@PathVariable ("id") long userId){
+        
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()) {
             User dbUser = user.get();
-            userDao.delete(dbUser);
+//            try{
+                userDao.delete(dbUser);
+                return ResponseEntity.ok().build();
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
         }
-        return ResponseEntity.ok().build();
+        return  null;
     }
+
+
 }

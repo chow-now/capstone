@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="categories")
@@ -25,9 +27,11 @@ public class Category {
     @Column(length = 100)
     private String icon;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(
+            mappedBy = "categories"
+    )
     @JsonIgnore
-    private List<Recipe> recipes;
+    private Set<Recipe> recipes = new HashSet<Recipe>();
 
     public Category(){}
 
@@ -46,11 +50,11 @@ public class Category {
         this.icon = icon;
     }
 
-    public List<Recipe> getRecipes() {
+    public Set<Recipe> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
+    public void setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
     }
 

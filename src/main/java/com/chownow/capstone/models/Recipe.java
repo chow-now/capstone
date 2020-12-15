@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="recipes")
@@ -60,13 +62,15 @@ public class Recipe {
     @JsonManagedReference
     private User chef;
 
-    @OneToMany(mappedBy = "recipe")
-
+    @OneToMany(
+            mappedBy = "recipe",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST)
     private List<Image> images;
 
     @OneToMany(
             mappedBy = "recipe",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
     @JsonIgnore
@@ -78,7 +82,7 @@ public class Recipe {
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="category_id")}
     )
-    private List<Category> categories;
+    private Set<Category> categories = new HashSet<Category>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -86,7 +90,7 @@ public class Recipe {
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="user_id")}
     )
-    private List<User> favoritedBy;
+    private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
 
@@ -182,11 +186,11 @@ public class Recipe {
         return chef;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -198,11 +202,11 @@ public class Recipe {
         this.images = images;
     }
 
-    public List<User> getFavoritedBy() {
+    public Set<User> getFavoritedBy() {
         return favoritedBy;
     }
 
-    public void setFavoritedBy(List<User> favoritedBy) {
+    public void setFavoritedBy(Set<User> favoritedBy) {
         this.favoritedBy = favoritedBy;
     }
 

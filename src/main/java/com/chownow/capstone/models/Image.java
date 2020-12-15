@@ -14,7 +14,10 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "INVALID FILE TYPE FOR RECIPE IMAGE")
+    @Pattern(
+            regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",
+            message = "INVALID FILE TYPE FOR RECIPE IMAGE"
+    )
     @Column(nullable = false,length = 100)
     private String url;
 

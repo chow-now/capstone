@@ -1,6 +1,5 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -14,11 +13,12 @@ public class Pantry {
     private long id;
 
     @OneToOne
+    @JsonIgnore
     private User owner;
 
     @OneToMany(
             mappedBy = "pantry",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
     private List<PantryIngredient> pantryIngredients;
