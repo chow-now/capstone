@@ -16,9 +16,7 @@
 </head>
 <body>
 
-
-<!--Main Navigation-->
-<header th:fragment="headerv1">
+<header th:fragment="nav">
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
     <a class="navbar-brand" href="#" th:href="@{~/}"><strong>ChowNow</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -31,7 +29,7 @@
           <a class="nav-link" href="#" th:href="@{~/about}">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" th:href="@{~/recipes}"></i>Recipes</a>
+          <a class="nav-link" href="#" th:href="@{~/recipes}">Recipes</a>
         </li>
         <li sec:authorize="isAuthenticated()" class="nav-item active">
           <a class="nav-link" href="#" th:href="@{~/users}"><span class="sr-only">(current)</span>Users</a>
@@ -41,23 +39,23 @@
         </li>
       </ul>
       <ul class="navbar-nav nav-flex-icons">
-        <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
-          <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link"><i class="fas fa-user-plus"></i></a>
-          </li>
-          <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link"><i class="fas fa-user-lock"></i></i></i></a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link"><i class="fas fa-sign-out-alt"></i></i></a>
-          </li>
-        </form>
+        <li>aaaa</li>
+<!--        <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">-->
+<!--          <li class="nav-item" sec:authorize="isAnonymous()">-->
+<!--            <a class="nav-link"><i class="fas fa-user-plus"></i></a>-->
+<!--          </li>-->
+<!--          <li class="nav-item" sec:authorize="isAnonymous()">-->
+<!--            <a class="nav-link"><i class="fas fa-user-lock"></i></a>-->
+<!--          </li>-->
+<!--          <li class="nav-item" sec:authorize="isAuthenticated()">-->
+<!--            <a class="nav-link"><i class="fas fa-sign-out-alt"></i></a>-->
+<!--          </li>-->
+<!--        </form>-->
       </ul>
     </div>
   </nav>
 </header>
 <!--Main Navigation-->
-
 
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -67,5 +65,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
