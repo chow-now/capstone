@@ -1,6 +1,5 @@
 package com.chownow.capstone.controllers;
 
-import com.chownow.capstone.models.Recipe;
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class AccountController {
 
 	@GetMapping("/users/search")
 	public String showUsersbySearch(Model model) {
- 		model.addAttribute("followers", followDao.findAllByFollowee(userDao.getOne(1L)));
+		model.addAttribute("followers", followDao.findAllByFollowee(userDao.getOne(1L)));
 		return "users/index";
 	}
 
@@ -74,7 +73,7 @@ public class AccountController {
 		/*Get Pantry Ingredients*/
 		/*4am trying to do some crazy method chaining is there a better way to declare what I need*/
 		model.addAttribute("pantryIngredients", pantryIngredientDao.findAllByPantry_Id(4));
-		return "/users/show";
+		return "profile";
 	}
 
 //	@PostMapping("/users/{id}/edit")

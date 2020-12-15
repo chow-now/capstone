@@ -87,7 +87,6 @@ public class User {
 
     // Setter
     public User(String username, String email, String firstName, String lastName, String password) {
-        this.username = username;
         this.email = email;
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
@@ -98,7 +97,6 @@ public class User {
     // Getter
     public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
         this.id = id;
-        this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -111,7 +109,6 @@ public class User {
 
     public User(User copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
-        username = copy.username;
         email = copy.email;
         password = copy.password;
     }
@@ -124,13 +121,6 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getEmail() {
         return email;
