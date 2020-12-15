@@ -76,7 +76,7 @@ public class Recipe {
     @JsonIgnore
     private List<RecipeIngredient> RecipeIngredients;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name="recipe_categories",
             joinColumns={@JoinColumn(name="recipe_id")},
@@ -84,7 +84,7 @@ public class Recipe {
     )
     private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name="favorites",
             joinColumns={@JoinColumn(name="recipe_id")},
