@@ -1,10 +1,13 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,27 +17,40 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    /*Todo:Added a username b/c ez*/
-    @Column(length = 20, nullable = false, unique = true)
-    private String username;
+    @Column(nullable = false)
+    @Size(min = 8,message = "Password must be at least 8 characters")
+    @Pattern.List({
+            @Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
+            @Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
+            @Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
+            @Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
+            @Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
+    })
+    @JsonIgnore
+    private String password;
 
-    @Column(nullable = false, length = 100, unique = true)
     @Email(message = "Email can't be empty")
+    @Pattern(
+            regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
+            message = "Please provide a valid email address"
+    )
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20)
+
     @NotBlank(message = "First name can't be empty")
+    @Size(min = 2,message = "That name is too short")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
+    @Column(nullable = false, length = 20)
     private String firstName;
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "Last name can't be empty")
+    @Size(min = 2,message = "That last name is too short")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
     private String lastName;
 
-    @Column(nullable = false, length = 100)
-    @NotBlank(message = "Password can't be empty")
-    @JsonIgnore
-    private String password;
-
+    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
     @Column(length = 250)
     private String avatar;
 
@@ -46,12 +62,15 @@ public class User {
     private Boolean isAdmin;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
+    @JsonBackReference
     private List<Recipe> recipes;
 
     @OneToMany(mappedBy = "followee")
+    @JsonBackReference
     private List<Follow> followings;
 
     @ManyToMany(mappedBy = "favoritedBy")
+    @JsonBackReference
     private List<Recipe> favorites;
 
     /*Todo: I think I need to add a owner column in order to be*/
@@ -70,9 +89,10 @@ public class User {
     public User(String username, String email, String firstName, String lastName, String password) {
         this.username = username;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
         this.password = password;
+        this.isAdmin = false;
     }
 
     // Getter

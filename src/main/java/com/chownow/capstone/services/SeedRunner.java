@@ -1,4 +1,4 @@
-package com.chownow.capstone.seeds;
+package com.chownow.capstone.services;
 
 
 import com.chownow.capstone.models.*;
@@ -93,14 +93,18 @@ public class SeedRunner {
     }
 
     public void seedUsers(){
-        User initialUser = new User("seeder@seeder.com","firstName","lastName","password");
+        User initialUser = new User("seeder@seeder.com","firstName","lastName","Password03!");
         initialUser.setIsAdmin(true);
         userDao.save(initialUser);
         for(int i = 0; i<=20; i++){
             String firstName = faker.name().firstName();
+            LOGGER.info("firstName = " + firstName);
             String lastName =  faker.name().lastName();
+            LOGGER.info("lastName = " + lastName);
             String email = faker.internet().emailAddress();
-            String password = "12345";
+            LOGGER.info("email = " + email);
+            String password = faker.internet().password(8,100,true,false,true)+"!";
+            LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,lastName,password);
             seedUser.setIsAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
@@ -162,7 +166,9 @@ public class SeedRunner {
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
                 double amount = makeDouble(amountUnit.get(0));
+                LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
+                LOGGER.info("unit = " + unit);
                 PantryIngredient pi = new PantryIngredient(
                         amount,
                         unit,
@@ -180,14 +186,29 @@ public class SeedRunner {
         List<String> levels = new ArrayList<>();
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
-        for(long i = 1; i<=usersSize; i++){
+        for(long i = 1; i<=100; i++){
+            String title= faker.food().dish();
+            LOGGER.info("title = " + title);
+            String description = faker.friends().quote();
+            LOGGER.info("description = " + description);
+            String directions = faker.buffy().quotes();
+            LOGGER.info("directions = " + directions);
+            String difficulty = levels.get(faker.number().numberBetween(0,3));
+            LOGGER.info("difficulty = " + difficulty);
+            int cooktime = faker.number().numberBetween(1,999);
+            LOGGER.info("cooktime = " + cooktime);
+            int preptime = faker.number().numberBetween(0,999);
+            LOGGER.info("preptime = " + preptime);
+            int servings = faker.number().numberBetween(1,20);
+            LOGGER.info("servings = " + servings);
             Recipe recipe = new Recipe(
-                    faker.food().dish(), // title
-                    faker.buffy().quotes(), // directions
-                    levels.get(faker.number().numberBetween(0,3)), // difficulty
-                    faker.number().numberBetween(1,1200), // cookTime
-                    faker.number().numberBetween(0,600),  // prepTime
-                    faker.number().numberBetween(1,40),   // servings
+                    title,
+                    description,
+                    directions,
+                    difficulty,
+                    cooktime,
+                    preptime,
+                    servings,
                     userDao.getOne((long) faker.number().numberBetween(1,usersSize+1))
             );
             recipeDao.save(recipe);
@@ -204,7 +225,9 @@ public class SeedRunner {
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
                 double amount = makeDouble(amountUnit.get(0));
+                LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
+                LOGGER.info("unit = " + unit);
                 RecipeIngredient ri = new RecipeIngredient(
                         amount,
                         unit,
@@ -241,6 +264,7 @@ public class SeedRunner {
             Recipe recipe = recipeDao.getFirstById(i);
             int max = faker.number().numberBetween(0,4);
             String word = recipe.getTitle().split(" ")[0];
+            word = toEnglish(word);
             for(int j = 0;j < max; j++){
                 Image image = new Image(randomImg(word),recipe);
                 imageDao.save(image);
@@ -303,6 +327,12 @@ public class SeedRunner {
     }
 
     public String randomImg(String word){
-        return "https://loremflickr.com/800/600/"+word;
+        String img = "https://loremflickr.com/800/600/"+word+".jpg";
+        LOGGER.info("img = " + img);
+        return img;
+    }
+
+    public String toEnglish(String word) {
+        return word.replaceAll("[^A-Za-z0-9]", "");
     }
 }

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/scripts :: head('Create a Recipe')">
+<head>
+<!--<head th:replace="partials/head :: head('Create a Recipe')">-->
     <meta charset="UTF-8">
     <title>Roll the Dice</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: nav"></nav>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
 
 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
-    Title:
-    <input th:field="*{title}"/>
-
+    <label for="title">Title</label>
+    <input id="title" th:field="*{title}"/>
+    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+    <br/>
     <button>Submit</button>
 </form>
 
 
-<footer th:replace="partials/partials :: footer"></footer>
-<th:block th:include="partials/scripts :: scripts"></th:block>
+<!--<footer th:replace="partials/partials :: footer"></footer>-->
+<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
 </body>
 </html>
