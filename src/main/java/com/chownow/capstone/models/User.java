@@ -50,7 +50,6 @@ public class User {
     @Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
     private String lastName;
 
-
     @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
     @Column(length = 250)
     private String avatar;

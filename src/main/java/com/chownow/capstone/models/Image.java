@@ -1,5 +1,6 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -18,9 +19,8 @@ public class Image {
     private String url;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private Recipe recipe;
-
 
     public Image(){}
 
@@ -51,11 +51,11 @@ public class Image {
         this.url = url;
     }
 
-    public Recipe getRecipes() {
+    public Recipe getRecipe() {
         return recipe;
     }
 
-    public void setRecipes(Recipe recipe) {
+    public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 }

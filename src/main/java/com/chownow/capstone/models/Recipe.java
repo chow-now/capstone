@@ -57,12 +57,11 @@ public class Recipe {
     private int servings;
 
     @ManyToOne
-//    @JoinColumn(name = "chef_id")
     @JsonManagedReference
     private User chef;
 
     @OneToMany(mappedBy = "recipe")
-    @JsonBackReference
+
     private List<Image> images;
 
     @OneToMany(
@@ -79,7 +78,6 @@ public class Recipe {
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="category_id")}
     )
-    
     private List<Category> categories;
 
     @ManyToMany(cascade = CascadeType.ALL)
