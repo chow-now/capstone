@@ -1,5 +1,7 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,10 +14,12 @@ public class Follow {
 
         @ManyToOne
         @JoinColumn(name = "follower_id")
+        @JsonManagedReference
         private User follower;
 
         @ManyToOne
         @JoinColumn(name = "followee_id")
+        @JsonManagedReference
         private User followee;
 
         public Follow(){}

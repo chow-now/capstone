@@ -1,7 +1,13 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,8 +17,10 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message= "Please provide a name")
+    @Size(min = 2, message = "Name should be a bit longer.")
+    @Pattern(regexp = "^([^0-9]*)", message = "Name must not contain numbers")
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "Name can't be empty")
     private String name;
 
     @OneToMany(
@@ -20,6 +28,7 @@ public class Ingredient {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonBackReference
     private List<PantryIngredient> pantryIngredients;
 
     @OneToMany(
@@ -27,9 +36,9 @@ public class Ingredient {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonBackReference
     private List<RecipeIngredient> recipeIngredients;
-
-
+    
     public Ingredient(){}
     //setter
     public Ingredient(String name) {
