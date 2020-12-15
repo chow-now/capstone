@@ -1,5 +1,9 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
@@ -12,7 +16,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Size(min = 5, message = "Title should be a bit longer.")
+    @Size(min = 2, message = "Title should be a bit longer.")
     @Size(max = 100,message = "Title is too long")
     @NotBlank(message= "Recipe needs a title")
     @Column(nullable = false,length = 100)
@@ -53,10 +57,12 @@ public class Recipe {
     private int servings;
 
     @ManyToOne
-    @JoinColumn(name = "cook_id")
+//    @JoinColumn(name = "chef_id")
+    @JsonManagedReference
     private User chef;
 
     @OneToMany(mappedBy = "recipe")
+    @JsonBackReference
     private List<Image> images;
 
     @OneToMany(
@@ -64,6 +70,7 @@ public class Recipe {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<RecipeIngredient> RecipeIngredients;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -72,6 +79,7 @@ public class Recipe {
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="category_id")}
     )
+    
     private List<Category> categories;
 
     @ManyToMany(cascade = CascadeType.ALL)

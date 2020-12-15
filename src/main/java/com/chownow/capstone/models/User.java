@@ -1,5 +1,8 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -23,6 +26,7 @@ public class User {
             @Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
             @Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
     })
+    @JsonIgnore
     private String password;
 
     @Email(message = "Email can't be empty")
@@ -58,12 +62,15 @@ public class User {
     private Boolean isAdmin;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
+    @JsonBackReference
     private List<Recipe> recipes;
 
     @OneToMany(mappedBy = "followee")
+    @JsonBackReference
     private List<Follow> followings;
 
     @ManyToMany(mappedBy = "favoritedBy")
+    @JsonBackReference
     private List<Recipe> favorites;
 
     public User(){}

@@ -1,5 +1,8 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -23,6 +26,7 @@ public class Category {
     private String icon;
 
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Recipe> recipes;
 
     public Category(){}

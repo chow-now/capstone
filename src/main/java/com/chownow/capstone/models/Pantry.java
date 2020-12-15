@@ -1,5 +1,8 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class Pantry {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    
     private List<PantryIngredient> pantryIngredients;
 
     public Pantry(){}

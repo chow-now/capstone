@@ -1,5 +1,7 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.List;
@@ -16,6 +18,7 @@ public class Image {
     private String url;
 
     @ManyToOne
+    @JsonManagedReference
     private Recipe recipe;
 
 

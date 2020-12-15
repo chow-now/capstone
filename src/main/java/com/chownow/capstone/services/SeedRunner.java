@@ -186,7 +186,7 @@ public class SeedRunner {
         List<String> levels = new ArrayList<>();
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
-        for(long i = 1; i<=usersSize; i++){
+        for(long i = 1; i<=100; i++){
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
