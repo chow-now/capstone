@@ -11,12 +11,34 @@
 
 
 
-<div th:each="recipe : ${searchResults}">
-    <div>
-        <p th:text="${recipe.getTitle()}"></p>
+<!--<div th:each="recipe : ${searchResults}">-->
+<!--    <div>-->
+<!--        <p th:text="${recipe.getTitle()}"></p>-->
 <!--        <img th:src="${recipe.getImage()}"/>-->
-    </div>
-</div>
+<!--    </div>-->
+<!--</div>-->
+<th:block th:include="partials/scripts :: scripts"></th:block>
+<script th:src="static/keys.js"></script>
 
+<script th:inline="javascript">
+
+    if (document.getElementById('main_search') == null) {
+        console.log("yo, it's null");
+    } else {
+        let searchString;
+        console.log(searchString);
+        let urlSearchString = window.location.href;
+        console.log(urlSearchString);
+        let url = new URL(urlSearchString);
+        let searchParam = url.searchParams.get("search");
+        console.log("url string" + searchString);
+        searchString = searchParam.replace(/,|,\s/g, ",+");
+    }
+
+    $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + searchString + "&number=50&apiKey=" + SPOON_API + "".done(function(results) {
+        console.log(results);
+    }))
+
+</script>
 </body>
 </html>

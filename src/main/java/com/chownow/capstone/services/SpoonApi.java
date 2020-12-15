@@ -1,10 +1,12 @@
 package com.chownow.capstone.services;
 
+import com.chownow.capstone.models.Image;
 import com.chownow.capstone.models.Recipe;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,6 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class SpoonApi {
     // GET Json from Http response
     public static JSONObject response(String uri) throws IOException, InterruptedException, ParseException {
@@ -27,7 +30,7 @@ public class SpoonApi {
                 .build ();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+//        System.out.println("api response: "+response.body());
 
         // Parse String -> Obj
         JSONParser jsonParser = new JSONParser();
@@ -39,17 +42,22 @@ public class SpoonApi {
         JSONArray array = (JSONArray) object.get("results");
 
         List<Recipe> list = new ArrayList<>();
+
+//        System.out.println("array = " + array);
+
         for (Object obj : array) {
+            System.out.println("obj = " + obj);
             JSONObject miniObject = (JSONObject) obj;
+            //System.out.println("miniObject.get(\"id\") = " + miniObject.get("id"));
             Recipe recipe = new Recipe();
-            recipe.setId((long) miniObject.get("id"));
+            recipe.setId(Long.parseLong(miniObject.get("id").toString()));
             recipe.setTitle((String) miniObject.get("title"));
 
-//            Image image = new Image("", recipe);
-//            image.setId((long) miniObject.get(recipe.getId()));
-//            image.setImage((String) miniObject.get());
+            String img = (String)miniObject.get("imageUrl");
+            Image image = new Image("https://spoonacular.com/recipeImages/"+img, recipe);
+            //image.setId(() miniObject.get(recipe.getId()));
 
-            list.add(recipe);
+           list.add(recipe);
         }
         System.out.println("list = " + list);
 
