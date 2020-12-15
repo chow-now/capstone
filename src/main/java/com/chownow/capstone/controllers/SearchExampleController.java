@@ -31,7 +31,9 @@ public class SearchExampleController {
     // With Javascript
     // test to search recipe by recipe name
     @GetMapping("/search")
-    public String getRecipes() throws InterruptedException, ParseException, IOException {
+    public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
+        viewModel.addAttribute("term", term);
+        viewModel.addAttribute("spoonApi", spoonApi);
         return "recipes/search";
     }
 }

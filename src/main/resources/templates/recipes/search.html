@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Results')">
     <meta charset="UTF-8">
     <title>Results</title>
 </head>
@@ -18,26 +19,21 @@
 <!--    </div>-->
 <!--</div>-->
 <th:block th:include="partials/scripts :: scripts"></th:block>
-<script th:src="static/keys.js"></script>
 
 <script th:inline="javascript">
+    // In the head
+    let spoonApi = document.querySelector('meta.spoonApi').content;
 
     if (document.getElementById('main_search') == null) {
         console.log("yo, it's null");
     } else {
-        let searchString;
-        console.log(searchString);
-        let urlSearchString = window.location.href;
-        console.log(urlSearchString);
-        let url = new URL(urlSearchString);
-        let searchParam = url.searchParams.get("search");
-        console.log("url string" + searchString);
-        searchString = searchParam.replace(/,|,\s/g, ",+");
+        var term = $('input').val();
+        console.log(term);
     }
 
-    $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + searchString + "&number=50&apiKey=" + SPOON_API + "".done(function(results) {
+    $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + term + "&number=50&apiKey=" + spoonApi + "").done(function(results) {
         console.log(results);
-    }))
+    })
 
 </script>
 </body>
