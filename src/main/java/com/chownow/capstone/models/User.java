@@ -1,7 +1,5 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +14,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
+    @Column(nullable = false)
+    @Size(min = 8,message = "Password must be at least 8 characters")
+    @Pattern.List({
+            @Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
+            @Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
+            @Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
+            @Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
+            @Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
+    })
+    private String password;
 
     @Email(message = "Email can't be empty")
     @Pattern(
@@ -29,25 +36,16 @@ public class User {
 
     @NotBlank(message = "First name can't be empty")
     @Size(min = 2,message = "That name is too short")
-    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Name must not contain numbers")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
     @Column(nullable = false, length = 20)
     private String firstName;
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "Last name can't be empty")
     @Size(min = 2,message = "That last name is too short")
-    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Last name must not contain numbers")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
     private String lastName;
 
-
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Should have 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long"
-    )
-    @Column(nullable = false, length = 100)
-    @NotBlank(message = "Password can't be empty")
-    @JsonIgnore
-    private String password;
 
     @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
     @Column(length = 250)
@@ -76,6 +74,7 @@ public class User {
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
         this.password = password;
+        this.isAdmin = false;
     }
     // Getter
     public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {

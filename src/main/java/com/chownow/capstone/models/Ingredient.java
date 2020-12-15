@@ -15,8 +15,8 @@ public class Ingredient {
 
     @NotBlank(message= "Please provide a name")
     @Size(min = 2, message = "Name should be a bit longer.")
-    @Pattern(regexp = "[a-zA-Z]+[-_]*[a-zA-Z]+", message = "Name must not contain numbers")
-    @Column(nullable = false, length = 100)
+    @Pattern(regexp = "^([^0-9]*)", message = "Name must not contain numbers")
+    @Column(nullable = false, length = 100, unique = true)
     private String name;
 
     @OneToMany(
@@ -32,8 +32,7 @@ public class Ingredient {
             orphanRemoval = true
     )
     private List<RecipeIngredient> recipeIngredients;
-
-
+    
     public Ingredient(){}
     //setter
     public Ingredient(String name) {
