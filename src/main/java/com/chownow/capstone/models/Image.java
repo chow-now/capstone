@@ -1,10 +1,6 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
@@ -14,13 +10,12 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "INVALID FILE TYPE FOR RECIPE IMAGE")
     @Column(nullable = false,length = 100)
     private String url;
 
     @ManyToOne
-    @JsonIgnore
     private Recipe recipe;
+
 
     public Image(){}
 
@@ -51,11 +46,11 @@ public class Image {
         this.url = url;
     }
 
-    public Recipe getRecipe() {
+    public Recipe getRecipes() {
         return recipe;
     }
 
-    public void setRecipe(Recipe recipe) {
+    public void setRecipes(Recipe recipe) {
         this.recipe = recipe;
     }
 }

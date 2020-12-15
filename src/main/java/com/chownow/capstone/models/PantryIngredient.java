@@ -1,8 +1,5 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 
 @Entity
@@ -18,13 +15,11 @@ public class PantryIngredient {
     @Column(nullable = false)
     private String unit;
 
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     private Pantry pantry;
 
 
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     private Ingredient ingredient;
 
     public PantryIngredient(){}
@@ -83,5 +78,4 @@ public class PantryIngredient {
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
-
 }

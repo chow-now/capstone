@@ -1,12 +1,6 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -16,9 +10,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message= "Please provide a name")
-    @Size(min = 2, message = "Name should be a bit longer.")
-    @Pattern(regexp = "^([^0-9]*)", message = "Name must not contain numbers")
     @Column(nullable = false,length = 100)
     private String name;
 
@@ -26,7 +17,6 @@ public class Category {
     private String icon;
 
     @ManyToMany(mappedBy = "categories")
-    @JsonIgnore
     private List<Recipe> recipes;
 
     public Category(){}
