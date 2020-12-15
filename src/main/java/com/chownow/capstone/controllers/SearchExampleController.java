@@ -4,6 +4,7 @@ import com.chownow.capstone.models.Recipe;
 import com.chownow.capstone.repos.RecipeRepository;
 //import com.chownow.capstone.services.SpoonApi;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,8 @@ import java.util.List;
 
 @Controller
 public class SearchExampleController {
-    private final RecipeRepository recipeRepository;
-
-    public SearchExampleController(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
+    @Value("${spoonacular.api.key}")
+    private String spoonApi;
     // With Java
 //    @GetMapping("/search")
 //    public String getRecipes(@RequestParam(required = false, name="term") String term, Model viewModel) throws InterruptedException, ParseException, IOException {
@@ -34,7 +32,6 @@ public class SearchExampleController {
     // test to search recipe by recipe name
     @GetMapping("/search")
     public String getRecipes() throws InterruptedException, ParseException, IOException {
-
         return "recipes/search";
     }
 }
