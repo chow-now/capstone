@@ -224,10 +224,10 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                LOGGER.info("amountUnit = " + amountUnit);
                 double amount = makeDouble(amountUnit.get(0));
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
+                LOGGER.info("unit = " + unit);
                 RecipeIngredient ri = new RecipeIngredient(
                         amount,
                         unit,
@@ -264,6 +264,7 @@ public class SeedRunner {
             Recipe recipe = recipeDao.getFirstById(i);
             int max = faker.number().numberBetween(0,4);
             String word = recipe.getTitle().split(" ")[0];
+            word = toEnglish(word);
             for(int j = 0;j < max; j++){
                 Image image = new Image(randomImg(word),recipe);
                 imageDao.save(image);
@@ -326,6 +327,12 @@ public class SeedRunner {
     }
 
     public String randomImg(String word){
-        return "https://loremflickr.com/800/600/"+word+".jpg";
+        String img = "https://loremflickr.com/800/600/"+word+".jpg";
+        LOGGER.info("img = " + img);
+        return img;
+    }
+
+    public String toEnglish(String word) {
+        return word.replaceAll("[^A-Za-z0-9]", "");
     }
 }
