@@ -72,7 +72,7 @@ public class RecipeController {
             model.addAttribute("recipe",recipeToBeSaved);
             return "recipes/new";
         }
-        
+
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
