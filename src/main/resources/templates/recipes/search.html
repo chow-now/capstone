@@ -12,28 +12,47 @@
 
 
 
-<!--<div th:each="recipe : ${searchResults}">-->
-<!--    <div>-->
-<!--        <p th:text="${recipe.getTitle()}"></p>-->
-<!--        <img th:src="${recipe.getImage()}"/>-->
-<!--    </div>-->
-<!--</div>-->
+<!--    // Dump recipes here-->
+<div class="recipe row"></div>
+
+
+
 <th:block th:include="partials/scripts :: scripts"></th:block>
 
 <script th:inline="javascript">
+
     // In the head
     let spoonApi = document.querySelector('meta.spoonApi').content;
 
     if (document.getElementById('main_search') == null) {
         console.log("yo, it's null");
     } else {
-        var term = $('input').val();
-        console.log(term);
-    }
+        //var term = $('input').val();
+        //console.log(term); // Always return null
+        var searchString;
+        // console.log(searchString);
+        var urlSearchString = window.location.href;
+        var url = new URL(urlSearchString);
+        var searchParam = url.searchParams.get("term");
+        searchString = searchParam;
 
-    $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + term + "&number=50&apiKey=" + spoonApi + "").done(function(results) {
-        console.log(results);
-    })
+        // By Recipe Name
+        $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + searchParam + "&number=50&apiKey=" + spoonApi + "")
+            .done(({results, offset, number, totalResults}) => {
+                console.log(results);
+
+                var recipe = "";
+
+                for (let item of results) {
+                    //console.log(item.title)
+                    recipe += '<h5>' + item.title + '</h5>';
+                    recipe += '<img src="' + item.image + '"/>';
+                }
+                $('.recipe').html(recipe);
+            })
+
+        }
+
 
 </script>
 </body>
