@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Cascade;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -37,25 +38,19 @@ public class User {
 	@JsonIgnore
 	private String password;
 
-	@Email(message = "Email can't be empty")
-	@Pattern(
-					regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
-					message = "Please provide a valid email address"
-	)
-	@Column(nullable = false, length = 100, unique = true)
-	private String email;
-
-	@NotBlank(message = "First name can't be empty")
-	@Size(min = 2,message = "That name is too short")
-	@Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
-	@Column(nullable = false, length = 20)
-	private String firstName;
-
-	@Column(nullable = false, length = 20)
-	@NotBlank(message = "Last name can't be empty")
-	@Size(min = 2,message = "That last name is too short")
-	@Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
-	private String lastName;
+    @Email(message = "Email can't be empty")
+    @Pattern(
+            regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
+            message = "Please provide a valid email address"
+    )
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
+    
+    @NotBlank(message = "First name can't be empty")
+    @Size(min = 2,message = "That name is too short")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
+    @Column(nullable = false, length = 20)
+    private String firstName;
 
 	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
 	@Column(length = 250)
@@ -67,28 +62,48 @@ public class User {
 	@Column(columnDefinition = "boolean default false", nullable = false)
 	private Boolean isAdmin;
 
-	@OneToMany(
-					mappedBy = "chef",
-					orphanRemoval = true,
-					cascade = CascadeType.PERSIST
-	)
-	@JsonBackReference
-	private List<Recipe> recipes;
+    @Column(columnDefinition = "boolean default false", nullable = false)
+    private Boolean isAdmin;
+    
+    @OneToMany(
+            mappedBy = "chef",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST
+    )
+    @JsonBackReference("recipeRef")
+    private List<Recipe> recipes;
 
-	@OneToMany(
-					mappedBy = "user",
-					cascade = CascadeType.ALL
-	)
-	@JsonBackReference
-	private List<Follow> followings;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    @JsonIgnore
+    private Set<Follow> followings;
 
-	@OneToMany(
-					mappedBy = "friend",
-					cascade = CascadeType.ALL
-	)
-	@JsonBackReference
-	private List<Follow> followers;
+    @OneToMany(
+            mappedBy = "friend",
+            cascade = CascadeType.ALL
+    )
+    @JsonIgnore
+    private Set<Follow> followers;
 
+
+    @ManyToMany(mappedBy = "favoritedBy",
+            cascade = CascadeType.ALL
+    )
+    @JsonBackReference(value="favRef")
+    private Set<Recipe> favorites = new HashSet<Recipe>();
+
+    @OneToOne(
+            mappedBy="owner",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            optional = false
+    )
+    @JsonBackReference(value="pantryRef")
+    private Pantry pantry;
+
+    public User(){}
 
 	@ManyToMany(mappedBy = "favoritedBy",
 					cascade = CascadeType.ALL
@@ -187,47 +202,35 @@ public class User {
 		return isAdmin;
 	}
 
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+    public Set<Follow> getFollowings() {
+        return followings;
+    }
 
-	public List<Recipe> getRecipes() {
-		return recipes;
-	}
+    public void setFollowings(Set<Follow> followings) {
+        this.followings = followings;
+    }
 
-	public void setRecipes(List<Recipe> recipes) {
-		this.recipes = recipes;
-	}
+    public Set<Follow> getFollowers() {
+        return followers;
+    }
 
-	public List<Follow> getFollowings() {
-		return followings;
-	}
+    public void setFollowers(Set<Follow> followers) {
+        this.followers = followers;
+    }
 
-	public void setFollowings(List<Follow> followings) {
-		this.followings = followings;
-	}
+    public Set<Recipe> getFavorites() {
+        return favorites;
+    }
 
-	public Set<Recipe> getFavorites() {
-		return favorites;
-	}
+    public void setFavorites(Set<Recipe> favorites) {
+        this.favorites = favorites;
+    }
 
-	public void setFavorites(Set<Recipe> favorites) {
-		this.favorites = favorites;
-	}
+    public Pantry getPantry() {
+        return pantry;
+    }
 
-	public Pantry getPantry() {
-		return pantry;
-	}
-
-	public void setPantry(Pantry pantry) {
-		this.pantry = pantry;
-	}
-
-	public List<Follow> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(List<Follow> followers) {
-		this.followers = followers;
-	}
+    public void setPantry(Pantry pantry) {
+        this.pantry = pantry;
+    }
 }

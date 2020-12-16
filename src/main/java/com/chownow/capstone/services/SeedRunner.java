@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class SeedRunner {
@@ -85,7 +82,9 @@ public class SeedRunner {
             LOGGER.info("SEEDING RECIPE IMAGES");
             seedRecipeImages();
             LOGGER.info("RECIPE IMAGES DONE");
-
+            User initialUser = new User("seeder@seeder.com","firstName","lastName","Password03!");
+            initialUser.setIsAdmin(true);
+            userDao.save(initialUser);
         }else{
             LOGGER.info("Seeder has already run");
         }
@@ -93,17 +92,14 @@ public class SeedRunner {
     }
 
     public void seedUsers(){
-        User initialUser = new User("seeder@seeder.com","firstName","lastName","Password03!");
-        initialUser.setIsAdmin(true);
-        userDao.save(initialUser);
-        for(int i = 0; i<=20; i++){
+        for(int i = 0; i<=10; i++){
             String firstName = faker.name().firstName();
             LOGGER.info("firstName = " + firstName);
             String lastName =  faker.name().lastName();
             LOGGER.info("lastName = " + lastName);
             String email = faker.internet().emailAddress();
             LOGGER.info("email = " + email);
-            String password = faker.internet().password(8,100,true,false,true)+"!";
+            String password = faker.internet().password(8,100,true,false,true)+"!1";
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,lastName,password);
             seedUser.setIsAdmin(false);
@@ -131,8 +127,8 @@ public class SeedRunner {
     }
 
     public void seedCategories(){
-        for(int i = 0; i<=50; i++){
-            String name = makeSingular(faker.nation().nationality());
+        for(int i = 0; i<=30; i++){
+            String name = makeSingular(faker.nation().nationality().split(" ")[0]);
             LOGGER.info(name);
             Category seedCategory = new Category(name);
             catDao.save(seedCategory);
@@ -140,7 +136,7 @@ public class SeedRunner {
     }
 
     public void seedIngredients(){
-        for(int i = 0; i<=100; i++){
+        for(int i = 0; i<=10; i++){
             String name = makeSingular(faker.food().ingredient());
             LOGGER.info(name);
             Ingredient seedIngredient = new Ingredient(name);
@@ -186,7 +182,7 @@ public class SeedRunner {
         List<String> levels = new ArrayList<>();
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
-        for(long i = 1; i<=100; i++){
+        for(long i = 1; i<=10; i++){
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
@@ -197,7 +193,7 @@ public class SeedRunner {
             LOGGER.info("difficulty = " + difficulty);
             int cooktime = faker.number().numberBetween(1,999);
             LOGGER.info("cooktime = " + cooktime);
-            int preptime = faker.number().numberBetween(0,999);
+            int preptime = faker.number().numberBetween(1,999);
             LOGGER.info("preptime = " + preptime);
             int servings = faker.number().numberBetween(1,20);
             LOGGER.info("servings = " + servings);
@@ -247,7 +243,7 @@ public class SeedRunner {
         for(long i = 1; i <= recipesSize; i++){
             Recipe recipe = recipeDao.getFirstById(i);
             int max = faker.number().numberBetween(0,4);
-            List<Category> categories = new ArrayList<>();
+            Set<Category> categories = new HashSet<Category>();
             for(int j = 0;j < max; j++){
                 long index = faker.number().numberBetween(1,categoriesSize+1);
                 categories.add(catDao.getOne(index));
@@ -280,7 +276,7 @@ public class SeedRunner {
             Recipe recipe = recipeDao.getFirstById(i);
             LOGGER.info(recipe.getTitle());
             int max = faker.number().numberBetween(1,10);
-            List<User> favarators = new ArrayList<>();
+            Set<User> favarators = new HashSet<User>();
             for(int j = 0;j < max; j++){
                 long index = faker.number().numberBetween(1,usersSize+1);
                 favarators.add(userDao.getOne(index));
@@ -327,7 +323,7 @@ public class SeedRunner {
     }
 
     public String randomImg(String word){
-        String img = "https://loremflickr.com/800/600/"+word+".jpg";
+        String img = "https://loremflickr.com/800/600/"+word;
         LOGGER.info("img = " + img);
         return img;
     }
