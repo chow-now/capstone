@@ -1,36 +1,63 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 100, unique = true)
-    @Email(message = "Email can't be empty")
-    private String email;
+    @Column(nullable = false)
+    @Size(min = 8,message = "Password must be at least 8 characters")
+    @Pattern.List({
+            @Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
+            @Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
+            @Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
+            @Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
+            @Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
+    })
+    @JsonIgnore
+    private String password;
 
-    @Column(nullable = false, length = 20)
+    @Email(message = "Email can't be empty")
+    @Pattern(
+            regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
+            message = "Please provide a valid email address"
+    )
+    @Column(nullable = false, length = 100, unique = true)
+    private String email;
+    
     @NotBlank(message = "First name can't be empty")
+    @Size(min = 2,message = "That name is too short")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
+    @Column(nullable = false, length = 20)
     private String firstName;
 
     @Column(nullable = false, length = 20)
     @NotBlank(message = "Last name can't be empty")
+    @Size(min = 2,message = "That last name is too short")
+    @Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
     private String lastName;
 
-    @Column(nullable = false, length = 100)
-    @NotBlank(message = "Password can't be empty")
-    @JsonIgnore
-    private String password;
-
+    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
     @Column(length = 250)
     private String avatar;
 
@@ -40,23 +67,53 @@ public class User {
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean isAdmin;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
+    @OneToMany(
+            mappedBy = "chef",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST
+    )
+    @JsonBackReference
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "followee")
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    @JsonBackReference
     private List<Follow> followings;
 
-    @ManyToMany(mappedBy = "favoritedBy")
-    private List<Recipe> favorites;
+    @OneToMany(
+            mappedBy = "friend",
+            cascade = CascadeType.ALL
+    )
+    @JsonBackReference
+    private List<Follow> followers;
+
+
+    @ManyToMany(mappedBy = "favoritedBy",
+            cascade = CascadeType.ALL
+    )
+    @JsonBackReference
+    private Set<Recipe> favorites = new HashSet<Recipe>();
+
+    @OneToOne(
+            mappedBy="owner",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            optional = false
+    )
+    @JsonBackReference
+    private Pantry pantry;
 
     public User(){}
 
     // Setter
     public User(String email, String firstName, String lastName, String password) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
         this.password = password;
+        this.isAdmin = false;
     }
     // Getter
     public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
@@ -150,11 +207,27 @@ public class User {
         this.followings = followings;
     }
 
-    public List<Recipe> getFavorites() {
+    public Set<Recipe> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(List<Recipe> favorites) {
+    public void setFavorites(Set<Recipe> favorites) {
         this.favorites = favorites;
+    }
+
+    public Pantry getPantry() {
+        return pantry;
+    }
+
+    public void setPantry(Pantry pantry) {
+        this.pantry = pantry;
+    }
+
+    public List<Follow> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Follow> followers) {
+        this.followers = followers;
     }
 }

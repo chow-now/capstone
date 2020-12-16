@@ -1,70 +1,108 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="recipes")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    
+    @Size(min = 2, message = "Title should be a bit longer.")
+    @Size(max = 100,message = "Title is too long")
+    @NotBlank(message= "Recipe needs a title")
     @Column(nullable = false,length = 100)
     private String title;
 
+    @Size(min = 5, message = "Description should be a bit longer")
+    @Size(max = 500,message = "That's a bit long winded")
+    @NotBlank(message= "Recipe needs a description")
+    @Column(nullable = false,length = 500)
+    private String description;
+
+    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
+    @NotBlank(message= "Directions would be useful here. Please provides some.")
     @Column(nullable = false,columnDefinition = "TEXT")
     private String directions;
 
+
+    @NotBlank(message = "Please set the level of difficulty.")
     @Column(nullable = false,length = 100)
     private String difficulty;
 
+    @Min(1)
+    @Max(999)
+    @NotNull(message= "Oops. Looks like the cook time is missing.")
     @Column(nullable = false)
     private int cookTime;
 
+    @Min(1)
+    @Max(999)
+    @NotNull(message= "Oops. Looks like the prem time is missing.")
     @Column(nullable = false)
     private int prepTime;
 
+    @Min(1)
+    @Max(value= 20, message = "Woah, that's a lot of servings!")
+    @NotNull(message = "Did you forget the servings? Please provide an amount.")
     @Column(nullable = false)
     private int servings;
 
     @ManyToOne
-    @JoinColumn(name = "cook_id")
+    @JsonManagedReference
     private User chef;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(
+            mappedBy = "recipe",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST)
     private List<Image> images;
 
     @OneToMany(
             mappedBy = "recipe",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<RecipeIngredient> RecipeIngredients;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name="recipe_categories",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="category_id")}
+            joinColumns=@JoinColumn(name="recipe_id"),
+            inverseJoinColumns=@JoinColumn(name="category_id")
     )
-    private List<Category> categories;
+    private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name="favorites",
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="user_id")}
     )
-    private List<User> favoritedBy;
+    private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
 
     //setter
-    public Recipe(String title, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
-        this.title = title;
-        this.directions = directions;
+    public Recipe(String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
+        this.title = title.trim();
+        this.description = description.trim();
+        this.directions = directions.trim();
         this.difficulty = difficulty;
         this.cookTime = cookTime;
         this.prepTime = prepTime;
@@ -72,9 +110,10 @@ public class Recipe {
         this.chef = chef;
     }
     //getter
-    public Recipe(long id, String title, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
+    public Recipe(long id, String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.directions = directions;
         this.difficulty = difficulty;
         this.cookTime = cookTime;
@@ -97,6 +136,14 @@ public class Recipe {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getDirections() {
@@ -143,19 +190,11 @@ public class Recipe {
         return chef;
     }
 
-    public List<RecipeIngredient> getIngredients() {
-        return RecipeIngredients;
-    }
-
-    public void setIngredients(List<RecipeIngredient> RecipeIngredients) {
-        this.RecipeIngredients = RecipeIngredients;
-    }
-
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -167,12 +206,20 @@ public class Recipe {
         this.images = images;
     }
 
-    public List<User> getFavoritedBy() {
+    public Set<User> getFavoritedBy() {
         return favoritedBy;
     }
 
-    public void setFavoritedBy(List<User> favoritedBy) {
+    public void setFavoritedBy(Set<User> favoritedBy) {
         this.favoritedBy = favoritedBy;
+    }
+
+    public List<RecipeIngredient> getRecipeIngredients() {
+        return RecipeIngredients;
+    }
+
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        RecipeIngredients = recipeIngredients;
     }
 
     public void setChef(User chef) {

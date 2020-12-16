@@ -1,9 +1,17 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="pantry_ingredients")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class PantryIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +23,13 @@ public class PantryIngredient {
     @Column(nullable = false)
     private String unit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JsonIgnore
     private Pantry pantry;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JsonIgnore
     private Ingredient ingredient;
 
     public PantryIngredient(){}
@@ -78,4 +88,5 @@ public class PantryIngredient {
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
+
 }

@@ -5,11 +5,13 @@ import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -58,9 +60,19 @@ public class RecipeController {
         model.addAttribute("recipe", new Recipe());
         return "recipes/new";
     }
-
+    /* new recipe with error handling */
     @PostMapping("/recipe/new")
-    public String submitPost(@ModelAttribute Recipe recipeToBeSaved) {
+    public String submitPost(
+            @Valid @ModelAttribute Recipe recipeToBeSaved,
+            Errors validation,
+            Model model
+    ) {
+        if(validation.hasErrors()){
+            model.addAttribute("errors",validation);
+            model.addAttribute("recipe",recipeToBeSaved);
+            return "recipes/new";
+        }
+        
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);

@@ -1,16 +1,25 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="pantries")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Pantry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_id")
+    @JsonIgnore
     private User owner;
 
     @OneToMany(
@@ -47,11 +56,11 @@ public class Pantry {
         this.owner = owner;
     }
 
-    public List<PantryIngredient> getIngredients() {
+    public List<PantryIngredient> getPantryIngredients() {
         return pantryIngredients;
     }
 
-    public void setIngredients(List<PantryIngredient> pantryIngredients) {
+    public void setPantryIngredients(List<PantryIngredient> pantryIngredients) {
         this.pantryIngredients = pantryIngredients;
     }
 }
