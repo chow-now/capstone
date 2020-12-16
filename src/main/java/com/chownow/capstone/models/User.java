@@ -86,7 +86,7 @@ public class User {
     public User(){}
 
     // Setter
-    public User(String username, String email, String firstName, String lastName, String password) {
+    public User(String email, String firstName, String lastName, String password) {
         this.email = email;
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
@@ -95,7 +95,7 @@ public class User {
     }
 
     // Getter
-    public User(long id, String username, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
+    public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;

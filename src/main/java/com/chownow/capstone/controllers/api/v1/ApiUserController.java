@@ -28,13 +28,12 @@ public class ApiUserController {
     private FollowRepository followDao;
 
     /* GET MAPPINGS */
-
     // get all users
     @GetMapping
     public @ResponseBody List<User> getAllUsers(){
         return userDao.findAll();
     }
-    
+
     // get user by id
     @GetMapping("/{id}")
     public @ResponseBody User getUser(@PathVariable (value="id") long userId) {
@@ -82,13 +81,13 @@ public class ApiUserController {
 
     //get user following
     @GetMapping("/{id}/following")
-    public @ResponseBody List<User> getFollowings(@PathVariable (value="id") long userId){
+    public @ResponseBody List<User> getFollowings(@PathVariable (value="id") long userId) {
         List<User> followings = new ArrayList<>();
         Optional<User> user = userDao.findById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             User dbUser = user.get();
-            List<Follow> followResults =followDao.findAllByFollower(dbUser);
-            for(Follow follow : followResults){
+            List<Follow> followResults = followDao.findAllByFollower(dbUser);
+            for (Follow follow : followResults) {
                 followings.add(follow.getFollowee());
             }
             return followings;

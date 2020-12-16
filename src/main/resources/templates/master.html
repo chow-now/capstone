@@ -1,78 +1,343 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
-  <title>Master</title>
+  <title>User Profile</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 </head>
 <body>
 
-<!--=====================User=====================-->
-<!--Info-->
-  <!--Id-->                   <h1 th:text="${user.id}"></h1>
-  <!--Email-->                <h1 th:text="${user.email}"></h1>
-  <!--Username-->             <h1 th:text="${user.username}"></h1>
-  <!--First Name-->           <h1 th:text="${user.firstName}"></h1>
-  <!--First Name-->           <h1 th:text="${user.lastName}"></h1>
-  <!--About-->                <h1 th:text="${user.aboutMe}"></h1>
-  <!--Is Admin?-->            <h1 th:text="${user.isAdmin}"></h1>
-  <!--User Recipe size-->     <h1 class="col-3" th:text="${user.recipes.size()}"></h1>
-  <!--Avatar img-->           <img th:src="${user.avatar}" alt="profile image">
 
-<!--Followers-->
-  <!--# of follower-->        <h1 class="col-3" th:text="${user.followings.size()}"></h1>
-  <!--# of following-->       <!--Todo:!!!!!-->
+<!--<h1>Table Template</h1>-->
+<!--<table class="table">-->
+<!--  <tbody>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--Keep empty-->
+<!--<tr>-->
+<!--  <td></td>-->
+<!--  <td></td>-->
+<!--</tr>-->
+<!--  </tbody>-->
+<!--</table>-->
+
+<h1>User info</h1>
+<table class="table">
+  <tbody>
+  <tr>
+    <td><p>Id</p></td>
+    <td><p th:text="${user.id}"></p></td>
+  </tr>
+  <tr>
+    <td>Avatar</td>
+    <td><img th:src="${user.avatar}" alt="profile image">
+    </td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td th:text="${user.email}"></td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td><span th:text="${user.firstName}"></span> <span th:text="${user.lastName}"></span></td>
+  </tr>
+  <tr>
+    <td>About</td>
+    <td th:text="${user.aboutMe}"></td>
+  </tr>
+  <tr>
+    <td>Is Admin?</td>
+    <td th:text="${user.isAdmin}"></td>
+  </tr>
+
+  <tr>
+    <td># of followers</td>
+    <td th:text="${user.followings.size()}"></td>
+  </tr>
+
+  <table class="table">
+    <tr>
+      <td>Followers</td>
+      <td th:each="followers: ${user.followings}"><span th:text="${followers.follower.id}"/> <span th:text="${followers.follower.firstName}"/></td>
+    </tr>
+  </table>
+
+  <!--Todo: Following pathing-->
+  <table class="table">
+    <tr>
+      <td>Following</td>
+      <td th:each="following: ${user.followings}"> id:<span th:text="${following.followee.id}"/> <span th:text="${following.followee.firstName}"/></td>
+    </tr>
+  </table>
+
+
+
+
+  <!--Todo: Following broken-->
+  <!--  <tr>-->
+  <!--    <td># of following</td>-->
+  <!--    <td th:text="${user.followings.size()}"></td>-->
+  <!--  </tr>-->
+  <!--  <td>Followings' id</td>-->
+  <!--  <td>-->
+  <!--    <div th:each="followings: ${user.followings}">-->
+  <!--      <span th:text="${followings.followee.id}" />-->
+  <!--    </div>-->
+  <!--  </td>-->
+  <!--  <td>Followings' Name</td>-->
+  <!--  <td>-->
+  <!--    <div th:each="followings: ${user.followings}">-->
+  <!--      <span th:text="${followings.followee.firstName}" />-->
+  <!--    </div>-->
+  <!--  </td>-->
+  <!--  </tr>-->
+  </tbody>
+</table>
+
+
+<!--=====================Recipe=====================-->
+<!--<td th:text="${recipes.get({id}).id}"></td>-->
+<div>
+  <h1>Single Recipe</h1>
+  <table class="table">
+    <tbody>
+    <tr>
+      <td>Recipe Id#</td>
+      <td th:text="${recipes.get(1).id}"></td>
+    </tr>
+    <tr>
+      <td>Title</td>
+      <td th:text="${recipes.get(1).title}"></td>
+    </tr>
+    <!--Keep empty-->
+    <tr>
+      <td>Chef id#</td>
+      <td th:text="${recipes.get(1).chef.id}"></td>
+    </tr>
+    <tr>
+      <td>Chef Name</td>
+      <td th:text="${recipes.get(1).chef.firstName}"></td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td th:text="${recipes.get(1).description}"></td>
+    </tr>
+    <tr>
+      <td>Directions</td>
+      <td th:text="${recipes.get(1).directions}"></td>
+    </tr>
+    <tr>
+      <td>Difficulty</td>
+      <td th:text="${recipes.get(1).difficulty}"></td>
+    </tr>
+    <tr>
+      <td>Servings</td>
+      <td th:text="${recipes.get(1).servings}"></td>
+    </tr>
+    <tr>
+      <td>Prep Time</td>
+      <td th:text="${recipes.get(1).prepTime}"></td>
+    </tr>
+    <tr>
+      <td>Cook Time</td>
+      <td th:text="${recipes.get(1).cookTime}"></td>
+    </tr>
+
+    <tr>
+    <table class="table">
+      <tr>
+        <td>favoritedBy</td>
+        <td th:each="favoritedBy: ${recipes.get(1).favoritedBy}"><span th:text="${favoritedBy.id}"/> <span th:text="${favoritedBy.firstName}"/></td>
+      </tr>
+    </table>
+    </tr>
+
+    <tr>
+    <table class="table">
+      <tr>
+        <td>Categories</td>
+        <td th:each="cat: ${recipes.get(1).categories}">
+          id:<span th:text="${cat.id}"/>
+          name:<span th:text="${cat.name}"/>
+        </td>
+      </tr>
+    </table>
+    </tr>
+
+<!--    <tr th:each="images: ${recipes.get(3).images}">-->
+<!--      <img th:attr="src=${images.url},title=${images.url}" class="img-fluid" alt="user"/>-->
+<!--    </tr>-->
+    </tbody>
+  </table>
+</div>
+
+<!--=====================Recipies=====================-->
+<div>
+  <h1>Recipes</h1>
+  <table class="table">
+    <tbody>
+    <div th:each="recipe : ${user.recipes}">
+      <tr>
+        <td>Recipe Id#</td>
+        <td th:text="${recipe.id}"></td>
+      </tr>
+      <tr>
+        <td>Title</td>
+        <td th:text="${recipe.title}"></td>
+      </tr>
+      <!--Keep empty-->
+      <tr>
+        <td>Chef id#</td>
+        <td th:text="${recipe.chef.id}"></td>
+      </tr>
+      <tr>
+        <td>Chef Name</td>
+        <td th:text="${recipe.chef.firstName}"></td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td th:text="${recipe.description}"></td>
+      </tr>
+      <tr>
+        <td>Directions</td>
+        <td th:text="${recipe.directions}"></td>
+      </tr>
+      <tr>
+        <td>Difficulty</td>
+        <td th:text="${recipe.difficulty}"></td>
+      </tr>
+      <tr>
+        <td>Servings</td>
+        <td th:text="${recipe.servings}"></td>
+      </tr>
+      <tr>
+        <td>Prep Time</td>
+        <td th:text="${recipe.prepTime}"></td>
+      </tr>
+      <tr>
+        <td>Cook Time</td>
+        <td th:text="${recipe.cookTime}"></td>
+      </tr>
+      <!--Loops both broken??-->
+      <tr>
+        <table class="table">
+          <tr>
+            <td>favoritedBy</td>
+            <td th:each="favoritedBy: ${recipes.get(1).favoritedBy}"><span th:text="${favoritedBy.id}"/> <span th:text="${favoritedBy.firstName}"/></td>
+          </tr>
+        </table>
+      </tr>
+      <tr>
+        <table class="table">
+          <tr>
+            <td>Categories</td>
+            <td th:each="cat: ${recipes.get(1).categories}">
+              id:<span th:text="${cat.id}"/>
+              name:<span th:text="${cat.name}"/>
+            </td>
+          </tr>
+        </table>
+      </tr>
+      <tr th:each="img : ${recipe.images}">
+        <img th:attr="src=${img.url},title=${img.url}" class="img-fluid" alt="user"/>
+      </tr>
+    </div>
+    </tbody>
+  </table>
+</div>
+
+<h1>Recipe Ingredients</h1>
+<table class="table">
+  <tbody>
+  <!--loops but cant access?-->
+
+
+
+
+
+<!--<h1>Table Template</h1>-->
+<!--<table class="table">-->
+<!--  <tbody>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <td></td>-->
+<!--    <td></td>-->
+<!--  </tr>-->
+<!--Keep empty-->
+<!--<tr>-->
+<!--  <td></td>-->
+<!--  <td></td>-->
+<!--</tr>-->
+<!--  </tbody>-->
+<!--</table>-->
+
 
 <!--Links-->
-  <!--To Profile-->             <h1><a href="" th:href="@{/users/{path}(path=${user.id})}">Profile</a></h1>
-  <!--To Profile-->             <h1><a href="" th:href="@{/users/{path}(path=${user.id})}">Profile</a></h1>
-  <!--To Profile Edit-->        <h1 class="pull-right mb-3"><a href="" th:href="@{/users/{path}/edit(path=${user.id})}">Edit Profile</a></h1>
-  <!--To Profile Delete-->      <h1 class="pull-right mb-3"><a href="" th:href="@{/users/{path}/edit(path=${user.id})}">Delete Profile</a></h1><!--Todo: !!!!!!!-->
-
-  <!--=====================Recipies=====================-->
-  <!--Info-->
-    <!--Loop-->               <div th:each="recipe : ${recipes}">
-    <!--Id-->                   <h1 th:text="${recipe.id}"></h1>
-    <!--Title-->                <h1 th:text="${recipe.title}"></h1>
-    <!--Chef #-->               <h1 th:text="${recipe.chef.id}"></h1>
-    <!--Fav #-->                <h1 th:text="${recipe.favoritedBy.size()}"></h1>
-    <!--Fav Users Loop-->       <div th:each="fav : ${recipe.favoritedBy}">
-    <!--Fav Users Username-->     <h1 th:text="${fav.username}"></h1>
-                                </div>
-    <!--Difficulty-->           <h1 th:text="${recipe.difficulty}"></h1>
-    <!--Prep time-->             <h1 th:text="${recipe.prepTime}"></h1>
-    <!--Prep time-->             <h1 th:text="${recipe.cookTime}"></h1>
-    <!--Serving-->              <h1 th:text="${recipe.servings}"></h1>
-    <!--Directions-->           <h1 th:text="${recipe.directions}"></h1>
-
-  <!--Ingredients-->
-    <!--Recipe Loop-->          <div th:each="recipeIngredients : ${recipe.ingredients}">
-    <!--Recipe Id-->              <h1 th:text="${recipeIngredients.id}"></h1>
-    <!--Recipe Name-->            <h1 th:text="${recipeIngredients.ingredient.name}"></h1>
-    <!--Recipe Amount-->          <h1 th:text="${recipeIngredients.amount}"></h1>
-    <!--Recipe Unit-->            <h1 th:text="${recipeIngredients.unit}"></h1>
-                                </div>
-
-
-  <!--Categories-->
-    <!--Categories Loop-->      <div th:each="recipeCategories : ${recipe.categories}">
-    <!--Categories Id-->          <h1 th:text="${recipeCategories.id}"></h1>
-    <!--Categories Name-->        <h1 th:text="${recipeCategories.name}"></h1>
-                                </div>
-</div>
+<!--To Profile <h1><a href="" th:href="@{/users/{path}(path=${user.id})}">Profile</a></h1>-->
+<!--To Profile <h1><a href="" th:href="@{/users/{path}(path=${user.id})}">Profile</a></h1>-->
+<!--To Profile Edit <h1 class="pull-right mb-3"><a href="" th:href="@{/users/{path}/edit(path=${user.id})}">Edit Profile</a></h1>-->
+<!--To Profile Delete <h1 class="pull-right mb-3"><a href="" th:href="@{/users/{path}/edit(path=${user.id})}">Delete Profile</a></h1>-->
 
 
 <!--=====================Pantry=====================-->
-<!--Pantry Id #-->                         <span><h1>Pantry #</h1><h1 th:text="${pantry.id}"></h1></span>
-<hr>
-<hr>
-<!--Info-->
-  <!--Pantry ingredient size-->                       <h1 th:text="${pantry.ingredients.size()}"></h1></span>
-  <!--Pantry ingredient loop-->                       <div th:each="pantryIngrediens : ${pantry.ingredients}">
-    <!--Pantry ingredient id-->                           <h1 th:text="${pantryIngrediens.id}"></h1>
-    <!--Pantry ingredient ingredient id-->                <h1 th:text="${pantryIngrediens.ingredient.id}"></h1>
-    <!--Pantry ingredient ingredient name-->              <h1 th:text="${pantryIngrediens.ingredient.name}"></h1>
-    <!--Pantry ingredient amount-->                       <h1 th:text="${pantryIngrediens.amount}"></h1>
-    <!--Pantry ingredient unit-->                         <h1 th:text="${pantryIngrediens.unit}"></h1>
-                                                      </div>
-</body>
+  <!--<h1>Table Template</h1>-->
+  <!--<table class="table">-->
+  <!--  <tbody>-->
+  <!--  <tr>-->
+  <!--    <td></td>-->
+  <!--    <td></td>-->
+  <!--  </tr>-->
+  <!--  <tr>-->
+  <!--    <td></td>-->
+  <!--    <td></td>-->
+  <!--  </tr>-->
+  <!--  <tr>-->
+  <!--    <td></td>-->
+  <!--    <td></td>-->
+  <!--  </tr>-->
+  <!--Keep empty-->
+  <!--<tr>-->
+  <!--  <td></td>-->
+  <!--  <td></td>-->
+  <!--</tr>-->
+  <!--  </tbody>-->
+  <!--</table>-->
+
+
+
+
+<!--Pantry Id #--> <span><h1>Pantry #</h1><h1 th:text="${pantry.id}"></h1></span>
+Info
+<!--Pantry ingredient size--> <h1 th:text="${pantry.ingredients.size()}"></h1>
+Pantry ingredient loop
+<div th:each="pantryIngrediens : ${pantry.ingredients}">
+  <!--Pantry ingredient id--> <h1 th:text="${pantryIngrediens.id}"></h1>
+  <!--Pantry ingredient ingredient id--> <h1 th:text="${pantryIngrediens.ingredient.id}"></h1>
+  <!--Pantry ingredient ingredient name--> <h1 th:text="${pantryIngrediens.ingredient.name}"></h1>
+  <!--Pantry ingredient amount--> <h1 th:text="${pantryIngrediens.amount}"></h1>
+  <!--Pantry ingredient unit--> <h1 th:text="${pantryIngrediens.unit}"></h1>
 </html>

@@ -1,10 +1,12 @@
 package com.chownow.capstone.controllers;
 
+import com.chownow.capstone.models.Follow;
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class AccountController {
 	@Autowired
 	private UserRepository userDao;
-
 	@Autowired
 	private FollowRepository followDao;
 
@@ -38,7 +41,7 @@ public class AccountController {
 	@GetMapping("/sign-up")
 	public String showSingnupForm(Model model){
 		model.addAttribute("user", new User());
-		return "/new";
+		return "/signup";
 	}
 
 	@PostMapping("/sign-up")
@@ -69,12 +72,9 @@ public class AccountController {
 		/*Get all user recipes @recipes_table*/
 		model.addAttribute("recipes", recipeDao.findAllByChef(user));
 		/*Get Pantry*/
-		model.addAttribute("pantry", pantryDao.findPantryByOwner(user));
-		/*Get Pantry Ingredients*/
-		/*4am trying to do some crazy method chaining is there a better way to declare what I need*/
-		model.addAttribute("pantryIngredients", pantryIngredientDao.findAllByPantry_Id(4));
-		return "profile";
+		return "/users/profile";
 	}
+
 
 //	@PostMapping("/users/{id}/edit")
 //	public String editRecipe(User userToBeSaved) {
@@ -102,6 +102,7 @@ public class AccountController {
 		return "redirect:/";
 	}
 
+
 	/*Todo: Roles*/
 	/*	@PostMapping("/users/{id}/disable")
 	public String disableAd(Long id) {
@@ -110,6 +111,18 @@ public class AccountController {
 		userDao.save(user);
 		return "redirect:/users";
 	}*/
+
+
+	// delete follow
+	@PostMapping("/{id}/delete")
+	public ResponseEntity<Follow> deleteFollow(@PathVariable ("id") long followId){
+		Optional<Follow> follow = followDao.findById(followId);
+		if(follow.isPresent()) {
+			Follow dbFollow = follow.get();
+			followDao.delete(dbFollow);
+		}
+		return ResponseEntity.ok().build();
+	}
 }
 
 

@@ -62,5 +62,4 @@ public class ApiCategoriesController {
         }
         return ResponseEntity.ok().build();
     }
-
 }

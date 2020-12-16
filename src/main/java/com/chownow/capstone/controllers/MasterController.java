@@ -31,19 +31,13 @@ public class MasterController {
 	@GetMapping("/master")
 	public String showSingnupForm(Model model) {
 		/*Find One User*/
-		User user = userDao.getOne(11L);
+		User user = userDao.getOne(12L);
 
 		/*Pass in single user*/
 		model.addAttribute("user",user);
 
 		/*Get all user recipes @recipes_table*/
 		model.addAttribute("recipes", recipeDao.findAllByChef(user));
-
-		/*Get Pantry*/
-		model.addAttribute("pantry", pantryDao.findPantryByOwner(user));
-
-		/*Get Pantry Ingredients*/
-		model.addAttribute("pantryIngredients", pantryIngredientDao.findAllByPantry_Id(4));
 		return "/master";
 	}
 }

@@ -1,20 +1,143 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="partials/scripts :: head('All Recipes')">
-    <meta charset="UTF-8">
-    <title>Roll the Dice</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Chownow Sign Up</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
 </head>
 <body>
-<nav th:replace="partials/navbar :: nav"></nav>
-
-<main class="container">
-    <div class="card" th:each="recipe : ${recipes}">
-        <a th:href="@{/recipes/{id}(id=${recipe.getId()})}" class="text-center" th:text="${recipe.title}"></a>
-        <p th:text="${recipe.difficulty}"></p>
+<div class="row">
+    <header th:include="/partials/navbar.html :: nav"></header>
+</div>
+<br><br><br>
+<!--Todo: if "search == null display /random recipes : display /recipesbyingredientorfilter"   -->
+<!--Todo:potentailly more robust where we can also search for recipes by title or categories.-->
+<div class="container">
+    <!--Search-->
+    <form class="form-inline d-flex justify-content-center md-form form-sm active-cyan-2 mt-2">
+        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
+               aria-label="Search">
+        <i class="fas fa-search" aria-hidden="true"></i>
+    </form>
+    <!--Filters-->
+    <div class="row">
+        <div class="col-6">
+            <select class="custom-select" multiple>
+                <option selected>Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <select class="custom-select" multiple>
+                <option selected>Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
     </div>
-</main>
 
-<footer th:replace="partials/partials :: footer"></footer>
-<th:block th:include="partials/scripts :: scripts"></th:block>
+
+
+<div class="row">
+    <!-- Grid row -->
+    <div class="row my-5">
+        <!-- Grid column -->
+        <div class="col-md-6 mb-4">
+            <h2>Random Recipies</h2>
+            <div th:each="recipe : ${recipes}">
+                <div class="card-deck">
+                    <!--Card Body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <h2 class="card-title" th:text="${recipe.title}"></h2>
+                            </div>
+                            <div class="col-3">
+                                <!--Todo: reactive and sizing-->
+                                <div class="row">
+                                    <h5 th:text="${recipe.favoritedBy.size()}" class="text-center"></h5>
+                                    <i class="far fa-bookmark ml-2 align-center"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Card-->
+                        <div class="row">
+                            <div class="col-md-6 my-1">
+                                <div class="view overlay z-depth-1">
+                                    <a href="">
+                                        <div th:each="img : ${recipe.images}">
+                                            <img th:attr="src=${img.url},title=${img.url}" class="img-fluid" alt="user"/>
+                                        </div>
+                                    </a>
+                                    <a>
+                                        <div class="mask waves-effect waves-light rgba-white-slight"></div>
+                                    </a>
+                                    <div class="description rgba-stylish-light text-white">
+                                        <div class="title ml-2">
+                                            <div class="d-flex mt-3">
+                                                <div th:each="recipeCategories : ${recipe.categories}">
+                                                    <p class="mr-2" th:text="${recipeCategories.name}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <i class="fas fa-utensils"></i>
+                                                        <h5 th:text="${recipe.favoritedBy.size()}">7/10 ingredients</h5>
+                                                    </div>
+                                                    <div class="col">
+                                                        <i class="fas fa-user-friends"></i>
+                                                        <h5 th:text="${recipe.favoritedBy.size()}">Serves</h5>
+                                                    </div>
+                                                    <div class="col">
+                                                        <i class="fas fa-utensils"></i>
+                                                        <h5 th:text="${recipe.difficulty}"></h5>
+                                                    </div>
+                                                    <div class="col">
+                                                        <i class="far fa-clock text-center"></i>
+                                                        <h5 th:text="${recipe.cookTime}"></h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <h4 th:text="${recipe.description}"></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--/. Sidebar navigation -->
+<!-- /Start your project here-->
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 </body>
 </html>
