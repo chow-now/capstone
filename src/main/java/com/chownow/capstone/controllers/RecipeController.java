@@ -73,6 +73,7 @@ public class RecipeController {
         }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
+
         recipeToBeSaved.setChef(userDoa.getOne(1L));
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
