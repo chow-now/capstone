@@ -1,7 +1,9 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +15,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="categories")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +32,9 @@ public class Category {
     @Column(length = 100)
     private String icon;
 
-    @ManyToMany(
-            mappedBy = "categories"
-    )
+    @ManyToMany(mappedBy = "categories")
     @JsonIgnore
-    private Set<Recipe> recipes = new HashSet<Recipe>();
+    private Set<Recipe> recipes = new HashSet<>();
 
     public Category(){}
 

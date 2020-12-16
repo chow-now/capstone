@@ -1,24 +1,30 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="pantries")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Pantry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_id")
     @JsonIgnore
     private User owner;
 
     @OneToMany(
             mappedBy = "pantry",
-            cascade = CascadeType.PERSIST,
+            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<PantryIngredient> pantryIngredients;

@@ -1,8 +1,6 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,6 +10,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="recipes")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Recipe {
 
     @Id
@@ -76,15 +77,18 @@ public class Recipe {
     @JsonIgnore
     private List<RecipeIngredient> RecipeIngredients;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name="recipe_categories",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="category_id")}
+            joinColumns=@JoinColumn(name="recipe_id"),
+            inverseJoinColumns=@JoinColumn(name="category_id")
     )
     private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name="favorites",
             joinColumns={@JoinColumn(name="recipe_id")},

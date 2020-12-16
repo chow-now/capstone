@@ -1,7 +1,9 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -9,6 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name="images")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

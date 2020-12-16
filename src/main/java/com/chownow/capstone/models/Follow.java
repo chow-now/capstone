@@ -1,11 +1,16 @@
 package com.chownow.capstone.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name= "follows")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Follow {
 
         @Id
@@ -13,26 +18,26 @@ public class Follow {
         private long id;
 
         @ManyToOne
-        @JoinColumn(name = "follower_id")
+        @JoinColumn(name = "user_id")
         @JsonManagedReference
-        private User follower;
+        private User user;
 
         @ManyToOne
-        @JoinColumn(name = "followee_id")
+        @JoinColumn(name = "friend_id")
         @JsonManagedReference
-        private User followee;
+        private User friend;
 
         public Follow(){}
 
-        public Follow(User follower, User followee) {
-                this.follower = follower;
-                this.followee = followee;
+        public Follow(User user, User friend) {
+                this.user = user;
+                this.friend = friend;
         }
 
-        public Follow(long id, User follower, User followee) {
+        public Follow(long id, User user, User friend) {
                 this.id = id;
-                this.follower = follower;
-                this.followee = followee;
+                this.user = user;
+                this.friend = friend;
         }
 
         public long getId() {
@@ -43,21 +48,19 @@ public class Follow {
                 this.id = id;
         }
 
-        public User getFollower() {
-                return follower;
+        public User getUser() {
+                return user;
         }
 
-        public void setFollower(User follower) {
-                this.follower = follower;
+        public void setUser(User user) {
+                this.user = user;
         }
 
-        public User getFollowee() {
-                return followee;
+        public User getFriend() {
+                return friend;
         }
 
-        public void setFollowee(User followee) {
-                this.followee = followee;
+        public void setFriend(User friend) {
+                this.friend = friend;
         }
-
-
 }
