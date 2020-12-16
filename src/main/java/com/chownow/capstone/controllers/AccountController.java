@@ -60,7 +60,8 @@ public class AccountController {
 
 	@GetMapping("/users/search")
 	public String showUsersbySearch(Model model) {
-		model.addAttribute("followers", followDao.findAllByFollowee(userDao.getOne(1L)));
+		model.addAttribute("followers", userDao.findById(2L)); 		/*Todo: Hardcode*/
+
 		return "users/index";
 	}
 

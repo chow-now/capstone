@@ -1,206 +1,233 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @Column(nullable = false)
-    @Size(min = 8,message = "Password must be at least 8 characters")
-    @Pattern.List({
-            @Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
-            @Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
-            @Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
-            @Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
-            @Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
-    })
-    @JsonIgnore
-    private String password;
+	@Column(nullable = false)
+	@Size(min = 8,message = "Password must be at least 8 characters")
+	@Pattern.List({
+					@Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
+					@Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
+					@Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
+					@Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
+					@Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
+	})
+	@JsonIgnore
+	private String password;
 
-    @Email(message = "Email can't be empty")
-    @Pattern(
-            regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
-            message = "Please provide a valid email address"
-    )
-    @Column(nullable = false, length = 100, unique = true)
-    private String email;
+	@Email(message = "Email can't be empty")
+	@Pattern(
+					regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
+					message = "Please provide a valid email address"
+	)
+	@Column(nullable = false, length = 100, unique = true)
+	private String email;
 
+	@NotBlank(message = "First name can't be empty")
+	@Size(min = 2,message = "That name is too short")
+	@Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
+	@Column(nullable = false, length = 20)
+	private String firstName;
 
-    @NotBlank(message = "First name can't be empty")
-    @Size(min = 2,message = "That name is too short")
-    @Pattern(regexp = "^([^0-9]*)$", message = "Name must not contain numbers")
-    @Column(nullable = false, length = 20)
-    private String firstName;
+	@Column(nullable = false, length = 20)
+	@NotBlank(message = "Last name can't be empty")
+	@Size(min = 2,message = "That last name is too short")
+	@Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
+	private String lastName;
 
-    @Column(nullable = false, length = 20)
-    @NotBlank(message = "Last name can't be empty")
-    @Size(min = 2,message = "That last name is too short")
-    @Pattern(regexp = "^([^0-9]*)$", message = "Last name must not contain numbers")
-    private String lastName;
+	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
+	@Column(length = 250)
+	private String avatar;
 
-    @Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
-    @Column(length = 250)
-    private String avatar;
+	@Column(columnDefinition = "TEXT")
+	private String aboutMe;
 
-    @Column(columnDefinition = "TEXT")
-    private String aboutMe;
+	@Column(columnDefinition = "boolean default false", nullable = false)
+	private Boolean isAdmin;
 
-    /*Can We remove nullable = false b/c I'm lazy and implementing roles anyways*/
-    @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean isAdmin;
+	@OneToMany(
+					mappedBy = "chef",
+					orphanRemoval = true,
+					cascade = CascadeType.PERSIST
+	)
+	@JsonBackReference
+	private List<Recipe> recipes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chef")
-    @JsonBackReference
-    private List<Recipe> recipes;
+	@OneToMany(
+					mappedBy = "user",
+					cascade = CascadeType.ALL
+	)
+	@JsonBackReference
+	private List<Follow> followings;
 
-    @OneToMany(mappedBy = "followee")
-    @JsonBackReference
-    private List<Follow> followings;
-
-    @ManyToMany(mappedBy = "favoritedBy")
-    @JsonBackReference
-    private List<Recipe> favorites;
-
-    /*Todo: I think I need to add a owner column in order to be*/
-
-    /*Todo: Authorization*/
-    /*
-    @Column
-    private boolean disabled = false;
-    public void disable() {
-        this.disabled = true;
-    }*/
-
-    public User(){}
-
-    // Setter
-    public User(String email, String firstName, String lastName, String password) {
-        this.email = email;
-        this.firstName = firstName.trim();
-        this.lastName = lastName.trim();
-        this.password = password;
-        this.isAdmin = false;
-    }
-
-    // Getter
-    public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin/*, boolean disabled*/) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.avatar = avatar;
-        this.aboutMe = aboutMe;
-        this.isAdmin = isAdmin;
-        /*this.disabled = disabled;*/
-    }
-
-    public User(User copy) {
-        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
-        email = copy.email;
-        password = copy.password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+	@OneToMany(
+					mappedBy = "friend",
+					cascade = CascadeType.ALL
+	)
+	@JsonBackReference
+	private List<Follow> followers;
 
 
-    public String getEmail() {
-        return email;
-    }
+	@ManyToMany(mappedBy = "favoritedBy",
+					cascade = CascadeType.ALL
+	)
+	@JsonBackReference
+	private Set<Recipe> favorites = new HashSet<Recipe>();
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	@OneToOne(
+					mappedBy="owner",
+					cascade = CascadeType.ALL,
+					fetch = FetchType.LAZY,
+					optional = false
+	)
+	@JsonBackReference
+	private Pantry pantry;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public User(){}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	// Setter
+	public User(String email, String firstName, String lastName, String password) {
+		this.email = email;
+		this.firstName = firstName.trim();
+		this.lastName = lastName.trim();
+		this.password = password;
+		this.isAdmin = false;
+	}
+	// Getter
+	public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
+		this.id = id;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.avatar = avatar;
+		this.aboutMe = aboutMe;
+		this.isAdmin = isAdmin;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getAvatar() {
-        return avatar;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getAboutMe() {
-        return aboutMe;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setIsAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public List<Recipe> getRecipes() {
-        return recipes;
-    }
+	public String getAvatar() {
+		return avatar;
+	}
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
-    }
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
-    public List<Follow> getFollowings() {
-        return followings;
-    }
+	public String getAboutMe() {
+		return aboutMe;
+	}
 
-    public void setFollowings(List<Follow> followings) {
-        this.followings = followings;
-    }
+	public void setAboutMe(String aboutMe) {
+		this.aboutMe = aboutMe;
+	}
 
-    public List<Recipe> getFavorites() {
-        return favorites;
-    }
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
 
-    public void setFavorites(List<Recipe> favorites) {
-        this.favorites = favorites;
-    }
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 
+	public List<Recipe> getRecipes() {
+		return recipes;
+	}
 
+	public void setRecipes(List<Recipe> recipes) {
+		this.recipes = recipes;
+	}
+
+	public List<Follow> getFollowings() {
+		return followings;
+	}
+
+	public void setFollowings(List<Follow> followings) {
+		this.followings = followings;
+	}
+
+	public Set<Recipe> getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(Set<Recipe> favorites) {
+		this.favorites = favorites;
+	}
+
+	public Pantry getPantry() {
+		return pantry;
+	}
+
+	public void setPantry(Pantry pantry) {
+		this.pantry = pantry;
+	}
+
+	public List<Follow> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(List<Follow> followers) {
+		this.followers = followers;
+	}
 }

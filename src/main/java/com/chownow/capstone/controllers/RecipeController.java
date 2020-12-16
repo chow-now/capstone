@@ -1,67 +1,104 @@
-package com.chownow.capstone.controllers.api.v1;
+package com.chownow.capstone.controllers;
 
-import com.chownow.capstone.models.Recipe;
-
+import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.RecipeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.chownow.capstone.repos.UserRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
-@RestController
-@RequestMapping("/recipes")
+@Controller
 public class RecipeController {
 
-    @Autowired
-    private RecipeRepository recipeDao;
+    private final RecipeRepository recipeDao;
+    private final UserRepository userDoa;
+    //    add email service?
 
-    /* GET MAPPINGS */
-
-    // get all users
-    @GetMapping
-    public @ResponseBody
-    List<Recipe> getAllRecipes(){
-        return recipeDao.findAll();
+    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
+        this.recipeDao = recipeDao;
+        this.userDoa = userDoa;
     }
 
-    // get recipe by id
-    @GetMapping("/{id}")
-    public @ResponseBody Recipe getRecipe(@PathVariable (value="id") long recipeId) {
-        Optional<Recipe> recipe = recipeDao.findById(recipeId);
-        return recipe.orElse(null);
+    @GetMapping("/recipes")
+    public String index(Model model) {
+        model.addAttribute("recipes", recipeDao.findAll());
+        return "recipes/index";
     }
 
-    /* POST MAPPINGS FOR CRUD */
+    @GetMapping("/recipes/{id}")
+    public String showRecipe(@PathVariable long id, Model model) {
+        model.addAttribute("recipe", recipeDao.getOne(id));
+        Recipe recipe = recipeDao.getOne(id);
 
-    // create recipe
-    @PostMapping("/new")
-    public @ResponseBody
-    Recipe createRecipe(@RequestBody Recipe recipe){
-        return recipeDao.save(recipe);
+        String firstName = recipe.getChef().getFirstName();
+        String lastName = recipe.getChef().getLastName();
+        String chef = firstName + " " + lastName;
+        model.addAttribute("chef", chef);
+
+//        List<Image> images = recipe.getImages();
+//        model.addAttribute("images", images);
+//
+//        List<RecipeIngredient> ingredients = recipe.getIngredients();
+//        model.addAttribute("ingredients", ingredients);
+//
+//        List<Category> categories = recipe.getCategories();
+//        model.addAttribute("categories", categories);
+
+        return "recipes/show";
+
     }
 
-    // update recipe
-    @PostMapping("/{id}/edit")
-    public @ResponseBody Recipe updateRecipe(@RequestBody Recipe requestRecipe,@PathVariable (value = "id")long recipeId){
-        Optional<Recipe> recipe = recipeDao.findById(recipeId);
-        if(recipe.isPresent()) {
-            Recipe dbRecipe = recipe.get();
-            return recipeDao.save(dbRecipe);
+    @GetMapping("/recipes/new")
+    public String showCreateRecipe(Model model) {
+        model.addAttribute("recipe", new Recipe());
+        return "recipes/new";
+    }
+    /* new recipe with error handling */
+    @PostMapping("/recipe/new")
+    public String submitPost(
+            @Valid @ModelAttribute Recipe recipeToBeSaved,
+            Errors validation,
+            Model model
+    ) {
+        if(validation.hasErrors()){
+            model.addAttribute("errors",validation);
+            model.addAttribute("recipe",recipeToBeSaved);
+            return "recipes/new";
         }
-        return null;
+
+//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        recipeToBeSaved.setChef(userDb);
+
+        recipeToBeSaved.setChef(userDoa.getOne(1L));
+        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+
+        return "redirect:/recipes/" + dbRecipe.getId();
     }
 
-    // delete recipe
-    @PostMapping("/{id}/delete")
-    public ResponseEntity<Recipe> deleteRecipe(@PathVariable ("id") long recipeId){
-        Optional<Recipe> recipe = recipeDao.findById(recipeId);
-        if(recipe.isPresent()) {
-            Recipe dbRecipe = recipe.get();
-            recipeDao.delete(dbRecipe);
-        }
-        return ResponseEntity.ok().build();
+    @PostMapping("/recipes/{id}/delete")
+    public String deleteRecipe(@PathVariable long id) {
+        recipeDao.deleteById(id);
+        return "redirect:/recipes";
     }
 
+    @GetMapping("/recipes/{id}/edit")
+    public String showEditRecipe(@PathVariable long id, Model model) {
+        model.addAttribute("recipe", recipeDao.getOne(id));
+        return "recipes/edit";
+    }
+
+    @PostMapping("/recipes/{id}/edit")
+    public String editRecipe(Recipe recipeToBeSaved) {
+//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        recipeToBeSaved.setChef(userDb);
+        recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes";
+    }
 }

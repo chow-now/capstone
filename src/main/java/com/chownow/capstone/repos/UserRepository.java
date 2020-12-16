@@ -1,5 +1,6 @@
 package com.chownow.capstone.repos;
 
+import com.chownow.capstone.models.Follow;
 import com.chownow.capstone.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
