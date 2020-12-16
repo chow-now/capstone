@@ -6,19 +6,77 @@
 </head>
 <body>
 <nav th:replace="partials/navbar :: nav"></nav>
+<div class="container d-flex justify-content-center my-3">
+    <div class="card d-flex justify-content-center" style="width: 80%;">
+        <img th:src="${images[0].url}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${recipe.title}">Recipe title</h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${chef}">Chef</h6>
+            <div th:each ="category : ${categories}">
+                <span class="badge rounded-pill bg-light text-dark" th:text="${category.getName()}">category</span>
+            </div>
+            <p class="card-text">Difficulty: <span th:text="${recipe.difficulty}"></span></p>
+            <p class="card-text">Cook Time: <span th:text="${recipe.cookTime + ' min'}"></span></p>
+            <p class="card-text">Prep Time: <span th:text="${recipe.prepTime + ' min'}"></span></p>
+            <p class="card-text">Servings: <span th:text="${recipe.servings}"></span></p>
+            <ul th:each="ingredient : ${ingredients}">
+                <li class="card-text"><span th:text="${ingredient.getAmount()}" class="rational"></span> <span
+                        th:text="${ingredient.getUnit()}"></span>
+                    <span th:text="${ingredient.getIngredient().getName()}"></span></li>
+            </ul>
+            <p class="card-text">Directions: <span th:text="${recipe.directions}"></span></p>
 
-<main class="container">
-    <div class="card">
-        <h3 class="text-center" th:text="${recipe.title}"></h3>
-        <p th:text="${chef}"></p>
-        <p th:text="${recipe.difficulty}"></p>
-        <p th:text="${recipe.cookTime}"></p>
-        <p th:text="${recipe.prepTime}"></p>
-        <p th:text="${recipe.servings}"></p>
-        <p th:text="${recipe.directions}"></p>
+            <a href="/recipes" class="btn btn-primary">Back to Recipes</a>
+        </div>
     </div>
-</main>
-<footer th:replace="partials/partials :: footer"></footer>
+</div>
+
+<footer th:replace="partials/footer :: footer"></footer>
 <th:block th:include="partials/scripts :: scripts"></th:block>
+
+<script>
+    /**
+     * Converts numbers to fractions:
+     * - 1.25 to 1 1/4
+     * - 2 to 2
+     */
+    const numberToFraction = (amount) => {
+        // This is a whole number and doesn't need modification.
+        if ( parseFloat( amount ) === parseInt( amount ) ) {
+            return Math.floor(amount);
+        }
+        // Next 12 lines are cribbed from https://stackoverflow.com/a/23575406.
+        let gcd = function(a, b) {
+            if (b < 0.0000001) {
+                return a;
+            }
+            return gcd(b, Math.floor(a % b));
+        };
+        let len = amount.toString().length - 2;
+        let denominator = Math.pow(10, len);
+        let numerator = amount * denominator;
+        let divisor = gcd(numerator, denominator);
+        numerator /= divisor;
+        denominator /= divisor;
+        let base = 0;
+        // In a scenario like 3/2, convert to 1 1/2
+        // by pulling out the base number and reducing the numerator.
+        if ( numerator > denominator ) {
+            base = Math.floor( numerator / denominator );
+            numerator -= base * denominator;
+        }
+        amount = Math.floor(numerator) + '/' + Math.floor(denominator);
+        if ( base ) {
+            amount = base + ' ' + amount;
+        }
+        return amount;
+    };
+
+    let els = document.getElementsByClassName("rational");
+    [].forEach.call(els, function (el) {
+        let rational = el.innerText;
+        el.innerText = numberToFraction(rational);
+    });
+</script>
 </body>
 </html>

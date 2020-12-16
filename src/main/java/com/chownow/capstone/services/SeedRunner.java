@@ -127,8 +127,8 @@ public class SeedRunner {
     }
 
     public void seedCategories(){
-        for(int i = 0; i<=10; i++){
-            String name = makeSingular(faker.nation().nationality());
+        for(int i = 0; i<=30; i++){
+            String name = makeSingular(faker.nation().nationality().split(" ")[0]);
             LOGGER.info(name);
             Category seedCategory = new Category(name);
             catDao.save(seedCategory);
@@ -323,7 +323,7 @@ public class SeedRunner {
     }
 
     public String randomImg(String word){
-        String img = "https://loremflickr.com/800/600/"+word+".jpg";
+        String img = "https://loremflickr.com/800/600/"+word;
         LOGGER.info("img = " + img);
         return img;
     }

@@ -1,10 +1,8 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Cascade;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -72,28 +70,28 @@ public class User {
             orphanRemoval = true,
             cascade = CascadeType.PERSIST
     )
-    @JsonBackReference
+    @JsonBackReference("recipeRef")
     private List<Recipe> recipes;
 
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
-    @JsonBackReference
-    private List<Follow> followings;
+    @JsonIgnore
+    private Set<Follow> followings;
 
     @OneToMany(
             mappedBy = "friend",
             cascade = CascadeType.ALL
     )
-    @JsonBackReference
-    private List<Follow> followers;
+    @JsonIgnore
+    private Set<Follow> followers;
 
 
     @ManyToMany(mappedBy = "favoritedBy",
             cascade = CascadeType.ALL
     )
-    @JsonBackReference
+    @JsonBackReference(value="favRef")
     private Set<Recipe> favorites = new HashSet<Recipe>();
 
     @OneToOne(
@@ -102,7 +100,7 @@ public class User {
             fetch = FetchType.LAZY,
             optional = false
     )
-    @JsonBackReference
+    @JsonBackReference(value="pantryRef")
     private Pantry pantry;
 
     public User(){}
@@ -199,12 +197,20 @@ public class User {
         this.recipes = recipes;
     }
 
-    public List<Follow> getFollowings() {
+    public Set<Follow> getFollowings() {
         return followings;
     }
 
-    public void setFollowings(List<Follow> followings) {
+    public void setFollowings(Set<Follow> followings) {
         this.followings = followings;
+    }
+
+    public Set<Follow> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<Follow> followers) {
+        this.followers = followers;
     }
 
     public Set<Recipe> getFavorites() {
@@ -221,13 +227,5 @@ public class User {
 
     public void setPantry(Pantry pantry) {
         this.pantry = pantry;
-    }
-
-    public List<Follow> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(List<Follow> followers) {
-        this.followers = followers;
     }
 }
