@@ -37,14 +37,13 @@ public class ApiRecipeController {
 
     // create recipe
     @PostMapping("/new")
-    public @ResponseBody
-    Recipe createRecipe(@RequestBody Recipe recipe){
+    public Recipe createRecipe(@RequestBody Recipe recipe){
         return recipeDao.save(recipe);
     }
 
     // update recipe
     @PostMapping("/{id}/edit")
-    public @ResponseBody Recipe updateRecipe(@RequestBody Recipe requestRecipe,@PathVariable (value = "id")long recipeId){
+    public Recipe updateRecipe(@RequestBody Recipe requestRecipe,@PathVariable (value = "id")long recipeId){
         Optional<Recipe> recipe = recipeDao.findById(recipeId);
         if(recipe.isPresent()) {
             Recipe dbRecipe = recipe.get();

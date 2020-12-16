@@ -1,15 +1,18 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="recipes")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Recipe {
 
     @Id
@@ -57,36 +60,41 @@ public class Recipe {
     private int servings;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonManagedReference(value="recipeRef")
     private User chef;
 
-    @OneToMany(mappedBy = "recipe")
-
+    @OneToMany(
+            mappedBy = "recipe",
+            orphanRemoval = true,
+            cascade = CascadeType.PERSIST)
     private List<Image> images;
 
     @OneToMany(
             mappedBy = "recipe",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
     @JsonIgnore
     private List<RecipeIngredient> RecipeIngredients;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name="recipe_categories",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="category_id")}
+            joinColumns=@JoinColumn(name="recipe_id"),
+            inverseJoinColumns=@JoinColumn(name="category_id")
     )
-    private List<Category> categories;
+    private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name="favorites",
             joinColumns={@JoinColumn(name="recipe_id")},
             inverseJoinColumns={@JoinColumn(name="user_id")}
     )
-    private List<User> favoritedBy;
+    private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
 
@@ -182,11 +190,11 @@ public class Recipe {
         return chef;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -198,11 +206,11 @@ public class Recipe {
         this.images = images;
     }
 
-    public List<User> getFavoritedBy() {
+    public Set<User> getFavoritedBy() {
         return favoritedBy;
     }
 
-    public void setFavoritedBy(List<User> favoritedBy) {
+    public void setFavoritedBy(Set<User> favoritedBy) {
         this.favoritedBy = favoritedBy;
     }
 

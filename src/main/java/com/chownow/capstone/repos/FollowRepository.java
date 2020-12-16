@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-    List<Follow> findAllByFollowee(User user);
-    List<Follow> findAllByFollower(User user);
+    List<Follow> findAllByFriend(User user);
+    List<Follow> findAllByUser(User user);
 }

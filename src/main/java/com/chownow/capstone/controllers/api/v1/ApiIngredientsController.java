@@ -18,14 +18,15 @@ public class ApiIngredientsController {
 
     // get all ingredients
     @GetMapping
-    public @ResponseBody
-    List<Ingredient> getAllIngredients(){
+    @ResponseBody
+    public List<Ingredient> getAllIngredients(){
         return ingredientDao.findAll();
     }
 
     // get ingredient by id
     @GetMapping("/{id}")
-    public @ResponseBody Ingredient getIngredient(@PathVariable(value="id") long ingredientId) {
+    @ResponseBody
+    public Ingredient getIngredient(@PathVariable(value="id") long ingredientId) {
         Optional<Ingredient> ingredient = ingredientDao.findById(ingredientId);
         return ingredient.orElse(null);
     }
@@ -34,14 +35,15 @@ public class ApiIngredientsController {
 
     // create ingredient
     @PostMapping("/new")
-    public @ResponseBody
-    Ingredient createIngredient(@RequestBody Ingredient ingredient){
+    @ResponseBody
+    public Ingredient createIngredient(@RequestBody Ingredient ingredient){
         return ingredientDao.save(ingredient);
     }
 
     // update ingredient
     @PostMapping("/{id}/edit")
-    public @ResponseBody Ingredient updateIngredient(@RequestBody Ingredient requestIngredient,@PathVariable (value = "id")long ingredientId){
+    @ResponseBody
+    public Ingredient updateIngredient(@RequestBody Ingredient requestIngredient,@PathVariable (value = "id")long ingredientId){
         Optional<Ingredient> ingredient = ingredientDao.findById(ingredientId);
         if(ingredient.isPresent()) {
             Ingredient dbIngredient = ingredient.get();
