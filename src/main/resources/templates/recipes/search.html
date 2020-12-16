@@ -132,7 +132,7 @@
 
                             title += results.title + '<a href="' + results.sourceUrl + '"</a>';
 
-                            // Categories
+                            // Categories List
                             if(results.cuisines.length == 0) {
                                 category += '<li class="">' + 'Unknown category' + '</li>';
                             } else {
@@ -161,13 +161,10 @@
                             $('.recipe-categories').html(category);
                             $('.recipe-ingredients').html(ingredients);
                             $('.recipe-directions').html(instructions);
-
                         })
                 })
             })
         }
-
-
 </script>
 </body>
 </html>
