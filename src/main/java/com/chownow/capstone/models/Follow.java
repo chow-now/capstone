@@ -12,7 +12,6 @@ import javax.persistence.*;
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
 //        property = "id")
 public class Follow {
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private long id;

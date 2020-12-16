@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -100,7 +101,7 @@
 <!--            <artifactId>thymeleaf-extras-springsecurity5</artifactId>-->
 <!--            <version>3.0.4.RELEASE</version>-->
 <!--        </dependency>-->
-        
+
 <!--        AWS *** comment out until required-->
         <dependency>
             <groupId>com.amazonaws</groupId>

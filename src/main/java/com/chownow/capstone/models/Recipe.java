@@ -60,7 +60,7 @@ public class Recipe {
     private int servings;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonManagedReference(value="recipeRef")
     private User chef;
 
     @OneToMany(

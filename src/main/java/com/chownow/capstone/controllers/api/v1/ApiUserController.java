@@ -10,7 +10,6 @@ import com.chownow.capstone.repos.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class ApiUserController {
     @Autowired
     private UserRepository userDao;
@@ -31,15 +30,14 @@ public class ApiUserController {
     private FollowRepository followDao;
 
     /* GET MAPPINGS */
-
     // get all users
-    @GetMapping("/users")
+    @GetMapping
     public @ResponseBody List<User> getAllUsers(){
         return userDao.findAll();
     }
-    
+
     // get user by id
-    @GetMapping("user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable (value="id") long userId) {
         User user = userDao.getById(userId);
         if(user == null){
@@ -49,7 +47,7 @@ public class ApiUserController {
     }
 
     // get user recipes
-    @GetMapping("user/{id}/recipes")
+    @GetMapping("/{id}/recipes")
     public @ResponseBody List<Recipe> getUserRecipes(@PathVariable (value="id") long userId) {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
@@ -60,7 +58,7 @@ public class ApiUserController {
     }
 
     // get user pantry
-    @GetMapping("user/{id}/pantry")
+    @GetMapping("/{id}/pantry")
     public @ResponseBody Pantry getPantryInventory(@PathVariable (value="id") long userId){
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
@@ -71,7 +69,7 @@ public class ApiUserController {
     }
 
     // get user followers
-    @GetMapping("user/{id}/followers")
+    @GetMapping("/{id}/followers")
     @ResponseBody
     public List<User> getFollowers(@PathVariable (value="id") long userId){
         List<User> followers = new ArrayList<>();
@@ -88,15 +86,16 @@ public class ApiUserController {
     }
 
     //get user following
-    @GetMapping("user/{id}/following")
+
+    @GetMapping("/{id}/following")
     @ResponseBody
     public List<User> getFollowings(@PathVariable (value="id") long userId){
         List<User> followings = new ArrayList<>();
         Optional<User> user = userDao.findById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             User dbUser = user.get();
-            List<Follow> followResults =followDao.findAllByFriend(dbUser);
-            for(Follow follow : followResults){
+            List<Follow> followResults = followDao.findAllByFriend(dbUser);
+            for (Follow follow : followResults) {
                 followings.add(follow.getFriend());
             }
             return followings;
@@ -105,12 +104,9 @@ public class ApiUserController {
     }
 
     /* POST MAPPINGS FOR CRUD */
-    @PostMapping("user/test")
-    public Object testing(@RequestBody Object object){
-        return object;
-    }
+
     // create user
-    @PostMapping("user/add")
+    @PostMapping("/add")
     public User addUser(@RequestBody User newUser){
         return userDao.save(newUser);
     }
@@ -123,7 +119,6 @@ public class ApiUserController {
             User dbUser = user.get();
             dbUser.setFirstName(requestUser.getFirstName());
             dbUser.setEmail(requestUser.getEmail());
-            dbUser.setLastName(requestUser.getLastName());
             return userDao.save(dbUser);
         }
         return null;

@@ -82,8 +82,8 @@ public class SeedRunner {
             LOGGER.info("SEEDING RECIPE IMAGES");
             seedRecipeImages();
             LOGGER.info("RECIPE IMAGES DONE");
-            User initialUser = new User("seeder@seeder.com","firstName","lastName","Password03!");
-            initialUser.setIsAdmin(true);
+            User initialUser = new User("seeder@seeder.com","firstName","Password03!");
+            initialUser.setAdmin(true);
             userDao.save(initialUser);
         }else{
             LOGGER.info("Seeder has already run");
@@ -95,14 +95,12 @@ public class SeedRunner {
         for(int i = 0; i<=10; i++){
             String firstName = faker.name().firstName();
             LOGGER.info("firstName = " + firstName);
-            String lastName =  faker.name().lastName();
-            LOGGER.info("lastName = " + lastName);
             String email = faker.internet().emailAddress();
             LOGGER.info("email = " + email);
             String password = faker.internet().password(8,100,true,false,true)+"!1";
             LOGGER.info("password = " + password);
-            User seedUser = new User(email,firstName,lastName,password);
-            seedUser.setIsAdmin(false);
+            User seedUser = new User(email,firstName,password);
+            seedUser.setAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
             seedUser.setAvatar(randomAvatar());
             userDao.save(seedUser);
@@ -127,8 +125,8 @@ public class SeedRunner {
     }
 
     public void seedCategories(){
-        for(int i = 0; i<=10; i++){
-            String name = makeSingular(faker.nation().nationality());
+        for(int i = 0; i<=30; i++){
+            String name = makeSingular(faker.nation().nationality().split(" ")[0]);
             LOGGER.info(name);
             Category seedCategory = new Category(name);
             catDao.save(seedCategory);
@@ -323,7 +321,7 @@ public class SeedRunner {
     }
 
     public String randomImg(String word){
-        String img = "https://loremflickr.com/800/600/"+word+".jpg";
+        String img = "https://loremflickr.com/800/600/"+word;
         LOGGER.info("img = " + img);
         return img;
     }
