@@ -7,13 +7,19 @@
 <body>
 
 <form class="w-50 mx-auto" th:action="@{/search}" method="get">
-    <input type="text" class="form-control" id="main_search" placeholder="Search Recipe name" name="term">
+    <input type="text" class="form-control" id="main_search" placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
 </form>
 
 
 
 <!--    // Dump recipes here-->
-<div class="recipe row"></div>
+<div class="recipes row">
+
+</div>
+
+// Modal to display recipe information - This can be changed later on
+
+
 
 
 
@@ -34,21 +40,69 @@
         var urlSearchString = window.location.href;
         var url = new URL(urlSearchString);
         var searchParam = url.searchParams.get("term");
-        searchString = searchParam;
+        searchString = searchParam.replace(/,|,\s/g, ",+");
+        console.log("url string" + searchString);
 
-        // By Recipe Name
-        $.ajax("https://api.spoonacular.com/recipes/complexSearch?query=" + searchParam + "&number=50&apiKey=" + spoonApi + "")
-            .done(({results, offset, number, totalResults}) => {
+        // Search by ingredients
+        $.ajax("https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchParam + "&number=50&apiKey=" + spoonApi + "")
+            .done(function(results) {
                 console.log(results);
 
-                var recipe = "";
+                let recipe = "";
 
-                for (let item of results) {
+                for (let i = 0; i < results.length; i++) {
                     //console.log(item.title)
-                    recipe += '<h5>' + item.title + '</h5>';
-                    recipe += '<img src="' + item.image + '"/>';
+                    recipe += '<h5>' + results[i].title + '</h5>';
+                    recipe += '<img src="' + results[i].image + '"/>';
+                    recipe += '<button class="btn btn-primary viewRecipe" id="' + results[i].id + '">' + " View " + '</button>'
                 }
-                $('.recipe').html(recipe);
+                $('.recipes').html(recipe);
+
+
+                $('.viewRecipe').on('click', function () {
+                    console.log(this.id + " button id");
+
+                    $.ajax("https://api.spoonacular.com/recipes/" + this.id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
+                        .done(function(results) {
+
+                            // Recipe Information
+                            let image = "";
+                            let title = "";
+                            let ingredients = "";
+                            let instructions = "";
+                            let category = "";
+                            let source = "";
+
+                            console.log(results.title);
+
+                            image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
+
+                            title += results.title + " by " + '<a href="' + results.sourceUrl + '"</a>';
+
+                            // Categories
+                            if(results.cuisines.length == 0) {
+                                category += '<li class="">' + 'Unknown category' + '</li>';
+                            } else {
+                                for (let i = 0; i < results.cuisines.length; i++) {
+                                    category += '<li>' + results.cuisines[i] + '</li>'
+                                }
+                            }
+
+                            // Ingredients List
+                            if (results.extendedIngredients.length == 0) {
+                                ingredients += 'No ingredients recorded'
+                            } else {
+                                for (let i = 0; i < results.extendedIngredients.length; i++) {
+                                    ingredients += '<li>' + results.extendedIngredients[i].amount + " "
+                                                          + results.extendedIngredients[i].unit + " "
+                                                          + results.extendedIngredients[i].originalName + '</li>';
+                                }
+                            }
+
+                            // Grab Instructions
+                            instructions += '<p>' + results.instructions + '</p>'
+                        })
+                })
             })
         }
 

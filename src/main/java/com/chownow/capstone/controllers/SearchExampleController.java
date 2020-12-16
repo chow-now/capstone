@@ -35,6 +35,7 @@ public class SearchExampleController {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
         // test commit
+
         return "recipes/search";
     }
 }
