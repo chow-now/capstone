@@ -1,8 +1,6 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +10,9 @@ import java.util.List;
 
 @Entity
 @Table(name="ingredients")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +29,7 @@ public class Ingredient {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonBackReference
+    @JsonIgnore
     private List<PantryIngredient> pantryIngredients;
 
     @OneToMany(
@@ -36,7 +37,7 @@ public class Ingredient {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonBackReference
+    @JsonIgnore
     private List<RecipeIngredient> recipeIngredients;
     
     public Ingredient(){}

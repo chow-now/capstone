@@ -1,7 +1,9 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -15,6 +17,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,7 +98,9 @@ public class User {
 
     @OneToOne(
             mappedBy="owner",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            optional = false
     )
     @JsonBackReference
     private Pantry pantry;

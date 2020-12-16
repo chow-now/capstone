@@ -56,9 +56,19 @@ public class ApiPantryController {
     public ResponseEntity<Pantry> deletePantry(@PathVariable ("id") long pantryId){
         Optional<Pantry> pantry = pantryDao.findById(pantryId);
         if(pantry.isPresent()) {
+            System.out.println("TRYING TO DELETE");
             Pantry dbPantry = pantry.get();
-            pantryDao.delete(dbPantry);
+            try{
+                System.out.println("pantry id: "+dbPantry.getId());
+                pantryDao.delete(dbPantry);
+                return ResponseEntity.ok().build();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        return ResponseEntity.ok().build();
+        System.out.println("PANTRY NOT FOUND");
+        return  null;
+
+
     }
 }

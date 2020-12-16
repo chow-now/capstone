@@ -92,7 +92,7 @@ public class SeedRunner {
     }
 
     public void seedUsers(){
-        for(int i = 0; i<=20; i++){
+        for(int i = 0; i<=10; i++){
             String firstName = faker.name().firstName();
             LOGGER.info("firstName = " + firstName);
             String lastName =  faker.name().lastName();
@@ -127,7 +127,7 @@ public class SeedRunner {
     }
 
     public void seedCategories(){
-        for(int i = 0; i<=50; i++){
+        for(int i = 0; i<=10; i++){
             String name = makeSingular(faker.nation().nationality());
             LOGGER.info(name);
             Category seedCategory = new Category(name);
@@ -136,7 +136,7 @@ public class SeedRunner {
     }
 
     public void seedIngredients(){
-        for(int i = 0; i<=100; i++){
+        for(int i = 0; i<=10; i++){
             String name = makeSingular(faker.food().ingredient());
             LOGGER.info(name);
             Ingredient seedIngredient = new Ingredient(name);
@@ -182,7 +182,7 @@ public class SeedRunner {
         List<String> levels = new ArrayList<>();
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
-        for(long i = 1; i<=100; i++){
+        for(long i = 1; i<=10; i++){
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
