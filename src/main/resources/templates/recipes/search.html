@@ -58,7 +58,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary">Add to favorites</button>
             </div>
         </div>
     </div>
@@ -94,11 +94,19 @@
 
                 let recipe = "";
 
+                recipe += '<div class="col-md-12">'
+                recipe += '<h3 class="my-3">Results</h3>';
+                recipe += '</div>';
+
                 for (let i = 0; i < results.length; i++) {
                     //console.log(item.title)
-                    recipe += '<h5>' + results[i].title + '</h5>';
-                    recipe += '<img src="' + results[i].image + '"/>';
+                    recipe += '<div class="card">';
+                    recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
+                    recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
+                    recipe += '<div class="card-body">';
                     recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
+                    recipe += '</div>';
+                    recipe += '</div>';
                 }
                 $('.recipes').html(recipe);
 
@@ -108,6 +116,7 @@
 
                     $.ajax("https://api.spoonacular.com/recipes/" + this.id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
                         .done(function(results) {
+                            console.log(results);
 
                             // Recipe Information
                             let image = "";
