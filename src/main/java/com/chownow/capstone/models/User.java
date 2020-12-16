@@ -1,10 +1,8 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Cascade;
+
 
 
 import javax.persistence.*;
@@ -18,9 +16,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
+
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,9 +57,6 @@ public class User {
 
 	@Column(columnDefinition = "boolean default false", nullable = false)
 	private Boolean isAdmin;
-
-    @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean isAdmin;
     
     @OneToMany(
             mappedBy = "chef",
@@ -94,22 +87,6 @@ public class User {
     @JsonBackReference(value="favRef")
     private Set<Recipe> favorites = new HashSet<Recipe>();
 
-    @OneToOne(
-            mappedBy="owner",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            optional = false
-    )
-    @JsonBackReference(value="pantryRef")
-    private Pantry pantry;
-
-    public User(){}
-
-	@ManyToMany(mappedBy = "favoritedBy",
-					cascade = CascadeType.ALL
-	)
-	@JsonBackReference
-	private Set<Recipe> favorites = new HashSet<Recipe>();
 
 	@OneToOne(
 					mappedBy="owner",
@@ -117,25 +94,23 @@ public class User {
 					fetch = FetchType.LAZY,
 					optional = false
 	)
-	@JsonBackReference
+	@JsonBackReference(value="pantryRef")
 	private Pantry pantry;
 
 	public User(){}
 
 	// Setter
-	public User(String email, String firstName, String lastName, String password) {
+	public User(String email, String firstName, String password) {
 		this.email = email;
 		this.firstName = firstName.trim();
-		this.lastName = lastName.trim();
 		this.password = password;
 		this.isAdmin = false;
 	}
 	// Getter
-	public User(long id, String email, String firstName, String lastName, String password, String avatar, String aboutMe, Boolean isAdmin) {
+	public User(long id, String email, String firstName, String password, String avatar, String aboutMe, Boolean isAdmin) {
 		this.id = id;
 		this.email = email;
 		this.firstName = firstName;
-		this.lastName = lastName;
 		this.password = password;
 		this.avatar = avatar;
 		this.aboutMe = aboutMe;
@@ -148,6 +123,14 @@ public class User {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -166,22 +149,6 @@ public class User {
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getAvatar() {
 		return avatar;
 	}
@@ -198,39 +165,51 @@ public class User {
 		this.aboutMe = aboutMe;
 	}
 
-	public Boolean getIsAdmin() {
+	public Boolean getAdmin() {
 		return isAdmin;
 	}
 
-    public Set<Follow> getFollowings() {
-        return followings;
-    }
+	public void setAdmin(Boolean admin) {
+		isAdmin = admin;
+	}
 
-    public void setFollowings(Set<Follow> followings) {
-        this.followings = followings;
-    }
+	public List<Recipe> getRecipes() {
+		return recipes;
+	}
 
-    public Set<Follow> getFollowers() {
-        return followers;
-    }
+	public void setRecipes(List<Recipe> recipes) {
+		this.recipes = recipes;
+	}
 
-    public void setFollowers(Set<Follow> followers) {
-        this.followers = followers;
-    }
+	public Set<Follow> getFollowings() {
+		return followings;
+	}
 
-    public Set<Recipe> getFavorites() {
-        return favorites;
-    }
+	public void setFollowings(Set<Follow> followings) {
+		this.followings = followings;
+	}
 
-    public void setFavorites(Set<Recipe> favorites) {
-        this.favorites = favorites;
-    }
+	public Set<Follow> getFollowers() {
+		return followers;
+	}
 
-    public Pantry getPantry() {
-        return pantry;
-    }
+	public void setFollowers(Set<Follow> followers) {
+		this.followers = followers;
+	}
 
-    public void setPantry(Pantry pantry) {
-        this.pantry = pantry;
-    }
+	public Set<Recipe> getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(Set<Recipe> favorites) {
+		this.favorites = favorites;
+	}
+
+	public Pantry getPantry() {
+		return pantry;
+	}
+
+	public void setPantry(Pantry pantry) {
+		this.pantry = pantry;
+	}
 }

@@ -36,7 +36,7 @@ public class UserController {
                 model.addAttribute("user",user);
                 return "recipes/new";
             }
-            user.setIsAdmin(false);
+            user.setAdmin(false);
             userDao.save(user);
             return "users/show";
     }

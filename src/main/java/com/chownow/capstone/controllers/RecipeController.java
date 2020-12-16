@@ -41,8 +41,7 @@ public class RecipeController {
         Recipe recipe = recipeDao.getOne(id);
 
         String firstName = recipe.getChef().getFirstName();
-        String lastName = recipe.getChef().getLastName();
-        String chef = firstName + " " + lastName;
+        String chef = firstName;
         model.addAttribute("chef", chef);
         List<Image> images = recipe.getImages();
         model.addAttribute("images", images);
