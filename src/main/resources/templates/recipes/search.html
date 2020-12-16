@@ -18,7 +18,51 @@
 </div>
 
 // Modal to display recipe information - This can be changed later on
+<div
+        class="modal fade"
+        id="viewRecipeModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                >x</button>
+            </div>
 
+            <!-- Display Image -->
+            <div class="recipe-image mx-auto"></div>
+
+            <div class="modal-body">
+                <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                <h4>Categories</h4>
+                <ul class="recipe-categories"></ul>
+
+                <!-- Display Ingredients -->
+                <h4>Ingredients</h4>
+                <ul class="recipe-ingredients"></ul>
+
+                <!-- Display Instructions -->
+                <h4>Directions</h4>
+                <div class="recipe-directions"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -54,7 +98,7 @@
                     //console.log(item.title)
                     recipe += '<h5>' + results[i].title + '</h5>';
                     recipe += '<img src="' + results[i].image + '"/>';
-                    recipe += '<button class="btn btn-primary viewRecipe" id="' + results[i].id + '">' + " View " + '</button>'
+                    recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
                 }
                 $('.recipes').html(recipe);
 
@@ -77,7 +121,7 @@
 
                             image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
 
-                            title += results.title + " by " + '<a href="' + results.sourceUrl + '"</a>';
+                            title += results.title + '<a href="' + results.sourceUrl + '"</a>';
 
                             // Categories
                             if(results.cuisines.length == 0) {
@@ -101,6 +145,14 @@
 
                             // Grab Instructions
                             instructions += '<p>' + results.instructions + '</p>'
+
+                            // Display to modal
+                            $('.recipe-title').html(title);
+                            $('.recipe-image').html(image);
+                            $('.recipe-categories').html(category);
+                            $('.recipe-ingredients').html(ingredients);
+                            $('.recipe-directions').html(instructions);
+
                         })
                 })
             })
