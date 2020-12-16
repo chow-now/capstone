@@ -52,19 +52,42 @@
     </div>
 
     <!--    ADD CATEGORIES-->
-    <div class="form-check">
-        <label>Categories:</label>
-
-    </div>
-
 
     <!--    ADD INGREDIENTS-->
+    <div id="ingredients-container">
+
+        <div id="ingredients-section">
+
+        </div>
+        <div>
+            <form id="ingredient-form">
+                <input class="input" type="number" name="ingredient-amount"
+                       placeholder="Add Amount/Quantity">
+                <input class="input" type="text" name="ingredient-unit" placeholder="Add Unit">
+                <input class="input" type="text" name="ingredient-name" placeholder="Add ingredient">
+                <button class="button--add" id="add-ingredient-button">Add Ingredient</button>
+            </form>
+            <div id="ingredients-list">
+            </div>
+        </div>
+    </div>
 
     <button>Submit</button>
 </form>
 
 
 <!--<footer th:replace="partials/partials :: footer"></footer>-->
-<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
+<th:block th:include="partials/scripts :: scripts"></th:block>
+<script th:inline="javascript">
+    "use strict";
+
+    $(document).ready(function() {
+
+        console.log("hello");
+
+
+
+    });
+</script>
 </body>
 </html>
