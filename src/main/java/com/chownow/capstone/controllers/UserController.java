@@ -38,6 +38,6 @@ public class UserController {
             }
             user.setAdmin(false);
             userDao.save(user);
-            return "users/show";
+            return "users/profile";
     }
 }

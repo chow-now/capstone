@@ -29,7 +29,7 @@ public class PantryIngredient {
 
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     private Ingredient ingredient;
 
     public PantryIngredient(){}
