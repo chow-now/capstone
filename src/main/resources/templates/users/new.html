@@ -37,18 +37,18 @@
 </script>
 <script>
     (function($) {
-        var request = $.ajax({'url': '/api/users'});
-        request.done(function (users) {
-            var html = '';
-            users.forEach(function(user) {
-                html += '<div>';
-                html += '<h1>' + user.firstName + '</h1>';
-                html += '<p>' + user.lastName + '</p>';
-                html += '<p>' + user.email+ '</p>';
-                html += '</div>';
-            });
-            $('#users').html(html);
-        });
+        // var request = $.ajax({'url': '/api/users'});
+        // request.done(function (users) {
+        //     var html = '';
+        //     users.forEach(function(user) {
+        //         html += '<div>';
+        //         html += '<h1>' + user.firstName + '</h1>';
+        //         html += '<p>' + user.lastName + '</p>';
+        //         html += '<p>' + user.email+ '</p>';
+        //         html += '</div>';
+        //     });
+        //     $('#users').html(html);
+        // });
 
         // $("#createUser").submit(function(e) {
         //

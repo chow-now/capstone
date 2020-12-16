@@ -1,13 +1,9 @@
 package com.chownow.capstone.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
 @Entity
 @Table(name="images")
@@ -19,10 +15,10 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Pattern(
-            regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",
-            message = "INVALID FILE TYPE FOR RECIPE IMAGE"
-    )
+//    @Pattern(
+//            regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",
+//            message = "INVALID FILE TYPE FOR RECIPE IMAGE"
+//    )
     @Column(nullable = false,length = 100)
     private String url;
 

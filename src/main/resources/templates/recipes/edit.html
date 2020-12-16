@@ -9,12 +9,57 @@
 <main class="container">
     <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
         Title:
-        <input th:field="*{title}" id="name-ipt" th:value="${recipe.title}"/>
-        <br />
-        Description:
-        <input th:field="*{difficulty}" th:value="${recipe.difficulty}"/>
-        <br />
-        <input class="btn btn-success" type="submit" />
+        <input th:field="*{title}"/>
+        <br/>
+        Difficulty:
+        <div class="form-group">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="easy" name="easy" class="custom-control-input" value="easy"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="easy">Easy</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="medium" name="medium" class="custom-control-input" value="medium"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="medium">Medium</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="hard" name="hard" class="custom-control-input" value="hard"
+                       th:field="*{difficulty}">
+                <label class="custom-control-label" for="hard">Hard</label>
+            </div>
+        </div>
+        <br/>
+        Prep Time:
+        <input th:field="*{prepTime}"/>
+        <br/>
+        Cook Time:
+        <input th:field="*{cookTime}"/>
+        <br/>
+        Servings:
+        <input th:field="*{servings}"/>
+        <br/>
+        Directions:
+        <textarea th:field="*{directions}"/>
+        <br/>
+        <ul th:each="ingredient : ${ingredients}">
+            <li class="card-text">
+                <input type="number" step=".05" th:value="${ingredient.getAmount()}">
+                <select>
+                    <option th:value="${ingredient.getUnit()}" selected></option>
+                    <option th:value="teaspoon">Teaspoon (tsp)</option>
+                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                    <option th:value="ounce">Ounce (oz)</option>
+                    <option th:value="cup">Cup (c)</option>
+                    <option th:value="pint">Pint (pt)</option>
+                    <option th:value="quart">Quart (qt)</option>
+                    <option th:value="gallon">Gallon (gal)</option>
+
+                </select>
+                <input th:value="${ingredient.getIngredient().getName()}">
+            </li>
+        </ul>
+        <input class="btn btn-success" type="submit"/>
     </form>
     <form th:action="@{/recipes/{id}/delete(id=${recipe.getId()})}" th:method="post">
         <button class="btn btn-danger">Delete</button>
@@ -22,7 +67,7 @@
 
 </main>
 
-<footer th:replace="partials/partials :: footer"></footer>
+<footer th:replace="partials/footer :: footer"></footer>
 <th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>
