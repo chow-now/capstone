@@ -34,9 +34,9 @@ public class Recipe {
     @Column
     private boolean isPublished;
 
-    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
-    @NotBlank(message= "Directions would be useful here. Please provides some.")
-    @Column(nullable = false,columnDefinition = "TEXT")
+//    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
+//    @NotBlank(message= "Directions would be useful here. Please provides some.")
+    @Column(columnDefinition = "TEXT")
     private String directions;
 
 

@@ -60,12 +60,13 @@ public class RecipeController {
         return "recipes/new";
     }
     /* new recipe with error handling */
-    @PostMapping("/recipe/new")
-    public String submitPost(
+    @PostMapping("/recipes/new")
+    public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model
     ) {
+        System.out.println("hello");
         if(validation.hasErrors()){
             model.addAttribute("errors",validation);
             model.addAttribute("recipe",recipeToBeSaved);
@@ -75,6 +76,7 @@ public class RecipeController {
 //        recipeToBeSaved.setChef(userDb);
 
         recipeToBeSaved.setChef(userDoa.getOne(1L));
+        System.out.println(recipeToBeSaved.getChef());
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
         return "redirect:/recipes/" + dbRecipe.getId();
@@ -89,19 +91,11 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
-        Recipe recipe = recipeDao.getOne(id);
-
-//        List<Image> images = recipe.getImages();
-//        model.addAttribute("images", images);
-        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
-        model.addAttribute("ingredients", ingredients);
-//        List<Category> categories = recipe.getCategories();
-//        model.addAttribute("categories", categories);
         return "recipes/edit";
     }
 
     @PostMapping("/recipes/{id}/edit")
-    public String editRecipe(Recipe recipeToBeSaved) {
+    public String editRecipe(@ModelAttribute Recipe recipeToBeSaved) {
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         recipeToBeSaved.setChef(userDoa.getOne(1L));
 

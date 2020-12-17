@@ -9,7 +9,7 @@
 <main class="container">
     <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
         Title:
-        <input th:field="*{title}"/>
+        <input th:field="*{title}" id="name-ipt" th:value="${recipe.title}"/>
         <br/>
         Difficulty:
         <div class="form-group">
@@ -42,9 +42,9 @@
         Directions:
         <textarea th:field="*{directions}"/>
         <br/>
-        <ul th:each="ingredient : ${ingredients}">
+        <ul th:each="ingredient : ${recipe.getRecipeIngredients()}">
             <li class="card-text">
-                <input type="number" step=".05" th:value="${ingredient.getAmount()}">
+                <input type="number" step=".05" th:value="${ingredient.amount}">
                 <select>
                     <option th:value="${ingredient.getUnit()}" selected></option>
                     <option th:value="teaspoon">Teaspoon (tsp)</option>
@@ -67,7 +67,7 @@
 
 </main>
 
-<footer th:replace="partials/footer :: footer"></footer>
-<th:block th:include="partials/scripts :: scripts"></th:block>
+<!--<footer th:replace="partials/footer :: footer"></footer>-->
+<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
 </body>
 </html>
