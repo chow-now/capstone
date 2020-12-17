@@ -79,7 +79,7 @@ public class RecipeController {
         System.out.println(recipeToBeSaved.getChef());
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
-        return "redirect:/recipes/" + dbRecipe.getId();
+        return "redirect:/recipes/" + dbRecipe.getId() + "/edit";
     }
 
     @PostMapping("/recipes/{id}/delete")
@@ -93,12 +93,12 @@ public class RecipeController {
         model.addAttribute("recipe", recipeDao.getOne(id));
         Recipe recipe = recipeDao.getOne(id);
 
-//        List<Image> images = recipe.getImages();
-//        model.addAttribute("images", images);
+        List<Image> images = recipe.getImages();
+        model.addAttribute("images", images);
         List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
         model.addAttribute("ingredients", ingredients);
-//        List<Category> categories = recipe.getCategories();
-//        model.addAttribute("categories", categories);
+        Set<Category> categories = recipe.getCategories();
+        model.addAttribute("categories", categories);
         return "recipes/edit";
     }
 

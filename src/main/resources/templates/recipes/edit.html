@@ -42,23 +42,23 @@
         Directions:
         <textarea th:field="*{directions}"/>
         <br/>
-        <ul th:each="ingredient : ${ingredients}">
-            <li class="card-text">
-                <input type="number" step=".05" th:value="${ingredient.getAmount()}">
-                <select>
-                    <option th:value="${ingredient.getUnit()}" selected></option>
-                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                    <option th:value="ounce">Ounce (oz)</option>
-                    <option th:value="cup">Cup (c)</option>
-                    <option th:value="pint">Pint (pt)</option>
-                    <option th:value="quart">Quart (qt)</option>
-                    <option th:value="gallon">Gallon (gal)</option>
+<!--        <ul th:each="ingredient : ${ingredients}">-->
+<!--            <li class="card-text">-->
+<!--                <input type="number" step=".05" th:value="${ingredient.getAmount()}">-->
+<!--                <select>-->
+<!--                    <option th:value="${ingredient.getUnit()}" selected></option>-->
+<!--                    <option th:value="teaspoon">Teaspoon (tsp)</option>-->
+<!--                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>-->
+<!--                    <option th:value="ounce">Ounce (oz)</option>-->
+<!--                    <option th:value="cup">Cup (c)</option>-->
+<!--                    <option th:value="pint">Pint (pt)</option>-->
+<!--                    <option th:value="quart">Quart (qt)</option>-->
+<!--                    <option th:value="gallon">Gallon (gal)</option>-->
 
-                </select>
-                <input th:value="${ingredient.getIngredient().getName()}">
-            </li>
-        </ul>
+<!--                </select>-->
+<!--                <input th:value="${ingredient.getIngredient().getName()}">-->
+<!--            </li>-->
+<!--        </ul>-->
         <input class="btn btn-success" type="submit"/>
     </form>
     <form th:action="@{/recipes/{id}/delete(id=${recipe.getId()})}" th:method="post">

@@ -34,8 +34,21 @@
 
 
     <div class="form-group">
-        <label for="difficulty">Description:</label>
-        <textarea class="form-control" rows="5" id="difficulty" th:field="*{difficulty}"></textarea>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="easy" name="difficulty" class="custom-control-input" value="easy"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="easy">Easy</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="medium" name="difficulty" class="custom-control-input" value="medium"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="medium">Medium</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="hard" name="difficulty" class="custom-control-input" value="hard"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="hard">Hard</label>
+        </div>
         <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
     </div>
     <!--    ENTER PREP TIME IN MINUTES-->
