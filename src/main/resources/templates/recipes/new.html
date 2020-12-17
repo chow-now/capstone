@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="partials/head :: head('Create a Recipe')">
+
+<body>
+<nav th:replace="partials/navbar :: nav"></nav>
+
+<form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
+    <!--    ENTER A RECIPE TITLE-->
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" th:field="*{title}"/>
+        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+    </div>
+
+    <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES-->
+    <div class="form-group">
+        <label for="servings">Servings:</label>
+        <input type="number" class="form-control" id="servings" th:field="*{servings}"/>
+        <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+    </div>
+
+    <!--    ENTER RECIPE DESCRIPTION-->
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" rows="5" id="description" th:field="*{description}"></textarea>
+        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+    </div>
+    <!--    ENTER DIFFICULTY LEVEL-->
+
+    <!--    ENTER PREP TIME IN MINUTES-->
+    <div class="form-group">
+        <label for="prep-time">Prep Time:</label>
+        <input type="number" class="form-control" id="prep-time" th:field="*{prepTime}"/>
+        <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+    </div>
+    <!--    ENTER COOK TIME IN MINUTES-->
+    <div class="form-group">
+        <label for="cook-time">Cook Time:</label>
+        <input type="number" class="form-control" id="cook-time" th:field="*{cookTime}"/>
+        <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+    </div>
+
+    <!--    ENTER COOKING DIRECTIONS-->
+    <div class="form-group">
+        <label for="directions">Directions:</label>
+        <textarea class="form-control" rows="5" id="directions" th:field="*{directions}"></textarea>
+        <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
+    </div>
+
+    <!--    ADD CATEGORIES-->
+
+    <!--    ADD INGREDIENTS-->
+    <div id="ingredients-container">
+
+        <div id="ingredients-section">
+
+        </div>
+        <div>
+            <form id="ingredient-form">
+                <input class="input" type="number" name="ingredient-amount"
+                       placeholder="Add Amount/Quantity">
+                <input class="input" type="text" name="ingredient-unit" placeholder="Add Unit">
+                <input class="input" type="text" name="ingredient-name" placeholder="Add ingredient">
+                <button class="button--add" id="add-ingredient-button">Add Ingredient</button>
+            </form>
+            <div id="ingredients-list">
+            </div>
+        </div>
+    </div>
+    <button>Submit</button>
+</form>
+<!--<footer th:replace="partials/partials :: footer"></footer>-->
+<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
+<script th:inline="javascript">
+    "use strict";
+
+    $(document).ready(function() {
+
+        console.log("hello");
+
+
+
+    });
+</script>
+
+</body>
+</html>
