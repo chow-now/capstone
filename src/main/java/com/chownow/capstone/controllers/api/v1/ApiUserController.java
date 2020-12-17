@@ -1,11 +1,9 @@
 package com.chownow.capstone.controllers.api.v1;
 
-import com.chownow.capstone.models.Follow;
-import com.chownow.capstone.models.Pantry;
-import com.chownow.capstone.models.Recipe;
-import com.chownow.capstone.models.User;
+import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.FollowRepository;
 import com.chownow.capstone.repos.PantryRepository;
+import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,9 @@ public class ApiUserController {
 
     @Autowired
     private PantryRepository pantryDao;
+
+    @Autowired
+    private RecipeRepository recipeDao;
 
     @Autowired
     private FollowRepository followDao;
@@ -101,6 +102,37 @@ public class ApiUserController {
             return followings;
         }
         return null;
+    }
+
+
+    // DB recipes that the user can make with items in their pantry
+    @GetMapping("/{id}/matches")
+    @ResponseBody
+    public List<Recipe> getMatches(@PathVariable (value="id") long userId){
+        User user = userDao.getById(userId);
+        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
+        List<Recipe> recipes = recipeDao.findAll();
+
+        List<Recipe> possibleRecipes = new ArrayList<>();
+
+        ArrayList<Long> ingredientsToMap= new ArrayList<>();
+        System.out.println("Ingredients in Users Pantry");
+        for(PantryIngredient pi : pantryIngredients){
+            ingredientsToMap.add(pi.getIngredient().getId());
+            System.out.println(pi.getIngredient().getId());
+        }
+        for(Recipe r : recipes){
+            boolean canMake = true;
+            for(RecipeIngredient ri : r.getRecipeIngredients()){
+                if(!ingredientsToMap.contains(ri.getIngredient().getId())){
+                    System.out.println("Ingredient not in pantry :" +ri.getIngredient().getId());
+                    canMake = false;
+                    break;
+                }
+            }
+            if(canMake) possibleRecipes.add(r);
+        }
+        return possibleRecipes;
     }
 
     /* POST MAPPINGS FOR CRUD */

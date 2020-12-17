@@ -5,23 +5,24 @@ import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Controller
 public class RecipeController {
 
-    private final RecipeRepository recipeDao;
-    private final UserRepository userDoa;
+    @Autowired
+    private RecipeRepository recipeDao;
+    @Autowired
+    private UserRepository userDoa;
     //    add email service?
 
     public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
