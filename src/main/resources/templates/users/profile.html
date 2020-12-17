@@ -79,6 +79,7 @@
           </ul>
       </div>
     </div>
+    <div id="userContent"></div>
   </div>
 </main>
 
@@ -95,35 +96,103 @@
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
     <script th:inline="javascript">
+      /*<![CDATA[*/
       (function($) {
         let userId = /*[[${user.id}]]*/ '';
         $( "#userPantry" ).click(function() {
-          alert( userId );
-          var request = $.ajax({'url': '/api/users/'});
-          request.done(function (users) {
+          var request = $.ajax({'url': '/api/users/'+userId+"/pantry"});
+          request.done(function (response) {
+            let pantryIngredients = response.pantryIngredients;
               var html = '';
-              users.forEach(function(user) {
+
+              pantryIngredients.forEach(function(item) {
                   html += '<div>';
-                  html += '<h1>' + user.firstName + '</h1>';
-                  html += '<p>' + user.lastName + '</p>';
-                  html += '<p>' + user.email+ '</p>';
+                  html += '<h5>' + item.ingredient.name + '</h5>';
+                  html += '<p>' + item.amount + '</p>';
+                  html += '<p>' + item.unit+ '</p>';
                   html += '</div>';
               });
-              $('#users').html(html);
+              $('#userContent').html(html);
           });
 
         });
         $( "#userRecipes" ).click(function() {
-          alert( "Handler for recipes called." );
+          var request = $.ajax({'url': '/api/users/'+userId+"/recipes"});
+          request.done(function (response) {
+
+            let recipes = response;
+            var html = '';
+
+            recipes.forEach(function(recipe) {
+              html += '<div>';
+              html += '<h5>' + recipe.title + '</h5>';
+              html += '<p>' + recipe.description + '</p>';
+              html += '<p>' + recipe.directions+ '</p>';
+              html += '<p>' + recipe.difficulty+ '</p>';
+              html += '<p>' + recipe.chef.firstName+ '</p>';
+              html += '</div>';
+            });
+            $('#userContent').html(html);
+          });
         });
+
         $( "#userFavorites" ).click(function() {
-          alert( "Handler for favorites called." );
+            var request = $.ajax({'url': '/api/users/'+userId+"/favorites"});
+            request.done(function (response) {
+              let favorites = response;
+              var html = '';
+
+              favorites.forEach(function(recipe) {
+                html += '<div>';
+                html += '<h5>' + recipe.title + '</h5>';
+                html += '<p>' + recipe.description + '</p>';
+                html += '<p>' + recipe.directions+ '</p>';
+                html += '<p>' + recipe.difficulty+ '</p>';
+                html += '<p>' + recipe.chef.firstName+ '</p>';
+                html += '</div>';
+              });
+              $('#userContent').html(html);
+            });
         });
+
         $( "#userFollowers" ).click(function() {
-          alert( "Handler for followers called." );
+          var request = $.ajax({'url': '/api/users/'+userId+"/followers"});
+          request.done(function (response) {
+            let followers = response;
+            var html = '';
+
+            followers.forEach(function(follower) {
+              html += '<div>';
+              html += '<h5>' + follower.firstName + '</h5>';
+              html += '<div>' +
+                      '<a href="/users/'+ follower.id + '">'+
+                      '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
+                      '</div>'+
+                      '</a>'
+              html += '</div>';
+            });
+            $('#userContent').html(html);
+          });
         });
+
         $( "#userFollowing" ).click(function() {
-          alert( "Handler for following called." );
+          var request = $.ajax({'url': '/api/users/'+userId+"/following"});
+          request.done(function (response) {
+            let following = response;
+            var html = '';
+
+            following.forEach(function(friend) {
+              html += '<div>';
+              html += '<h5>' + friend.firstName + '</h5>';
+              html += '<div>' +
+                      '<a href="/users/'+ friend.id + '">'+
+                      '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
+                      '</div>'+
+                      '</a>'
+              html += '</div>';
+            });
+            $('#userContent').html(html);
+          });
         });
 
         // var request = $.ajax({'url': '/api/users'});
@@ -158,10 +227,8 @@
         //
         // });
 
-
-
       })(jQuery);
-
+      /*]]>*/
     </script>
 </body>
 </html>
