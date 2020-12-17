@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -57,6 +58,17 @@ public class ApiUserController {
         }
         return null;
     }
+    
+    // get user favorites
+    @GetMapping("/{id}/favorites")
+    public @ResponseBody Set<Recipe> getUserFavorites(@PathVariable (value="id") long userId) {
+        Optional<User> user = userDao.findById(userId);
+        if(user.isPresent()){
+            User dbUser = user.get();
+            return dbUser.getFavorites();
+        }
+        return null;
+    }
 
     // get user pantry
     @GetMapping("/{id}/pantry")
@@ -77,7 +89,7 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
-            List<Follow> followResults =followDao.findAllByUser(dbUser);
+            Set<Follow> followResults = dbUser.getFollowers();
             for(Follow follow : followResults){
                 followers.add(follow.getUser());
             }
@@ -95,7 +107,7 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if (user.isPresent()) {
             User dbUser = user.get();
-            List<Follow> followResults = followDao.findAllByFriend(dbUser);
+            Set<Follow> followResults = dbUser.getFollowings();
             for (Follow follow : followResults) {
                 followings.add(follow.getFriend());
             }
