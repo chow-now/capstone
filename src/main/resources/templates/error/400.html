@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Server Error</title>
+    <title>Bad Request</title>
     <style>
         @import url("https://fonts.googleapis.com/css?family=VT323");
         :root{
@@ -41,7 +41,7 @@
         plate{
             width: 100%;
             height: calc(var(--height) / 2.5);
-            background: #CAD7E4;
+            background: orange;
             position: absolute;
             bottom: 0;
             border-radius: 0 0 50px 50px;
@@ -49,13 +49,13 @@
         }
 
         plate:before{
-            content: '500 Unexpected Error :(';
+            content: '400 Bad Request';
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-transform: uppercase;
             font-weight: bold;
-            color: rgba(0, 0, 0, .35);
+            color: rgba(0, 0, 0, .5);
             text-align: center;
         }
 
@@ -63,7 +63,7 @@
             content: '';
             width: calc(var(--width) / 2);
             height: calc(var(--height) / 10);
-            background: #B5C3D0;
+            background: darkorange;
             position: absolute;
             top: 100%; left: 50%;
             transform: translateX(-50%);
@@ -129,8 +129,8 @@
     </style>
 </head>
 <body>
-<div class="error-500" data-text="500 ERROR!
-The pastabilities are endless.">
+<div class="error-500" data-text="400 ERROR!
+You Sent a Spicy Meatball.">
     <spaguetti>
         <fork></fork>
         <meat></meat>
