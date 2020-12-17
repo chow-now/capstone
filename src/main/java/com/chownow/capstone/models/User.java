@@ -53,7 +53,7 @@ public class User {
 	@Column(columnDefinition = "TEXT")
 	private String aboutMe;
 
-	@Column(columnDefinition = "boolean default false", nullable = false)
+	@Column
 	private Boolean isAdmin;
     
     @OneToMany(
