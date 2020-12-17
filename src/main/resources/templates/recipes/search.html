@@ -6,16 +6,18 @@
 </head>
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
-
-<form class="w-50 mt-4 mx-auto" th:action="@{/search}" method="get">
-    <input type="text" class="form-control" id="main_search" placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
-</form>
-
+<div class="form-outline">
+    <form class="w-50 mt-4 mx-auto" th:action="@{/search}" method="get">
+        <input type="text" class="form-control" id="main_search"
+               placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
+    </form>
+</div>
 
 
 <!--    // Dump recipes here-->
-<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
-
+<div class="container">
+    <div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
+</div>
 <!--- Modal to display recipe information - This can be changed later on --->
 <div
         class="modal fade"
@@ -86,7 +88,7 @@
 
         // Search by ingredients
         $.ajax("https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchParam + "&number=50&apiKey=" + spoonApi + "")
-            .done(function(results) {
+            .done(function (results) {
                 console.log(results);
 
                 let recipe = "";
@@ -114,7 +116,7 @@
                     console.log(this.id + " button id");
 
                     $.ajax("https://api.spoonacular.com/recipes/" + this.id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
-                        .done(function(results) {
+                        .done(function (results) {
                             console.log(results);
 
                             // Recipe Information
@@ -131,7 +133,7 @@
                             title += results.title + '<a href="' + results.sourceUrl + '"> [source]</a>';
 
                             // Categories List
-                            if(results.cuisines.length == 0) {
+                            if (results.cuisines.length == 0) {
                                 category += '<li class="">' + 'Unknown category' + '</li>';
                             } else {
                                 for (let i = 0; i < results.cuisines.length; i++) {
@@ -145,8 +147,8 @@
                             } else {
                                 for (let i = 0; i < results.extendedIngredients.length; i++) {
                                     ingredients += '<li>' + results.extendedIngredients[i].amount + " "
-                                                          + results.extendedIngredients[i].unit + " "
-                                                          + results.extendedIngredients[i].originalName + '</li>';
+                                        + results.extendedIngredients[i].unit + " "
+                                        + results.extendedIngredients[i].originalName + '</li>';
                                 }
                             }
 
@@ -162,7 +164,7 @@
                         })
                 })
             })
-        }
+    }
 </script>
 </body>
 </html>
