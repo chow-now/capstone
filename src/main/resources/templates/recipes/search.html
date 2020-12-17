@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Results')">
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+
+<form class="w-50 mt-4 mx-auto" th:action="@{/search}" method="get">
+    <input type="text" class="form-control" id="main_search" placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
+</form>
+
+
+
+<!--    // Dump recipes here-->
+<div class="recipes row">
+
+</div>
+
+<!--- Modal to display recipe information - This can be changed later on --->
+<div
+        class="modal fade"
+        id="viewRecipeModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                >x</button>
+            </div>
+
+            <!-- Display Image -->
+            <div class="recipe-image mx-auto"></div>
+
+            <div class="modal-body">
+                <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                <h4>Categories</h4>
+                <ul class="recipe-categories"></ul>
+
+                <!-- Display Ingredients -->
+                <h4>Ingredients</h4>
+                <ul class="recipe-ingredients"></ul>
+
+                <!-- Display Instructions -->
+                <h4>Directions</h4>
+                <div class="recipe-directions"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary">Add to favorites</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<!-- Added this inline for now. Scripts partial that held the jQuery cdn was gone on latest pull -->
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<script th:inline="javascript">
+
+    // In the head
+    let spoonApi = document.querySelector('meta.spoonApi').content;
+
+    if (document.getElementById('main_search') == null) {
+        console.log("yo, it's null");
+    } else {
+        //var term = $('input').val();
+        //console.log(term); // Always return null
+        var searchString;
+        // console.log(searchString);
+        var urlSearchString = window.location.href;
+        var url = new URL(urlSearchString);
+        var searchParam = url.searchParams.get("term");
+        searchString = searchParam.replace(/,|,\s/g, ",+");
+        console.log("url string" + searchString);
+
+        // Search by ingredients
+        $.ajax("https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + searchParam + "&number=50&apiKey=" + spoonApi + "")
+            .done(function(results) {
+                console.log(results);
+
+                let recipe = "";
+
+                recipe += '<div class="col-md-12">'
+                recipe += '<h3 class="my-3">Results</h3>';
+                recipe += '</div>';
+
+                for (let i = 0; i < results.length; i++) {
+                    //console.log(item.title)
+                    recipe += '<div class="card">';
+                    recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
+                    recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
+                    recipe += '<div class="card-body">';
+                    recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
+                    recipe += '</div>';
+                    recipe += '</div>';
+                }
+                $('.recipes').html(recipe);
+
+
+                $('.viewRecipe').on('click', function () {
+                    console.log(this.id + " button id");
+
+                    $.ajax("https://api.spoonacular.com/recipes/" + this.id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
+                        .done(function(results) {
+                            console.log(results);
+
+                            // Recipe Information
+                            let image = "";
+                            let title = "";
+                            let ingredients = "";
+                            let instructions = "";
+                            let category = "";
+
+                            console.log(results.title);
+
+                            image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
+
+                            title += results.title + '<a href="' + results.sourceUrl + '"> [source]</a>';
+
+                            // Categories List
+                            if(results.cuisines.length == 0) {
+                                category += '<li class="">' + 'Unknown category' + '</li>';
+                            } else {
+                                for (let i = 0; i < results.cuisines.length; i++) {
+                                    category += '<li>' + results.cuisines[i] + '</li>'
+                                }
+                            }
+
+                            // Ingredients List
+                            if (results.extendedIngredients.length == 0) {
+                                ingredients += 'No ingredients recorded'
+                            } else {
+                                for (let i = 0; i < results.extendedIngredients.length; i++) {
+                                    ingredients += '<li>' + results.extendedIngredients[i].amount + " "
+                                                          + results.extendedIngredients[i].unit + " "
+                                                          + results.extendedIngredients[i].originalName + '</li>';
+                                }
+                            }
+
+                            // Grab Instructions
+                            instructions += '<p>' + results.instructions + '</p>'
+
+                            // Display to modal
+                            $('.recipe-title').html(title);
+                            $('.recipe-image').html(image);
+                            $('.recipe-categories').html(category);
+                            $('.recipe-ingredients').html(ingredients);
+                            $('.recipe-directions').html(instructions);
+                        })
+                })
+            })
+        }
+</script>
+</body>
+</html>
