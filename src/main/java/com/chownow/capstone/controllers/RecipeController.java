@@ -91,14 +91,8 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
-        Recipe recipe = recipeDao.getOne(id);
+//        Recipe recipe = recipeDao.getOne(id);
 
-        List<Image> images = recipe.getImages();
-        model.addAttribute("images", images);
-        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
-        model.addAttribute("ingredients", ingredients);
-        Set<Category> categories = recipe.getCategories();
-        model.addAttribute("categories", categories);
         return "recipes/edit";
     }
 
