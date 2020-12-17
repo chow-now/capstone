@@ -25,8 +25,8 @@ public class RecipeIngredient {
     @JsonIgnore
     private Recipe recipe;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
+//    @JsonIgnore
     private Ingredient ingredient;
 
     public RecipeIngredient(){}

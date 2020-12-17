@@ -39,7 +39,7 @@ public class SeedRunner {
     @Autowired
     private ImageRepository imageDao;
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SeedRunner.class);
     boolean seederHasRun = false;
@@ -134,7 +134,7 @@ public class SeedRunner {
     }
 
     public void seedIngredients(){
-        for(int i = 0; i<=10; i++){
+        for(int i = 0; i<=40; i++){
             String name = makeSingular(faker.food().ingredient());
             LOGGER.info(name);
             Ingredient seedIngredient = new Ingredient(name);
@@ -155,7 +155,7 @@ public class SeedRunner {
         int ingredientsSize = ingredientDao.findAll().size();
         for (long i = 1; i <= pantriesSize; i++){
             int j = 0;
-            int max = faker.number().numberBetween(1,ingredientsSize+1);
+            int max = faker.number().numberBetween(1,25);
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
@@ -214,7 +214,7 @@ public class SeedRunner {
         int ingredientsSize = ingredientDao.findAll().size();
         for (long i = 1; i <= recipesSize; i++){
             int j = 0;
-            int max = faker.number().numberBetween(1,ingredientsSize+1);
+            int max = faker.number().numberBetween(1,11);
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
