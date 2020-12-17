@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/scripts :: head('Edit a Recipe')">
+<head th:replace="partials/head :: head('Edit a Recipe')">
     <meta charset="UTF-8">
+    <title>Edit Recipe</title>
 </head>
 <body>
-<nav th:replace="partials/navbar :: nav"></nav>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
 
 <main class="container">
     <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
@@ -67,7 +68,6 @@
 
 </main>
 
-<footer th:replace="partials/footer :: footer"></footer>
 <th:block th:include="partials/scripts :: scripts"></th:block>
 </body>
 </html>

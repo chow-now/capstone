@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-
 <head th:replace="partials/head :: head('Create a Recipe')">
-
+    <meta charset="UTF-8">
+    <title>Create Recipe</title>
+</head>
 <body>
 <nav th:replace="partials/navbar :: nav"></nav>
 
@@ -72,8 +72,8 @@
     </div>
     <button>Submit</button>
 </form>
-<!--<footer th:replace="partials/partials :: footer"></footer>-->
-<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:inline="javascript">
     "use strict";
 
