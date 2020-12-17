@@ -39,7 +39,7 @@ public class SeedRunner {
     @Autowired
     private ImageRepository imageDao;
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SeedRunner.class);
     boolean seederHasRun = false;
