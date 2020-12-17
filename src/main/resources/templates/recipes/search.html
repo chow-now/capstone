@@ -14,7 +14,7 @@
 
 
 <!--    // Dump recipes here-->
-<div class="recipes row"></div>
+<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
 
 <!--- Modal to display recipe information - This can be changed later on --->
 <div
@@ -33,7 +33,7 @@
                         class="btn-close"
                         data-dismiss="modal"
                         aria-label="Close"
-                >x</button>
+                ></button>
             </div>
 
             <!-- Display Image -->
@@ -97,11 +97,13 @@
 
                 for (let i = 0; i < results.length; i++) {
                     //console.log(item.title)
-                    recipe += '<div class="card">';
+                    recipe += '<div class="col">'
+                    recipe += '<div class="card h-100">';
                     recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
                     recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
                     recipe += '<div class="card-body">';
                     recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
+                    recipe += '</div>';
                     recipe += '</div>';
                     recipe += '</div>';
                 }
