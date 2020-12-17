@@ -60,12 +60,13 @@ public class RecipeController {
         return "recipes/new";
     }
     /* new recipe with error handling */
-    @PostMapping("/recipe/new")
-    public String submitPost(
+    @PostMapping("/recipes/new")
+    public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model
     ) {
+        System.out.println("hello");
         if(validation.hasErrors()){
             model.addAttribute("errors",validation);
             model.addAttribute("recipe",recipeToBeSaved);
@@ -75,6 +76,7 @@ public class RecipeController {
 //        recipeToBeSaved.setChef(userDb);
 
         recipeToBeSaved.setChef(userDoa.getOne(1L));
+        System.out.println(recipeToBeSaved.getChef());
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
         return "redirect:/recipes/" + dbRecipe.getId();
