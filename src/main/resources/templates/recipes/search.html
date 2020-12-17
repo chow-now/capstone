@@ -5,6 +5,7 @@
     <title>Results</title>
 </head>
 <body>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
 
 <form class="w-50 mt-4 mx-auto" th:action="@{/search}" method="get">
     <input type="text" class="form-control" id="main_search" placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
@@ -13,9 +14,7 @@
 
 
 <!--    // Dump recipes here-->
-<div class="recipes row">
-
-</div>
+<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
 
 <!--- Modal to display recipe information - This can be changed later on --->
 <div
@@ -34,7 +33,7 @@
                         class="btn-close"
                         data-dismiss="modal"
                         aria-label="Close"
-                >x</button>
+                ></button>
             </div>
 
             <!-- Display Image -->
@@ -65,16 +64,7 @@
 </div>
 
 
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
-<!-- Added this inline for now. Scripts partial that held the jQuery cdn was gone on latest pull -->
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 
 <script th:inline="javascript">
 
@@ -107,11 +97,13 @@
 
                 for (let i = 0; i < results.length; i++) {
                     //console.log(item.title)
-                    recipe += '<div class="card">';
+                    recipe += '<div class="col">'
+                    recipe += '<div class="card h-100">';
                     recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
                     recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
                     recipe += '<div class="card-body">';
                     recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
+                    recipe += '</div>';
                     recipe += '</div>';
                     recipe += '</div>';
                 }

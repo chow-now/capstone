@@ -159,7 +159,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 2.55;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);
@@ -218,7 +218,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 1.55;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);

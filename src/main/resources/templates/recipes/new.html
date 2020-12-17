@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-
 <head th:replace="partials/head :: head('Create a Recipe')">
 
-    <script src="../../static/js/jquery.js"></script>
+    <meta charset="UTF-8">
+    <title>Create Recipe</title>
+</head>
+
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
 
@@ -76,6 +77,21 @@
 
     <button type="submit">Submit</button>
 </form>
+
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
+<script th:inline="javascript">
+    "use strict";
+
+    $(document).ready(function() {
+
+        console.log("hello");
+
+
+
+    });
+</script>
+
 <!--<footer th:replace="partials/partials :: footer"></footer>-->
 <!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
 <!-- JQuery -->
@@ -86,6 +102,7 @@
 <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
 <!--&lt;!&ndash; MDB core JavaScript &ndash;&gt;-->
 <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>-->
+
 
 </body>
 </html>
