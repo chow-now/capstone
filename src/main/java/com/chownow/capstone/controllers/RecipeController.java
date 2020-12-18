@@ -76,10 +76,9 @@ public class RecipeController {
 //        recipeToBeSaved.setChef(userDb);
 
         recipeToBeSaved.setChef(userDoa.getOne(1L));
-        System.out.println(recipeToBeSaved.getChef());
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
-        return "redirect:/recipes/" + dbRecipe.getId();
+        return "redirect:/recipes/" + dbRecipe.getId() + "/edit";
     }
 
     @PostMapping("/recipes/{id}/delete")
@@ -95,11 +94,19 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/{id}/edit")
-    public String editRecipe(@ModelAttribute Recipe recipeToBeSaved) {
+    public String editRecipe(
+        @Valid @ModelAttribute Recipe recipeToBeSaved,
+        Errors validation,
+        Model model) {
+
+        if(validation.hasErrors()){
+        model.addAttribute("errors",validation);
+        model.addAttribute("recipe",recipeToBeSaved);
+        return "recipes/" + recipeToBeSaved.getId() + "/edit";
+    }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         recipeToBeSaved.setChef(userDoa.getOne(1L));
-
-        recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes";
+        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes" + dbRecipe.getId();
     }
 }
