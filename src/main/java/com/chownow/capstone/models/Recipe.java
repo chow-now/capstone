@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,15 +71,15 @@ public class Recipe {
             mappedBy = "recipe",
             orphanRemoval = true,
             cascade = CascadeType.PERSIST)
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "recipe",
             cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
-    @JsonIgnore
-    private List<RecipeIngredient> RecipeIngredients;
+    @JsonManagedReference
+    private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

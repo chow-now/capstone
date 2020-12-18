@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" class="form-control" id="title" th:field="*{title}" th:value="${recipe.title}"/>
-            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+<!--            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
         </div>
 
         <!--    EDIT NUMBER OF SERVINGS RECIPE PREPARES-->
@@ -22,7 +22,7 @@
             <label for="servings">Servings:</label>
             <input type="number" class="form-control" id="servings" th:field="*{servings}"
                    th:value="${recipe.servings}"/>
-            <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+<!--            <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>-->
         </div>
 
         <!--    EDIT RECIPE DESCRIPTION-->
@@ -30,7 +30,7 @@
             <label for="description">Description:</label>
             <textarea class="form-control" rows="5" id="description" th:field="*{description}"
                       th:value="${recipe.description}"></textarea>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+<!--            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>-->
         </div>
 
         <!--    EDIT DIFFICULTY LEVEL-->
@@ -50,7 +50,7 @@
                        th:field="*{difficulty}" th:value="${recipe.difficulty}">
                 <label class="custom-control-label" for="hard">Hard</label>
             </div>
-            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+<!--            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>-->
         </div>
 
         <!--    EDIT PREP TIME IN MINUTES-->
@@ -58,7 +58,7 @@
             <label for="prep-time">Prep Time:</label>
             <input type="number" class="form-control" id="prep-time" th:field="*{prepTime}"
                    th:value="${recipe.prepTime}"/>
-            <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+<!--            <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>-->
         </div>
 
         <!--    EDIT COOK TIME IN MINUTES-->
@@ -66,7 +66,7 @@
             <label for="cook-time">Cook Time:</label>
             <input type="number" class="form-control" id="cook-time" th:field="*{cookTime}"
                    th:value="${recipe.cookTime}"/>
-            <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+<!--            <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>-->
         </div>
 
         <!--    EDIT COOKING DIRECTIONS-->
@@ -74,29 +74,29 @@
             <label for="directions">Directions:</label>
             <textarea class="form-control" rows="5" id="directions" th:field="*{directions}"
                       th:value="${recipe.difficulty}"></textarea>
-            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" th:value="${recipe.directions}"></p>
+<!--            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" th:value="${recipe.directions}"></p>-->
         </div>
 
         <!--    EDIT INGREDIENTS-->
         <label>Ingredients:</label>
-        <ul th:each="ingredient : ${recipe.getRecipeIngredients()}">
-            <li class="card-text">
-                <input type="number" step=".05" th:value="${ingredient.amount}">
-                <select>
-                    <option th:value="${ingredient.getUnit()}" selected></option>
-                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                    <option th:value="ounce">Ounce (oz)</option>
-                    <option th:value="cup">Cup (c)</option>
-                    <option th:value="pint">Pint (pt)</option>
-                    <option th:value="quart">Quart (qt)</option>
-                    <option th:value="gallon">Gallon (gal)</option>
+<!--        <ul th:each="ingredient : ${recipe.getRecipeIngredients()}">-->
+<!--            <li class="card-text">-->
+<!--                <input type="number" step=".05" th:value="${ingredient.amount}">-->
+<!--                <select>-->
+<!--                    <option th:value="${ingredient.getUnit()}" selected></option>-->
+<!--                    <option th:value="teaspoon">Teaspoon (tsp)</option>-->
+<!--                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>-->
+<!--                    <option th:value="ounce">Ounce (oz)</option>-->
+<!--                    <option th:value="cup">Cup (c)</option>-->
+<!--                    <option th:value="pint">Pint (pt)</option>-->
+<!--                    <option th:value="quart">Quart (qt)</option>-->
+<!--                    <option th:value="gallon">Gallon (gal)</option>-->
 
-                </select>
-                <input th:value="${ingredient.getIngredient().getName()}">
-            </li>
-        </ul>
-        <input class="btn btn-success" type="submit"/>
+<!--                </select>-->
+<!--                <input th:value="${ingredient.getIngredient().getName()}">-->
+<!--            </li>-->
+<!--        </ul>-->
+        <button type="submit">Submit</button>
     </form>
     <form th:action="@{/recipes/{id}/delete(id=${recipe.getId()})}" th:method="post">
         <button class="btn btn-danger">Delete</button>
