@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <meta charset="UTF-8">
+  <title>User Profile</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+</head>
+<body>
+<!--<nav th:include="partials/navbar.html :: nav"></nav>-->
+
+
+<main>
+  <!--Main Container-->
+
+  <div class="">
+    <!-- USER INFO -->
+    <div class="container pt-4">
+      <div class="row">
+        <!-- IF CUSTOMER HAS PROFILE PICTURE -->
+        <div class="col-4 col-sm-3 text-center px-lg-5 mb-4">
+          <img width="100%" th:src="${user.avatar}" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">
+        </div>
+        <div class="col-8 col-sm-9 mb-4">
+          <div class="mb-2">
+            <h2 class="mb-0" th:text="${user.firstName}"></h2>
+          </div>
+          <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
+          <p>
+            <em>
+              <small th:text="${user.getAboutMe()} ?: 'Introduce yourself to the community by writing a little about yourself.'"></small>
+            </em>
+          </p>
+          <!-- EDIT PROFILE LINK -->
+          <div>
+<!--            <button sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == user.id}" type="button" class="el-button el-button&#45;&#45;default el-button&#45;&#45;small is-plain">-->
+<!--              <a th:href="@{/users/{id}/edit(id=${user.id})}">Edit Profile</a>-->
+<!--            </button>-->
+              <button id="addFriend" type="submit" class="btn"> Follow </button>
+          </div>
+        </div>
+      </div>
+      <!-- END USER INFO -->
+      <div>
+          <ul class="nav nav-tabs">
+            <li class="nav-item" id="userRecipes">
+              <a class="nav-link" href="#">
+                  <i class="far fa-utensils fa-2x"></i>
+                  <i class="fas fa-utensils fa-2x"></i>
+              </a>
+            </li>
+            <li class="nav-item" id="userFavorites">
+              <a class="nav-link" href="#">
+                  <!--              <i class="far fa-bookmark fa-2x"></i>-->
+                  <i class="fas fa-bookmark fa-2x"></i>
+              </a>
+            </li>
+            <li class="nav-item" id="userPantry">
+              <a class="nav-link" href="#">
+                  <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
+              </a>
+            </li>
+
+            <li class="nav-item" id="userFollowers">
+              <a class="nav-link" href="#">
+                  <i class="fas fa-users fa-2x"></i>
+              </a>
+            </li>
+            <li class="nav-item" id="userFollowing">
+              <a class="nav-link" href="#">
+                  <i class="fas fa-user-plus fa-2x"></i>
+              </a>
+            </li>
+            <li class="nav-item" id="suggestions">
+              <a class="nav-link" href="#">
+                <i class="fas fa-drumstick-bite fa-2x"></i>
+              </a>
+            </li>
+          </ul>
+      </div>
+    </div>
+    <div id="userContent" class="bg-light"></div>
+    
+  </div>
+</main>
+
+
+
+
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+<script th:inline="javascript">
+      /*<![CDATA[*/
+      (function($) {
+
+        /* GET USER ID FROM THYMELEAF */
+        let userId = /*[[${user.id}]]*/ '';
+        
+        // API CALL TO CREATE HTML CONTENT
+
+        let recipesHtml = "";
+        let favoritesHtml = "";
+        let pantryHtml = "";
+        let followingHtml = "";
+
+
+        // RECIPES
+        $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
+          recipes.forEach(function(recipe) {
+            recipesHtml += '<div>';
+            recipesHtml += '<h5>' + recipe.title + '</h5>';
+            recipesHtml += '<p>' + recipe.description + '</p>';
+            recipesHtml += '<p>' + recipe.directions+ '</p>';
+            recipesHtml += '<p>' + recipe.difficulty+ '</p>';
+            recipesHtml += '<p>' + recipe.chef.firstName+ '</p>';
+            recipesHtml += '</div>';
+          });
+        });
+
+        // FAVORITES
+        $.ajax({'url': '/api/users/'+userId+"/favorites"}).done(function (favorites) {
+          favorites.forEach(function(recipe) {
+            favoritesHtml += '<div>';
+            favoritesHtml += '<h5>' + recipe.title + '</h5>';
+            favoritesHtml += '<p>' + recipe.description + '</p>';
+            favoritesHtml += '<p>' + recipe.directions+ '</p>';
+            favoritesHtml += '<p>' + recipe.difficulty+ '</p>';
+            favoritesHtml += '<p>' + recipe.chef.firstName+ '</p>';
+            favoritesHtml += '</div>';
+          });
+        });
+
+        // PANTRY
+
+        $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
+          response.pantryIngredients.forEach(function(item) {
+            pantryHtml += '<div>';
+            pantryHtml += '<h5>' + item.ingredient.name + '</h5>';
+            pantryHtml += '<p class="rational">' + item.amount + '</p>';
+            pantryHtml += '<p>' + item.unit+ '</p>';
+            pantryHtml += '</div>';
+          });
+        });
+
+
+
+        // FOLLOWING
+        $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
+          following.forEach(function(friend) {
+            followingHtml += '<div>';
+            followingHtml += '<h5>' + friend.firstName + '</h5>';
+            followingHtml += '<div>' +
+                    '<a href="/users/'+ friend.id + '">'+
+                    '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
+                    '</div>'+
+                    '</a>'
+            followingHtml += '</div>';
+          });
+        });
+
+
+
+        /* set content on tab click */
+
+        // RECIPES
+        $( "#userRecipes" ).click(function() {
+          $('#userContent').html(recipesHtml);
+        });
+        // FAVORITES
+        $( "#userFavorites" ).click(function() {
+          $('#userContent').html(favoritesHtml);
+        });
+        // PANTRY
+        $( "#userPantry" ).click(function() {
+          $('#userContent').html(pantryHtml);
+          convertAllRationals();
+        });
+        // FOLLOWERS
+        $( "#userFollowers" ).click(function() {
+            $.ajax({'url': '/api/users/'+userId+"/followers"}).done(function (followers) {
+                let followersHtml = "";
+                followers.forEach(function(follower) {
+                    followersHtml += '<div>';
+                    followersHtml += '<h5>' + follower.firstName + '</h5>';
+                    followersHtml += '<div>' +
+                        '<a href="/users/'+ follower.id + '">'+
+                        '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
+                        '</div>'+
+                        '</a>'
+                    followersHtml += '</div>';
+                });
+                $('#userContent').html(followersHtml);
+            });
+        });
+        // FOLLOWING
+        $( "#userFollowing" ).click(function() {
+          $('#userContent').html(followingHtml);
+        });
+
+        // SUGGESTIONS
+        $( "#suggestions" ).click(function() {
+            $.ajax({'url': '/api/users/'+userId+"/matches"}).done(function (recipes) {
+                let suggestionsHtml = "";
+                recipes.forEach(function(recipe) {
+                    suggestionsHtml += '<div>';
+                    suggestionsHtml += '<h5>' + recipe.title + '</h5>';
+                    suggestionsHtml += '<p>' + recipe.description + '</p>';
+                    suggestionsHtml += '<p>' + recipe.directions+ '</p>';
+                    suggestionsHtml += '<p>' + recipe.difficulty+ '</p>';
+                    suggestionsHtml += '<p>' + recipe.chef.firstName+ '</p>';
+                    suggestionsHtml += '</div>';
+                });
+                $('#userContent').html(suggestionsHtml);
+            });
+
+        });
+
+        // FOLLOW BTN
+          $( "#addFriend" ).click(function() {
+
+              let url = "/users/follow";
+              $.ajax({
+                  type: "POST",
+                  contentType: "application/json",
+                  url: url,
+                  data: JSON.stringify(userId),
+                  dataType: 'json'
+              }).done(function (response){
+                  $('#addFriend').text("Following");
+                  $('#addFriend').prop("disabled", true);
+              });
+          });
+
+
+
+              // $("#createUser").submit(function(e) {
+        //
+        //     e.preventDefault(); // avoid to execute the actual submit of the form.
+        //
+        //     var form = $(this);
+        //     var url = form.attr('action');
+        //     var formData = JSON.stringify($(this).serializeArray());
+        //     console.log(formData);
+        //     $.ajax({
+        //         type: "POST",
+        //         url: url,
+        //         data: formData,
+        //         dataType: "json",
+        //         contentType : "application/json"
+        //     });
+        //
+        //
+        // });
+
+      })(jQuery);
+      /*]]>*/
+    </script>
+<script th:src="@{/js/fraction_converter.js}"></script>
+</body>
+</html>
