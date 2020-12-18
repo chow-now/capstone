@@ -49,7 +49,9 @@
         </div>
       </div>
       <!-- END USER INFO -->
+
       <div>
+<!--          LOGGED IN USERS TAB-->
           <ul class="nav nav-tabs">
             <li class="nav-item" id="userRecipes">
               <a class="nav-link" href="#">
@@ -63,12 +65,6 @@
                   <i class="fas fa-bookmark fa-2x"></i>
               </a>
             </li>
-            <li class="nav-item" id="userPantry">
-              <a class="nav-link" href="#">
-                  <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
-              </a>
-            </li>
-
             <li class="nav-item" id="userFollowers">
               <a class="nav-link" href="#">
                   <i class="fas fa-users fa-2x"></i>
@@ -79,6 +75,12 @@
                   <i class="fas fa-user-plus fa-2x"></i>
               </a>
             </li>
+<!--            PROFILE OWNER ONLY TABS-->
+            <li class="nav-item" id="userPantry">
+              <a class="nav-link" href="#">
+                <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
+              </a>
+            </li>
             <li class="nav-item" id="suggestions">
               <a class="nav-link" href="#">
                 <i class="fas fa-drumstick-bite fa-2x"></i>
@@ -87,10 +89,46 @@
           </ul>
       </div>
     </div>
+
+<!--    RENDERED CONTENT-->
     <div id="userContent" class="bg-light"></div>
-    
+
+
+
   </div>
 </main>
+<!--MODALS-->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body"  id="ingredientModalContent">
+          <form id="ingredientForm">
+            <div class="form-group">
+              <input name="name" type="hidden" class="form-control" id="ingredient-name">
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+            </div>
+          </form>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="addIngredient" type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!--Todo: FIX SCRIPT CONFIGURATION-->
 
 <!-- JQuery -->
@@ -248,21 +286,36 @@
       });
     });
 
+    // AUTOSEARCH INGREDIENTS FOR PANTRY
     $(document).on('keyup',"#ingredientSearch",function(){
       console.log("keypress");
       let searchResults = $('#searchResults');
       searchResults.empty();
-      let html = "<ul>"
+      let html = "<ul class='list-unstyled'>";
       let searchInput = this.value;
       ingredientsList.filter(function(ingredient){
         if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
-          console.log(ingredient);
-          searchResults.append("<li>"+ingredient+"</li>");
+          searchResults.append(
+            '<li>'+
+                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+
+                    ingredient +
+                '</button>'+
+            '</li>'
+          );
         }
       });
       searchResults.append("</ul>");
-
     });
+
+    // $('#ingredientModal').modal('toggle')
+    // MODALS
+    $('#ingredientModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget); // Button that triggered the modal
+      let clickedIngredient = button[0].innerHTML;
+      let modal = $(this);
+      modal.find('.modal-title').text("Add "+clickedIngredient+" to pantry");
+      modal.find('.modal-body input').val(clickedIngredient);
+    })
   })(jQuery);
 
 
