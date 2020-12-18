@@ -36,19 +36,19 @@
         <!--    EDIT DIFFICULTY LEVEL-->
         <div class="form-group">
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="easy" name="difficulty" class="custom-control-input" value="easy"
-                       th:field="*{difficulty}" th:value="${recipe.difficulty}">
-                <label class="custom-control-label" for="easy">Easy</label>
+                <input type="radio" id="easy" class="custom-control-input" value="easy"
+                       th:field="${recipe.difficulty}">
+                <label class="custom-control-label" th:for="${recipe.difficulty}">Easy</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="medium" name="difficulty" class="custom-control-input" value="medium"
-                       th:field="*{difficulty}" th:value="${recipe.difficulty}">
-                <label class="custom-control-label" for="medium">Medium</label>
+                <input type="radio" id="medium" class="custom-control-input" value="medium"
+                       th:field="${recipe.difficulty}">
+                <label class="custom-control-label" th:for="${recipe.difficulty}">Medium</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="hard" name="difficulty" class="custom-control-input" value="hard"
-                       th:field="*{difficulty}" th:value="${recipe.difficulty}">
-                <label class="custom-control-label" for="hard">Hard</label>
+                <input type="radio" id="hard" class="custom-control-input" value="hard"
+                       th:field="${recipe.difficulty}">
+                <label class="custom-control-label" th:for="${recipe.difficulty}">Hard</label>
             </div>
             <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
         </div>
