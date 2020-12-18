@@ -65,7 +65,7 @@ public class AccountController {
 		return "users/index";
 	}
 
-	@GetMapping("users/{id}")
+	@GetMapping("user/{id}")
 	public String getUserProfile(@PathVariable long id, Model model){
 		/*Get user*/
 		User user = userDao.getOne(id);
@@ -75,11 +75,15 @@ public class AccountController {
 		/*Get Pantry*/
 		return "/users/profile";
 	}
-	@GetMapping("user/{id}")
+	@GetMapping("users/{id}")
 	public String showUserProfile(@PathVariable long id, Model model){
 		/*Get user*/
+		User currentUser = userDao.getOne(2L);
 		User user = userDao.getOne(id);
 		model.addAttribute("user",user);
+		if(followDao.findByUserAndFriend(currentUser,user) != null){
+			model.addAttribute("isFollowing",true);
+		}
 		/*Get all user recipes @recipes_table*/
 		model.addAttribute("recipes", recipeDao.findAllByChef(user));
 		/*Get Pantry*/

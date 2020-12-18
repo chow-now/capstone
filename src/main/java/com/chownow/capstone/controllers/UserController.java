@@ -1,17 +1,18 @@
 package com.chownow.capstone.controllers;
 
+import com.chownow.capstone.models.AjaxFollowRequest;
 import com.chownow.capstone.models.Follow;
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.FollowRepository;
 import com.chownow.capstone.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/users")
@@ -45,11 +46,12 @@ public class UserController {
 
 
     @RequestMapping(value = "/follow", method = RequestMethod.POST, headers="Content-Type=application/json")
-    public @ResponseBody Follow post(@RequestBody long friendId) {
-        Follow friend = new Follow(userDao.getById(7L), userDao.getById(friendId));
-        Follow dbFollow = followDao.save(friend);
-        if(dbFollow == null){
-            return null;
+    public @ResponseBody Follow post(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
+        User currentUser = userDao.getById(2L);
+        User friend = userDao.getById(ajaxFollowRequest.getFriendId());
+        Follow dbFollow = null;
+        if(followDao.findByUserAndFriend(currentUser,friend) == null){
+            dbFollow = followDao.save(new Follow(currentUser,friend));
         }
         return dbFollow;
     }
