@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Create a Recipe')">
+
+    <meta charset="UTF-8">
+    <title>Create Recipe</title>
+</head>
+
+<body>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+
+<form th:action="@{/recipes/new2}" th:method="post" th:object="${recipe-ingredients}">
+    <!--    EDIT INGREDIENTS-->
+    <label>Ingredients:</label>
+    <ul th:each="ingredient : ${recipe.getRecipeIngredients()}">
+        <li class="card-text">
+            <input type="number" step=".05" th:value="${ingredient.amount}">
+            <select>
+                <option th:value="${ingredient.getUnit()}" selected></option>
+                <option th:value="teaspoon">Teaspoon (tsp)</option>
+                <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                <option th:value="ounce">Ounce (oz)</option>
+                <option th:value="cup">Cup (c)</option>
+                <option th:value="pint">Pint (pt)</option>
+                <option th:value="quart">Quart (qt)</option>
+                <option th:value="gallon">Gallon (gal)</option>
+
+            </select>
+            <input th:value="${ingredient.getIngredient().getName()}">
+        </li>
+    </ul>
+</form>
+
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
+
+</body>
+</html>
