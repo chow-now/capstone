@@ -66,7 +66,7 @@ public class AccountController {
 	}
 
 	@GetMapping("users/{id}")
-	public String showUserProfile(@PathVariable long id, Model model){
+	public String getUserProfile(@PathVariable long id, Model model){
 		/*Get user*/
 		User user = userDao.getOne(id);
 		model.addAttribute("user",user);
@@ -74,6 +74,16 @@ public class AccountController {
 		model.addAttribute("recipes", recipeDao.findAllByChef(user));
 		/*Get Pantry*/
 		return "/users/profile";
+	}
+	@GetMapping("user/{id}")
+	public String showUserProfile(@PathVariable long id, Model model){
+		/*Get user*/
+		User user = userDao.getOne(id);
+		model.addAttribute("user",user);
+		/*Get all user recipes @recipes_table*/
+		model.addAttribute("recipes", recipeDao.findAllByChef(user));
+		/*Get Pantry*/
+		return "users/profilev2";
 	}
 
 
