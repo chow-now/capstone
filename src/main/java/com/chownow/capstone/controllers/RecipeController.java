@@ -76,7 +76,7 @@ public class RecipeController {
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
 
-        recipeToBeSaved.setChef(userDoa.getOne(1L));
+        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
         return "redirect:/recipes/" + dbRecipe.getId() + "/edit";
@@ -106,8 +106,8 @@ public class RecipeController {
         return "recipes/" + recipeToBeSaved.getId() + "/edit";
     }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        recipeToBeSaved.setChef(userDoa.getOne(1L));
+        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes";
+        return "redirect:/recipes/" + dbRecipe.getId();
     }
 }
