@@ -30,7 +30,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String showHomepage() {
-        return "/coming-soon";
+        return "coming-soon";
     }
 
     @GetMapping("/about")
