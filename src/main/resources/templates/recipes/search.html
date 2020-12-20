@@ -92,26 +92,25 @@
                 console.log(results);
 
                 let recipe = "";
-                function getSummary(id) {
-                    $.ajax("https://api.spoonacular.com/recipes/" + id + "/summary?apiKey=" + spoonApi + "")
-                        .done(function (data) {
-                            console.log(data.summary);
-                            return data.summary;
-                        });
-                }
-                console.log(getSummary(4632));
+                // console.log(getSummary(4632));
 
                 recipe += '<div class="col-md-12">'
                 recipe += '<h3 class="my-3">Results</h3>';
                 recipe += '</div>';
 
                 for (let i = 0; i < results.length; i++) {
+                // function getSummary(id) {
+                //     $.ajax("https://api.spoonacular.com/recipes/" + id + "/summary?apiKey=" + spoonApi + "")
+                //         .done(function (data) {
+                //             console.log(data.summary);
+                //             return data;
+                //         });
+                // }
                     recipe += '<div class="col">'
                     recipe += '<div class="card h-100">';
                     recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
                     recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
                     recipe += '<div class="card-body">';
-                    recipe += '<p>' + getSummary(4632) + '</p>'
                     recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
                     recipe += '</div>';
                     recipe += '</div>';
