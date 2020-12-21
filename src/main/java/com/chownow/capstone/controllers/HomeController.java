@@ -10,40 +10,40 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private UserRepository userDao;
-
-    @Autowired
-    private FollowRepository followDao;
-
-    @Autowired
-    private RecipeIngredientRepository recipeIngredientDao;
-
-    @Autowired
-    private RecipeRepository recipeDao;
-
-    @Autowired
-    private PantryIngredientRepository pantryIngredientDao;
-
-    @Autowired
-    private PantryRepository pantryDao;
+//    @Autowired
+//    private UserRepository userDao;
+//
+//    @Autowired
+//    private FollowRepository followDao;
+//
+//    @Autowired
+//    private RecipeIngredientRepository recipeIngredientDao;
+//
+//    @Autowired
+//    private RecipeRepository recipeDao;
+//
+//    @Autowired
+//    private PantryIngredientRepository pantryIngredientDao;
+//
+//    @Autowired
+//    private PantryRepository pantryDao;
 
     @GetMapping("/")
     public String showHomepage() {
-        return "coming-soon";
+        return "/coming-soon";
     }
 
-    @GetMapping("/about")
-    public String showAboutPage(Model model) {
-        return "/aboutus";
-    }
+//    @GetMapping("/about")
+//    public String showAboutPage(Model model) {
+//        return "/aboutus";
+//    }
 
-    @GetMapping("/home")
-    public String showUsers(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
-        model.addAttribute("users", userDao.findAll());
-
-        return "/index";
-    }
+//    @GetMapping("/home")
+//    public String showUsers(Model model) {
+//        model.addAttribute("recipes", recipeDao.findAll());
+//        model.addAttribute("users", userDao.findAll());
+//
+//        return "/index";
+//    }
 }
 
