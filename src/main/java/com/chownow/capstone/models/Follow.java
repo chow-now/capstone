@@ -28,6 +28,9 @@ public class Follow {
 
         public Follow(){}
 
+        public Follow(User friend){
+                this.friend = friend;
+        }
         public Follow(User user, User friend) {
                 this.user = user;
                 this.friend = friend;

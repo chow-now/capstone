@@ -3,8 +3,6 @@ package com.chownow.capstone.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -55,7 +53,9 @@ public class User {
 	@Column(columnDefinition = "TEXT")
 	private String aboutMe;
 
-	@Column(columnDefinition = "boolean default false", nullable = false)
+
+	@Column
+	@JsonIgnore
 	private Boolean isAdmin;
     
     @OneToMany(
@@ -104,7 +104,6 @@ public class User {
 		this.email = email;
 		this.firstName = firstName.trim();
 		this.password = password;
-		this.isAdmin = false;
 	}
 	// Getter
 	public User(long id, String email, String firstName, String password, String avatar, String aboutMe, Boolean isAdmin) {

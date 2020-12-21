@@ -52,56 +52,7 @@ public class AccountController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/users")
-	public String showUsers(Model model) {
-		model.addAttribute("users", userDao.findAll());
-		return "users/index";
-	}
 
-	@GetMapping("/users/search")
-	public String showUsersbySearch(Model model) {
-		model.addAttribute("followers", userDao.findById(2L)); 		/*Todo: Hardcode*/
-
-		return "users/index";
-	}
-
-	@GetMapping("users/{id}")
-	public String showUserProfile(@PathVariable long id, Model model){
-		/*Get user*/
-		User user = userDao.getOne(id);
-		model.addAttribute("user",user);
-		/*Get all user recipes @recipes_table*/
-		model.addAttribute("recipes", recipeDao.findAllByChef(user));
-		/*Get Pantry*/
-		return "/users/profile";
-	}
-
-
-//	@PostMapping("/users/{id}/edit")
-//	public String editRecipe(User userToBeSaved) {
-//		User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		userToBeSaved.setUser(userDb); /*Todo: make setUser*/
-//		userDao.save(userToBeSaved);
-//		return "redirect:/user";
-//	}
-
-	@GetMapping("users/{id}/edit")
-	public String showEditUser(@PathVariable long id, Model model){
-		model.addAttribute("user",userDao.getOne(id));
-		return "/users/edit";
-	}
-
-	@PostMapping("users/{id}/edit")
-	public String editUser(@PathVariable long id, Model model){
-		model.addAttribute("user",userDao.getOne(id));
-		return "redirect:/users/edit";
-	}
-
-	@PostMapping("/users/{id}/delete")
-	public String deleteAd(@PathVariable long id){
-		userDao.deleteById(id);
-		return "redirect:/";
-	}
 
 
 	/*Todo: Roles*/

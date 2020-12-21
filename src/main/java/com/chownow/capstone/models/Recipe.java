@@ -31,9 +31,12 @@ public class Recipe {
     @Column(nullable = false,length = 500)
     private String description;
 
-    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
-    @NotBlank(message= "Directions would be useful here. Please provides some.")
-    @Column(nullable = false,columnDefinition = "TEXT")
+    @Column
+    private boolean isPublished;
+
+//    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
+//    @NotBlank(message= "Directions would be useful here. Please provides some.")
+    @Column(columnDefinition = "TEXT")
     private String directions;
 
 
@@ -224,5 +227,13 @@ public class Recipe {
 
     public void setChef(User chef) {
         this.chef = chef;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }

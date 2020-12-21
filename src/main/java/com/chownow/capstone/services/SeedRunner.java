@@ -135,7 +135,7 @@ public class SeedRunner {
 
     public void seedIngredients(){
         for(int i = 0; i<=40; i++){
-            String name = makeSingular(faker.food().ingredient());
+            String name = makeSingular(faker.food().ingredient().toLowerCase());
             LOGGER.info(name);
             Ingredient seedIngredient = new Ingredient(name);
             ingredientDao.save(seedIngredient);
@@ -159,7 +159,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 2.50;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);
@@ -218,7 +218,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 2.25;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);

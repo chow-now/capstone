@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-
 <head th:replace="partials/head :: head('Create a Recipe')">
 
+    <meta charset="UTF-8">
+    <title>Create Recipe</title>
+</head>
+
 <body>
-<nav th:replace="partials/navbar :: nav"></nav>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
 
 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
     <!--    ENTER A RECIPE TITLE-->
@@ -14,6 +16,9 @@
         <input type="text" class="form-control" id="title" th:field="*{title}"/>
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
     </div>
+
+
+
 
     <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES-->
     <div class="form-group">
@@ -30,6 +35,26 @@
     </div>
     <!--    ENTER DIFFICULTY LEVEL-->
 
+
+
+    <div class="form-group">
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="easy" name="difficulty" class="custom-control-input" value="easy"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="easy">Easy</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="medium" name="difficulty" class="custom-control-input" value="medium"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="medium">Medium</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="hard" name="difficulty" class="custom-control-input" value="hard"
+                   th:field="*{difficulty}">
+            <label class="custom-control-label" for="hard">Hard</label>
+        </div>
+        <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+    </div>
     <!--    ENTER PREP TIME IN MINUTES-->
     <div class="form-group">
         <label for="prep-time">Prep Time:</label>
@@ -50,30 +75,11 @@
         <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
     </div>
 
-    <!--    ADD CATEGORIES-->
-
-    <!--    ADD INGREDIENTS-->
-    <div id="ingredients-container">
-
-        <div id="ingredients-section">
-
-        </div>
-        <div>
-            <form id="ingredient-form">
-                <input class="input" type="number" name="ingredient-amount"
-                       placeholder="Add Amount/Quantity">
-                <input class="input" type="text" name="ingredient-unit" placeholder="Add Unit">
-                <input class="input" type="text" name="ingredient-name" placeholder="Add ingredient">
-                <button class="button--add" id="add-ingredient-button">Add Ingredient</button>
-            </form>
-            <div id="ingredients-list">
-            </div>
-        </div>
-    </div>
-    <button>Submit</button>
+    <button type="submit">Submit</button>
 </form>
-<!--<footer th:replace="partials/partials :: footer"></footer>-->
-<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
+
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:inline="javascript">
     "use strict";
 
@@ -85,6 +91,18 @@
 
     });
 </script>
+
+<!--<footer th:replace="partials/partials :: footer"></footer>-->
+<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
+<!-- JQuery -->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<!--&lt;!&ndash; Bootstrap tooltips &ndash;&gt;-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>-->
+<!--&lt;!&ndash; Bootstrap core JavaScript &ndash;&gt;-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
+<!--&lt;!&ndash; MDB core JavaScript &ndash;&gt;-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>-->
+
 
 </body>
 </html>
