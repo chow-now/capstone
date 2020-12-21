@@ -30,7 +30,6 @@ public class HomeController {
 //    private PantryRepository pantryDao;
 
     @GetMapping("/home")
-    @ResponseBody
     public String showHomepage() {
         return "/coming-soon";
     }
