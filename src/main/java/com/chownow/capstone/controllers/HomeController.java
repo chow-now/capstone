@@ -28,7 +28,7 @@ public class HomeController {
 //    @Autowired
 //    private PantryRepository pantryDao;
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String showHomepage() {
         return "/coming-soon";
     }
