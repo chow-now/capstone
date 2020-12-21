@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <title>User Profile</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -102,6 +104,12 @@
     .table.table-bordered th {
       text-align: center;
     }
+
+    @media only screen and (max-width: 500px) {
+      .fas{
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -110,10 +118,8 @@
 
 <main>
   <!--Main Container-->
-
-  <div class="">
     <!-- USER INFO -->
-    <div class="container pt-4">
+    <div class="container mt-4">
       <div class="row">
         <!-- IF CUSTOMER HAS PROFILE PICTURE -->
         <div class="col-4 col-sm-3 text-center px-lg-5 mb-4">
@@ -143,52 +149,45 @@
       </div>
       <!-- END USER INFO -->
 
-      <div>
+
 <!--          LOGGED IN USERS TAB-->
-          <ul class="nav nav-tabs">
-            <li class="nav-item" id="userRecipes">
-              <a class="nav-link" href="#">
-                  <i class="far fa-utensils fa-2x"></i>
-                  <i class="fas fa-utensils fa-2x"></i>
-              </a>
-            </li>
-            <li class="nav-item" id="userFavorites">
-              <a class="nav-link" href="#">
-                  <!--              <i class="far fa-bookmark fa-2x"></i>-->
-                  <i class="fas fa-bookmark fa-2x"></i>
-              </a>
-            </li>
-            <li class="nav-item" id="userFollowers">
-              <a class="nav-link" href="#">
-                  <i class="fas fa-users fa-2x"></i>
-              </a>
-            </li>
-            <li class="nav-item" id="userFollowing">
-              <a class="nav-link" href="#">
-                  <i class="fas fa-user-plus fa-2x"></i>
-              </a>
-            </li>
+      <ul class="nav nav-tabs align-items-center justify-content-between">
+        <li class="nav-item" id="userRecipes">
+          <a class="nav-link" href="#">
+              <i class="fas fa-utensils fa-2x"></i>
+          </a>
+        </li>
+        <li class="nav-item" id="userFavorites">
+          <a class="nav-link" href="#">
+              <!--              <i class="far fa-bookmark fa-2x"></i>-->
+              <i class="fas fa-bookmark fa-2x"></i>
+          </a>
+        </li>
+        <li class="nav-item" id="userFollowers">
+          <a class="nav-link" href="#">
+              <i class="fas fa-users fa-2x"></i>
+          </a>
+        </li>
+        <li class="nav-item" id="userFollowing">
+          <a class="nav-link" href="#">
+              <i class="fas fa-user-plus fa-2x"></i>
+          </a>
+        </li>
 <!--            PROFILE OWNER ONLY TABS-->
-            <li class="nav-item" id="userPantry">
-              <a class="nav-link" href="#">
-                <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
-              </a>
-            </li>
-            <li class="nav-item" id="suggestions">
-              <a class="nav-link" href="#">
-                <i class="fas fa-drumstick-bite fa-2x"></i>
-              </a>
-            </li>
-          </ul>
-      </div>
+        <li class="nav-item" id="userPantry">
+          <a class="nav-link" href="#">
+            <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
+          </a>
+        </li>
+        <li class="nav-item" id="suggestions">
+          <a class="nav-link" href="#">
+            <i class="fas fa-drumstick-bite fa-2x"></i>
+          </a>
+        </li>
+      </ul>
     </div>
-
 <!--    RENDERED CONTENT-->
-    <div id="userContent" class="bg-light"></div>
-
-
-
-  </div>
+    <div id="userContent"></div>
 </main>
 <!--MODALS-->
 
@@ -202,24 +201,24 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <div class="modal-body"  id="ingredientModalContent">
-          <form id="ingredientForm">
+      <form id="ingredientForm" >
+          <div class="modal-body"  id="ingredientModalContent">
             <div class="form-group">
-              <input name="name" type="hidden" class="form-control" id="ingredient-name">
+              <input name="name" type="hidden" class="form-control" id="ingredientName">
             </div>
             <div class="container d-flex justify-content-center">
               <div class="form-group">
                 <label >Amount</label>
                 <div class="qty mt-1">
                   <span class="minus"><i class="fas fa-minus-circle"></i></span>
-                  <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05">
+                  <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05" required>
                   <span class="plus"><i class="fas fa-plus-circle"></i></span>
                 </div>
               </div>
               <div class="form-group">
                 <label>Unit</label>
                 <div class="mt-1">
-                  <select>
+                  <select name="unit" required>
                     <option th:value="teaspoon">Teaspoon (tsp)</option>
                     <option th:value="tablespoon">Tablespoon (Tbsp)</option>
                     <option th:value="ounce">Ounce (oz)</option>
@@ -231,12 +230,12 @@
                 </div>
               </div>
             </div>
-          </form>
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button id="addIngredient" type="button" class="btn btn-primary">Save</button>
-      </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="addIngredient" type="submit" class="btn btn-primary">Save</button>
+          </div>
+      </form>
     </div>
   </div>
 </div>
@@ -291,16 +290,16 @@
 
     // FOLLOWING
     $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
+      followingHtml += '<div class="container"><div class="row align-items-center justify-content-around">';
       following.forEach(function(friend) {
-        followingHtml += '<div>';
-        followingHtml += '<h5>' + friend.firstName + '</h5>';
-        followingHtml += '<div>' +
-                '<a href="/users/'+ friend.id + '">'+
-                '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
-                '</div>'+
-                '</a>'
-        followingHtml += '</div>';
+          followingHtml += '<div class="my-2 text-center">'+
+                            '<a href="/users/'+ friend.id + '">'+
+                            '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
+                            '</a>'+
+                            '<p>'+friend.firstName+'</p>'+
+                          '</div>';
       });
+      followingHtml += '</div></div>';
     });
 
     /* set content on tab click */
@@ -315,79 +314,20 @@
       $('#userContent').html(favoritesHtml);
     });
 
-    // PANTRY
-    $( "#userPantry" ).click(function() {
-      let pantryHtml = "";
-      $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
-        // CREATE HTML TEMPLATE
-        pantryHtml +=
-                '<div class="container">'+
-                '<div class="row">'+
-                '<div class="col-md-12">'+
-                '<div class="text-center"><input type="button" id="showIngredientForm" class="btn" value="Add New Ingredient"/></div>'+
-                '<div class="">' +
-                '<input class="form-control my-0 py-1 pl-3 d-none" type="text" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
-                '<div id="searchResults" class="container text-center"></div>'+
-                '</div>'+
-                '<h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Search Your Pantry</h2>'+
-                '<div class="input-group md-form form-sm form-2 pl-0">'+
-                '<input class="form-control my-0 py-1 pl-3 purple-border" type="text" placeholder="Search something here..." aria-label="Search">'+
-                '<span class="input-group-addon waves-effect purple lighten-2" id="basic-addon1"><a><i class="fa fa-search white-text" aria-hidden="true"></i></a></span>'+
-                '</div>'+
-                '</div>'+
-                '</div>'
-        ;
-        // PANTRY INGREDIENT TABLE
-        pantryHtml += '<table class="table table-striped">'+
-                '<thead>'+
-                '<tr>'+
-                '<th>#</th>'+
-                '<th>Ingredient</th>'+
-                '<th>Amount</th>'+
-                '<th></th>'+
-                '</tr>'+
-                '</thead>'+
-                '<tbody>'
-        ;
-        // ADD ROWS TO PANTRY TABLE
-        let pantryItem = 0;
-        response.pantryIngredients.forEach(function(item) {
-          pantryItem ++;
-          pantryHtml += '<tr>'+
-                  '<th scope="row">'+pantryItem+'</th>'+
-                  '<td><span>' + item.ingredient.name + '</span></td>'+
-                  '<td><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
-                  '<td class="qty">'+
-                  '<span class="minus"><i class="fas fa-minus-circle"></i></span>&nbsp&nbsp' +
-                  '<span class="plus"><i class="fas fa-plus-circle"></i></span>'+
-                  '</td>'+
-                  '</tr>';
-        });
-        // CLOSE PANTRY HTML TEMPLATE
-        pantryHtml += '</tbody>'+
-                '</table>'+
-                '</div>'
-        ;
-        // RENDER TEMPLATE
-        $('#userContent').html(pantryHtml);
-      });
-      convertAllRationals();
-    });
-
     // FOLLOWERS
     $( "#userFollowers" ).click(function() {
       $.ajax({'url': '/api/users/'+userId+"/followers"}).done(function (followers) {
         let followersHtml = "";
+        followersHtml = '<div class="container mt-3"><div class="row align-items-center justify-content-around">';
         followers.forEach(function(follower) {
-          followersHtml += '<div>';
-          followersHtml += '<h5>' + follower.firstName + '</h5>';
-          followersHtml += '<div>' +
-                  '<a href="/users/'+ follower.id + '">'+
-                  '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">' +
-                  '</div>'+
-                  '</a>'
-          followersHtml += '</div>';
+          followersHtml += '<div class="my-2 text-center">'+
+                  '<a class="text-center" href="/users/'+ follower.id + '">'+
+                  '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
+                  '</a>'+
+                  '<p>'+follower.firstName+'</p>'+
+                  '</div>';
         });
+        followersHtml += '</div></div>';
         $('#userContent').html(followersHtml);
       });
     });
@@ -397,7 +337,7 @@
       $('#userContent').html(followingHtml);
     });
 
-    // FOLLOW BTN
+    // FOLLOW BTN SUBMIT A FOLLOW REQUEST
     $( "#addFriend" ).click(function() {
       let formData = {
         "friendId" : userId
@@ -418,7 +358,7 @@
 
     /* profile owner js */
 
-    // SUGGESTIONS
+    // RECIPE SUGGESTIONS
     $( "#suggestions" ).click(function() {
       $.ajax({'url': '/api/users/'+userId+"/matches"}).done(function (recipes) {
         let suggestionsHtml = "";
@@ -437,25 +377,107 @@
     });
 
 
+    // PANTRY
+    let pantryInventory;
+    let inventoryIngredients;
+    const makePantryAjaxCall = ()=>{
+      pantryInventory = [];
+      inventoryIngredients = [];
+      $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
+        response.pantryIngredients.forEach(function(item) {
+          inventoryIngredients.push(item);
+          pantryInventory.push(item.ingredient.name.toLowerCase());
+        });
+      });
+    }
+
+    // CREATE HTML FOR PANTRY TEMPLATE
+    const renderPantry = ()=>{
+      // SORT INGREDIENTS BY NAME
+      inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
+      let pantryHtml = "";
+      pantryHtml +=
+              '<div class="container">'+
+              '<div class="row">'+
+              '<div class="col-md-12">'+
+              '<h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>'+
+              '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>'+
+              '<div class="">' +
+              '<input class="form-control my-2 py-1 pl-3 d-none" type="text" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
+              '<div id="searchResults" class="container text-center"></div>'+
+              '</div>'+
+              '</div>'+
+              '</div>'
+      ;
+      // PANTRY INGREDIENT TABLE
+      pantryHtml += '<div class="card shadow mt-3">';
+      pantryHtml += '<table class="table table-striped">'+
+              '<thead>'+
+              '<tr>'+
+              '<th>Ingredient</th>'+
+              '<th>Amount</th>'+
+              '<th></th>'+
+              '</tr>'+
+              '</thead>'+
+              '<tbody>'
+      ;
+      // ADD ROWS TO PANTRY TABLE
+      inventoryIngredients.forEach((item)=>{
+        pantryHtml += '<tr>'+
+                '<td><span>' + item.ingredient.name + '</span></td>'+
+                '<td><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
+                '<td class="qty">'+
+                '<span class="minus"><i class="fas fa-minus-circle"></i></span>&nbsp&nbsp' +
+                '<span class="plus"><i class="fas fa-plus-circle"></i></span>'+
+                '</td>'+
+                '</tr>'
+        ;
+      })
+      // CLOSE PANTRY HTML TEMPLATE
+      pantryHtml += '</tbody>'+
+              '</table>'+
+              '</div>'+
+              '</div>'
+      ;
+      // RENDER TEMPLATE
+      $('#userContent').html(pantryHtml);
+    }
+
+    $( "#userPantry" ).click(function() {
+      makePantryAjaxCall();
+      setTimeout(function() {
+        renderPantry();
+        convertAllRationals();
+      }, 500);
+    });
 
     // AUTOSEARCH INGREDIENTS FOR PANTRY
     $(document).on('keyup',"#ingredientSearch",function(){
       let searchResults = $('#searchResults');
+      let searchInput = this.value.trim();
+      /* dont display any suggestions if empty string */
       if(this.value === "") {
         searchResults.empty();
-      }else{
+      }else if(pantryInventory.includes(searchInput.toLowerCase())){
+        console.log("found");
         searchResults.empty();
-        let html = "<div>";
-        let searchInput = this.value;
+        searchResults.append(
+                '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal" disabled>'+searchInput.toLowerCase()+' is in pantry</button>'
+        );
+      }
+      else{
+        searchResults.empty();
         searchResults.append(
                 '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+searchInput.toLowerCase()+'</button>'
-        )
+        );
+
+        /* search ingredients list to auto suggest ingredients and if not in list allow user to select own input */
         ingredientsList.filter(function(ingredient){
-          if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
+          if(ingredient.toLowerCase() === searchInput.toLowerCase()){
             $("#ingredientInput").addClass("d-none");
+          }
+          if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
             searchResults.append(
-                    // '<img src="https://spoonacular.com/cdn/ingredients_100x100/'+ingredient+'">'+
-                    //   ingredient +
                     '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+ingredient+'</button>'
             );
           }
@@ -464,6 +486,7 @@
       }
     });
 
+    // USER PANTRY ADD NEW PANTRY INPUT CLICK
     $(document).on('click',"#showIngredientForm", function () {
       let input = $("#ingredientSearch");
       if(input.hasClass("d-none")){
@@ -476,12 +499,11 @@
       }
     })
 
-    // $('#ingredientModal').modal('toggle')
-    // MODALS
+    // INGREDIENT MODAL ON SHOW DYNAMIC INFO
     $('#ingredientModal').on('show.bs.modal', function (event) {
+      let openModal = $(this);
       let button = $(event.relatedTarget); // Button that triggered the modal
       let clickedIngredient = button[0].innerHTML;
-      let modal = $(this);
       // Plus Minus Count for form modal
       let count = $('#ingredientForm').find('input.count');
       $(document).on('click','.plus',function(){
@@ -496,8 +518,37 @@
           count.val(1);
         }
       });
-      modal.find('.modal-title').text("Add "+clickedIngredient+" to pantry");
-      modal.find('.modal-body input').val(clickedIngredient);
+      openModal.find('.modal-title').text("Add "+clickedIngredient+" to pantry");
+      openModal.find('.modal-body input').val(clickedIngredient);
+    })
+
+    // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO PANTRY
+    $("#ingredientForm").submit(function () {
+      $('#ingredientModal').modal('toggle');
+      let form = $(this);
+      let url = "/users/pantry/ingredient/new";
+      let formData = JSON.stringify({
+        "name" : form.find('input#ingredientName').val(),
+        "amount": form.find('input.count').val(),
+        "unit" : form.find('select  option:selected').text()
+      });
+      $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          url: url,
+          data: formData,
+          dataType: "json",
+      });
+
+      setTimeout(function() {
+        makePantryAjaxCall();
+      }, 1000);
+      setTimeout(function() {
+        renderPantry();
+        convertAllRationals();
+      }, 1500);
+
+      return false;
     })
   })(jQuery);
 

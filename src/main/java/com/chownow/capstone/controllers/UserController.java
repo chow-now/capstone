@@ -1,9 +1,9 @@
 package com.chownow.capstone.controllers;
 
-import com.chownow.capstone.models.AjaxFollowRequest;
-import com.chownow.capstone.models.Follow;
-import com.chownow.capstone.models.User;
+import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.FollowRepository;
+import com.chownow.capstone.repos.IngredientRepository;
+import com.chownow.capstone.repos.PantryIngredientRepository;
 import com.chownow.capstone.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +21,12 @@ public class UserController {
     private UserRepository userDao;
     @Autowired
     private FollowRepository followDao;
+
+    @Autowired
+    private IngredientRepository ingredientDao;
+
+    @Autowired
+    PantryIngredientRepository pantryIngDao;
 
     @GetMapping("/create")
     public String createUser(Model model){
@@ -46,7 +52,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/follow", method = RequestMethod.POST, headers="Content-Type=application/json")
-    public @ResponseBody Follow post(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
+    public @ResponseBody Follow postFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
         User currentUser = userDao.getById(2L);
         User friend = userDao.getById(ajaxFollowRequest.getFriendId());
         Follow dbFollow = null;
@@ -54,5 +60,30 @@ public class UserController {
             dbFollow = followDao.save(new Follow(currentUser,friend));
         }
         return dbFollow;
+    }
+
+    @RequestMapping(value = "/pantry/ingredient/new", method = RequestMethod.POST, headers="Content-Type=application/json")
+    public @ResponseBody String postPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient){
+        User currentUser = userDao.getOne(2L);
+        Ingredient dbIngredient = null;
+        boolean isNotInDb = true;
+        for(Ingredient i : ingredientDao.findAllByNameLike(pantryIngredient.getName())){
+            if(pantryIngredient.getName().equalsIgnoreCase(i.getName())){
+                dbIngredient = i;
+                isNotInDb = false;
+                break;
+            }
+        }
+        if(isNotInDb){
+            dbIngredient = ingredientDao.save(new Ingredient(pantryIngredient.getName().toLowerCase()));
+        }
+        PantryIngredient newPantryIng = new PantryIngredient(
+                pantryIngredient.getAmount(),
+                pantryIngredient.getUnit(),
+                currentUser.getPantry(),
+                dbIngredient
+        );
+        pantryIngDao.save(newPantryIng);
+        return "im done";
     }
 }
