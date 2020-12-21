@@ -10,6 +10,99 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+<!--  CUSTOM PROFILE CSS -->
+  <style>
+
+    /*plus minus input buttons*/
+    .qty .count {
+      color: #000;
+      /*display: inline-block;*/
+      vertical-align: top;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 30px;
+      padding: 0 2px;
+      min-width: 60px;
+      text-align: center;
+    }
+    .qty .plus {
+      cursor: pointer;
+      /*display: inline-block;*/
+      vertical-align: top;
+      color: black;
+      width: 30px;
+      height: 30px;
+      font: 30px/1 Arial,sans-serif;
+      text-align: center;
+      border-radius: 50%;
+    }
+    .qty .minus {
+      cursor: pointer;
+      /*display: inline-block;*/
+      vertical-align: top;
+      color: black;
+      width: 30px;
+      height: 30px;
+      font: 30px/1 Arial,sans-serif;
+      text-align: center;
+      border-radius: 50%;
+      background-clip: padding-box;
+    }
+    .minus:hover{
+      background-color: white !important;
+    }
+    .plus:hover{
+      background-color: white !important;
+    }
+    .count{
+      border: 0;
+      width: 5%;
+    }
+    .count::-webkit-outer-spin-button,
+    .count::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .count:disabled{
+      background-color:white;
+    }
+
+    /* table css */
+    .hm-gradient {
+      background-image: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
+    }
+    .darken-grey-text {
+      color: #2E2E2E;
+    }
+    .input-group.md-form.form-sm.form-2 input {
+      border: 1px solid #bdbdbd;
+      border-top-left-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+    }
+    .input-group.md-form.form-sm.form-2 input.purple-border {
+      border: 1px solid #9e9e9e;
+    }
+    .input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
+      border: 1px solid #ba68c8;
+      box-shadow: none;
+    }
+    .form-2 .input-group-addon {
+      border: 1px solid #ba68c8;
+    }
+    .danger-text {
+      color: #ff3547;
+    }
+    .success-text {
+      color: #00C851;
+    }
+    .table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
+      border: 1px solid #ff3547!important;
+    }
+    .table.table-bordered th {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 <!--<nav th:include="partials/navbar.html :: nav"></nav>-->
@@ -99,9 +192,7 @@
 </main>
 <!--MODALS-->
 
-
-
-<!-- Modal -->
+<!-- Add Ingredient Modal -->
 <div class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -116,9 +207,29 @@
             <div class="form-group">
               <input name="name" type="hidden" class="form-control" id="ingredient-name">
             </div>
-            <div class="form-group">
-              <label for="message-text" class="col-form-label">Message:</label>
-              <textarea class="form-control" id="message-text"></textarea>
+            <div class="container d-flex justify-content-center">
+              <div class="form-group">
+                <label >Amount</label>
+                <div class="qty mt-1">
+                  <span class="minus"><i class="fas fa-minus-circle"></i></span>
+                  <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05">
+                  <span class="plus"><i class="fas fa-plus-circle"></i></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Unit</label>
+                <div class="mt-1">
+                  <select>
+                    <option th:value="teaspoon">Teaspoon (tsp)</option>
+                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                    <option th:value="ounce">Ounce (oz)</option>
+                    <option th:value="cup">Cup (c)</option>
+                    <option th:value="pint">Pint (pt)</option>
+                    <option th:value="quart">Quart (qt)</option>
+                    <option th:value="gallon">Gallon (gal)</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -206,7 +317,60 @@
 
     // PANTRY
     $( "#userPantry" ).click(function() {
-      $('#userContent').html(pantryHtml);
+      let pantryHtml = "";
+      $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
+        // CREATE HTML TEMPLATE
+        pantryHtml +=
+                '<div class="container">'+
+                '<div class="row">'+
+                '<div class="col-md-12">'+
+                '<div class="text-center"><input type="button" id="showIngredientForm" class="btn" value="Add New Ingredient"/></div>'+
+                '<div class="">' +
+                '<input class="form-control my-0 py-1 pl-3 d-none" type="text" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
+                '<div id="searchResults" class="container text-center"></div>'+
+                '</div>'+
+                '<h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Search Your Pantry</h2>'+
+                '<div class="input-group md-form form-sm form-2 pl-0">'+
+                '<input class="form-control my-0 py-1 pl-3 purple-border" type="text" placeholder="Search something here..." aria-label="Search">'+
+                '<span class="input-group-addon waves-effect purple lighten-2" id="basic-addon1"><a><i class="fa fa-search white-text" aria-hidden="true"></i></a></span>'+
+                '</div>'+
+                '</div>'+
+                '</div>'
+        ;
+        // PANTRY INGREDIENT TABLE
+        pantryHtml += '<table class="table table-striped">'+
+                '<thead>'+
+                '<tr>'+
+                '<th>#</th>'+
+                '<th>Ingredient</th>'+
+                '<th>Amount</th>'+
+                '<th></th>'+
+                '</tr>'+
+                '</thead>'+
+                '<tbody>'
+        ;
+        // ADD ROWS TO PANTRY TABLE
+        let pantryItem = 0;
+        response.pantryIngredients.forEach(function(item) {
+          pantryItem ++;
+          pantryHtml += '<tr>'+
+                  '<th scope="row">'+pantryItem+'</th>'+
+                  '<td><span>' + item.ingredient.name + '</span></td>'+
+                  '<td><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
+                  '<td class="qty">'+
+                  '<span class="minus"><i class="fas fa-minus-circle"></i></span>&nbsp&nbsp' +
+                  '<span class="plus"><i class="fas fa-plus-circle"></i></span>'+
+                  '</td>'+
+                  '</tr>';
+        });
+        // CLOSE PANTRY HTML TEMPLATE
+        pantryHtml += '</tbody>'+
+                '</table>'+
+                '</div>'
+        ;
+        // RENDER TEMPLATE
+        $('#userContent').html(pantryHtml);
+      });
       convertAllRationals();
     });
 
@@ -272,40 +436,45 @@
 
     });
 
-    // PANTRY
-    let pantryHtml = "";
-    pantryHtml += '<input type="text" id="ingredientSearch" />'
-    pantryHtml += '<div id="searchResults"></div>';
-    $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
-      response.pantryIngredients.forEach(function(item) {
-        pantryHtml += '<div>';
-        pantryHtml += '<h5>' + item.ingredient.name + '</h5>';
-        pantryHtml += '<p class="rational">' + item.amount + '</p>';
-        pantryHtml += '<p>' + item.unit+ '</p>';
-        pantryHtml += '</div>';
-      });
-    });
+
 
     // AUTOSEARCH INGREDIENTS FOR PANTRY
     $(document).on('keyup',"#ingredientSearch",function(){
-      console.log("keypress");
       let searchResults = $('#searchResults');
-      searchResults.empty();
-      let html = "<ul class='list-unstyled'>";
-      let searchInput = this.value;
-      ingredientsList.filter(function(ingredient){
-        if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
-          searchResults.append(
-            '<li>'+
-                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+
-                    ingredient +
-                '</button>'+
-            '</li>'
-          );
-        }
-      });
-      searchResults.append("</ul>");
+      if(this.value === "") {
+        searchResults.empty();
+      }else{
+        searchResults.empty();
+        let html = "<div>";
+        let searchInput = this.value;
+        searchResults.append(
+                '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+searchInput.toLowerCase()+'</button>'
+        )
+        ingredientsList.filter(function(ingredient){
+          if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
+            $("#ingredientInput").addClass("d-none");
+            searchResults.append(
+                    // '<img src="https://spoonacular.com/cdn/ingredients_100x100/'+ingredient+'">'+
+                    //   ingredient +
+                    '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+ingredient+'</button>'
+            );
+          }
+        });
+        searchResults.append("</div>");
+      }
     });
+
+    $(document).on('click',"#showIngredientForm", function () {
+      let input = $("#ingredientSearch");
+      if(input.hasClass("d-none")){
+        $(this).prop('value', 'close');
+        input.removeClass("d-none");
+      }
+      else{
+        $(this).prop('value', 'Add New Ingredient');
+        input.addClass("d-none");
+      }
+    })
 
     // $('#ingredientModal').modal('toggle')
     // MODALS
@@ -313,6 +482,20 @@
       let button = $(event.relatedTarget); // Button that triggered the modal
       let clickedIngredient = button[0].innerHTML;
       let modal = $(this);
+      // Plus Minus Count for form modal
+      let count = $('#ingredientForm').find('input.count');
+      $(document).on('click','.plus',function(){
+        if (count.val() == 0) {
+          count.val(0);
+        }
+        count.val(parseFloat(count.val()) + 1);
+      });
+      $(document).on('click','.minus',function(){
+        count.val(parseFloat(count.val()) - 1);
+        if (count.val() == 0) {
+          count.val(1);
+        }
+      });
       modal.find('.modal-title').text("Add "+clickedIngredient+" to pantry");
       modal.find('.modal-body input').val(clickedIngredient);
     })
