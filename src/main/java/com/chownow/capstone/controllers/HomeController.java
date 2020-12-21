@@ -14,7 +14,7 @@ public class HomeController {
     }
 
     @GetMapping("/about")
-    public String showAboutPage(Model model) {
+    public String showAboutPage() {
         return "aboutus";
     }
 
