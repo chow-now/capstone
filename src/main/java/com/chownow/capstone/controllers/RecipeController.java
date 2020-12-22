@@ -57,7 +57,6 @@ public class RecipeController {
     @GetMapping("/recipes/new")
     public String showCreateRecipe(Model model) {
         model.addAttribute("recipe", new Recipe());
-//        model.addAttribute("recipeIngredients", new RecipeIngredient());
         return "recipes/new";
     }
     /* new recipe with error handling */
@@ -79,9 +78,17 @@ public class RecipeController {
         recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
-        return "redirect:/recipes/" + dbRecipe.getId() + "/edit";
+        return "redirect:/recipes/" + dbRecipe.getId() + "/new2";
     }
 
+    @GetMapping("/recipes/{id}/new2")
+    public String showAddIngredients(@PathVariable long id, Model model) {
+        model.addAttribute("recipe", recipeDao.getOne(id));
+        model.addAttribute("recipe-ingredients", new ArrayList<RecipeIngredient>());
+
+
+        return "recipes/new2";
+    }
 
 
 

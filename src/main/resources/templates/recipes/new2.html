@@ -14,7 +14,7 @@
     <label>Ingredients:</label>
     <ul th:each="ingredient : ${recipe.getRecipeIngredients()}">
         <li class="card-text">
-            <input type="number" step=".05" th:value="${ingredient.amount}">
+            <input type="number" step=".05" th:value="*{ingredient.amount}">
             <select>
                 <option th:value="${ingredient.getUnit()}" selected></option>
                 <option th:value="teaspoon">Teaspoon (tsp)</option>
@@ -26,7 +26,7 @@
                 <option th:value="gallon">Gallon (gal)</option>
 
             </select>
-            <input th:value="${ingredient.getIngredient().getName()}">
+            <input th:value="*{ingredient.getIngredient().getName()}">
         </li>
     </ul>
 </form>
