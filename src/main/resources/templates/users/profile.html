@@ -110,6 +110,11 @@
         font-size: 1rem;
       }
     }
+    @media only screen and (max-width: 700px) {
+      .recipe-card{
+        width: 100%!important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -263,30 +268,69 @@
     let followingHtml = "";
 
     // RECIPES
-    $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
-      recipes.forEach(function(recipe) {
-        recipesHtml += '<div>';
-        recipesHtml += '<h5>' + recipe.title + '</h5>';
-        recipesHtml += '<p>' + recipe.description + '</p>';
-        recipesHtml += '<p>' + recipe.directions+ '</p>';
-        recipesHtml += '<p>' + recipe.difficulty+ '</p>';
-        recipesHtml += '<p>' + recipe.chef.firstName+ '</p>';
-        recipesHtml += '</div>';
+      $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
+        recipesHtml = renderRecipes(recipes,"owner");
       });
-    });
 
     // FAVORITES
     $.ajax({'url': '/api/users/'+userId+"/favorites"}).done(function (favorites) {
-      favorites.forEach(function(recipe) {
-        favoritesHtml += '<div>';
-        favoritesHtml += '<h5>' + recipe.title + '</h5>';
-        favoritesHtml += '<p>' + recipe.description + '</p>';
-        favoritesHtml += '<p>' + recipe.directions+ '</p>';
-        favoritesHtml += '<p>' + recipe.difficulty+ '</p>';
-        favoritesHtml += '<p>' + recipe.chef.firstName+ '</p>';
-        favoritesHtml += '</div>';
-      });
+      favoritesHtml = renderRecipes(favorites,"favorites");
     });
+
+    // RENDER RECIPE CARDS USED FOR PROFILE OWNER PERSONAL,FAVORITED AND SUGGESTED RECIPES
+    const renderRecipes = (recipesToRender,recipesType) =>{
+      let title;
+      switch(recipesType){
+        case "owner":
+          title = recipesToRender[0].chef.firstName +"'s";
+          break ;
+        case "favorites":
+          title = "Favorited";
+          break;
+        case "suggested":
+          title = "Suggested";
+          break;
+        default:
+          title = "";
+      }
+      let html = "";
+      html += '<div class="container">';
+      html +=   '<div class="row">';
+      html +=     '<div class="col-md-12">'
+      html +=       '<h3 class="my-3">'+ title +' Recipes</h3>';
+      html +=     '</div>';
+
+      recipesToRender.forEach((recipe)=>{
+        html += '<div class="align-items-center justify-content-around">';
+        html +=   '<div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >';
+        html +=     '<a href="/recipes/'+recipe.id+'">'
+        html +=     '<img class="card-img-top shadow" style="border-radius:1.5rem!important" src="' + recipe.images[0].url + '"/>';
+        html +=     '</a>'
+        html +=     '<div class="card-body bg-transparent">';
+        html +=       '<h5 class="card-title font-weight-bold">' +  recipe.title + '</h5>';
+        html +=       '<div class="row align-items-baseline">'
+        html +=           '<div class="col-2">' +
+                              '<a href="/users/'+recipe.chef.id+'">'+
+                                '<img src="' + recipe.chef.avatar+'" class="rounded-circle" style="width: 40px;height: 40px">' +
+                              '</a>' +
+                          '</div>' +
+                          '<div class="col-6"' +
+                              '<p>'+ recipe.chef.firstName+ '</p>' +
+                          '</div>';
+        html +=           '<div class="col-3">' +
+                              '<div class="rounded-pill border text-center" style="width: 75px">' +
+                                  '<i class="far fa-heart"></i> ' + recipe.favoritedBy.length +
+                              '</div>' +
+                          '</div>';
+        html +=       '</div>';
+        html +=     '</div>';
+        html +=   '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      html += '</div>';
+      return html;
+    }
 
     // FOLLOWING
     $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
@@ -302,7 +346,7 @@
       followingHtml += '</div></div>';
     });
 
-    /* set content on tab click */
+    /* ON CLICK EVENTS FOR TAB UL */
 
     // RECIPES
     $( "#userRecipes" ).click(function() {
@@ -356,26 +400,15 @@
       });
     });
 
-    /* profile owner js */
+    /* PROFILE OWNER JS */
 
     // RECIPE SUGGESTIONS
     $( "#suggestions" ).click(function() {
       $.ajax({'url': '/api/users/'+userId+"/matches"}).done(function (recipes) {
-        let suggestionsHtml = "";
-        recipes.forEach(function(recipe) {
-          suggestionsHtml += '<div>';
-          suggestionsHtml += '<h5>' + recipe.title + '</h5>';
-          suggestionsHtml += '<p>' + recipe.description + '</p>';
-          suggestionsHtml += '<p>' + recipe.directions+ '</p>';
-          suggestionsHtml += '<p>' + recipe.difficulty+ '</p>';
-          suggestionsHtml += '<p>' + recipe.chef.firstName+ '</p>';
-          suggestionsHtml += '</div>';
-        });
+        let suggestionsHtml = renderRecipes(recipes,"suggested");
         $('#userContent').html(suggestionsHtml);
       });
-
     });
-
 
     // PANTRY
     let pantryInventory;
