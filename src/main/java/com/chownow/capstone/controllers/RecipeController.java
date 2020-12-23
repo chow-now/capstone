@@ -84,7 +84,7 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/new2")
     public String showAddIngredients(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
-        model.addAttribute("recipe-ingredients", new ArrayList<RecipeIngredient>());
+        model.addAttribute("recipeingredients", new ArrayList<RecipeIngredient>());
 
 
         return "recipes/new2";
