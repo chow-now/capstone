@@ -8,26 +8,16 @@
 
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
-<div>
+<form action="/recipes/addimages" method="post">
 
+    <p>Upload images of your dish</p>
 
-</div>
-<form th:action="@{/recipes/new2}" th:method="post" th:object="${recipeingredients}">
-
-    <label>Ingredients:</label>
-
-
-
-
+    <input type="submit">
 </form>
 
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
 <script>
-
-
-
-
 </script>
 
 

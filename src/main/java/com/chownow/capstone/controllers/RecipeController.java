@@ -1,6 +1,7 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
+import com.chownow.capstone.repos.RecipeIngredientRepository;
 import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,8 @@ public class RecipeController {
     private RecipeRepository recipeDao;
     @Autowired
     private UserRepository userDoa;
+    @Autowired
+    private RecipeIngredientRepository recipeIngredientsDao;
     //    add email service?
 
     public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
@@ -59,6 +62,7 @@ public class RecipeController {
         model.addAttribute("recipe", new Recipe());
         return "recipes/new";
     }
+
     /* new recipe with error handling */
     @PostMapping("/recipes/new")
     public String submitRecipe(
@@ -67,30 +71,46 @@ public class RecipeController {
             Model model
     ) {
 
-        if(validation.hasErrors()){
-            model.addAttribute("errors",validation);
-            model.addAttribute("recipe",recipeToBeSaved);
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
-
+        
         recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
-        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        recipeDao.save(recipeToBeSaved);
 
-        return "redirect:/recipes/" + dbRecipe.getId() + "/new2";
+        return "recipes/addingredients";
     }
 
-    @GetMapping("/recipes/{id}/new2")
-    public String showAddIngredients(@PathVariable long id, Model model) {
-        model.addAttribute("recipe", recipeDao.getOne(id));
-        model.addAttribute("recipeingredients", new ArrayList<RecipeIngredient>());
-
-
-        return "recipes/new2";
+    @GetMapping("/recipes/addingredients")
+    public String addIngredients() {
+        return "recipes/addingredients";
+    }
+    @PostMapping("/recipes/addingredients")
+    public String submitIngredients() {
+        return "recipes/addcategories";
     }
 
+    @GetMapping("/recipes/addcategories")
+    public String addCategories() {
+        return "recipes/addcategories";
+    }
+    @PostMapping("/recipes/addcategories")
+    public String submitCategories() {
+        return "recipes/addimages";
+    }
 
+    @GetMapping("/recipes/addimages")
+    public String addImages() {
+        return "recipes/addimages";
+    }
+    @PostMapping("/recipes/addimages")
+    public String submitImages() {
+        return "redirect:/recipes";
+    }
 
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
@@ -106,15 +126,15 @@ public class RecipeController {
 
     @PostMapping("/recipes/{id}/edit")
     public String editRecipe(
-        @ModelAttribute Recipe recipeToBeSaved,
-        Errors validation,
-        Model model) {
+            @ModelAttribute Recipe recipeToBeSaved,
+            Errors validation,
+            Model model) {
 
-        if(validation.hasErrors()){
-        model.addAttribute("errors",validation);
-        model.addAttribute("recipe",recipeToBeSaved);
-        return "recipes/" + recipeToBeSaved.getId() + "/edit";
-    }
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
+            return "recipes/" + recipeToBeSaved.getId() + "/edit";
+        }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
