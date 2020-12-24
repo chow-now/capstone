@@ -152,7 +152,7 @@
         </div>
         <div class="col-8 col-sm-9 mb-4">
           <div class="mb-2">
-            <h2 class="mb-0" th:text="${user.firstName}"></h2>
+            <h2 id="profileName" class="mb-0" th:text="${user.firstName}"></h2>
           </div>
           <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
           <p>
@@ -342,7 +342,7 @@
       let title;
       switch(recipesType){
         case "owner":
-          title = recipesToRender[0].chef.firstName +"'s";
+          title = $("#profileName").text() +"'s";
           break ;
         case "favorites":
           title = "Favorited";

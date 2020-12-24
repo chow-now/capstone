@@ -1,27 +1,21 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
-import com.chownow.capstone.repos.FollowRepository;
-import com.chownow.capstone.repos.IngredientRepository;
-import com.chownow.capstone.repos.PantryIngredientRepository;
-import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.repos.*;
 import com.chownow.capstone.services.AmazonService;
+import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintViolationException;
+
 import javax.validation.Valid;
-import javax.validation.ValidationException;
-import java.util.HashMap;
+
 import java.util.Map;
 
 
@@ -43,6 +37,15 @@ public class UserController {
     @Autowired
     PantryIngredientRepository pantryIngDao;
 
+    @Autowired
+    PantryRepository pantryDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userServ;
+
     // CREATE USER
 
     @GetMapping("/create")
@@ -57,14 +60,30 @@ public class UserController {
             Errors validation,
             Model model
     ) {
+        User existingEmail = userDao.getFirstByEmail(user.getEmail());
+
+        if(existingEmail != null){
+            validation.rejectValue("email", "user.email", "Duplicate email " + user.getEmail());
+        }
+
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("user", user);
-            return "recipes/new";
+            return "users/new";
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAdmin(false);
-        userDao.save(user);
-        return "profile";
+        User dbUser = userDao.save(user);
+
+        userServ.authenticate(dbUser);
+        System.out.println(dbUser.getFirstName());
+        System.out.println(dbUser.getId());
+        Pantry pantry = new Pantry(dbUser);
+        Pantry dbPantry = pantryDao.save(pantry);
+        System.out.println(dbPantry.getId());
+        System.out.println(dbPantry.getOwner().getId());
+        model.addAttribute(dbUser);
+        return "users/profile";
     }
 
     // READ ALL USERS

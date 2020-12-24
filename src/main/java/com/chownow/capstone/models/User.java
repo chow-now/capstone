@@ -47,7 +47,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private String firstName;
 
-	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
+//	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
 	@Column(length = 250)
 	private String avatar;
 
@@ -58,6 +58,10 @@ public class User {
 	@Column
 	@JsonIgnore
 	private Boolean isAdmin;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name= "auth_provider")
+	private AuthenticationProvider authProvider;
     
     @OneToMany(
             mappedBy = "chef",
@@ -121,6 +125,14 @@ public class User {
 		this.avatar = avatar;
 		this.aboutMe = aboutMe;
 		this.isAdmin = isAdmin;
+	}
+
+	// security
+	public User(User copy) {
+		id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+		email = copy.email;
+		firstName = copy.firstName;
+		password = copy.password;
 	}
 
 	public long getId() {
@@ -217,5 +229,13 @@ public class User {
 
 	public void setPantry(Pantry pantry) {
 		this.pantry = pantry;
+	}
+
+	public AuthenticationProvider getAuthProvider() {
+		return authProvider;
+	}
+
+	public void setAuthProvider(AuthenticationProvider authProvider) {
+		this.authProvider = authProvider;
 	}
 }

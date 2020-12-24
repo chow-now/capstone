@@ -97,7 +97,7 @@ public class SeedRunner {
             LOGGER.info("firstName = " + firstName);
             String email = faker.internet().emailAddress();
             LOGGER.info("email = " + email);
-            String password = faker.internet().password(8,100,true,false,true)+"!1";
+            String password = "Password123!";
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,password);
             seedUser.setAdmin(false);

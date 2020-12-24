@@ -39,7 +39,7 @@ public class AccountController {
 //	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/sign-up")
-	public String showSingnupForm(Model model){
+	public String showSignupForm(Model model){
 		model.addAttribute("user", new User());
 		return "users/new";
 	}
@@ -52,11 +52,11 @@ public class AccountController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/login")
-	public String loginForm(Model model){
-		model.addAttribute("user", new User());
-		return "sessions/new";
-	}
+//	@GetMapping("/login")
+//	public String loginForm(Model model){
+//		model.addAttribute("user", new User());
+//		return "sessions/new";
+//	}
 
 
 	/*Todo: Roles*/
