@@ -5,14 +5,24 @@ import com.chownow.capstone.repos.FollowRepository;
 import com.chownow.capstone.repos.IngredientRepository;
 import com.chownow.capstone.repos.PantryIngredientRepository;
 import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.services.AmazonService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -20,6 +30,10 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     private UserRepository userDao;
+
+    @Autowired
+    private AmazonService s3;
+
     @Autowired
     private FollowRepository followDao;
 
@@ -93,9 +107,67 @@ public class UserController {
 
     // SUBMIT USER EDIT FORM
     @PostMapping("/{id}/edit")
-    public String editUser(@PathVariable long id, Model model) {
-        model.addAttribute("user", userDao.getOne(id));
-        return "redirect:/users/edit";
+    public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
+        User user = userDao.getOne(id);
+        if (validation.hasErrors()) {
+            System.out.println("has errors");
+            System.out.println(validation);
+            model.addAttribute("errors", validation);
+            model.addAttribute("user", editUser);
+            return "users/edit";
+        }
+        user.setFirstName(editUser.getFirstName());
+        user.setEmail(editUser.getEmail());
+        user = userDao.save(user);
+        model.addAttribute("user",user);
+        return "redirect:/users/"+id;
+    }
+
+    // update password
+    @PostMapping("/{id}/reset")
+    public String resetPassword(@PathVariable(name="id") long id, @RequestParam Map<String, String> params,Model model){
+        User user = userDao.getOne(id);
+        // regex for password
+        String passValidation = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        String password = params.get("password");
+        String newPassword = params.get("new_password");
+        String passwordConfirmation = params.get("confirm_password");
+        boolean canUpdate = true;
+        // if new password and confirmation dont match set error
+        if(!newPassword.equals(passwordConfirmation)){
+            System.out.println("passwords dont match");
+            canUpdate = false;
+            model.addAttribute("notMatch", true );
+        }
+        // if password fails regex set error
+        if(!newPassword.matches(passValidation)){
+            System.out.println("invalid password");
+            canUpdate = false;
+            model.addAttribute("invalidPassword",true);
+        }
+        // if errors redirect to edit page
+        if(!canUpdate){
+            System.out.println("cant update");
+            model.addAttribute("user",user);
+            return "users/edit";
+        }
+        //reset password
+        user.setPassword(newPassword);
+        model.addAttribute("user",userDao.save(user));
+        return "redirect:/users/"+id;
+    }
+
+    // SUBMIT UPLOAD USER AVATAR FORM
+
+    @PostMapping("/{id}/upload")
+    public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
+        User user = userDao.getOne(id);
+        if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
+            s3.deleteFile(user.getAvatar());
+        }
+        s3.uploadAvatar(multipartFile, user);
+        model.addAttribute("user",user);
+        return "redirect:/users/"+user.getId()+"/edit";
     }
 
     // DELETE USER
@@ -157,4 +229,9 @@ public class UserController {
         pantryIngDao.save(pi);
         return "update complete";
     }
+
+//    public static void main(String[] args) {
+//        String passValidation = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+//        System.out.println("Iotaline03!".matches(passValidation));
+//    }
 }

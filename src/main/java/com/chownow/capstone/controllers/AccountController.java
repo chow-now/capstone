@@ -41,7 +41,7 @@ public class AccountController {
 	@GetMapping("/sign-up")
 	public String showSingnupForm(Model model){
 		model.addAttribute("user", new User());
-		return "/signup";
+		return "users/new";
 	}
 
 	@PostMapping("/sign-up")
@@ -52,7 +52,11 @@ public class AccountController {
 		return "redirect:/";
 	}
 
-
+	@GetMapping("/login")
+	public String loginForm(Model model){
+		model.addAttribute("user", new User());
+		return "sessions/new";
+	}
 
 
 	/*Todo: Roles*/

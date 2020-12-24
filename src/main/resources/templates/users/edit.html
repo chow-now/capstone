@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Edit Profile</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
+</head>
+<body>
+<!--<header th:include="partials/navbar.html :: nav"></header>-->
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-3 my-2 white-text text-center ">
+            <form th:action="@{/users/{id}/upload(id=${user.id})}" th:method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <img id="image_upload_preview" th:src="${user.avatar}" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);" width="200" height="200" th:alt="${user.firstName}">
+                    <br>
+                    <br>
+                    <label class="btn btn-default btn-sm">
+                        <i class="fas fa-pencil-alt"></i>  Edit <input accept=".jpg,.png,.jpeg" name="file" type='file' id="profilePicture" hidden/>
+                    </label>
+                    <button id="avatarUpdate" type="submit" class="btn btn-sm btn-danger mt-2"  style="display: none;">Updload</button>
+                </div>
+            </form>
+            <a class="btn btn-block btn-outline-default shadow" th:href="@{/users/{id}(id=${user.id})}">View Profile</a>
+        </div>
+        <div class="col-md-9 mb-4">
+<!--    EDIT USER FORM -->
+            <div class="card my-4">
+                <form th:replace="users/forms :: edit"></form>
+            </div>
+            <div class="card my-4">
+                <form th:replace="users/forms :: resetPassword"></form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+
+<script type="text/javascript">
+    // preview image upload function
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image_upload_preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // if avatar image file is selected call preview function and shows avatar button
+    $("#profilePicture").on('change', function() {
+        $("#avatarUpdate").show();
+        readURL(this);
+    });
+    
+</script>
+
+</body>
+</html>
+

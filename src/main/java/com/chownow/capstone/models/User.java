@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,28 +65,28 @@ public class User {
             cascade = CascadeType.PERSIST
     )
     @JsonBackReference("recipeRef")
-    private List<Recipe> recipes;
+    private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
     @JsonIgnore
-    private Set<Follow> followings;
+    private Set<Follow> followings = new HashSet<>();
 
     @OneToMany(
             mappedBy = "friend",
             cascade = CascadeType.ALL
     )
     @JsonIgnore
-    private Set<Follow> followers;
+    private Set<Follow> followers = new HashSet<>();
 
 
     @ManyToMany(mappedBy = "favoritedBy",
             cascade = CascadeType.ALL
     )
     @JsonBackReference(value="favRef")
-    private Set<Recipe> favorites = new HashSet<Recipe>();
+    private Set<Recipe> favorites = new HashSet<>();
 
 
 	@OneToOne(
@@ -99,6 +100,12 @@ public class User {
 
 	public User(){}
 
+
+	// Update User
+	public User(String email, String firstName) {
+		this.email = email;
+		this.firstName = firstName.trim();
+	}
 	// Setter
 	public User(String email, String firstName, String password) {
 		this.email = email;
