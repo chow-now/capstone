@@ -52,13 +52,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/",
                         "/recipes",
-                        "/sign-up",
+                        "/register",
                         "/oauth2/*"
                 ).permitAll()
                 /* Pages that require authentication */
                 .antMatchers(
                         "/recipes/{id}/*",
-                        "/users/{id}/*"
+                        "/recipes/{id}",
+                        "/users/{id}",
+                        "/dashboard",
+                        "/users/{id}/*",
+                        "/api"
                 ).authenticated()
                 /* Pages that require a role */
                 .antMatchers("/admin/*").hasRole("Admin")
@@ -66,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 /* Login configuration */
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/recipes").permitAll()  //  all can access login page & on success redirect, it can be any URL
+                .defaultSuccessUrl("/dashboard").permitAll()  //  all can access login page & on success redirect, it can be any URL
                 /* OAuth2 login */
                 .and()
                 .oauth2Login()

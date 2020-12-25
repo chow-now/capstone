@@ -33,11 +33,8 @@ public class UserService {
     }
 
     // Checks if the user is the owner of the recipe
-    public boolean isOwner(User recipeUser){
-        if(isLoggedIn()){
-            return (recipeUser.getId() ==loggedInUser().getId());
-        }
-        return false;
+    public boolean isOwner(User user){
+        return isLoggedIn() && (user.getId() == loggedInUser().getId());
     }
 
     // if the user is logged in and is the profile owner allow edit

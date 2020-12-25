@@ -48,13 +48,13 @@ public class UserController {
 
     // CREATE USER
 
-    @GetMapping("/create")
-    public String createUser(Model model) {
+    @GetMapping("/register")
+    public String registerUser(Model model) {
         model.addAttribute("user", new User());
         return "users/new";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public String submitUser(
             @Valid @ModelAttribute User user,
             Errors validation,
@@ -76,61 +76,61 @@ public class UserController {
         User dbUser = userDao.save(user);
 
         userServ.authenticate(dbUser);
-        System.out.println(dbUser.getFirstName());
-        System.out.println(dbUser.getId());
         Pantry pantry = new Pantry(dbUser);
         Pantry dbPantry = pantryDao.save(pantry);
-        System.out.println(dbPantry.getId());
-        System.out.println(dbPantry.getOwner().getId());
         model.addAttribute(dbUser);
         return "users/profile";
     }
 
-    // READ ALL USERS
+    // GET ALL USERS
     @GetMapping
     public String showUsers(Model model) {
         model.addAttribute("users", userDao.findAll());
         return "users/index";
     }
 
-    // READ 1 USER
+    // GET USER PROFILE BY ID
     @GetMapping("/{id}")
     public String showUserProfile(@PathVariable long id, Model model) {
         /*Get user*/
-        User currentUser = userDao.getOne(2L);
+        User currentUser = userServ.loggedInUser();
         User user = userDao.getOne(id);
-        model.addAttribute("user", user);
         if (followDao.findByUserAndFriend(currentUser, user) != null) {
             model.addAttribute("isFollowing", true);
         }
+        model.addAttribute("user", user);
+        model.addAttribute("isOwner",userServ.isOwner(user));
+        return "users/profile";
+    }
+
+    // GET LOGGED IN USER PROFILE
+    @GetMapping("/dashboard")
+    public String getDashboard(Model model) {
+        User currentUser = userServ.loggedInUser();
+        model.addAttribute("isFollowing", true);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
         return "users/profile";
     }
 
     // SHOW USER EDIT FORM
     @GetMapping("/{id}/edit")
     public String showEditUser(@PathVariable long id, Model model) {
-        model.addAttribute("user", userDao.getOne(id));
+        User user = userDao.getOne(id);
+        if(!userServ.isOwner(user)){
+            return "redirect:/recipes";
+        }
+        model.addAttribute("user",user);
         return "/users/edit";
     }
 
     // POST MAPPING FOR USER RELATED TO PROFILE DASHBOARD
-
-//	@PostMapping("/users/{id}/edit")
-//	public String editRecipe(User userToBeSaved) {
-//		User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		userToBeSaved.setUser(userDb); /*Todo: make setUser*/
-//		userDao.save(userToBeSaved);
-//		return "redirect:/user";
-//	}
-
 
     // SUBMIT USER EDIT FORM
     @PostMapping("/{id}/edit")
     public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
         User user = userDao.getOne(id);
         if (validation.hasErrors()) {
-            System.out.println("has errors");
-            System.out.println(validation);
             model.addAttribute("errors", validation);
             model.addAttribute("user", editUser);
             return "users/edit";
@@ -142,7 +142,7 @@ public class UserController {
         return "redirect:/users/"+id;
     }
 
-    // update password
+    // UPDATE PASSWORD
     @PostMapping("/{id}/reset")
     public String resetPassword(@PathVariable(name="id") long id, @RequestParam Map<String, String> params,Model model){
         User user = userDao.getOne(id);
@@ -201,7 +201,7 @@ public class UserController {
     @RequestMapping(value = "/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
     Follow postFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
-        User currentUser = userDao.getById(2L);
+        User currentUser = userServ.loggedInUser();
         User friend = userDao.getById(ajaxFollowRequest.getFriendId());
         Follow dbFollow = null;
         if (followDao.findByUserAndFriend(currentUser, friend) == null) {
@@ -215,7 +215,7 @@ public class UserController {
     @RequestMapping(value = "/pantry/ingredient/new", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
     String postPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient) {
-        User currentUser = userDao.getOne(2L);
+        User currentUser = userServ.loggedInUser();
         Ingredient dbIngredient = null;
         boolean isNotInDb = true;
         for (Ingredient i : ingredientDao.findAllByNameLike(pantryIngredient.getName())) {
@@ -248,9 +248,4 @@ public class UserController {
         pantryIngDao.save(pi);
         return "update complete";
     }
-
-//    public static void main(String[] args) {
-//        String passValidation = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-//        System.out.println("Iotaline03!".matches(passValidation));
-//    }
 }
