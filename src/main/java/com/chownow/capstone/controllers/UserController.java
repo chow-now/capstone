@@ -137,6 +137,7 @@ public class UserController {
         }
         user.setFirstName(editUser.getFirstName());
         user.setEmail(editUser.getEmail());
+        user.setAboutMe(editUser.getAboutMe());
         user = userDao.save(user);
         model.addAttribute("user",user);
         return "redirect:/users/"+id;

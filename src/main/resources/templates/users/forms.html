@@ -68,6 +68,11 @@
         <input type="email" id="editFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
     </div>
 
+    <div class="form-group">
+        <label for="editFormAbout">About Me</label>
+        <textarea id="editFormAbout" class="form-control mb-4" placeholder="Quick summary about yourself" th:field="*{aboutMe}"></textarea>
+    </div>
+
     <!-- submit button -->
     <button class="btn btn-info my-4 btn-block" type="submit">Update</button>
 </form>
