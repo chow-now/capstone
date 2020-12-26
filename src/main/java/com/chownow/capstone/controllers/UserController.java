@@ -50,6 +50,9 @@ public class UserController {
 
     @GetMapping("/register")
     public String registerUser(Model model) {
+        if(userServ.isLoggedIn()){
+            return "redirect:/recipes";
+        }
         model.addAttribute("user", new User());
         return "users/new";
     }
@@ -82,19 +85,15 @@ public class UserController {
         return "users/profile";
     }
 
-    // GET ALL USERS
-    @GetMapping
-    public String showUsers(Model model) {
-        model.addAttribute("users", userDao.findAll());
-        return "users/index";
-    }
 
     // GET USER PROFILE BY ID
     @GetMapping("/{id}")
     public String showUserProfile(@PathVariable long id, Model model) {
-        /*Get user*/
         User currentUser = userServ.loggedInUser();
-        User user = userDao.getOne(id);
+        User user = userDao.getFirstById(id);
+        if(user == null){
+            return "redirect:/recipes";
+        }
         if (followDao.findByUserAndFriend(currentUser, user) != null) {
             model.addAttribute("isFollowing", true);
         }
@@ -197,6 +196,8 @@ public class UserController {
         return "redirect:/";
     }
 
+
+    /* AJAX POST REQUESTS */
 
     // Create a follow request
     @RequestMapping(value = "/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")

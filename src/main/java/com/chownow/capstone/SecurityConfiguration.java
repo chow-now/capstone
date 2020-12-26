@@ -65,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/api"
                 ).authenticated()
                 /* Pages that require a role */
-                .antMatchers("/admin/*").hasRole("Admin")
+//                .antMatchers("/admin/*","/admin").hasRole("Admin")
                 .and()
                 /* Login configuration */
                 .formLogin()
