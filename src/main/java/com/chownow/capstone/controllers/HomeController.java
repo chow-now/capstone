@@ -29,8 +29,8 @@ public class HomeController {
     private PantryRepository pantryDao;
 
     @GetMapping("/")
-    public String showHomepage(Model model) {
-        return "/homepage";
+    public String showHomepage() {
+        return "/coming-soon";
     }
 
     @GetMapping("/about")
