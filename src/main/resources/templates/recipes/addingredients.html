@@ -19,8 +19,11 @@
 <th:block th:include="partials/scripts :: scripts"></th:block>
 <script>
 
-    $.ajax("/api/recipe-ingredients").done(function(data){
+    $.ajax("/api/ingredients").done(function(data){
         console.log(data);
+
+
+
     })
 
 

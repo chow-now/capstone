@@ -1,6 +1,7 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
+import com.chownow.capstone.repos.CategoryRepository;
 import com.chownow.capstone.repos.RecipeIngredientRepository;
 import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
@@ -26,7 +27,10 @@ public class RecipeController {
     private UserRepository userDoa;
     @Autowired
     private RecipeIngredientRepository recipeIngredientsDao;
-    //    add email service?
+    @Autowired
+    private CategoryRepository categoryDao;
+
+
 
     public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
         this.recipeDao = recipeDao;
@@ -51,8 +55,8 @@ public class RecipeController {
         model.addAttribute("images", images);
         List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
         model.addAttribute("ingredients", ingredients);
-//        Set<Category> categories = recipe.getCategories();
-//        model.addAttribute("categories", categories);
+        Set<Category> categories = recipe.getCategories();
+        model.addAttribute("categories", categories);
         return "recipes/show";
 
     }
@@ -95,9 +99,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/addcategories")
-    public String addCategories() {
-        return "recipes/addcategories";
-    }
+    public String addCategories(Model model) { return "recipes/addcategories"; }
     @PostMapping("/recipes/addcategories")
     public String submitCategories() {
         return "recipes/addimages";
