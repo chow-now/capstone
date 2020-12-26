@@ -1,6 +1,8 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
+import com.chownow.capstone.repos.CategoryRepository;
+import com.chownow.capstone.repos.RecipeIngredientRepository;
 import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +25,12 @@ public class RecipeController {
     private RecipeRepository recipeDao;
     @Autowired
     private UserRepository userDoa;
-    //    add email service?
+    @Autowired
+    private RecipeIngredientRepository recipeIngredientsDao;
+    @Autowired
+    private CategoryRepository categoryDao;
+
+
 
     public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
         this.recipeDao = recipeDao;
@@ -59,6 +66,7 @@ public class RecipeController {
         model.addAttribute("recipe", new Recipe());
         return "recipes/new";
     }
+
     /* new recipe with error handling */
     @PostMapping("/recipes/new")
     public String submitRecipe(
@@ -66,20 +74,44 @@ public class RecipeController {
             Errors validation,
             Model model
     ) {
-        System.out.println("hello");
-        if(validation.hasErrors()){
-            model.addAttribute("errors",validation);
-            model.addAttribute("recipe",recipeToBeSaved);
+
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
 //        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        recipeToBeSaved.setChef(userDb);
+        
+        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+        recipeDao.save(recipeToBeSaved);
 
-        recipeToBeSaved.setChef(userDoa.getOne(1L));
-        System.out.println(recipeToBeSaved.getChef());
-        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        return "recipes/addingredients";
+    }
 
-        return "redirect:/recipes/" + dbRecipe.getId();
+    @GetMapping("/recipes/addingredients")
+    public String addIngredients() {
+        return "recipes/addingredients";
+    }
+    @PostMapping("/recipes/addingredients")
+    public String submitIngredients() {
+        return "recipes/addcategories";
+    }
+
+    @GetMapping("/recipes/addcategories")
+    public String addCategories(Model model) { return "recipes/addcategories"; }
+    @PostMapping("/recipes/addcategories")
+    public String submitCategories() {
+        return "recipes/addimages";
+    }
+
+    @GetMapping("/recipes/addimages")
+    public String addImages() {
+        return "recipes/addimages";
+    }
+    @PostMapping("/recipes/addimages")
+    public String submitImages() {
+        return "redirect:/recipes";
     }
 
     @PostMapping("/recipes/{id}/delete")
@@ -95,11 +127,19 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/{id}/edit")
-    public String editRecipe(@ModelAttribute Recipe recipeToBeSaved) {
-//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recipeToBeSaved.setChef(userDoa.getOne(1L));
+    public String editRecipe(
+            @ModelAttribute Recipe recipeToBeSaved,
+            Errors validation,
+            Model model) {
 
-        recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes";
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
+            return "recipes/" + recipeToBeSaved.getId() + "/edit";
+        }
+//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes/" + dbRecipe.getId();
     }
 }
