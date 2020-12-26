@@ -48,8 +48,8 @@ public class AdminController {
 		if(currentUser == null || !currentUser.getAdmin()){
 			return "/error/403";	
 		}
-		model.addAttribute("members",userDao.findAllByIsAdminFalse());
-		model.addAttribute("admins",userDao.findAllByIsAdminTrue());
+		model.addAttribute("currentUser",currentUser);
+		model.addAttribute("users",userDao.findAll());
 		model.addAttribute("ingredients",ingredientDao.findAll());
 		model.addAttribute("categories",catDao.findAll());
 		model.addAttribute("recipes",recipeDao.findAll());
