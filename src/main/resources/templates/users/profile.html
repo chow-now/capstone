@@ -195,23 +195,22 @@
 <!--      DASHBOARD TABS-->
       <ul class="nav nav-tabs align-items-center justify-content-between">
         <li class="nav-item" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
-          <a class="nav-link" href="#">
-              <!--              <i class="far fa-bookmark fa-2x"></i>-->
+          <a class="nav-link" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
           </a>
         </li>
@@ -229,6 +228,99 @@
       </ul>
 <!--      !DASHBOARD TABS-->
     </div>
+  <div class="container">
+    <div class="tab-content ">
+<!--      RECIPES TAB-->
+      <div class="tab-pane active" id="recipesTab">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3"></h3>
+          </div>
+          <div th:each="recipe : ${user.recipes}" class="align-items-center justify-content-around">
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              </a>
+              <div class="card-body bg-transparent">
+                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <div class="row align-items-baseline">
+                  <div class="col-2">
+                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <p th:text="${recipe.chef.firstName}"></p>
+                  </div>
+                  <div class="col-3">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="'+favoritedHtml+'">
+                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--      FAVORITES TAB-->
+      <div class="tab-pane" id="favoritesTab">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3"></h3>
+          </div>
+          <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              </a>
+              <div class="card-body bg-transparent">
+                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <div class="row align-items-baseline">
+                  <div class="col-2">
+                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <p th:text="${recipe.chef.firstName}"></p>
+                  </div>
+                  <div class="col-3">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="'+favoritedHtml+'">
+                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--      FOLLOWERS TAB-->
+      <div class="tab-pane" id="followersTab">
+        <div class="row align-items-center justify-content-around p-3">
+          <div th:each="follower : ${user.followers}" class="my-2  mx-2 text-center">
+            <a class="text-center" th:href="@{/users/{id}(id=${ follower.user.id })}">
+              <img th:src="${follower.user.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
+            </a>
+            <p th:text="${follower.user.firstName}"></p>
+          </div>
+        </div>
+      </div>
+<!--      FOLLOWING TAB-->
+      <div class="tab-pane" id="followingTab">
+        <div class="row align-items-center justify-content-around p-3">
+          <div th:each="following : ${user.followings}" class="my-2  mx-2 text-center">
+            <a class="text-center" th:href="@{/users/{id}(id=${ following.friend.id })}">
+              <img th:src="${following.friend.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
+            </a>
+            <p th:text="${following.friend.firstName}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <!--    RENDERED CONTENT-->
     <div id="userContent" class="mt-2"></div>
 </main>
@@ -335,27 +427,27 @@
     });
 
     // API CALLS TO CREATE HTML CONTENT
-    let recipesHtml = "";
-    let favoritesHtml = "";
-    let followingHtml = "";
+    // let recipesHtml = "";
+    // let favoritesHtml = "";
+    // let followingHtml = "";
 
     // RECIPES
-    $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
-      recipesHtml = renderRecipes(recipes,"owner");
-    });
+    // $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
+    //   recipesHtml = renderRecipes(recipes,"owner");
+    // });
 
     // ON PAGE LOAD RENDER PROFILE OWNER RECIPES
     setTimeout(function() {
-      $('#userContent').html(recipesHtml);
+      // $('#userContent').html(recipesHtml);
       // ENABLE TOOLTIPS ON UL MENU
       $('[data-toggle="tooltip"]').tooltip()
     }, 500);
 
 
     // FAVORITES
-    $.ajax({'url': '/api/users/'+userId+"/favorites"}).done(function (favorites) {
-      favoritesHtml = renderRecipes(favorites,"favorites");
-    });
+    // $.ajax({'url': '/api/users/'+userId+"/favorites"}).done(function (favorites) {
+    //   favoritesHtml = renderRecipes(favorites,"favorites");
+    // });
 
     // RENDER RECIPE CARDS USED FOR PROFILE OWNER PERSONAL,FAVORITED AND SUGGESTED RECIPES
     const renderRecipes = (recipesToRender,recipesType) =>{
@@ -402,7 +494,7 @@
                                 '<img src="' + recipe.chef.avatar+'" class="rounded-circle" style="width: 40px;height: 40px">' +
                               '</a>' +
                           '</div>' +
-                          '<div class="col-6"' +
+                          '<div class="col-6">' +
                               '<p>'+ recipe.chef.firstName+ '</p>' +
                           '</div>';
         html +=           '<div class="col-3">' +
@@ -421,55 +513,55 @@
     }
 
     // FOLLOWING
-    $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
-      followingHtml += '<div class="container"><div class="row align-items-center justify-content-around p-3">';
-      following.forEach(function(friend) {
-          followingHtml += '<div class="my-2  mx-2 text-center">'+
-                            '<a href="/users/'+ friend.id + '">'+
-                            '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
-                            '</a>'+
-                            '<p>'+friend.firstName+'</p>'+
-                          '</div>';
-      });
-      followingHtml += '</div></div>';
-    });
+    // $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
+    //   followingHtml += '<div class="container"><div class="row align-items-center justify-content-around p-3">';
+    //   following.forEach(function(friend) {
+    //       followingHtml += '<div class="my-2  mx-2 text-center">'+
+    //                         '<a href="/users/'+ friend.id + '">'+
+    //                         '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
+    //                         '</a>'+
+    //                         '<p>'+friend.firstName+'</p>'+
+    //                       '</div>';
+    //   });
+    //   followingHtml += '</div></div>';
+    // });
 
     /* ON CLICK EVENTS FOR TAB UL */
 
     // RECIPES
-    $( "#userRecipes" ).click(function() {
-      $('#userContent').html(recipesHtml);
-      $('[data-toggle="tooltip"]').tooltip();
-    });
+    // $( "#userRecipes" ).click(function() {
+    //   $('#userContent').html(recipesHtml);
+    //   $('[data-toggle="tooltip"]').tooltip();
+    // });
 
     // FAVORITES
-    $( "#userFavorites" ).click(function() {
-      $('#userContent').html(favoritesHtml);
-      $('[data-toggle="tooltip"]').tooltip();
-    });
+    // $( "#userFavorites" ).click(function() {
+    //   $('#userContent').html(favoritesHtml);
+    //   $('[data-toggle="tooltip"]').tooltip();
+    // });
 
     // FOLLOWERS
-    $( "#userFollowers" ).click(function() {
-      $.ajax({'url': '/api/users/'+userId+"/followers"}).done(function (followers) {
-        let followersHtml = "";
-        followersHtml = '<div class="container mt-3"><div class="row align-items-center justify-content-around p-3">';
-        followers.forEach(function(follower) {
-          followersHtml += '<div class="my-2  mx-2 text-center">'+
-                  '<a class="text-center" href="/users/'+ follower.id + '">'+
-                  '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
-                  '</a>'+
-                  '<p>'+follower.firstName+'</p>'+
-                  '</div>';
-        });
-        followersHtml += '</div></div>';
-        $('#userContent').html(followersHtml);
-      });
-    });
+    // $( "#userFollowers" ).click(function() {
+    //   $.ajax({'url': '/api/users/'+userId+"/followers"}).done(function (followers) {
+    //     let followersHtml = "";
+    //     followersHtml = '<div class="container mt-3"><div class="row align-items-center justify-content-around p-3">';
+    //     followers.forEach(function(follower) {
+    //       followersHtml += '<div class="my-2  mx-2 text-center">'+
+    //               '<a class="text-center" href="/users/'+ follower.id + '">'+
+    //               '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
+    //               '</a>'+
+    //               '<p>'+follower.firstName+'</p>'+
+    //               '</div>';
+    //     });
+    //     followersHtml += '</div></div>';
+    //     $('#userContent').html(followersHtml);
+    //   });
+    // });
 
     // FOLLOWING
-    $( "#userFollowing" ).click(function() {
-      $('#userContent').html(followingHtml);
-    });
+    // $( "#userFollowing" ).click(function() {
+    //   $('#userContent').html(followingHtml);
+    // });
 
     // FOLLOW BTN SUBMIT A FOLLOW REQUEST
     $( "#addFriend" ).click(function() {

@@ -29,18 +29,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /*  Method to authenticate the user and encrypt password */
-    @Bean
-    DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(usersLoader);
-        return daoAuthenticationProvider;
-    }
+//    @Bean
+//    DaoAuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(usersLoader);
+//        return daoAuthenticationProvider;
+//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .authenticationProvider(authenticationProvider())
+                .userDetailsService(usersLoader).passwordEncoder(passwordEncoder());
         ;
     }
 
@@ -52,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/",
                         "/recipes",
-                        "/register",
+                        "/users/register",
                         "/oauth2/*"
                 ).permitAll()
                 /* Pages that require authentication */

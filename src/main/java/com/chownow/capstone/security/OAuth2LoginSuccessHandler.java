@@ -45,7 +45,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             pantryDao.save(new Pantry(user));
             userServ.authenticate(regUser);
             System.out.println("USERS ID: "+regUser.getId());
-            response.sendRedirect("/users/"+regUser.getId());
+            response.sendRedirect("/dashboard");
         }else{
             System.out.println("GETTING USER");
             // update existing customer
@@ -55,7 +55,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 dbUser = userDao.save(dbUser);
             }
             userServ.authenticate(dbUser);
-            response.sendRedirect("/users/"+dbUser.getId());
+            response.sendRedirect("/dashboard");
         }
     }
 

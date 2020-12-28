@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping
 public class UserController {
     @Autowired
     private UserRepository userDao;
@@ -76,21 +76,22 @@ public class UserController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAdmin(false);
+        user.setAvatar("/img/chef-avatar.jpg");
         User dbUser = userDao.save(user);
-
-        userServ.authenticate(dbUser);
         Pantry pantry = new Pantry(dbUser);
-        Pantry dbPantry = pantryDao.save(pantry);
+        pantryDao.save(pantry);
+        userServ.authenticate(dbUser);
         model.addAttribute(dbUser);
-        return "users/profile";
+        return "redirect:/users/"+dbUser.getId()+"/edit";
     }
 
 
     // GET USER PROFILE BY ID
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public String showUserProfile(@PathVariable long id, Model model) {
         User currentUser = userServ.loggedInUser();
-        User user = userDao.getFirstById(id);
+        System.out.println(currentUser);
+        User user = userDao.findFirstById(id);
         if(user == null){
             return "redirect:/recipes";
         }
@@ -106,6 +107,7 @@ public class UserController {
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
+        System.out.println(currentUser);
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
@@ -113,12 +115,15 @@ public class UserController {
     }
 
     // SHOW USER EDIT FORM
-    @GetMapping("/{id}/edit")
+    @GetMapping("/users/{id}/edit")
     public String showEditUser(@PathVariable long id, Model model) {
         User user = userDao.getOne(id);
         if(!userServ.isOwner(user)){
             return "redirect:/recipes";
         }
+        if(user.getAuthProvider()==null){
+            model.addAttribute("canChange",true);
+        };
         model.addAttribute("user",user);
         return "/users/edit";
     }
@@ -126,7 +131,7 @@ public class UserController {
     // POST MAPPING FOR USER RELATED TO PROFILE DASHBOARD
 
     // SUBMIT USER EDIT FORM
-    @PostMapping("/{id}/edit")
+    @PostMapping("/users/{id}/edit")
     public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
         User user = userDao.getOne(id);
         if (validation.hasErrors()) {
@@ -143,7 +148,7 @@ public class UserController {
     }
 
     // UPDATE PASSWORD
-    @PostMapping("/{id}/reset")
+    @PostMapping("/users/{id}/reset")
     public String resetPassword(@PathVariable(name="id") long id, @RequestParam Map<String, String> params,Model model){
         User user = userDao.getOne(id);
         // regex for password
@@ -178,7 +183,7 @@ public class UserController {
 
     // SUBMIT UPLOAD USER AVATAR FORM
 
-    @PostMapping("/{id}/upload")
+    @PostMapping("/users/{id}/upload")
     public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
         User user = userDao.getOne(id);
         if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
@@ -190,7 +195,7 @@ public class UserController {
     }
 
     // DELETE USER
-    @PostMapping("/{id}/delete")
+    @PostMapping("/users/{id}/delete")
     public String deleteAd(@PathVariable long id) {
         userDao.deleteById(id);
         return "redirect:/";
@@ -200,7 +205,7 @@ public class UserController {
     /* AJAX POST REQUESTS */
 
     // Create a follow request
-    @RequestMapping(value = "/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
+    @RequestMapping(value = "/users/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
     Follow postFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
         User currentUser = userServ.loggedInUser();
@@ -214,7 +219,7 @@ public class UserController {
 
 
     // CREATE A NEW PANTRY ITEM
-    @RequestMapping(value = "/pantry/ingredient/new", method = RequestMethod.POST, headers = "Content-Type=application/json")
+    @RequestMapping(value = "/users/pantry/ingredient/new", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
     String postPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient) {
         User currentUser = userServ.loggedInUser();
@@ -241,7 +246,7 @@ public class UserController {
     }
 
     // EDIT PANTRY ITEM
-    @RequestMapping(value = "/pantry/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type=application/json")
+    @RequestMapping(value = "/users/pantry/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
     String editPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient) {
         PantryIngredient pi = pantryIngDao.getOne(pantryIngredient.getId());

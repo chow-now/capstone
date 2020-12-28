@@ -1,6 +1,5 @@
 package com.chownow.capstone.services;
 
-
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.models.UserWithRoles;
 import com.chownow.capstone.repos.UserRepository;
@@ -19,7 +18,7 @@ public class UserDetailsLoader implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = usersDao.getFirstByEmail(email);
+        User user = usersDao.findFirstByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("No user found for " + email);
         }

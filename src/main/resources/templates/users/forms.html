@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<form th:fragment="register" th:action="@{/users/register}" th:method="post" class="text-center p-5" th:object="${user}">
+<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center p-5" th:object="${user}">
 
     <p class="h4 mb-4">Sign up</p>
 
@@ -35,17 +35,17 @@
     <a th:href="@{/oauth2/authorization/google}" class="mx-2" role="button"><i class="fab fa-google light-blue-text"></i></a>
 </form>
 
-<form th:fragment="login" th:action="@{/login}" th:method="post" class="text-center p-5">
+<form th:fragment="login" th:action="@{/login}" th:method="POST" class="text-center p-5">
 
     <p class="h4 mb-4">Login</p>
     
     <!-- E-mail -->
-    <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+    <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-4" placeholder="E-mail">
 
     <!-- Password -->
-    <input type="password" id="defaultLoginFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
-    <!-- Sign up button -->
-    <button class="btn btn-info my-4 btn-block" type="submit">Login</button>
+    <input type="password" id="defaultLoginFormPassword" class="form-control" name="password" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
+    <!-- Login button -->
+    <button class="btn btn-info my-4 btn-block" type="submit" value="Log In">Login</button>
 
     <!-- Social login -->
     <p>or sign in with:</p>
