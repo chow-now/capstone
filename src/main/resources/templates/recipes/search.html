@@ -198,11 +198,13 @@
 
                             // Grab Instructions
                             if (results.analyzedInstructions.length === 0) {
-                                instructions =+ '<p>' + 'Instructions are null' + '</p>'
+                                instructions += '<p>' + 'Sorry, directions not available' + '</p>';
+                                instructions += '<p>' + 'You can find more information in the main' +
+                                                '<a href="' + results.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
                             } else {
                                 for (let i = 0; i < results.analyzedInstructions[0].steps.length; i++) {
-                                    instructions += '<li class="list-group">' + '<strong>' + "Step " + results.analyzedInstructions[0].steps[i].number + '</strong>' +
-                                                                                  '<p>' + results.analyzedInstructions[0].steps[i].step + '</p>' + '</li>';
+                                    instructions += '<li class="list-group">' + '<p>' + results.analyzedInstructions[0].steps[i].number + ". " +
+                                                                                  '<span>' + results.analyzedInstructions[0].steps[i].step + '</span>' + '</p>' + '</li>';
                                 }
                             }
 
