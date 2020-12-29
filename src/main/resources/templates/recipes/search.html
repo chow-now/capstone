@@ -144,6 +144,10 @@
                 $('.recipes').html(recipe);
 
                 // Individual Recipe
+                // TODO: Convert these into template literals for easier readability
+                // TODO: Start on fetching Categories (cuisines)
+                // TODO: Work on Favorites, have fields saved to backend (PostMapping controller w/ dynamic params)
+                // TODO: Try re-writing to async/await vanilla JS
                 $('.viewRecipe').on('click', function () {
                     console.log(this.id + " button id");
 
@@ -204,7 +208,7 @@
                             } else {
                                 for (let i = 0; i < results.analyzedInstructions[0].steps.length; i++) {
                                     instructions += '<li class="list-group">' + '<p>' + results.analyzedInstructions[0].steps[i].number + ". " +
-                                                                                  '<span>' + results.analyzedInstructions[0].steps[i].step + '</span>' + '</p>' + '</li>';
+                                                    '<span>' + results.analyzedInstructions[0].steps[i].step + '</span>' + '</p>' + '</li>';
                                 }
                             }
 
