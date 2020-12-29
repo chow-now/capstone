@@ -94,6 +94,8 @@
             .then(function (results) {
                 console.log(results);
 
+
+
                 let recipe = "";
                 // console.log(getSummary(4632));
 
@@ -103,18 +105,27 @@
 
                 for (let i = 0; i < results.length; i++) {
 
-                    $.ajax("https://api.spoonacular.com/recipes/" + results[i].id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
-                        .done(function (data) {
-                            console.log(data.summary);
-                            recipe += '<div>' + data.summary + '<div/>'
-                        });
+                    // function getData(id) {
+                    //     $.when($.ajax("https://api.spoonacular.com/recipes/" + id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
+                    //         .then(function (data) {
+                    //             console.log(data.summary);
+                    //             //recipe += '<div>' + data.summary + '<div/>'
+                    //             return '<p>' + data.summary + '</p>'
+                    //         }));
+                    // }
 
                     recipe += '<div class="col">'
                     recipe += '<div class="card h-100">';
                     recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
                     recipe += '<img class="card-img-top" src="' + results[i].image + '"/>';
                     recipe += '<div class="card-body">';
-                    recipe += '<button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
+                    // This function getData() is not working. Returns undefined
+                    // recipe += '<div>' + getData(results[i].id) + '<div/>'
+
+                    // Calculate (total ingredients needed - ingredients entered)
+                    recipe += '<div>' + results[i].usedIngredientCount + "/" +  (results[i].usedIngredientCount + results[i].missedIngredientCount) + " ingredients" + '</div>'
+
+                    recipe += '<button class="btn btn-primary viewRecipe" ' + 'data-toggle="modal" data-target="#viewRecipeModal" id="' + results[i].id + '">' + " View " + '</button>'
                     recipe += '</div>';
                     recipe += '</div>';
                     recipe += '</div>';
