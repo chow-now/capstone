@@ -42,6 +42,12 @@
             <div class="recipe-image mx-auto"></div>
 
             <div class="modal-body">
+                <!-- Display Prep Time -->
+                <h4>Prep Time</h4>
+                <div class="recipe-prep"></div>
+                <!-- Display Cook Time -->
+                <h4>Cook Time</h4>
+                <div class="recipe-cook"></div>
                 <!-- Display summary -->
                 <h4>Summary</h4>
                 <div class="recipe-summary"></div>
@@ -132,7 +138,7 @@
                 }
                 $('.recipes').html(recipe);
 
-
+                // Individual Recipe
                 $('.viewRecipe').on('click', function () {
                     console.log(this.id + " button id");
 
@@ -147,12 +153,18 @@
                             let ingredients = "";
                             let instructions = "";
                             let category = "";
+                            let prepTime = "";
+                            let cookTime = "";
 
                             console.log(results.title);
 
                             image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
 
                             title += results.title + '<a href="' + results.sourceUrl + '"> [source]</a>';
+
+                            prepTime += '<p>' + results.preparationMinutes + "mins" + '</p>'
+
+                            cookTime += '<p>' + results.cookingMinutes + "mins" + '</p>'
 
                             summary += '<p>' + results.summary + '</p>';
 
@@ -182,6 +194,8 @@
                             // Display to modal
                             $('.recipe-title').html(title);
                             $('.recipe-image').html(image);
+                            $('.recipe-prep').html(prepTime);
+                            $('.recipe-cook').html(cookTime);
                             $('.recipe-summary').html(summary);
                             $('.recipe-categories').html(category);
                             $('.recipe-ingredients').html(ingredients);
