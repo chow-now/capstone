@@ -26,7 +26,7 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
 >
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
@@ -54,14 +54,12 @@
                 <!-- Display Categories by cuisines: im planning to change this into pills for future -->
                 <h4>Categories</h4>
                 <ul class="recipe-categories"></ul>
-
                 <!-- Display Ingredients -->
                 <h4>Ingredients</h4>
                 <ul class="recipe-ingredients"></ul>
-
                 <!-- Display Instructions -->
                 <h4>Directions</h4>
-                <div class="recipe-directions"></div>
+                <ol class="recipe-directions"></ol>
 
             </div>
             <div class="modal-footer">
@@ -160,11 +158,11 @@
 
                             image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
 
-                            title += results.title + '<a href="' + results.sourceUrl + '"> [source]</a>';
+                            title += results.title + ' by ' + '<a href="' + results.sourceUrl + '">' + results.sourceName + '</a>';
 
-                            prepTime += '<p>' + results.preparationMinutes + "mins" + '</p>'
+                            prepTime += '<p>' + results.preparationMinutes + " mins" + '</p>'
 
-                            cookTime += '<p>' + results.cookingMinutes + "mins" + '</p>'
+                            cookTime += '<p>' + results.cookingMinutes + " mins" + '</p>'
 
                             summary += '<p>' + results.summary + '</p>';
 
@@ -189,7 +187,15 @@
                             }
 
                             // Grab Instructions
-                            instructions += '<p>' + results.instructions + '</p>'
+                            if (results.analyzedInstructions.length === 0) {
+                                instructions =+ '<p>' + 'Instructions are null' + '</p>'
+                            } else {
+                                for (let i = 0; i < results.analyzedInstructions[0].steps.length; i++) {
+                                    instructions += '<li class="list-group">' + '<strong>' + "Step " + results.analyzedInstructions[0].steps[i].number + '</strong>' +
+                                                                                  '<p>' + results.analyzedInstructions[0].steps[i].step + '</p>' + '</li>';
+                                }
+                            }
+
 
                             // Display to modal
                             $('.recipe-title').html(title);
