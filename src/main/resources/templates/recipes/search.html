@@ -42,6 +42,9 @@
             <div class="recipe-image mx-auto"></div>
 
             <div class="modal-body">
+                <!-- Display summary -->
+                <h4>Summary</h4>
+                <div class="recipe-summary"></div>
                 <!-- Display Categories by cuisines: im planning to change this into pills for future -->
                 <h4>Categories</h4>
                 <ul class="recipe-categories"></ul>
@@ -99,13 +102,13 @@
                 recipe += '</div>';
 
                 for (let i = 0; i < results.length; i++) {
-                // function getSummary(id) {
-                //     $.ajax("https://api.spoonacular.com/recipes/" + id + "/summary?apiKey=" + spoonApi + "")
-                //         .done(function (data) {
-                //             console.log(data.summary);
-                //             return data;
-                //         });
-                // }
+
+                    $.ajax("https://api.spoonacular.com/recipes/" + results[i].id + "/information?includeNutrition=false&apiKey=" + spoonApi + "")
+                        .done(function (data) {
+                            console.log(data.summary);
+                            recipe += '<div>' + data.summary + '<div/>'
+                        });
+
                     recipe += '<div class="col">'
                     recipe += '<div class="card h-100">';
                     recipe += '<h5 class="card-title text-center">' + results[i].title + '</h5>';
@@ -129,6 +132,7 @@
 
                             // Recipe Information
                             let image = "";
+                            let summary = "";
                             let title = "";
                             let ingredients = "";
                             let instructions = "";
@@ -139,6 +143,8 @@
                             image += '<img class="img-fluid" src="' + results.image + '" alt="" />';
 
                             title += results.title + '<a href="' + results.sourceUrl + '"> [source]</a>';
+
+                            summary += '<p>' + results.summary + '</p>';
 
                             // Categories List
                             if (results.cuisines.length == 0) {
@@ -166,13 +172,13 @@
                             // Display to modal
                             $('.recipe-title').html(title);
                             $('.recipe-image').html(image);
+                            $('.recipe-summary').html(summary);
                             $('.recipe-categories').html(category);
                             $('.recipe-ingredients').html(ingredients);
                             $('.recipe-directions').html(instructions);
                         })
                 })
             }))
-
     }
 </script>
 </body>
