@@ -1,6 +1,7 @@
 package com.chownow.capstone.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class RecipeIngredient {
     private String unit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonBackReference
     private Recipe recipe;
 
     @ManyToOne

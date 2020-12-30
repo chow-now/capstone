@@ -17,9 +17,6 @@
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
     </div>
 
-
-
-
     <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES-->
     <div class="form-group">
         <label for="servings">Servings:</label>
@@ -35,23 +32,21 @@
     </div>
     <!--    ENTER DIFFICULTY LEVEL-->
 
-
-
     <div class="form-group">
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="easy" name="difficulty" class="custom-control-input" value="easy"
-                   th:field="*{difficulty}">
-            <label class="custom-control-label" for="easy">Easy</label>
+            <input type="radio" id="easy" class="custom-control-input" value="easy"
+                   th:field="${recipe.difficulty}">
+            <label class="custom-control-label" th:for="${recipe.difficulty}">Easy</label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="medium" name="difficulty" class="custom-control-input" value="medium"
-                   th:field="*{difficulty}">
-            <label class="custom-control-label" for="medium">Medium</label>
+            <input type="radio" id="medium" class="custom-control-input" value="medium"
+                   th:field="${recipe.difficulty}">
+            <label class="custom-control-label" th:for="${recipe.difficulty}">Medium</label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="hard" name="difficulty" class="custom-control-input" value="hard"
-                   th:field="*{difficulty}">
-            <label class="custom-control-label" for="hard">Hard</label>
+            <input type="radio" id="hard" class="custom-control-input" value="hard"
+                   th:field="${recipe.difficulty}">
+            <label class="custom-control-label" th:for="${recipe.difficulty}">Hard</label>
         </div>
         <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
     </div>
@@ -74,35 +69,12 @@
         <textarea class="form-control" rows="5" id="directions" th:field="*{directions}"></textarea>
         <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
     </div>
-
-    <button type="submit">Submit</button>
+    <br>
+    <button class="btn btn-primary" type="submit">Add Ingredients</button>
 </form>
 
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
-<script th:inline="javascript">
-    "use strict";
-
-    $(document).ready(function() {
-
-        console.log("hello");
-
-
-
-    });
-</script>
-
-<!--<footer th:replace="partials/partials :: footer"></footer>-->
-<!--<th:block th:include="partials/scripts :: scripts"></th:block>-->
-<!-- JQuery -->
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
-<!--&lt;!&ndash; Bootstrap tooltips &ndash;&gt;-->
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>-->
-<!--&lt;!&ndash; Bootstrap core JavaScript &ndash;&gt;-->
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
-<!--&lt;!&ndash; MDB core JavaScript &ndash;&gt;-->
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>-->
-
 
 </body>
 </html>

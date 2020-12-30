@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('Create a Recipe')">
+
+    <meta charset="UTF-8">
+    <title>Create Recipe</title>
+</head>
+
+<body>
+<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+<form action="/recipes/addimages" method="post">
+
+    <p>Upload images of your dish</p>
+
+    <input type="submit">
+</form>
+
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
+<script>
+</script>
+
+
+
+
+</body>
+</html>
