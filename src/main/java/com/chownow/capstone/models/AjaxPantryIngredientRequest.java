@@ -1,6 +1,7 @@
 package com.chownow.capstone.models;
 
 public class AjaxPantryIngredientRequest {
+    private long id;
     private String name;
     private String unit;
     private double amount;
@@ -8,6 +9,13 @@ public class AjaxPantryIngredientRequest {
     public AjaxPantryIngredientRequest(){}
 
     public AjaxPantryIngredientRequest(String name, String unit, double amount) {
+        this.name = name;
+        this.unit = unit;
+        this.amount = amount;
+    }
+
+    public AjaxPantryIngredientRequest(long id, String name, String unit, double amount) {
+        this.id = id;
         this.name = name;
         this.unit = unit;
         this.amount = amount;
@@ -35,5 +43,13 @@ public class AjaxPantryIngredientRequest {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

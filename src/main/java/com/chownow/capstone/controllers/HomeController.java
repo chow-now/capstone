@@ -33,17 +33,5 @@ public class HomeController {
         return "/coming-soon";
     }
 
-    @GetMapping("/about")
-    public String showAboutPage(Model model) {
-        return "/aboutus";
-    }
-
-    @GetMapping("/home")
-    public String showUsers(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
-        model.addAttribute("users", userDao.findAll());
-
-        return "/index";
-    }
 }
 

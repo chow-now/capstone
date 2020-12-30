@@ -14,6 +14,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -45,9 +46,11 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}")
     public String showRecipe(@PathVariable long id, Model model) {
-        model.addAttribute("recipe", recipeDao.getOne(id));
-        Recipe recipe = recipeDao.getOne(id);
-
+        Recipe recipe = recipeDao.getFirstById(id);
+        if(recipe == null){
+            return "redirect:/recipes";
+        }
+        model.addAttribute("recipe", recipe);
         String firstName = recipe.getChef().getFirstName();
         String chef = firstName;
         model.addAttribute("chef", chef);

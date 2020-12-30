@@ -33,10 +33,11 @@ public class AWSExampleController {
         return "aws-example/rform";
     }
 
-    @PostMapping("/users/{id}/upload")
+    @PostMapping("/aws/{id}/upload")
     public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
         User user = userDao.getOne(id);
         if(user.getAvatar() != null){
+            System.out.println(user.getAvatar());
             s3.deleteFile(user.getAvatar());
         }
         s3.uploadAvatar(multipartFile, user);

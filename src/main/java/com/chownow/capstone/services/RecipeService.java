@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RecipeHelper {
+public class RecipeService {
     @Autowired
     private static RecipeRepository recipeDao;
     @Autowired
