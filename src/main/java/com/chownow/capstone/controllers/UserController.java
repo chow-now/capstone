@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,6 +47,9 @@ public class UserController {
 
     @Autowired
     private UserService userServ;
+
+    @Autowired
+    private RecipeRepository recipeDao;
 
     // CREATE USER
 
@@ -100,6 +105,7 @@ public class UserController {
         }
         model.addAttribute("user", user);
         model.addAttribute("isOwner",userServ.isOwner(user));
+//        model.addAttribute("suggestions",getMatches(user));
         return "users/profile";
     }
 
@@ -111,6 +117,7 @@ public class UserController {
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
+//        model.addAttribute("suggestions",getMatches(currentUser));
         return "users/profile";
     }
 
@@ -254,5 +261,62 @@ public class UserController {
         pi.setUnit(pantryIngredient.getUnit());
         pantryIngDao.save(pi);
         return "update complete";
+    }
+
+    // USER RECIPE MATCHES
+    public List<Recipe> getMatches(User user){
+        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
+        List<Recipe> recipes = recipeDao.findAll();
+
+        List<Recipe> possibleRecipes = new ArrayList<>();
+
+        ArrayList<Long> ingredientsToMap= new ArrayList<>();
+        System.out.println("Ingredients in Users Pantry");
+        for(PantryIngredient pi : pantryIngredients){
+            ingredientsToMap.add(pi.getIngredient().getId());
+            System.out.println(pi.getIngredient().getId());
+        }
+        for(Recipe r : recipes){
+            boolean canMake = true;
+            for(RecipeIngredient ri : r.getRecipeIngredients()){
+                if(!ingredientsToMap.contains(ri.getIngredient().getId())){
+                    System.out.println("Ingredient not in pantry :" +ri.getIngredient().getId());
+                    canMake = false;
+                    break;
+                }
+            }
+            if(canMake) possibleRecipes.add(r);
+        }
+        return possibleRecipes;
+    }
+
+    @GetMapping("users/{id}/matches")
+    public String getMatches(@PathVariable (value="id") long userId, Model model){
+        User user = userDao.getById(userId);
+        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
+        List<Recipe> recipes = recipeDao.findAll();
+
+        List<Recipe> possibleRecipes = new ArrayList<>();
+
+        ArrayList<Long> ingredientsToMap= new ArrayList<>();
+        System.out.println("Ingredients in Users Pantry");
+        for(PantryIngredient pi : pantryIngredients){
+            ingredientsToMap.add(pi.getIngredient().getId());
+            System.out.println(pi.getIngredient().getId());
+        }
+        for(Recipe r : recipes){
+            boolean canMake = true;
+            for(RecipeIngredient ri : r.getRecipeIngredients()){
+                if(!ingredientsToMap.contains(ri.getIngredient().getId())){
+                    System.out.println("Ingredient not in pantry :" +ri.getIngredient().getId());
+                    canMake = false;
+                    break;
+                }
+            }
+            if(canMake) possibleRecipes.add(r);
+        }
+        model.addAttribute("suggestions",possibleRecipes);
+        model.addAttribute("user",user);
+        return "users/suggestions :: suggestions";
     }
 }

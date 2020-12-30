@@ -13,144 +13,12 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <!--  CUSTOM PROFILE CSS -->
+  <link rel="stylesheet" th:href="@{/css/profile.css}">
 
-<!--  CUSTOM PROFILE CSS -->
-  <style>
-
-    /*plus minus input buttons*/
-    .qty .count {
-      color: #000;
-      /*display: inline-block;*/
-      vertical-align: top;
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 30px;
-      padding: 0 2px;
-      min-width: 60px;
-      text-align: center;
-    }
-    .qty .plus {
-      cursor: pointer;
-      /*display: inline-block;*/
-      vertical-align: top;
-      color: black;
-      width: 30px;
-      height: 30px;
-      font: 30px/1 Arial,sans-serif;
-      text-align: center;
-      border-radius: 50%;
-    }
-    .qty .minus {
-      cursor: pointer;
-      /*display: inline-block;*/
-      vertical-align: top;
-      color: black;
-      width: 30px;
-      height: 30px;
-      font: 30px/1 Arial,sans-serif;
-      text-align: center;
-      border-radius: 50%;
-      background-clip: padding-box;
-    }
-    .minus:hover{
-      background-color: white !important;
-    }
-    .plus:hover{
-      background-color: white !important;
-    }
-    .count{
-      border: 0;
-      width: 5%;
-    }
-    .count::-webkit-outer-spin-button,
-    .count::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    .count:disabled{
-      background-color:white;
-    }
-
-    /* table css */
-    .hm-gradient {
-      background-image: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
-    }
-    .darken-grey-text {
-      color: #2E2E2E;
-    }
-    .input-group.md-form.form-sm.form-2 input {
-      border: 1px solid #bdbdbd;
-      border-top-left-radius: 0.25rem;
-      border-bottom-left-radius: 0.25rem;
-    }
-    .input-group.md-form.form-sm.form-2 input.purple-border {
-      border: 1px solid #9e9e9e;
-    }
-    .input-group.md-form.form-sm.form-2 input[type=text]:focus:not([readonly]).purple-border {
-      border: 1px solid #ba68c8;
-      box-shadow: none;
-    }
-    .form-2 .input-group-addon {
-      border: 1px solid #ba68c8;
-    }
-    .danger-text {
-      color: #ff3547;
-    }
-    .success-text {
-      color: #00C851;
-    }
-    .table-bordered.red-border, .table-bordered.red-border th, .table-bordered.red-border td {
-      border: 1px solid #ff3547!important;
-    }
-    .table.table-bordered th {
-      text-align: center;
-    }
-
-    .follow-avatar{
-      width: 10em;
-      height: 10em;
-    }
-    
-    @media only screen and (max-width: 500px) {
-      .fas{
-        font-size: 1rem;
-      }
-    }
-
-    @media only screen and (min-width: 1101px) {
-      .card-img-top {
-        width: 100%;
-        height: 10vw;
-        object-fit: cover;
-      }
-    }
-    @media only screen and (max-width: 1100px) {
-      .card-img-top {
-        width: 100%;
-        height: 15vw;
-        object-fit: cover;
-      }
-    }
-    @media only screen and (max-width: 767px) {
-      .recipe-card{
-        width: 100%!important;
-      }
-      .card-img-top {
-        width: 100%;
-        height: 43vw;
-        object-fit: cover;
-      }
-      .follow-avatar{
-        width: 6em;
-        height: 6em;
-      }
-    }
-  </style>
 </head>
 <body>
 <!--<nav th:include="partials/navbar.html :: nav"></nav>-->
-
-
 <main>
   <!--Main Container-->
     <!-- USER INFO -->
@@ -216,12 +84,12 @@
         </li>
 <!--            PROFILE OWNER ONLY TABS-->
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#pantryTab" data-toggle="tab">
             <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
           </a>
         </li>
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#suggestionsTab" data-toggle="tab">
             <i class="fas fa-drumstick-bite fa-2x"></i>
           </a>
         </li>
@@ -318,11 +186,23 @@
           </div>
         </div>
       </div>
+<!--      PANTRY TAB-->
+      <div class="tab-pane" id="pantryTab">
+              <!--    RENDERED CONTENT-->
+        <div id="pantryContent" class="mt-2"></div>
+      </div>
+<!--      SUGGESTIONS TAB-->
+      <div  class="tab-pane" id="suggestionsTab">
+<!--        <div th:replace="users/suggestions :: suggestions"></div>-->
+      </div>
+<!--      <div class="tab-pane" id="suggestionsTab">-->
+        <!--    RENDERED CONTENT-->
+<!--        <div id="suggestionsContent" class="mt-2 "></div>-->
+      </div>
     </div>
   </div>
 
-<!--    RENDERED CONTENT-->
-    <div id="userContent" class="mt-2"></div>
+
 </main>
 <!--MODALS-->
 <div th:replace="partials/modals"></div>
@@ -426,141 +306,16 @@
               {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
     });
 
-    // API CALLS TO CREATE HTML CONTENT
-    // let recipesHtml = "";
-    // let favoritesHtml = "";
-    // let followingHtml = "";
-
-    // RECIPES
-    // $.ajax({'url': '/api/users/'+userId+"/recipes"}).done(function (recipes) {
-    //   recipesHtml = renderRecipes(recipes,"owner");
-    // });
-
-    // ON PAGE LOAD RENDER PROFILE OWNER RECIPES
     setTimeout(function() {
-      // $('#userContent').html(recipesHtml);
       // ENABLE TOOLTIPS ON UL MENU
       $('[data-toggle="tooltip"]').tooltip()
     }, 500);
-
-
-    // FAVORITES
-    // $.ajax({'url': '/api/users/'+userId+"/favorites"}).done(function (favorites) {
-    //   favoritesHtml = renderRecipes(favorites,"favorites");
-    // });
-
-    // RENDER RECIPE CARDS USED FOR PROFILE OWNER PERSONAL,FAVORITED AND SUGGESTED RECIPES
-    const renderRecipes = (recipesToRender,recipesType) =>{
-      let title;
-      switch(recipesType){
-        case "owner":
-          title = $("#profileName").text() +"'s";
-          break ;
-        case "favorites":
-          title = "Favorited";
-          break;
-        case "suggested":
-          title = "Suggested";
-          break;
-        default:
-          title = "";
-      }
-      let html = "";
-      html += '<div class="container">';
-      html +=   '<div class="row justify-content-center">';
-      html +=     '<div class="col-md-12">'
-      html +=       '<h3 class="my-3">'+ title +' Recipes</h3>';
-      html +=     '</div>';
       
-      recipesToRender.forEach((recipe)=>{
-        let favoritedHtml = "";
-        recipe.favoritedBy.forEach((favorite)=>{
-          favoritedHtml += favorite.firstName +"<br/>";
-        })
-        html += '<div class="align-items-center justify-content-around">';
-        html +=   '<div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >';
-        html +=     '<a href="/recipes/'+recipe.id+'">';
-        if(recipe.images.length > 0){
-          html +=     '<img class="card-img-top shadow" style="border-radius:1.5rem!important" src="' + recipe.images[0].url + '"/>';
-        }else{
-          html +=     '<img class="card-img-top shadow" style="border-radius:1.5rem!important" src="/img/recipe-default.png">';
-        }
-        html +=     '</a>';
-        html +=     '<div class="card-body bg-transparent">';
-        html +=       '<h5 class="card-title font-weight-bold">' +  recipe.title + '</h5>';
-        html +=       '<div class="row align-items-baseline">'
-        html +=           '<div class="col-2">' +
-                              '<a href="/users/'+recipe.chef.id+'">'+
-                                '<img src="' + recipe.chef.avatar+'" class="rounded-circle" style="width: 40px;height: 40px">' +
-                              '</a>' +
-                          '</div>' +
-                          '<div class="col-6">' +
-                              '<p>'+ recipe.chef.firstName+ '</p>' +
-                          '</div>';
-        html +=           '<div class="col-3">' +
-                              '<div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="'+favoritedHtml+'">' +
-                                  '<i class="far fa-heart"></i> ' + recipe.favoritedBy.length +
-                              '</div>' +
-                          '</div>';
-        html +=       '</div>';
-        html +=     '</div>';
-        html +=   '</div>';
-        html += '</div>';
-      });
-      html += '</div>';
-      html += '</div>';
-      return html;
-    }
-
-    // FOLLOWING
-    // $.ajax({'url': '/api/users/'+userId+"/following"}).done(function (following) {
-    //   followingHtml += '<div class="container"><div class="row align-items-center justify-content-around p-3">';
-    //   following.forEach(function(friend) {
-    //       followingHtml += '<div class="my-2  mx-2 text-center">'+
-    //                         '<a href="/users/'+ friend.id + '">'+
-    //                         '<img src="'+ friend.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
-    //                         '</a>'+
-    //                         '<p>'+friend.firstName+'</p>'+
-    //                       '</div>';
-    //   });
-    //   followingHtml += '</div></div>';
-    // });
-
-    /* ON CLICK EVENTS FOR TAB UL */
-
-    // RECIPES
-    // $( "#userRecipes" ).click(function() {
-    //   $('#userContent').html(recipesHtml);
-    //   $('[data-toggle="tooltip"]').tooltip();
-    // });
-
-    // FAVORITES
-    // $( "#userFavorites" ).click(function() {
-    //   $('#userContent').html(favoritesHtml);
-    //   $('[data-toggle="tooltip"]').tooltip();
-    // });
-
-    // FOLLOWERS
-    // $( "#userFollowers" ).click(function() {
-    //   $.ajax({'url': '/api/users/'+userId+"/followers"}).done(function (followers) {
-    //     let followersHtml = "";
-    //     followersHtml = '<div class="container mt-3"><div class="row align-items-center justify-content-around p-3">';
-    //     followers.forEach(function(follower) {
-    //       followersHtml += '<div class="my-2  mx-2 text-center">'+
-    //               '<a class="text-center" href="/users/'+ follower.id + '">'+
-    //               '<img src="'+ follower.avatar +'" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">'+
-    //               '</a>'+
-    //               '<p>'+follower.firstName+'</p>'+
-    //               '</div>';
-    //     });
-    //     followersHtml += '</div></div>';
-    //     $('#userContent').html(followersHtml);
-    //   });
-    // });
-
-    // FOLLOWING
-    // $( "#userFollowing" ).click(function() {
-    //   $('#userContent').html(followingHtml);
+    // recipesToRender.forEach((recipe)=> {
+    //   let favoritedHtml = "";
+    //   recipe.favoritedBy.forEach((favorite) => {
+    //     favoritedHtml += favorite.firstName + "<br/>";
+    //   })
     // });
 
     // FOLLOW BTN SUBMIT A FOLLOW REQUEST
@@ -568,7 +323,6 @@
       let formData = {
         "friendId" : userId
       }
-      // headers: {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')},
       let url = "/users/follow";
       $.ajax({
         type: "POST",
@@ -585,14 +339,13 @@
 
     // RECIPE SUGGESTIONS
     $( "#suggestions" ).click(function() {
-      $.ajax({'url': '/api/users/'+userId+"/matches"}).done(function (recipes) {
-        let suggestionsHtml = renderRecipes(recipes,"suggested");
-        $('#userContent').html(suggestionsHtml);
+      $.ajax({'url': ''+userId+'/matches'}).done(function (recipes) {
+        $('#suggestionsTab').html(recipes);
         $('[data-toggle="tooltip"]').tooltip();
       });
     });
 
-    // PANTRY
+    // PANTRY API CALL
     let pantryInventory;
     let inventoryIngredients;
     const makePantryAjaxCall = ()=>{
@@ -618,7 +371,7 @@
               '<h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>'+
               '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>'+
               '<div class="">' +
-              '<input class="form-control my-2 py-1 pl-3 d-none" type="text" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
+              '<input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
               '<div id="searchResults" class="container text-center"></div>'+
               '</div>'+
               '</div>'+
@@ -655,7 +408,7 @@
               '</div>'
       ;
       // RENDER TEMPLATE
-      $('#userContent').html(pantryHtml);
+      $('#pantryContent').html(pantryHtml);
     }
 
     $( "#userPantry" ).click(function() {
@@ -793,7 +546,7 @@
       return false;
     })
 
-
+    // UPDATE INGREDIENT
     $(document).on('click','#updateIngredient',function(){
     $('#ingredientModal').modal('toggle');
     let form = $('#ingredientForm');
@@ -803,7 +556,6 @@
       "amount": form.find('input.count').val(),
       "unit" : form.find('select  option:selected').text()
     });
-      console.log(formData);
     $.ajax({
       type: "POST",
       contentType: "application/json",
