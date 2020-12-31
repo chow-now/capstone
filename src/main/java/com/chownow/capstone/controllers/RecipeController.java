@@ -92,30 +92,7 @@ public class RecipeController {
         return "recipes/addingredients";
     }
 
-    @GetMapping("/recipes/addingredients")
-    public String addIngredients() {
-        return "recipes/addingredients";
-    }
-    @PostMapping("/recipes/addingredients")
-    public String submitIngredients() {
-        return "recipes/addcategories";
-    }
 
-    @GetMapping("/recipes/addcategories")
-    public String addCategories(Model model) { return "recipes/addcategories"; }
-    @PostMapping("/recipes/addcategories")
-    public String submitCategories() {
-        return "recipes/addimages";
-    }
-
-    @GetMapping("/recipes/addimages")
-    public String addImages() {
-        return "recipes/addimages";
-    }
-    @PostMapping("/recipes/addimages")
-    public String submitImages() {
-        return "redirect:/recipes";
-    }
 
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
