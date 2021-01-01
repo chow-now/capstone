@@ -7,6 +7,7 @@ import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.repos.UserRepository;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +25,18 @@ public class RecipeController {
 
     @Autowired
     private RecipeRepository recipeDao;
+
     @Autowired
     private UserRepository userDoa;
+
     @Autowired
     private RecipeIngredientRepository recipeIngredientsDao;
+
     @Autowired
     private CategoryRepository categoryDao;
 
+    @Autowired
+    private UserService userServ;
 
 
     public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
@@ -66,6 +72,11 @@ public class RecipeController {
 
     @GetMapping("/recipes/new")
     public String showCreateRecipe(Model model) {
+        User currentUser = userServ.loggedInUser();
+        System.out.println(currentUser);
+        model.addAttribute("isFollowing", true);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
         return "recipes/new";
     }
