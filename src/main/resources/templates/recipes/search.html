@@ -13,10 +13,15 @@
     </form>
 </div>
 
-
 <!--    // Dump recipes here-->
+<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
 
-    <div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
+<div id="spinner" class="d-flex justify-content-center d-none">
+    <div class="spinner-grow text-warning" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
 
 <!--- Modal to display recipe information - This can be changed later on --->
 <div
@@ -26,7 +31,7 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
 >
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
@@ -75,7 +80,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn btn-primary">Add to favorites</button>
+                <button type="button" class="btn btn-primary favorite">Add to favorites</button>
             </div>
         </div>
     </div>
@@ -88,7 +93,8 @@
 
     // In the head
     const spoonApi = document.querySelector('meta.spoonApi').content;
-
+    $('.spinner-grow').hide();
+    $('.spinner-grow').removeClass('d-none');
     if (document.getElementById('main_search') == null) {
         console.log("yo, it's null");
     } else {
@@ -99,9 +105,12 @@
         searchString = searchParam.replace(/,|,\s/g, ",+");
         console.log("url string" + searchString);
 
+
+
+        $('.spinner-grow').show();
         $.ajax({
             type: 'GET',
-            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
+            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=50&ranking=2&apiKey=${spoonApi}`,
             success: function (results) {
                 //console.log(results);
                 let recipe = "";
@@ -112,16 +121,15 @@
 
                 $('.recipes').html(recipe);
 
-
                 $.each(results, function (i, recipe) {
                     $.ajax({
                         type: 'GET',
                         url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
                         success: function (singleRecipe) {
-                            //console.log(singleRecipe);
+                            console.log(singleRecipe);
 
                             $('.recipes').append(
-                                `<div class="col">
+                                `<div class="col my-3">
                                      <div class="card h-100">
                                          <h5 class="card-title text-center">${singleRecipe.title}</h5>
                                          <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
@@ -130,11 +138,13 @@
                                                 <h6 class="mb3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
                                             </div>
 
-                                            <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
-                                                <p style="line-height: 20px;">${singleRecipe.summary}</p>
+                                            <div class="scroll mb-2">
+                                                <p style="line-height: 20px;  display: -webkit-box;max-width: 100%; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">
+                                                   ${singleRecipe.summary}
+                                                </p>
                                             </div>
 
-                                            <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>View</button>
+                                            <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                          </div>
                                      </div>
                                  </div>`)
@@ -177,7 +187,7 @@
                                             category += `<li class="">Unknown category</li>`;
                                         } else {
                                             for (let i = 0; i < modalRecipe.cuisines.length; i++) {
-                                                category += `<li class="list-group">${modalRecipe.cuisines[i]}</li>`;
+                                                category += `<li>${modalRecipe.cuisines[i]}</li>`;
                                             }
                                         }
 
@@ -222,17 +232,17 @@
                             })
                         },
                         complete: function() {
-                            console.log("FINISHED")
-                        }
+                            console.log("FINISHED");
+                            $('.spinner-grow').hide();
+                            $('.spinner-grow').addClass('d-none');
+                        },
                     })
                 })
-
             }
         })
 
                 // TODO: Start on fetching Categories (cuisines)
                 // TODO: Work on Favorites, have fields saved to backend (PostMapping controller w/ dynamic params)
-                // TODO: Try re-writing to async/await vanilla JS
     }
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>
