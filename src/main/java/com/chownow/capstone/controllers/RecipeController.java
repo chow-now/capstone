@@ -1,10 +1,7 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
-import com.chownow.capstone.repos.CategoryRepository;
-import com.chownow.capstone.repos.RecipeIngredientRepository;
-import com.chownow.capstone.repos.RecipeRepository;
-import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.repos.*;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.chownow.capstone.services.UserService;
@@ -30,7 +27,13 @@ public class RecipeController {
     private UserRepository userDoa;
 
     @Autowired
-    private RecipeIngredientRepository recipeIngredientsDao;
+    private IngredientRepository ingredientDao;
+
+    @Autowired
+    PantryIngredientRepository pantryIngDao;
+
+    @Autowired
+    private RecipeIngredientRepository recipeIngDao;
 
     @Autowired
     private CategoryRepository categoryDao;
@@ -39,10 +42,10 @@ public class RecipeController {
     private UserService userServ;
 
 
-    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
-        this.recipeDao = recipeDao;
-        this.userDoa = userDoa;
-    }
+//    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
+//        this.recipeDao = recipeDao;
+//        this.userDoa = userDoa;
+//    }
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -82,27 +85,65 @@ public class RecipeController {
     }
 
     /* new recipe with error handling */
-    @PostMapping("/recipes/new")
-    public String submitRecipe(
-            @Valid @ModelAttribute Recipe recipeToBeSaved,
-            Errors validation,
-            Model model
-    ) {
+//    @PostMapping("/recipes/new")
+//    public String submitRecipe(
+//            @Valid @ModelAttribute Recipe recipeToBeSaved,
+//            Errors validation,
+//            Model model
+//    ) {
+//
+//        if (validation.hasErrors()) {
+//            model.addAttribute("errors", validation);
+//            model.addAttribute("recipe", recipeToBeSaved);
+//            return "recipes/new";
+//        }
+////        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+////        recipeToBeSaved.setChef(userDb);
+//
+//        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+//        recipeDao.save(recipeToBeSaved);
+//
+//        return "recipes/addingredients";
+//    }
 
-        if (validation.hasErrors()) {
-            model.addAttribute("errors", validation);
-            model.addAttribute("recipe", recipeToBeSaved);
-            return "recipes/new";
+    // CREATE A NEW RECIPE ITEM
+    @RequestMapping(value = "/users/recipe/ingredient/new", method = RequestMethod.POST, headers = "Content-Type" +
+            "=application/json")
+    public @ResponseBody
+    String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
+//        User currentUser = userServ.loggedInUser();
+        Ingredient dbIngredient = null;
+        boolean isNotInDb = true;
+        for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
+            if (recipeIngredient.getName().equalsIgnoreCase(i.getName())) {
+                dbIngredient = i;
+                isNotInDb = false;
+                break;
+            }
         }
-//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        recipeToBeSaved.setChef(userDb);
-        
-        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
-        recipeDao.save(recipeToBeSaved);
-
-        return "recipes/addingredients";
+        if (isNotInDb) {
+            dbIngredient = ingredientDao.save(new Ingredient(recipeIngredient.getName().toLowerCase()));
+        }
+        RecipeIngredient newRecipeIng = new RecipeIngredient(
+                recipeIngredient.getAmount(),
+                recipeIngredient.getUnit(),
+                dbIngredient
+        );
+        recipeIngDao.save(newRecipeIng);
+        return "im done";
     }
 
+    // EDIT RECIPE ITEM
+    @RequestMapping(value = "/users/recipe/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type" +
+            "=application/json")
+    public @ResponseBody
+    String editRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
+        RecipeIngredient pi = recipeIngDao.getOne(recipeIngredient.getId());
+        pi.setAmount(recipeIngredient.getAmount());
+        pi.setUnit(recipeIngredient.getUnit());
+        recipeIngDao.save(pi);
+        return "update complete";
+    }
 
 
     @PostMapping("/recipes/{id}/delete")
