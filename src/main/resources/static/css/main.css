@@ -1,0 +1,60 @@
+.jumbotron{
+    /* Set a specific height */
+    background-size: cover;
+    height: 100vh;
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.btn-pink{
+    background-color: #fba9c8;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.btn-green{
+    background-color: #03b090;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.green-text{
+    color: #03b090;
+}
+
+::placeholder {
+    color: #03b090;
+}
+
+.modal-content{
+    border-radius: 1.5rem!important;
+}
+
+.or-seperator {
+    margin: 20px 0 10px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+
+.or-seperator i {
+    padding: 0 10px;
+    background: white;
+    position: relative;
+    top: -11px;
+    z-index: 1;
+}
+
+@media screen and (max-width: 768px){
+    #chowText{
+        margin-top: 40%;
+        width: 100%
+    }
+}
+
+@media screen and (min-width: 769px)   {
+    #chowText{
+        width: 50%;
+    }
+}

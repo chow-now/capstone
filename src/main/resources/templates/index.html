@@ -3,56 +3,26 @@
 <head th:replace="partials/head :: head(title)"></head>
 <style>
 
-  
-
-
-  
-  .jumbotron{
-    background-image: url("img/cn-bg.png");
-    /* Set a specific height */
-    background-size: cover;
-    height: 100vh;
-    /* Position and center the image to scale nicely on all screens */
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-  }
-
-  .btn-pink{
-    background-color: #fba9c8;
-    color: whitesmoke;
-    font-weight: bold;
-  }
-
-  @media screen and (max-width: 768px){
-    #chowText{
-      margin-top: 40%;
-      width: 100%
-    }
-  }
-
-  @media screen and (min-width: 769px)   {
-    #chowText{
-      width: 50%;
-    }
-  }
 </style>
 <body>
 <!--<nav th:include="partials/navbar.html :: nav"></nav>-->
-<div class="jumbotron">
+<div class="jumbotron m-0" style="background-image: url('img/cn-bg.png');">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-12 text-center mb-5">
         <img src="img/cn-text.png" id="chowText"  >
       </div>
-      <div class="btn btn-pink btn-lg rounded-pill">REGISTER</div>
+      <div class="btn btn-pink btn-lg rounded-pill register-btn" data-toggle="modal" data-target="#registerModal">REGISTER</div>
     </div>
   </div>
 </div>
+<div class="card">
 
+</div>
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<div th:replace="partials/scripts :: scripts"></div>
 
-
-<!--<div th:replace="partials/scripts :: scripts"></div>-->
 </body>
 
 </html>

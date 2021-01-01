@@ -319,4 +319,10 @@ public class UserController {
         model.addAttribute("user",user);
         return "users/suggestions :: suggestions";
     }
+
+    @GetMapping("/register-form")
+    public String getRegisterForm(Model model) {
+        model.addAttribute("user", new User());
+        return "users/forms :: register";
+    }
 }
