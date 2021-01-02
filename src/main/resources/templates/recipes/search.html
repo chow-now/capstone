@@ -179,6 +179,17 @@
                                         let prepTime = "";
                                         let cookTime = "";
                                         let servings = "";
+
+                                        // Hidden fields
+                                        let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
+                                        let hiddenImage = modalRecipe.image;
+                                        let hiddenPrepTime = modalRecipe.preparationMinutes ;
+                                        let hiddenCook = modalRecipe.cookingMinutes;
+                                        let hiddenServings = modalRecipe.servings;
+                                        let hiddenSummary = modalRecipe.summary;
+                                        let hiddenCategories = "";
+                                        let hiddenIngredients = "";
+                                        let hiddenDirections = "";
                                         
                                         image += `<img class="img-fluid" src=${modalRecipe.image} alt="" />`;
 
@@ -196,21 +207,26 @@
                                         // Categories List
                                         if (modalRecipe.cuisines.length == 0) {
                                             category += `<li class="">Unknown category</li>`;
+                                            hiddenCategories = 'Unknown category';
                                         } else {
                                             for (let i = 0; i < modalRecipe.cuisines.length; i++) {
                                                 category += `<li>${modalRecipe.cuisines[i]}</li>`;
+                                                hiddenCategories += modalRecipe.cuisines[i] + '##'
                                             }
                                         }
 
                                         // Ingredients List
                                         if (modalRecipe.extendedIngredients.length == 0) {
-                                            ingredients += 'No ingredients recorded'
+                                            ingredients += 'No ingredients recorded';
+                                            hiddenIngredients = 'No ingredients recorded';
                                         } else {
                                             for (let i = 0; i < modalRecipe.extendedIngredients.length; i++) {
                                                 ingredients += `<li>${modalRecipe.extendedIngredients[i].amount}
                                                                     ${modalRecipe.extendedIngredients[i].unit}
                                                                     ${modalRecipe.extendedIngredients[i].originalName}
                                                                 </li>`;
+
+                                                hiddenIngredients += modalRecipe.extendedIngredients[i].amount + '@@' + modalRecipe.extendedIngredients[i].unit + '@@' + modalRecipe.extendedIngredients[i].originalName + '##';
                                             }
                                         }
 
@@ -219,6 +235,9 @@
                                             instructions += '<p>' + 'Sorry, directions not available' + '</p>';
                                             instructions += '<p>' + 'You can find more information in the main' +
                                                             '<a href="' + modalRecipe.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
+
+                                            hiddenDirections = 'Sorry, directions not available';
+
                                         } else {
                                             for (let i = 0; i < modalRecipe.analyzedInstructions[0].steps.length; i++) {
                                                 instructions += `<li class="list-group">
@@ -226,6 +245,8 @@
                                                                     <span>${modalRecipe.analyzedInstructions[0].steps[i].step}</span>
                                                                     </p>
                                                                  </li>`;
+
+                                                hiddenDirections += modalRecipe.analyzedInstructions[0].steps[i].number + ' ' + modalRecipe.analyzedInstructions[0].steps[i].step + '##'
                                             }
                                         }
 
