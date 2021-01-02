@@ -4,15 +4,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <title>User Profile</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <meta class="spoonApi" th:content="${spoonApi}">
+  <title>Dashboard</title>
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!--  MAIN CSS -->
+  <link rel="stylesheet" th:href="@{/css/main.css}">
   <!--  CUSTOM PROFILE CSS -->
   <link rel="stylesheet" th:href="@{/css/profile.css}">
 
@@ -30,30 +28,24 @@
         </div>
         <div class="col-8 col-sm-9 mb-4">
           <div class="mb-2">
-            <h2 id="profileName" class="mb-0" th:text="${user.firstName}"></h2>
+            <h2 id="profileName" class="mb-0 text-black" th:text="${user.firstName}"></h2>
           </div>
           <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
-          <p>
+          <p class="text-white">
             <em>
               <small th:text="${user.getAboutMe()} ?: 'Introduce yourself to the community by writing a little about yourself.'"></small>
             </em>
           </p>
 
           <div>
-<!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">-->
-<!--              Register-->
-<!--            </button>-->
-<!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">-->
-<!--              Login-->
-<!--            </button>-->
             <!-- EDIT PROFILE LINK -->
-            <button sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn">
-              <a th:href="@{/users/{id}/edit(id=${user.id})}">Edit Profile</a>
-            </button>
+            
+              <a th:href="@{/users/{id}/edit(id=${user.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow">Edit Profile</a>
+
             <!-- FOLLOW USER BUTTON -->
             <div th:if="${not isOwner}">
-              <button th:if="${isFollowing}" class="btn" disabled> Following </button>
-              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn"> Follow </button>
+              <button th:if="${isFollowing}" class="btn btn-red rounded-pill" disabled> Following </button>
+              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn btn-red rounded-pill"> Follow </button>
             </div>
           </div>
         </div>
@@ -63,46 +55,46 @@
 <!--      DASHBOARD TABS-->
       <ul class="nav nav-tabs align-items-center justify-content-between">
         <li class="nav-item" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
-          <a class="nav-link" href="#recipesTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
-          <a class="nav-link" href="#favoritesTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
-          <a class="nav-link" href="#followersTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
-          <a class="nav-link" href="#followingTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
           </a>
         </li>
 <!--            PROFILE OWNER ONLY TABS-->
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
-          <a class="nav-link" href="#pantryTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#pantryTab" data-toggle="tab">
             <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
           </a>
         </li>
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
-          <a class="nav-link" href="#suggestionsTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#suggestionsTab" data-toggle="tab">
             <i class="fas fa-drumstick-bite fa-2x"></i>
           </a>
         </li>
       </ul>
 <!--      !DASHBOARD TABS-->
     </div>
-  <div class="container">
+  <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
     <div class="tab-content ">
 <!--      RECIPES TAB-->
       <div class="tab-pane active" id="recipesTab">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3"></h3>
+            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
           <div th:each="recipe : ${user.recipes}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
@@ -135,7 +127,7 @@
       <div class="tab-pane" id="favoritesTab">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3"></h3>
+            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
           <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
@@ -204,10 +196,8 @@
 
 
 </main>
-<!--MODALS-->
-<div th:replace="partials/modals"></div>
-<!--            PROFILE OWNER ONLY MODALS-->
 
+<!--            PROFILE OWNER ONLY MODALS-->
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -281,17 +271,9 @@
 </div>
 <!--! MODALS-->
 
-<!--Todo: FIX SCRIPT CONFIGURATION-->
-
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<div th:replace="partials/scripts :: scripts"></div>
 <script th:src="@{/js/ingredients.js}"></script>
 <script th:inline="javascript">
 
