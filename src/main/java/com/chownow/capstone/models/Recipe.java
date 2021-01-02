@@ -29,7 +29,7 @@ public class Recipe {
     @Size(min = 5, message = "Description should be a bit longer")
     @Size(max = 5000,message = "That's a bit long winded")
     @NotBlank(message= "Recipe needs a description")
-    @Column(nullable = false,length = 500)
+    @Column(nullable = false,length = 5000)
     private String description;
 
     @Column

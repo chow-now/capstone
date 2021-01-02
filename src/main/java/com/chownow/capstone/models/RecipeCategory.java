@@ -1,4 +1,10 @@
+package com.chownow.capstone.models;
+
+import com.chownow.capstone.models.Category;
+import com.chownow.capstone.models.Recipe;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="recipe_categories")
