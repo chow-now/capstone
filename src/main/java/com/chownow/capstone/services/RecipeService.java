@@ -39,9 +39,18 @@ public class RecipeService {
     @Autowired
     private ImageRepository imageRepository;
 
-    @Transactional
-    public String saveRecipe(RecipeDto recipe){
+    @Autowired
+    private FavoritesRepository favoritesRepository;
 
+    /**
+     * Here used transactional because we save daa to 8 tables, during saving something happen it will rollback the data
+     * @param recipe
+     * @return
+     */
+    @Transactional // Do this sequentially
+    public String saveRecipe(RecipeDto recipe){
+// Hard-coded for now
+// User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
         Pantry pantry = pantryRepository.getFirstByOwner(user);
 
@@ -49,24 +58,35 @@ public class RecipeService {
         String prepTime = "";
         String servings = "";
 
+/**
+ * When cook time not define it set as a 0
+ */
         if (recipe.getCook().equals("")){
             cookTime = "0";
         }else{
             cookTime = recipe.getCook();
         }
 
+/**
+ * When preparation time not define it set as a 0
+ */
         if (recipe.getPrep().equals("")){
             prepTime = "0";
         }else{
             prepTime = recipe.getPrep();
         }
-
+/**
+ * When serving is not define it set as a 0
+ */
         if (recipe.getServings().equals("")){
             servings = "0";
         }else{
             servings = recipe.getServings();
         }
 
+/**
+ * Create a recipe entity object to be saved
+ */
         Recipe recipeEntity = new Recipe();
         recipeEntity.setCookTime(Integer.parseInt(cookTime));
         recipeEntity.setDescription(recipe.getSummary());
@@ -78,7 +98,7 @@ public class RecipeService {
         recipeEntity.setTitle(recipe.getTitle());
         recipeEntity.setChef(user);
 
-        recipeDao.save(recipeEntity);
+        recipeDao.save(recipeEntity); // Saves to recipe
 
         String ingredients[] = recipe.getIngredients().split("##");
 
@@ -89,14 +109,26 @@ public class RecipeService {
         List<RecipeCategory> recipeCategoryList = new ArrayList<>();
 
         for (String ingredient: ingredients) {
-
+/**
+ * In the UI there are many ingredients so they are coming to java end like below
+ * Ingredient1@@Ingredient2@@Ingredient3@@Ingredient4@@Ingredient5@@
+ *
+ * So we have to split using @@ to get the actual Ingredients from above array
+ * that's why here used split method
+ */
             String ingredientObjects[] = ingredient.split("@@");
 
+/**
+ * Create a Ingredient entity object to be saved
+ */
             Ingredient ingredientEntity = new Ingredient();
             ingredientEntity.setName(ingredientObjects[2]);
             ingredientsList.add(ingredientEntity);
             ingredientRepository.save(ingredientEntity);
 
+/**
+ * Create a PantryIngredient entity object to be saved
+ */
             PantryIngredient pantryIngredientEntity = new PantryIngredient();
             pantryIngredientEntity.setAmount(Double.parseDouble(ingredientObjects[0]));
             pantryIngredientEntity.setUnit(ingredientObjects[1]);
@@ -105,6 +137,9 @@ public class RecipeService {
             pantryIngredientList.add(pantryIngredientEntity);
             pantryIngredientRepository.save(pantryIngredientEntity);
 
+/**
+ * Create a RecipeIngredient entity object to be saved
+ */
             RecipeIngredient recipeIngredientEntity = new RecipeIngredient();
             recipeIngredientEntity.setAmount(Double.parseDouble(ingredientObjects[0]));
             recipeIngredientEntity.setUnit(ingredientObjects[1]);
@@ -112,18 +147,30 @@ public class RecipeService {
             recipeIngredientEntity.setRecipe(recipeEntity);
             recipeIngredientList.add(recipeIngredientEntity);
             recipeIngredientRepository.save(recipeIngredientEntity);
-
         }
 
+/**
+ * In the UI there are many Categories so they are coming to java end like below
+ * Category1##Category2##Category3##Category4##Category5##
+ *
+ * So we have to split using ## to get the actual Ingredients from above array
+ * that's why here used split method
+ */
         String categories[] = recipe.getCategories().split("##");
 
         for (String category : categories ) {
+/**
+ * Create a Category entity object to be saved
+ */
             Category categoryEntity = new Category();
             categoryEntity.setName(category);
             categoryEntity.setIcon("NA");
             categoryList.add(categoryEntity);
             categoryRepository.save(categoryEntity);
 
+/**
+ * Create a RecipeCategory entity object to be saved
+ */
             RecipeCategory recipeCategoryEntity = new RecipeCategory();
             recipeCategoryEntity.setCategory(categoryEntity);
             recipeCategoryEntity.setRecipe(recipeEntity);
@@ -132,10 +179,23 @@ public class RecipeService {
 
         }
 
+/**
+ * Create a Favorites entity object to be saved
+ */
+        Favorites favoriteEntity = new Favorites();
+        favoriteEntity.setRecipe(recipeEntity);
+        favoriteEntity.setUser(user);
+        favoritesRepository.save(favoriteEntity);
+
+/**
+ * Create a Image entity object to be saved
+ */
         Image imageEntity = new Image();
         imageEntity.setRecipe(recipeEntity);
         imageEntity.setUrl(recipe.getImage());
         imageRepository.save(imageEntity);
+
+        System.out.println("Successfully saved !");
 
         return recipeEntity.getId() + "";
     }
