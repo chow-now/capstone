@@ -48,121 +48,88 @@
                     <p class="card-text">Begin creating your recipe by providing some general information.</p>
                 </div>
 
-                <!--                <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">-->
+                <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
 
-                <!--    TITLE   -->
-                <div class="input-group mb-3 px-4">
-                    <span class="input-group-text" id="title">Title</span>
-                    <input type="text" class="form-control" aria-label="Title"
-                           aria-describedby="title">
-                </div>
-                <!--                    ENTER A RECIPE TITLE-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="title">Title:</label>-->
-                <!--                        <input type="text" class="form-control" id="title" th:field="*{title}"/>-->
-                <!--                        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER A RECIPE TITLE   -->
+                    <div class="form-group input-group mb-3 px-4">
+                        <span class="input-group-text" id="title">Title</span>
+                        <input type="text" class="form-control" aria-label="Title"
+                               aria-describedby="title" th:field="*{title}"/>
+                        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                    </div>
 
-                <!--    DESCRIPTION -->
-                <div class="input-group px-4">
-                    <span class="input-group-text">Description</span>
-                    <textarea class="form-control" aria-label="description" rows="3"></textarea>
-                </div>
-                <!--                    &lt;!&ndash;    ENTER RECIPE DESCRIPTION&ndash;&gt;-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="description">Description:</label>-->
-                <!--                        <textarea class="form-control" rows="5" id="description" th:field="*{description}"></textarea>-->
-                <!--                        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER RECIPE DESCRIPTION -->
+                    <div class="form-group input-group px-4">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" aria-label="description" rows="3"
+                                  th:field="*{description}"></textarea>
+                        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                    </div>
 
-                <!--    DIFFICULTY LEVEL    -->
-                <div class="input-group px-4 py-3">
-                    <label class="input-group-text" for="difficulty">Level of Difficulty</label>
-                    <select class="form-select" id="difficulty">
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                </div>
-                <!--                    ENTER DIFFICULTY LEVEL-->
-                <!--                    <div class="form-group">-->
-                <!--                        <div class="custom-control custom-radio custom-control-inline">-->
-                <!--                            <input type="radio" id="easy" class="custom-control-input" value="easy"-->
-                <!--                                   th:field="${recipe.difficulty}">-->
-                <!--                            <label class="custom-control-label" th:for="${recipe.difficulty}">Easy</label>-->
-                <!--                        </div>-->
-                <!--                        <div class="custom-control custom-radio custom-control-inline">-->
-                <!--                            <input type="radio" id="medium" class="custom-control-input" value="medium"-->
-                <!--                                   th:field="${recipe.difficulty}">-->
-                <!--                            <label class="custom-control-label" th:for="${recipe.difficulty}">Medium</label>-->
-                <!--                        </div>-->
-                <!--                        <div class="custom-control custom-radio custom-control-inline">-->
-                <!--                            <input type="radio" id="hard" class="custom-control-input" value="hard"-->
-                <!--                                   th:field="${recipe.difficulty}">-->
-                <!--                            <label class="custom-control-label" th:for="${recipe.difficulty}">Hard</label>-->
-                <!--                        </div>-->
-                <!--                        <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER DIFFICULTY LEVEL    -->
+                    <div class="form-group input-group px-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
+                                   th:field="*{difficulty}" value="easy">
+                            <label class="form-check-label" th:for="*{difficulty}">
+                                Easy
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
+                                   th:field="*{difficulty}" value="medium">
+                            <label class="form-check-label" th:for="*{difficulty}">
+                                Medium
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
+                                   th:field="*{difficulty}" value="hard">
+                            <label class="form-check-label" th:for="*{difficulty}">
+                                Hard
+                            </label>
+                            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+                        </div>
+                    </div>
 
-                <!--    PREP-TIME   -->
-                <div class="input-group mb-3 px-4">
-                    <span class="input-group-text" id="prep-time">Prep-time</span>
-                    <input type="number" class="form-control" aria-label="Prep-time"
-                           aria-describedby="prep-time">
-                </div>
-                <!--                    &lt;!&ndash;    ENTER PREP TIME IN MINUTES&ndash;&gt;-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="prep-time">Prep Time:</label>-->
-                <!--                        <input type="number" class="form-control" id="prep-time" th:field="*{prepTime}"/>-->
-                <!--                        <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER PREP TIME IN MINUTES   -->
+                    <div class="form-group input-group mb-3 px-4">
+                        <span class="input-group-text" id="prep-time">Prep-time</span>
+                        <input type="number" class="form-control" aria-label="Prep-time"
+                               aria-describedby="prep-time" th:field="*{prepTime}">
+                        <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                    </div>
 
-                <!--    COOK-TIME   -->
-                <div class="input-group mb-3 px-4">
-                    <span class="input-group-text" id="cook-time">Cook-time</span>
-                    <input type="number" class="form-control" aria-label="Cook-time"
-                           aria-describedby="cook-time">
-                </div>
-                <!--                    &lt;!&ndash;    ENTER COOK TIME IN MINUTES&ndash;&gt;-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="cook-time">Cook Time:</label>-->
-                <!--                        <input type="number" class="form-control" id="cook-time" th:field="*{cookTime}"/>-->
-                <!--                        <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER COOK TIME IN MINUTES   -->
+                    <div class="form-group input-group mb-3 px-4">
+                        <span class="input-group-text" id="cook-time">Cook-time</span>
+                        <input type="number" class="form-control" aria-label="Cook-time"
+                               aria-describedby="cook-time" th:field="*{cookTime}">
+                        <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+                    </div>
 
-                <!--    SERVINGS    -->
-                <div class="input-group mb-3 px-4">
-                    <span class="input-group-text" id="servings">Servings</span>
-                    <input type="number" class="form-control" aria-label="Servings"
-                           aria-describedby="servings">
-                </div>
-                <!--                    &lt;!&ndash;    ENTER NUMBER OF SERVINGS RECIPE PREPARES&ndash;&gt;-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="servings">Servings:</label>-->
-                <!--                        <input type="number" class="form-control" id="servings" th:field="*{servings}"/>-->
-                <!--                        <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
+                    <div class="form-group input-group mb-3 px-4">
+                        <span class="input-group-text" id="servings">Servings</span>
+                        <input type="number" class="form-control" aria-label="Servings"
+                               aria-describedby="servings" th:field="*{servings}">
+                        <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                    </div>
 
-                <!--    DIRECTIONS  -->
-                <div class="input-group px-4">
-                    <span class="input-group-text">Directions</span>
-                    <textarea class="form-control" aria-label="directions" rows="5"></textarea>
-                </div>
-                <div class="card-footer text-muted">
-                    <a href="#recipeTab" class="btn btn-primary float-right">Next Step</a>
-                </div>
-                <!--                    &lt;!&ndash;    ENTER COOKING DIRECTIONS&ndash;&gt;-->
-                <!--                    <div class="form-group">-->
-                <!--                        <label for="directions">Directions:</label>-->
-                <!--                        <textarea class="form-control" rows="5" id="directions" th:field="*{directions}"></textarea>-->
-                <!--                        <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>-->
-                <!--                    </div>-->
+                    <!--    ENTER COOKING DIRECTIONS  -->
+                    <div class="form-group input-group px-4">
+                        <span class="input-group-text">Directions</span>
+                        <textarea class="form-control" aria-label="directions" rows="5"
+                                  th:field="*{directions}"></textarea>
+                        <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
+                    </div>
 
-                <!-- SUBMIT RECIPE INFO -->
-                <!--                    <br>-->
-                <!--                    <button class="btn btn-primary" type="submit">Add Ingredients</button>-->
-
-                <!--                </form>-->
+                    <!-- SUBMIT RECIPE INFO -->
+                    <div class="card-footer text-muted">
+                        <a href="#recipeTab" class="btn btn-primary float-right">Next Step</a>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
 

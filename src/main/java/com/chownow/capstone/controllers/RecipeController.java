@@ -85,28 +85,29 @@ public class RecipeController {
     }
 
     /* new recipe with error handling */
-//    @PostMapping("/recipes/new")
-//    public String submitRecipe(
-//            @Valid @ModelAttribute Recipe recipeToBeSaved,
-//            Errors validation,
-//            Model model
-//    ) {
-//
-//        if (validation.hasErrors()) {
-//            model.addAttribute("errors", validation);
-//            model.addAttribute("recipe", recipeToBeSaved);
-//            return "recipes/new";
-//        }
-////        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-////        recipeToBeSaved.setChef(userDb);
-//
-//        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
-//        recipeDao.save(recipeToBeSaved);
-//
-//        return "recipes/addingredients";
-//    }
+    @PostMapping("/recipes/new")
+    public @ResponseBody
+    String submitRecipe(
+            @Valid @ModelAttribute Recipe recipeToBeSaved,
+            Errors validation,
+            Model model
+    ) {
 
-    // CREATE A NEW RECIPE ITEM
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
+            return "recipes/new";
+        }
+
+        User currentUser = userServ.loggedInUser();
+
+        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId())); //Hard-coding Chef
+        recipeDao.save(recipeToBeSaved);
+
+        return "recipes/addingredients";
+    }
+
+    // CREATE A NEW RECIPE INGREDIENT
     @RequestMapping(value = "/users/recipe/ingredient/new", method = RequestMethod.POST, headers = "Content-Type" +
             "=application/json")
     public @ResponseBody
@@ -133,7 +134,7 @@ public class RecipeController {
         return "im done";
     }
 
-    // EDIT RECIPE ITEM
+    // EDIT RECIPE INGREDIENT
     @RequestMapping(value = "/users/recipe/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type" +
             "=application/json")
     public @ResponseBody
