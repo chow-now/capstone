@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
@@ -20,6 +21,11 @@ public class SearchExampleController {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
 
+        return "recipes/search";
+    }
+
+    @PostMapping("/search")
+    public String saveRecipes(Model viewModel){
         return "recipes/search";
     }
 }

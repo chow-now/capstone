@@ -20,14 +20,14 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Size(min = 2, message = "Title should be a bit longer.")
+    @Size(min = 0, message = "Title should be a bit longer.")
     @Size(max = 100,message = "Title is too long")
     @NotBlank(message= "Recipe needs a title")
     @Column(nullable = false,length = 100)
     private String title;
 
     @Size(min = 5, message = "Description should be a bit longer")
-    @Size(max = 500,message = "That's a bit long winded")
+    @Size(max = 5000,message = "That's a bit long winded")
     @NotBlank(message= "Recipe needs a description")
     @Column(nullable = false,length = 500)
     private String description;
@@ -45,15 +45,15 @@ public class Recipe {
     @Column(nullable = false,length = 100)
     private String difficulty;
 
-    @Min(1)
+    @Min(0)
     @Max(999)
     @NotNull(message= "Oops. Looks like the cook time is missing.")
     @Column(nullable = false)
     private int cookTime;
 
-    @Min(1)
+    @Min(0)
     @Max(999)
-    @NotNull(message= "Oops. Looks like the prem time is missing.")
+    @NotNull(message= "Oops. Looks like the prep time is missing.")
     @Column(nullable = false)
     private int prepTime;
 

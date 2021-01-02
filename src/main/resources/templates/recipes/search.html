@@ -32,6 +32,7 @@
         aria-hidden="true"
 >
     <div class="modal-dialog modal-lg">
+        <form th:action="@{/search}" th:object="${recipe}" method="post">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
@@ -83,6 +84,16 @@
                 <button type="button" class="btn btn-primary favorite">Add to favorites</button>
             </div>
         </div>
+            <input type="hidden" id="hidden-recipe-title" th:name="title" value="" />
+            <input type="hidden" id="hidden-recipe-image" th:name="image" value="" />
+            <input type="hidden" id="hidden-recipe-prep" th:name="prep" value="" />
+            <input type="hidden" id="hidden-recipe-cook" th:name="cook" value="" />
+            <input type="hidden" id="hidden-recipe-servings" th:name="servings" value="" />
+            <input type="hidden" id="hidden-recipe-summary" th:name="summary" value="" />
+            <input type="hidden" id="hidden-recipe-categories" th:name="categories" value="" />
+            <input type="hidden" id="hidden-recipe-ingredients" th:name="ingredients" value="" />
+            <input type="hidden" id="hidden-recipe-directions" th:name="directions" value="" />
+        </form>
     </div>
 </div>
 
@@ -228,6 +239,17 @@
                                         $('.recipe-categories').html(category);
                                         $('.recipe-ingredients').html(ingredients);
                                         $('.recipe-directions').html(instructions);
+
+                                        // Display to Hidden Fields
+                                        $('#hidden-recipe-title').val(hiddenTitle);
+                                        $('#hidden-recipe-image').val(hiddenImage);
+                                        $('#hidden-recipe-prep').val(hiddenPrepTime);
+                                        $('#hidden-recipe-cook').val(hiddenCook);
+                                        $('#hidden-recipe-servings').val(hiddenServings);
+                                        $('#hidden-recipe-summary').val(hiddenSummary);
+                                        $('#hidden-recipe-categories').val(hiddenCategories);
+                                        $('#hidden-recipe-ingredients').val(hiddenIngredients);
+                                        $('#hidden-recipe-directions').val(hiddenDirections);
                                     })
                             })
                         },
