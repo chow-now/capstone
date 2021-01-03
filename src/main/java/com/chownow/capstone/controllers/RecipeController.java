@@ -86,26 +86,23 @@ public class RecipeController {
 
     /* new recipe with error handling */
     @PostMapping("/recipes/new")
-    @ResponseBody
     public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model
     ) {
-
 //        if (validation.hasErrors()) {
 //            model.addAttribute("errors", validation);
 //            model.addAttribute("recipe", recipeToBeSaved);
 //            return "recipes/new";
 //        }
-
         User currentUser = userServ.loggedInUser();
-
         recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
-        return "done";
-//        return "redirect:/recipes/" + recipeDB.getId();
+        model.addAttribute(recipeToBeSaved);
+
+        return "/recipes/new";
     }
 
     // CREATE A NEW RECIPE INGREDIENT

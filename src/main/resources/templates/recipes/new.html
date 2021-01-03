@@ -46,14 +46,9 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Begin creating your recipe by providing some general information.</p>
+                <p th:text="${recipe.id}"></p>
                 </div>
-
                 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
-
-                    <p th:text="${recipe.id}"></p>
-                    <br>
-                    <p th:text="${user.id}"></p>
-
                     <!--    ENTER A RECIPE TITLE   -->
                     <div class="form-group input-group mb-3 px-4">
                         <span class="input-group-text" id="title">Title</span>
@@ -130,19 +125,16 @@
 
                     <!-- SUBMIT RECIPE INFO -->
                     <div class="card-footer text-muted">
-                        <button class="btn btn-primary float-right nav-link" type="submit" sec:authorize="isAuthenticated()"
-                                th:if="${isOwner}" id="userRecipe" href="#recipeTab"
-                                data-toggle="tab" role="tab"
-                                aria-controls="nav-ingredients"
-                                aria-selected="false">Submit</button>
-
                         <div class="nav-item" role="presentation">
-
-<!--                            <a sec:authorize="isAuthenticated()" th:if="${isOwner}" id="userRecipe" href="#recipeTab"-->
-<!--                               data-toggle="tab" role="tab"-->
-<!--                               aria-controls="nav-ingredients"-->
-<!--                               aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>-->
+                            <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
+                               aria-controls="nav-ingredients"
+                               aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
                         </div>
+                        <div>
+                            <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
+                                    type="submit">Submit</button>
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -155,7 +147,7 @@
                     Ingredients List
                 </div>
 
-                <p th:text="${recipe.id}"></p>
+                <p id="recipe-id" th:text="${recipe.id}"></p>
 
                 <div class="card-body">
                     <p class="card-text">Next, let's add an ingredients list to the recipe.</p>
@@ -242,6 +234,7 @@
         </div>
     </div>
 </div>
+
 <!-- Add Ingredient Modal -->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
      role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
@@ -308,7 +301,7 @@
     (function ($) {
 
         // TEMPORARY HARD-CODED RECIPE
-        let recipeId = 1;
+        let recipeId = document.getElementById('recipe-id');
 
         $.ajaxSetup({
             headers:
