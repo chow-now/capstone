@@ -12,29 +12,29 @@
     <h2>Create your recipe!</h2>
 
     <!--    RECIPE CREATION TABS-->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="add-info-tab" data-toggle="tab" href="#addInfo" role="tab"
-               aria-controls="nav-info"
-               aria-selected="true"><span class="badge badge-pill badge-secondary">1</span> Recipe Info</a>
-        </li>
-        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation" id="userRecipe">
-            <a class="nav-link" id="add-ingredients-tab" data-toggle="tab" href="#recipeTab" role="tab"
-               aria-controls="nav-ingredients"
-               aria-selected="false"><span class="badge badge-pill badge-secondary">2</span> Add Ingredients</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="add-images-tab" data-toggle="tab" href="#addImages" role="tab"
-               aria-controls="nav-images" aria-selected="false"><span class="badge badge-pill badge-secondary">3</span>
-                Upload Images</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="add-categories-tab" data-toggle="tab" href="#addCategories" role="tab"
-               aria-controls="nav-categories" aria-selected="false"><span class="badge badge-pill badge-secondary">4
-            </span>
-                Categorize</a>
-        </li>
-    </ul>
+    <!--    <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+    <!--        <li class="nav-item" role="presentation">-->
+    <!--            <a class="nav-link active" id="add-info-tab" data-toggle="tab" href="#addInfo" role="tab"-->
+    <!--               aria-controls="nav-info"-->
+    <!--               aria-selected="true"><span class="badge badge-pill badge-secondary">1</span> Recipe Info</a>-->
+    <!--        </li>-->
+    <!--        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">-->
+    <!--            <a class="nav-link" data-toggle="tab" href="#recipeTab" role="tab"-->
+    <!--               aria-controls="nav-ingredients"-->
+    <!--               aria-selected="false"><span class="badge badge-pill badge-secondary">2</span> Add Ingredients</a>-->
+    <!--        </li>-->
+    <!--        <li class="nav-item" role="presentation">-->
+    <!--            <a class="nav-link" data-toggle="tab" href="#addImages" role="tab"-->
+    <!--               aria-controls="nav-images" aria-selected="false"><span class="badge badge-pill badge-secondary">3</span>-->
+    <!--                Upload Images</a>-->
+    <!--        </li>-->
+    <!--        <li class="nav-item" role="presentation">-->
+    <!--            <a class="nav-link" data-toggle="tab" href="#addCategories" role="tab"-->
+    <!--               aria-controls="nav-categories" aria-selected="false"><span class="badge badge-pill badge-secondary">4-->
+    <!--            </span>-->
+    <!--                Categorize</a>-->
+    <!--        </li>-->
+    <!--    </ul>-->
     <!--    TAB CONTENTS-->
     <div class="tab-content" id="myTabContent">
 
@@ -49,6 +49,10 @@
                 </div>
 
                 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
+
+                    <p th:text="${recipe.id}"></p>
+                    <br>
+                    <p th:text="${user.id}"></p>
 
                     <!--    ENTER A RECIPE TITLE   -->
                     <div class="form-group input-group mb-3 px-4">
@@ -126,8 +130,19 @@
 
                     <!-- SUBMIT RECIPE INFO -->
                     <div class="card-footer text-muted">
-                        <a href="#recipeTab" class="btn btn-primary float-right">Next Step</a>
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-primary float-right nav-link" type="submit" sec:authorize="isAuthenticated()"
+                                th:if="${isOwner}" id="userRecipe" href="#recipeTab"
+                                data-toggle="tab" role="tab"
+                                aria-controls="nav-ingredients"
+                                aria-selected="false">Submit</button>
+
+                        <div class="nav-item" role="presentation">
+
+<!--                            <a sec:authorize="isAuthenticated()" th:if="${isOwner}" id="userRecipe" href="#recipeTab"-->
+<!--                               data-toggle="tab" role="tab"-->
+<!--                               aria-controls="nav-ingredients"-->
+<!--                               aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>-->
+                        </div>
                     </div>
                 </form>
             </div>
@@ -139,11 +154,24 @@
                 <div class="card-header bg-primary text-white">
                     Ingredients List
                 </div>
+
+                <p th:text="${recipe.id}"></p>
+
                 <div class="card-body">
                     <p class="card-text">Next, let's add an ingredients list to the recipe.</p>
                 </div>
                 <!--    RENDERED CONTENT-->
                 <div id="recipeContent" class="mt-2"></div>
+
+                <div class="card-footer text-muted">
+                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                        <a id="add-images-tab" href="#addImages" data-toggle="tab" role="tab"
+                           aria-controls="nav-images"
+                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                    </div>
+                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
+
+                </div>
             </div>
         </div>
 
@@ -155,6 +183,14 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">You can upload an image of your dish here.</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                        <a id="add-categories-tab" href="#addCategories" data-toggle="tab" role="tab"
+                           aria-controls="nav-images"
+                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                    </div>
+                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                 </div>
             </div>
         </div>
@@ -168,6 +204,14 @@
                 <div class="card-body">
                     <p class="card-text">Finally, categorize your recipe, so it is easier for others to
                         discover!</p>
+                </div>
+                <div class="card-footer text-muted">
+                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                        <a id="publishRecipe" href="#addCategories" data-toggle="tab" role="tab"
+                           aria-controls="nav-publish"
+                           aria-selected="false" class="btn btn-primary float-right nav-link">Publish</a>
+                    </div>
+                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                 </div>
             </div>
         </div>
@@ -263,21 +307,21 @@
     /* GET USER ID FROM THYMELEAF */
     (function ($) {
 
-        // get userId from Thyme
-        let userId = /*[[${user.id}]]*/ '';
+        // TEMPORARY HARD-CODED RECIPE
+        let recipeId = 1;
 
         $.ajaxSetup({
             headers:
                 {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
         });
 
-        // PANTRY API CALL
+        // RECIPE API CALL
         let recipeInventory;
         let inventoryIngredients;
         const makeRecipeAjaxCall = () => {
             recipeInventory = [];
             inventoryIngredients = [];
-            $.ajax({'url': '/api/users/' + userId + "/recipe"}).done(function (response) {
+            $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
                 response.recipeIngredients.forEach(function (item) {
                     inventoryIngredients.push(item);
                     recipeInventory.push(item.ingredient.name.toLowerCase());
@@ -285,7 +329,7 @@
             });
         }
 
-        // CREATE HTML FOR PANTRY TEMPLATE
+        // CREATE HTML FOR RECIPE TEMPLATE
         const renderRecipe = () => {
             // SORT INGREDIENTS BY NAME
             inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
@@ -302,7 +346,7 @@
                 '</div>' +
                 '</div>'
             ;
-            // PANTRY INGREDIENT TABLE
+            // RECIPE INGREDIENT TABLE
             recipeHtml += '<div class="card shadow mt-3">';
             recipeHtml += '<table class="table table-striped">' +
                 '<thead>' +
@@ -314,7 +358,7 @@
                 '</thead>' +
                 '<tbody>'
             ;
-            // ADD ROWS TO PANTRY TABLE
+            // ADD ROWS TO RECIPE TABLE
             inventoryIngredients.forEach((item) => {
                 recipeHtml += '<tr>' +
                     '<td><span>' + item.ingredient.name + '</span></td>' +
@@ -326,7 +370,7 @@
                     '</tr>'
                 ;
             })
-            // CLOSE PANTRY HTML TEMPLATE
+            // CLOSE RECIPE HTML TEMPLATE
             recipeHtml += '</tbody>' +
                 '</table>' +
                 '</div>' +
@@ -344,7 +388,7 @@
             }, 500);
         });
 
-        // AUTOSEARCH INGREDIENTS FOR PANTRY
+        // AUTOSEARCH INGREDIENTS FOR RECIPE
         $(document).on('keyup', "#ingredientSearch", function () {
             let searchResults = $('#searchResults');
             let searchInput = this.value.trim();
@@ -378,7 +422,7 @@
             }
         });
 
-        // USER PANTRY ADD NEW PANTRY INPUT CLICK
+        // USER RECIPE ADD NEW RECIPE INPUT CLICK
         $(document).on('click', "#showIngredientForm", function () {
             let input = $("#ingredientSearch");
             if (input.hasClass("d-none")) {
@@ -440,7 +484,7 @@
             }
         });
 
-        // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO PANTRY
+        // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO RECIPE
         $(document).on('click', '#addIngredient', function () {
             $('#ingredientModal').modal('toggle');
             let form = $('#ingredientForm');
@@ -512,7 +556,7 @@
             openModal.find('.modal-body input').val(recipeIngId);
         })
 
-        // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM PANTRY
+        // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM RECIPE
         $("#deleteIngredient").submit(function () {
             $('#deleteIngredientModal').modal('toggle');
             let form = $(this);

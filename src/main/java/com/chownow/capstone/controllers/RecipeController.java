@@ -77,7 +77,7 @@ public class RecipeController {
     public String showCreateRecipe(Model model) {
         User currentUser = userServ.loggedInUser();
         System.out.println(currentUser);
-        model.addAttribute("isFollowing", true);
+//        model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
@@ -86,25 +86,26 @@ public class RecipeController {
 
     /* new recipe with error handling */
     @PostMapping("/recipes/new")
-    public @ResponseBody
-    String submitRecipe(
+    @ResponseBody
+    public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model
     ) {
 
-        if (validation.hasErrors()) {
-            model.addAttribute("errors", validation);
-            model.addAttribute("recipe", recipeToBeSaved);
-            return "recipes/new";
-        }
+//        if (validation.hasErrors()) {
+//            model.addAttribute("errors", validation);
+//            model.addAttribute("recipe", recipeToBeSaved);
+//            return "recipes/new";
+//        }
 
         User currentUser = userServ.loggedInUser();
 
-        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId())); //Hard-coding Chef
+        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
-        return "recipes/addingredients";
+        return "done";
+//        return "redirect:/recipes/" + recipeDB.getId();
     }
 
     // CREATE A NEW RECIPE INGREDIENT
@@ -112,7 +113,7 @@ public class RecipeController {
             "=application/json")
     public @ResponseBody
     String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
-//        User currentUser = userServ.loggedInUser();
+        User currentUser = userServ.loggedInUser();
         Ingredient dbIngredient = null;
         boolean isNotInDb = true;
         for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
@@ -128,6 +129,8 @@ public class RecipeController {
         RecipeIngredient newRecipeIng = new RecipeIngredient(
                 recipeIngredient.getAmount(),
                 recipeIngredient.getUnit(),
+//                currentUser.getRecipes(),
+
                 dbIngredient
         );
         recipeIngDao.save(newRecipeIng);
