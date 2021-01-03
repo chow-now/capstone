@@ -22,7 +22,7 @@
 
     // SUGGESTIONS AJAX
     $( "#suggestions" ).click(function() {
-        $.ajax({'url': ''+userId+'/matches'}).done(function (recipes) {
+        $.ajax({'url': 'users/'+userId+'/matches'}).done(function (recipes) {
             $('#suggestionsTab').html(recipes);
             $('[data-toggle="tooltip"]').tooltip();
         });
