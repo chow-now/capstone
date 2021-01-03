@@ -51,7 +51,7 @@
     <a th:href="@{/oauth2/authorization/google}" class=" text-danger" role="button"><i class="fab fa-google light-blue-text"></i></a>
 </form>
 
-<form th:fragment="edit" th:action="@{/users/{id}/edit(id=${user.id})}" th:method="post" class=" p-5" th:object="${user}">
+<form th:fragment="edit" th:action="@{/users/{id}/edit(id=${user.id})}" th:method="post" class=" p-4" th:object="${user}">
 
     <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Edit</p>
     
@@ -74,7 +74,7 @@
     <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Update</button>
 </form>
 
-<form th:fragment="resetPassword" th:action="@{/users/{id}/reset(id=${user.id})}" th:method="post" class=" p-5">
+<form th:fragment="resetPassword" th:action="@{/users/{id}/reset(id=${user.id})}" th:method="post" class=" p-4">
     <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Reset Password</p>
     <div class="form-group">
         <label for="currentPassword">Current Password</label>

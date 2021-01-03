@@ -21,10 +21,10 @@
         </div>
         <div class="col-md-9 mb-4">
 <!--    EDIT USER FORM -->
-            <div class="card rounded-card shadow-lg my-4">
+            <div class="card bg-light rounded-card shadow-lg my-4">
                 <form th:replace="users/forms :: edit"></form>
             </div>
-            <div th:if="${canChange}" class="card rounded-card shadow-lg my-4">
+            <div th:if="${canChange}" class="card bg-light rounded-card shadow-lg my-4">
                 <form th:replace="users/forms :: resetPassword"></form>
             </div>
         </div>

@@ -105,7 +105,6 @@ public class UserController {
         }
         model.addAttribute("user", user);
         model.addAttribute("isOwner",userServ.isOwner(user));
-//        model.addAttribute("suggestions",getMatches(user));
         return "users/profile";
     }
 
@@ -117,7 +116,6 @@ public class UserController {
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
-//        model.addAttribute("suggestions",getMatches(currentUser));
         return "users/profile";
     }
 
