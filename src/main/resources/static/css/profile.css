@@ -1,6 +1,9 @@
+body{
+    background-color: #03b090;
+}
 /*plus minus input buttons*/
 .qty .count {
-    color: #000;
+    color: dimgrey;
     /*display: inline-block;*/
     vertical-align: top;
     font-size: 20px;
@@ -14,7 +17,7 @@
     cursor: pointer;
     /*display: inline-block;*/
     vertical-align: top;
-    color: black;
+    color: #fec82e;
     width: 30px;
     height: 30px;
     font: 30px/1 Arial,sans-serif;
@@ -25,7 +28,7 @@
     cursor: pointer;
     /*display: inline-block;*/
     vertical-align: top;
-    color: black;
+    color: #fec82e;
     width: 30px;
     height: 30px;
     font: 30px/1 Arial,sans-serif;
@@ -92,6 +95,46 @@
     height: 10em;
 }
 
+.edit-btn:hover{
+    color:#ff686d;
+}
+
+.dashtab{
+    color:#fec82e;
+}
+
+.fa-pencil-alt{
+    color:#fec82e;
+}
+
+.fa-trash-alt{
+    color:#ff686dd4;
+}
+.nav-tabs {
+    border-bottom: none!important;
+}
+
+.nav-tabs .nav-link {
+    border-top-left-radius: .6rem;
+    border-top-right-radius: .6rem;
+    padding-top: 1rem;
+}
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border: none!important;
+    color:#ff686dd4;
+    /*background-color: #03b090!important;*/
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color:#ff686dd4;
+    background-color: #03b090!important;
+    border: none!important;
+}
+
+.nav-tab-shadow{
+    box-shadow: 0 -0.1rem 3rem rgba(0,0,0,0.175)!important;
+}
+
 @media only screen and (max-width: 500px) {
     .fas{
         font-size: 1rem;
@@ -124,6 +167,24 @@
     .follow-avatar{
         width: 6em;
         height: 6em;
+    }
+    .tab-card{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .tab-card {
+        height: 100%;
+    }
+    .fa-pencil-alt{
+        font-size: 1.3em;
+    }
+
+    .fa-trash-alt{
+        font-size: 1.5em;
     }
 }
 
