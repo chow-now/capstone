@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.script.ScriptEngine;
@@ -38,6 +39,10 @@ public class SeedRunner {
     private PantryIngredientRepository pantryIngDao;
     @Autowired
     private ImageRepository imageDao;
+    @Autowired
+    private UserService userServ;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final Faker faker = new Faker();
 
@@ -100,6 +105,7 @@ public class SeedRunner {
             String password = "Password123!";
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,password);
+            seedUser.setPassword(passwordEncoder.encode(seedUser.getPassword()));
             seedUser.setAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
             seedUser.setAvatar(randomAvatar());
