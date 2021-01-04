@@ -12,50 +12,45 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <!--  MAIN CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--  CUSTOM PROFILE CSS -->
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
 
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
-<div class="container">
-    <h2>Edit your recipe!</h2>
-    <!--    RECIPE CREATION TABS-->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="add-info-tab" data-toggle="tab" href="#addInfo" role="tab"
-               aria-controls="nav-info"
-               aria-selected="true"><span class="badge badge-pill badge-secondary">1</span> Recipe Info</a>
-        </li>
-        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-            <a id="userRecipe" class="nav-link" data-toggle="tab" href="#recipeTab" role="tab"
-               aria-controls="nav-ingredients"
-               aria-selected="false"><span class="badge badge-pill badge-secondary">2</span> Ingredients</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-toggle="tab" href="#addImages" role="tab"
-               aria-controls="nav-images" aria-selected="false"><span class="badge badge-pill badge-secondary">3</span>
-                Images</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-toggle="tab" href="#addCategories" role="tab"
-               aria-controls="nav-categories" aria-selected="false"><span class="badge badge-pill badge-secondary">4
-                </span>
-                Categories</a>
-        </li>
-    </ul>
+<main>
+    <div class="container mt-4">
+        <!--    RECIPE CREATION TABS-->
+        <ul class="nav nav-tabs align-items-center justify-content-between">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link dashtab nav-tab-shadow" id="add-info-tab" data-toggle="tab" href="#addInfo"
+                   role="tab" aria-controls="nav-info" aria-selected="true">Recipe Info</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                <a id="userRecipe" class="nav-link dashtab nav-tab-shadow" data-toggle="tab" href="#recipeTab"
+                   role="tab" aria-controls="nav-ingredients" aria-selected="false">Ingredients</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link dashtab nav-tab-shadow" data-toggle="tab" href="#addImages" role="tab"
+                   aria-controls="nav-images" aria-selected="false">Images</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link dashtab nav-tab-shadow" data-toggle="tab" href="#addCategories" role="tab"
+                   aria-controls="nav-categories" aria-selected="false">Categories</a>
+            </li>
+        </ul>
+    </div>
     <!--    TAB CONTENTS-->
-    <div class="tab-content" id="myTabContent">
-        <p id="recipe-id" th:text="${recipe.id}" hidden></p>
-        <!--    ADD RECIPE INFO TAB-->
-        <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Recipe Info
-                </div>
-                <div class="card-body">
-
-                    <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
+    <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
+        <div class="tab-content">
+            <p id="recipe-id" th:text="${recipe.id}" hidden></p>
+            <!--    ADD RECIPE INFO TAB-->
+            <div class="tab-pane active" id="addInfo">
+                <div class="p-4">
+                    <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post"
+                          th:object="${recipe}">
                         <!--    ENTER A RECIPE TITLE   -->
                         <div class="form-group input-group mb-3 px-4">
                             <span class="input-group-text" id="title">Title</span>
@@ -63,7 +58,6 @@
                                    aria-describedby="title" th:field="*{title}"/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
-
                         <!--    ENTER RECIPE DESCRIPTION -->
                         <div class="form-group input-group px-4">
                             <span class="input-group-text">Description</span>
@@ -71,7 +65,6 @@
                                       th:field="*{description}"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
-
                         <!--    ENTER DIFFICULTY LEVEL    -->
                         <div class="form-group input-group px-4">
                             <div class="form-check">
@@ -97,7 +90,6 @@
                                 <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
                             </div>
                         </div>
-
                         <!--    ENTER PREP TIME IN MINUTES   -->
                         <div class="form-group input-group mb-3 px-4">
                             <span class="input-group-text" id="prep-time">Prep-time</span>
@@ -105,7 +97,6 @@
                                    aria-describedby="prep-time" th:field="*{prepTime}">
                             <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
                         </div>
-
                         <!--    ENTER COOK TIME IN MINUTES   -->
                         <div class="form-group input-group mb-3 px-4">
                             <span class="input-group-text" id="cook-time">Cook-time</span>
@@ -113,7 +104,6 @@
                                    aria-describedby="cook-time" th:field="*{cookTime}">
                             <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
                         </div>
-
                         <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
                         <div class="form-group input-group mb-3 px-4">
                             <span class="input-group-text" id="servings">Servings</span>
@@ -121,7 +111,6 @@
                                    aria-describedby="servings" th:field="*{servings}">
                             <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
                         </div>
-
                         <!--    ENTER COOKING DIRECTIONS  -->
                         <div class="form-group input-group px-4">
                             <span class="input-group-text">Directions</span>
@@ -129,439 +118,422 @@
                                       th:field="*{directions}"></textarea>
                             <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
                         </div>
-
                         <!-- SUBMIT RECIPE INFO -->
-                        <div class="card-footer text-muted">
-                            <div>
-                                <button class="btn btn-primary float-right nav-link px-2"
-                                        type="submit">Submit
-                                </button>
-                            </div>
-                        </div>
+                        <button class="btn btn-yellow float-right nav-link px-2"
+                                type="submit">Submit
+                        </button>
                     </form>
                 </div>
             </div>
-        </div>
 
-        <!--        ADD RECIPE INGREDIENTS TAB-->
-        <div class="tab-pane fade" id="recipeTab" role="tabpanel" aria-labelledby="add-ingredients-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Edit Ingredients List
-                </div>
+
+            <!--        ADD RECIPE INGREDIENTS TAB-->
+            <div class="tab-pane pb-3" id="recipeTab">
                 <div class="card-body">
                     <!--    RENDERED CONTENT-->
                     <div id="recipeContent" class="mt-2"></div>
                 </div>
             </div>
-        </div>
 
-        <!--        UPLOAD IMAGES TAB-->
-        <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Images
-                </div>
+            <!--        UPLOAD IMAGES TAB-->
+            <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div class="card-body">
                     <p class="card-text">You can upload an image of your dish here.</p>
                 </div>
             </div>
-        </div>
 
-        <!--        ADD CATEGORIES TAB-->
-        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
-             role="tabpanel" aria-labelledby="add-categories-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Categories
-                </div>
+            <!--        ADD CATEGORIES TAB-->
+            <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
+                 role="tabpanel" aria-labelledby="add-categories-tab">
                 <div class="card-body">
                     <p class="card-text">Finally, categorize your recipe, so it is easier for others to
                         discover!</p>
-                </div>
-                <div class="card-footer text-muted">
-                    <div>
-                        <button class="btn btn-primary float-right nav-link px-2"
-                                type="submit">Submit
-                        </button>
-                    </div>
+
+
+                    <button class="btn btn-primary float-right nav-link px-2"
+                            type="submit">Submit
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--Delete Ingredient Modal-->
-<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
-     role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <!--Delete Ingredient Modal-->
+    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal"
+         tabindex="-1"
+         role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="deleteIngredient">
+                    <div class="modal-body">
+                        <input name="id" type="hidden" value="'+recipeIngId+'"/>
+                        <p>Are you sure you want to trash this?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
             </div>
-            <form id="deleteIngredient">
-                <div class="modal-body">
-                    <input name="id" type="hidden" value="'+recipeIngId+'"/>
-                    <p>Are you sure you want to trash this?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
-<!-- Add Ingredient Modal -->
-<div class="modal fade" id="ingredientModal" tabindex="-1"
-     role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="ingredientForm">
-                <div class="modal-body" id="ingredientModalContent">
-                    <div class="form-group">
-                        <input name="name" type="hidden" class="form-control" id="ingredientName">
-                    </div>
-                    <div class="container d-flex justify-content-center">
+    <!-- Add Ingredient Modal -->
+    <div class="modal fade" id="ingredientModal" tabindex="-1"
+         role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="ingredientForm">
+                    <div class="modal-body" id="ingredientModalContent">
                         <div class="form-group">
-                            <label>Amount</label>
-                            <div id="formQty" class="qty mt-1">
-                                <span class="minus"><i class="fas fa-minus-circle"></i></span>
-                                <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05"
-                                       required>
-                                <span class="plus"><i class="fas fa-plus-circle"></i></span>
+                            <input name="name" type="hidden" class="form-control" id="ingredientName">
+                        </div>
+                        <div class="container d-flex justify-content-center">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <div id="formQty" class="qty mt-1">
+                                    <span class="minus"><i class="fas fa-minus-circle"></i></span>
+                                    <input type="number" class="count" name="qty" value="1.0" step=".05"
+                                           placeholder="0.05"
+                                           required>
+                                    <span class="plus"><i class="fas fa-plus-circle"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <div class="mt-1">
+                                    <select name="unit" required>
+                                        <option th:value="teaspoon">Teaspoon (tsp)</option>
+                                        <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                                        <option th:value="ounce">Ounce (oz)</option>
+                                        <option th:value="cup">Cup (c)</option>
+                                        <option th:value="pint">Pint (pt)</option>
+                                        <option th:value="quart">Quart (qt)</option>
+                                        <option th:value="gallon">Gallon (gal)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Unit</label>
-                            <div class="mt-1">
-                                <select name="unit" required>
-                                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                                    <option th:value="ounce">Ounce (oz)</option>
-                                    <option th:value="cup">Cup (c)</option>
-                                    <option th:value="pint">Pint (pt)</option>
-                                    <option th:value="quart">Quart (qt)</option>
-                                    <option th:value="gallon">Gallon (gal)</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <div id="typeSubmit"></div>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <div id="typeSubmit"></div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-<script th:src="@{/js/ingredients.js}"></script>
-<script th:inline="javascript">
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <script th:src="@{/js/ingredients.js}"></script>
+    <script th:inline="javascript">
 
-    /* GET USER ID FROM THYMELEAF */
-    (function ($) {
+        /* GET USER ID FROM THYMELEAF */
+        (function ($) {
 
 
-        $.ajaxSetup({
-            headers:
-                {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
-        });
-
-        let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-        console.log(recipeId);
-        console.log(typeof recipeId);
-
-        // RECIPE API CALL
-        let recipeInventory;
-        let inventoryIngredients;
-        const makeRecipeAjaxCall = () => {
-            recipeInventory = [];
-            inventoryIngredients = [];
-
-            $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
-                response.recipeIngredients.forEach(function (item) {
-                    inventoryIngredients.push(item);
-                    recipeInventory.push(item.ingredient.name.toLowerCase());
-                });
+            $.ajaxSetup({
+                headers:
+                    {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
             });
-        }
 
-        // CREATE HTML FOR RECIPE TEMPLATE
-        const renderRecipe = () => {
-            // SORT INGREDIENTS BY NAME
-            inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
-            let recipeHtml = "";
-            recipeHtml +=
-                '<div class="container">' +
-                '<div class="row">' +
-                '<div class="col-md-12">' +
-                '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>' +
-                '<div class="">' +
-                '<input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />' +
-                '<div id="searchResults" class="container text-center"></div>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            ;
-            // RECIPE INGREDIENT TABLE
-            recipeHtml += '<div class="card shadow mt-3">';
-            recipeHtml += '<table class="table table-striped">' +
-                '<thead>' +
-                '<tr>' +
-                '<th>Ingredient</th>' +
-                '<th>Amount</th>' +
-                '<th></th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody>'
-            ;
-            // ADD ROWS TO RECIPE TABLE
-            inventoryIngredients.forEach((item) => {
-                recipeHtml += '<tr>' +
-                    '<td><span>' + item.ingredient.name + '</span></td>' +
-                    '<td data-amount-float="' + item.amount + '-' + item.unit + '"><span class="rational">' + item.amount + '</span><span> ' + item.unit + '</span></td>' +
-                    '<td  id="' + item.id + '" class="qty">' +
-                    '<span class="minus type="button" data-toggle="modal" data-target="#deleteIngredientModal""><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
-                    '<span class="plus" type="button" data-toggle="modal" data-target="#ingredientModal"><i class="fas fa-pencil-alt"></i></span>' +
-                    '</td>' +
-                    '</tr>'
-                ;
-            })
-            // CLOSE RECIPE HTML TEMPLATE
-            recipeHtml += '</tbody>' +
-                '</table>' +
-                '</div>' +
-                '</div>'
-            ;
-            // RENDER TEMPLATE
-            $('#recipeContent').html(recipeHtml);
-        }
+            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+            console.log(recipeId);
+            console.log(typeof recipeId);
 
-        $("#userRecipe").click(function () {
-            makeRecipeAjaxCall();
-            setTimeout(function () {
-                renderRecipe();
-                convertAllRationals();
-            }, 500);
-        });
+            // RECIPE API CALL
+            let recipeInventory;
+            let inventoryIngredients;
+            const makeRecipeAjaxCall = () => {
+                recipeInventory = [];
+                inventoryIngredients = [];
 
-        // AUTOSEARCH INGREDIENTS FOR RECIPE
-        $(document).on('keyup', "#ingredientSearch", function () {
-            let searchResults = $('#searchResults');
-            let searchInput = this.value.trim();
-            /* dont display any suggestions if empty string */
-            if (this.value === "") {
-                searchResults.empty();
-            } else if (recipeInventory.includes(searchInput.toLowerCase())) {
-                console.log("found");
-                searchResults.empty();
-                searchResults.append(
-                    '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal" disabled>' + searchInput.toLowerCase() + ' is in recipe</button>'
-                );
-            } else {
-                searchResults.empty();
-                searchResults.append(
-                    '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + searchInput.toLowerCase() + '</button>'
-                );
-
-                /* search ingredients list to auto suggest ingredients and if not in list allow user to select own input */
-                ingredientsList.filter(function (ingredient) {
-                    if (ingredient.toLowerCase() === searchInput.toLowerCase()) {
-                        $("#ingredientInput").addClass("d-none");
-                    }
-                    if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
-                        searchResults.append(
-                            '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + ingredient + '</button>'
-                        );
-                    }
+                $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
+                    response.recipeIngredients.forEach(function (item) {
+                        inventoryIngredients.push(item);
+                        recipeInventory.push(item.ingredient.name.toLowerCase());
+                    });
                 });
-                searchResults.append("</div>");
             }
-        });
 
-        // USER RECIPE ADD NEW RECIPE INPUT CLICK
-        $(document).on('click', "#showIngredientForm", function () {
-            let input = $("#ingredientSearch");
-            if (input.hasClass("d-none")) {
-                $(this).prop('value', 'close');
-                input.removeClass("d-none");
-            } else {
-                $(this).prop('value', 'Add New Ingredient');
-                input.addClass("d-none");
+            // CREATE HTML FOR RECIPE TEMPLATE
+            const renderRecipe = () => {
+                // SORT INGREDIENTS BY NAME
+                inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
+                let recipeHtml = "";
+                recipeHtml +=
+                    '<div class="container">' +
+                    '<div class="row">' +
+                    '<div class="col-md-12">' +
+                    '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>' +
+                    '<div class="">' +
+                    '<input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />' +
+                    '<div id="searchResults" class="container text-center"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
+                ;
+                // RECIPE INGREDIENT TABLE
+                recipeHtml += '<div class="card shadow mt-3">';
+                recipeHtml += '<table class="table table-striped">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th>Ingredient</th>' +
+                    '<th>Amount</th>' +
+                    '<th></th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>'
+                ;
+                // ADD ROWS TO RECIPE TABLE
+                inventoryIngredients.forEach((item) => {
+                    recipeHtml += '<tr>' +
+                        '<td><span>' + item.ingredient.name + '</span></td>' +
+                        '<td data-amount-float="' + item.amount + '-' + item.unit + '"><span class="rational">' + item.amount + '</span><span> ' + item.unit + '</span></td>' +
+                        '<td  id="' + item.id + '" class="qty">' +
+                        '<span class="minus type="button" data-toggle="modal" data-target="#deleteIngredientModal""><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
+                        '<span class="plus" type="button" data-toggle="modal" data-target="#ingredientModal"><i class="fas fa-pencil-alt"></i></span>' +
+                        '</td>' +
+                        '</tr>'
+                    ;
+                })
+                // CLOSE RECIPE HTML TEMPLATE
+                recipeHtml += '</tbody>' +
+                    '</table>' +
+                    '</div>' +
+                    '</div>'
+                ;
+                // RENDER TEMPLATE
+                $('#recipeContent').html(recipeHtml);
             }
-        })
 
-        // INGREDIENT MODAL ON SHOW DYNAMIC INFO
-        $('#ingredientModal').on('show.bs.modal', function (event) {
-            let openModal = $(this);
-            let button = $(event.relatedTarget); // Button that triggered the modal
-            let tagType = button[0].tagName;
-            let clickedIngredient; // Ingredient name to be used
+            $("#userRecipe").click(function () {
+                makeRecipeAjaxCall();
+                setTimeout(function () {
+                    renderRecipe();
+                    convertAllRationals();
+                }, 500);
+            });
 
-            /* if tag type is span change ingredient form to an update form */
-            if (tagType === "SPAN") {
+            // AUTOSEARCH INGREDIENTS FOR RECIPE
+            $(document).on('keyup', "#ingredientSearch", function () {
+                let searchResults = $('#searchResults');
+                let searchInput = this.value.trim();
+                /* dont display any suggestions if empty string */
+                if (this.value === "") {
+                    searchResults.empty();
+                } else if (recipeInventory.includes(searchInput.toLowerCase())) {
+                    console.log("found");
+                    searchResults.empty();
+                    searchResults.append(
+                        '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal" disabled>' + searchInput.toLowerCase() + ' is in recipe</button>'
+                    );
+                } else {
+                    searchResults.empty();
+                    searchResults.append(
+                        '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + searchInput.toLowerCase() + '</button>'
+                    );
+
+                    /* search ingredients list to auto suggest ingredients and if not in list allow user to select own input */
+                    ingredientsList.filter(function (ingredient) {
+                        if (ingredient.toLowerCase() === searchInput.toLowerCase()) {
+                            $("#ingredientInput").addClass("d-none");
+                        }
+                        if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
+                            searchResults.append(
+                                '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + ingredient + '</button>'
+                            );
+                        }
+                    });
+                    searchResults.append("</div>");
+                }
+            });
+
+            // USER RECIPE ADD NEW RECIPE INPUT CLICK
+            $(document).on('click', "#showIngredientForm", function () {
+                let input = $("#ingredientSearch");
+                if (input.hasClass("d-none")) {
+                    $(this).prop('value', 'close');
+                    input.removeClass("d-none");
+                } else {
+                    $(this).prop('value', 'Add New Ingredient');
+                    input.addClass("d-none");
+                }
+            })
+
+            // INGREDIENT MODAL ON SHOW DYNAMIC INFO
+            $('#ingredientModal').on('show.bs.modal', function (event) {
+                let openModal = $(this);
+                let button = $(event.relatedTarget); // Button that triggered the modal
+                let tagType = button[0].tagName;
+                let clickedIngredient; // Ingredient name to be used
+
+                /* if tag type is span change ingredient form to an update form */
+                if (tagType === "SPAN") {
+                    /* get data for update form from the tr element */
+                    let recipeIngId = button.parent()[0].getAttribute("id");
+                    let tableRow = button.parent().parent()[0];
+                    let amountUnit = tableRow.firstChild.nextSibling.getAttribute("data-amount-float").split("-");
+                    clickedIngredient = tableRow.firstChild.innerText;
+                    /* set form values for update */
+                    openModal.find('select').val(amountUnit[1].split(" ")[0].toLowerCase()); // set unit select value
+                    openModal.find('.modal-title').text("Update " + clickedIngredient); // place ingredient name on title
+                    openModal.find('.modal-body input').val(clickedIngredient);
+                    count.val(parseFloat(amountUnit[0]));// set amount value
+                    $("#typeSubmit").html(
+                        '<input name="id" type="hidden" value="' + recipeIngId + '"/>' +
+                        '<button id="updateIngredient" type="submit" class="btn btn-primary">Update</button>'
+                    );// set edit submit button
+                }
+                /* else ingredient form is a new ingredient form */
+                else {
+                    clickedIngredient = button[0].innerHTML;
+                    $("#typeSubmit").html('<button id="addIngredient" type="submit" class="btn btn-primary">Save</button>');
+                    openModal.find('.modal-title').text("Add " + clickedIngredient + " to recipe");
+                    openModal.find('.modal-body input').val(clickedIngredient);
+                    count.val(1);
+                }
+
+            })
+
+            // Plus Minus Count for Ingredient Form modal
+            let count = $('#ingredientForm').find('input.count');
+            $(document).on('click', '#formQty .plus', function () {
+                if (count.val() == 0) {
+                    count.val(0);
+                }
+                count.val(parseFloat(count.val()) + 1);
+            });
+            $(document).on('click', '#formQty .minus', function () {
+                count.val(parseFloat(count.val()) - 1);
+                if (count.val() == 0) {
+                    count.val(1);
+                }
+            });
+
+            // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO RECIPE
+            $(document).on('click', '#addIngredient', function () {
+                $('#ingredientModal').modal('toggle')
+                let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+
+                let form = $('#ingredientForm');
+                let url = "/recipe/" + recipeId + "/ingredient/new";
+                let formData = JSON.stringify({
+                    "name": form.find('input#ingredientName').val(),
+                    "amount": form.find('input.count').val(),
+                    "unit": form.find('select  option:selected').text()
+                });
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    data: formData,
+                    dataType: "json",
+                });
+
+                setTimeout(function () {
+                    makeRecipeAjaxCall();
+                }, 1000);
+                setTimeout(function () {
+                    renderRecipe();
+                    convertAllRationals();
+                }, 1500);
+
+                return false;
+            })
+
+            // UPDATE INGREDIENT
+            $(document).on('click', '#updateIngredient', function () {
+                $('#ingredientModal').modal('toggle');
+                let form = $('#ingredientForm');
+                let url = "/recipe/ingredient/edit";
+                let formData = JSON.stringify({
+                    "id": form.find('input[name=id]').val(),
+                    "amount": form.find('input.count').val(),
+                    "unit": form.find('select  option:selected').text()
+                });
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    data: formData,
+                    dataType: "json",
+                });
+
+                setTimeout(function () {
+                    makeRecipeAjaxCall();
+                }, 1000);
+                setTimeout(function () {
+                    renderRecipe();
+                    convertAllRationals();
+                }, 1500);
+
+                return false;
+            })
+
+            // INGREDIENT MODAL ON SHOW DYNAMIC INFO
+            $('#deleteIngredientModal').on('show.bs.modal', function (event) {
+                let openModal = $(this);
+                let button = $(event.relatedTarget); // Button that triggered the modal
+                let clickedIngredient; // Ingredient name to be used
                 /* get data for update form from the tr element */
                 let recipeIngId = button.parent()[0].getAttribute("id");
                 let tableRow = button.parent().parent()[0];
-                let amountUnit = tableRow.firstChild.nextSibling.getAttribute("data-amount-float").split("-");
                 clickedIngredient = tableRow.firstChild.innerText;
                 /* set form values for update */
-                openModal.find('select').val(amountUnit[1].split(" ")[0].toLowerCase()); // set unit select value
-                openModal.find('.modal-title').text("Update " + clickedIngredient); // place ingredient name on title
-                openModal.find('.modal-body input').val(clickedIngredient);
-                count.val(parseFloat(amountUnit[0]));// set amount value
-                $("#typeSubmit").html(
-                    '<input name="id" type="hidden" value="' + recipeIngId + '"/>' +
-                    '<button id="updateIngredient" type="submit" class="btn btn-primary">Update</button>'
-                );// set edit submit button
-            }
-            /* else ingredient form is a new ingredient form */
-            else {
-                clickedIngredient = button[0].innerHTML;
-                $("#typeSubmit").html('<button id="addIngredient" type="submit" class="btn btn-primary">Save</button>');
-                openModal.find('.modal-title').text("Add " + clickedIngredient + " to recipe");
-                openModal.find('.modal-body input').val(clickedIngredient);
-                count.val(1);
-            }
+                openModal.find('.modal-title').text("Remove " + clickedIngredient); // place ingredient name on title
+                openModal.find('.modal-body input').val(recipeIngId);
+            })
 
-        })
+            // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM RECIPE
+            $("#deleteIngredient").submit(function () {
+                $('#deleteIngredientModal').modal('toggle');
+                let form = $(this);
+                let ingredientId = form.find('input[name=id]').val();
+                let url = '/api/recipe-ingredients/' + ingredientId + '/delete';
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+                setTimeout(function () {
+                    makeRecipeAjaxCall();
+                }, 1000);
+                setTimeout(function () {
+                    renderRecipe();
+                    convertAllRationals();
+                }, 1500);
+                return false;
+            })
+        })(jQuery);
 
-        // Plus Minus Count for Ingredient Form modal
-        let count = $('#ingredientForm').find('input.count');
-        $(document).on('click', '#formQty .plus', function () {
-            if (count.val() == 0) {
-                count.val(0);
-            }
-            count.val(parseFloat(count.val()) + 1);
-        });
-        $(document).on('click', '#formQty .minus', function () {
-            count.val(parseFloat(count.val()) - 1);
-            if (count.val() == 0) {
-                count.val(1);
-            }
-        });
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/fraction_converter.js}"></script>
 
-        // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO RECIPE
-        $(document).on('click', '#addIngredient', function () {
-            $('#ingredientModal').modal('toggle')
-            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-
-            let form = $('#ingredientForm');
-            let url = "/recipe/" + recipeId + "/ingredient/new";
-            let formData = JSON.stringify({
-                "name": form.find('input#ingredientName').val(),
-                "amount": form.find('input.count').val(),
-                "unit": form.find('select  option:selected').text()
-            });
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: url,
-                data: formData,
-                dataType: "json",
-            });
-
-            setTimeout(function () {
-                makeRecipeAjaxCall();
-            }, 1000);
-            setTimeout(function () {
-                renderRecipe();
-                convertAllRationals();
-            }, 1500);
-
-            return false;
-        })
-
-        // UPDATE INGREDIENT
-        $(document).on('click', '#updateIngredient', function () {
-            $('#ingredientModal').modal('toggle');
-            let form = $('#ingredientForm');
-            let url = "/recipe/ingredient/edit";
-            let formData = JSON.stringify({
-                "id": form.find('input[name=id]').val(),
-                "amount": form.find('input.count').val(),
-                "unit": form.find('select  option:selected').text()
-            });
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: url,
-                data: formData,
-                dataType: "json",
-            });
-
-            setTimeout(function () {
-                makeRecipeAjaxCall();
-            }, 1000);
-            setTimeout(function () {
-                renderRecipe();
-                convertAllRationals();
-            }, 1500);
-
-            return false;
-        })
-
-        // INGREDIENT MODAL ON SHOW DYNAMIC INFO
-        $('#deleteIngredientModal').on('show.bs.modal', function (event) {
-            let openModal = $(this);
-            let button = $(event.relatedTarget); // Button that triggered the modal
-            let clickedIngredient; // Ingredient name to be used
-            /* get data for update form from the tr element */
-            let recipeIngId = button.parent()[0].getAttribute("id");
-            let tableRow = button.parent().parent()[0];
-            clickedIngredient = tableRow.firstChild.innerText;
-            /* set form values for update */
-            openModal.find('.modal-title').text("Remove " + clickedIngredient); // place ingredient name on title
-            openModal.find('.modal-body input').val(recipeIngId);
-        })
-
-        // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM RECIPE
-        $("#deleteIngredient").submit(function () {
-            $('#deleteIngredientModal').modal('toggle');
-            let form = $(this);
-            let ingredientId = form.find('input[name=id]').val();
-            let url = '/api/recipe-ingredients/' + ingredientId + '/delete';
-            $.ajax({
-                type: "POST",
-                url: url,
-                contentType: "application/json",
-                dataType: 'json'
-            });
-            setTimeout(function () {
-                makeRecipeAjaxCall();
-            }, 1000);
-            setTimeout(function () {
-                renderRecipe();
-                convertAllRationals();
-            }, 1500);
-            return false;
-        })
-    })(jQuery);
-
-    /*]]>*/
-</script>
-<script th:src="@{/js/fraction_converter.js}"></script>
-
+</main>
 </body>
 </html>
 <!--<!DOCTYPE html>-->
