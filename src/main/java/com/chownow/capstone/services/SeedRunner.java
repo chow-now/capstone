@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.script.ScriptEngine;
@@ -38,6 +39,10 @@ public class SeedRunner {
     private PantryIngredientRepository pantryIngDao;
     @Autowired
     private ImageRepository imageDao;
+    @Autowired
+    private UserService userServ;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final Faker faker = new Faker();
 
@@ -82,8 +87,11 @@ public class SeedRunner {
             LOGGER.info("SEEDING RECIPE IMAGES");
             seedRecipeImages();
             LOGGER.info("RECIPE IMAGES DONE");
-            User initialUser = new User("seeder@seeder.com","firstName","Password03!");
+            User initialUser = new User("seeder@seeder.com","firstName","Password123!");
+            initialUser.setPassword(passwordEncoder.encode(initialUser.getPassword()));
             initialUser.setAdmin(true);
+            initialUser.setAboutMe(faker.buffy().quotes());
+            initialUser.setAvatar(randomAvatar());
             userDao.save(initialUser);
         }else{
             LOGGER.info("Seeder has already run");
@@ -97,9 +105,10 @@ public class SeedRunner {
             LOGGER.info("firstName = " + firstName);
             String email = faker.internet().emailAddress();
             LOGGER.info("email = " + email);
-            String password = faker.internet().password(8,100,true,false,true)+"!1";
+            String password = "Password123!";
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,password);
+            seedUser.setPassword(passwordEncoder.encode(seedUser.getPassword()));
             seedUser.setAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
             seedUser.setAvatar(randomAvatar());
@@ -134,8 +143,8 @@ public class SeedRunner {
     }
 
     public void seedIngredients(){
-        for(int i = 0; i<=40; i++){
-            String name = makeSingular(faker.food().ingredient());
+        for(int i = 0; i<=60; i++){
+            String name = makeSingular(faker.food().ingredient().toLowerCase());
             LOGGER.info(name);
             Ingredient seedIngredient = new Ingredient(name);
             ingredientDao.save(seedIngredient);
@@ -159,7 +168,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 2.50;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);
@@ -180,7 +189,7 @@ public class SeedRunner {
         List<String> levels = new ArrayList<>();
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
-        for(long i = 1; i<=10; i++){
+        for(long i = 1; i<=60; i++){
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
@@ -218,7 +227,7 @@ public class SeedRunner {
             while (j < max){
                 long id = faker.number().numberBetween(1,ingredientsSize+1);
                 List<String> amountUnit = Arrays.asList(faker.food().measurement().split(" "));
-                double amount = makeDouble(amountUnit.get(0));
+                double amount = 2.25;
                 LOGGER.info("amount = " + amount);
                 String unit = amountUnit.get(1);
                 LOGGER.info("unit = " + unit);

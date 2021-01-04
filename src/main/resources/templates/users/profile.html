@@ -1,333 +1,325 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
   <meta charset="UTF-8">
-  <title>User Profile</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <title>Dashboard</title>
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!--  MAIN CSS -->
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <!--  CUSTOM PROFILE CSS -->
+  <link rel="stylesheet" th:href="@{/css/profile.css}">
+
 </head>
 <body>
-<nav th:include="partials/navbar.html :: nav"></nav>
-
-
+<!--<nav th:include="partials/navbar.html :: nav"></nav>-->
 <main>
   <!--Main Container-->
-  <div class="row">
-    <div class="col-12 text-center bg-secondary">
-      <img th:src="${user.avatar}" alt="profile image" class="rounded mb-0 align-self-center">
-      <h2 class="mt-3"><span th:text="${user.firstName}"></span> </h2>
-    </div>
-    <div class="row mx-auto" style="width: 200px;">
-      <div class="row">
-        <div class="col">
-          Followers
+    <!-- USER INFO -->
+  <div th:each="ingredient : ${pantryIngredients}">
+    <p th:text="${ingredient}"></p>
+  </div>
+    <div class="container mt-4">
+      <div class="row px-2">
+        <!-- IF CUSTOMER HAS PROFILE PICTURE -->
+        <div class="col-4 col-sm-3 px-lg-5 mb-4 text-center">
+          <img width="100%" th:src="${user.avatar}" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">
         </div>
-        <div class="col">
-          Following
-        </div>
-        <div class="col">
-          Recipes
+        <div class="col-8 col-sm-9 mb-4">
+          <div class="mb-2">
+            <h2 id="profileName" class="mb-0 text-black" th:text="${user.firstName}"></h2>
+          </div>
+          <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
+          <p class="text-white">
+            <em>
+              <small th:text="${user.getAboutMe()} ?: 'Introduce yourself to the community by writing a little about yourself.'"></small>
+            </em>
+          </p>
+
+          <div>
+            <!-- EDIT PROFILE LINK -->
+            <a th:href="@{/users/{id}/edit(id=${user.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow font-weight-bold">Edit Profile</a>
+
+            <!-- FOLLOW USER BUTTON -->
+            <div th:if="${not isOwner}">
+              <button th:if="${isFollowing}" class="btn btn-red rounded-pill" disabled> Following </button>
+              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn btn-red rounded-pill"> Follow </button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <h1 class="col-3" th:text="${user.followings.size()}"></h1>
+      <!-- END USER INFO -->
+
+<!--      DASHBOARD TABS-->
+      <ul class="nav nav-tabs align-items-center justify-content-between">
+<!--        recipes-->
+        <li class="nav-item" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
+          <a class="nav-link dashtab nav-tab-shadow" href="#recipesTab" data-toggle="tab">
+              <i class="fas fa-utensils fa-2x"></i>
+          </a>
+        </li>
+<!--        favorites-->
+        <li class="nav-item" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
+          <a class="nav-link dashtab nav-tab-shadow" href="#favoritesTab" data-toggle="tab">
+              <i class="fas fa-bookmark fa-2x"></i>
+          </a>
+        </li>
+<!--        followers-->
+        <li class="nav-item" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followersTab" data-toggle="tab">
+              <i class="fas fa-users fa-2x"></i>
+          </a>
+        </li>
+<!--        following-->
+        <li class="nav-item" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followingTab" data-toggle="tab">
+              <i class="fas fa-user-plus fa-2x"></i>
+          </a>
+        </li>
+<!--            PROFILE OWNER ONLY TABS-->
+<!--        pantry-->
+        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
+          <a class="nav-link dashtab nav-tab-shadow" href="#pantryTab" data-toggle="tab">
+            <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
+          </a>
+        </li>
+<!--        suggested recipes based on pantry-->
+        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
+          <a class="nav-link dashtab nav-tab-shadow" href="#suggestionsTab" data-toggle="tab">
+            <i class="fas fa-drumstick-bite fa-2x"></i>
+          </a>
+        </li>
+      </ul>
+<!--      !DASHBOARD TABS-->
+    </div>
+  <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
+    <div class="tab-content ">
+<!--      RECIPES TAB-->
+      <div class="tab-pane active" id="recipesTab">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
+          <div th:each="recipe : ${user.recipes}" class="align-items-center justify-content-around">
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              </a>
+              <div class="card-body bg-transparent">
+                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <div class="row align-items-baseline">
+                  <div class="col-2">
+                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <p th:text="${recipe.chef.firstName}"></p>
+                  </div>
+                  <div class="col-3">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
+                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col">
-          <h1 class="col-3" th:text="${user.followings.size()}"></h1>
+      </div>
+<!--      FAVORITES TAB-->
+      <div class="tab-pane" id="favoritesTab">
+        <div class="row justify-content-center">
+          <div class="col-md-12">
+            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
+          <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              </a>
+              <div class="card-body bg-transparent">
+                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <div class="row align-items-baseline">
+                  <div class="col-2">
+                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <p th:text="${recipe.chef.firstName}"></p>
+                  </div>
+                  <div class="col-3">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
+                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col">
-          <h1 class="col-3" th:text="${user.recipes.size()}"></h1>
+      </div>
+<!--      FOLLOWERS TAB-->
+      <div class="tab-pane" id="followersTab">
+        <div class="row align-items-center justify-content-around p-3">
+          <div class="col-md-12">
+            <h3 th:text="${'Followers'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
+          <div th:each="follower : ${user.followers}" class="my-2  mx-2 text-center">
+            <a class="text-center" th:href="@{/users/{id}(id=${ follower.user.id })}">
+              <img th:src="${follower.user.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
+            </a>
+            <p th:text="${follower.user.firstName}"></p>
+          </div>
         </div>
+      </div>
+<!--      FOLLOWING TAB-->
+      <div class="tab-pane" id="followingTab">
+        <div class="row align-items-center justify-content-around p-3">
+          <div class="col-md-12">
+            <h3 th:text="${'Following'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
+          <div th:each="following : ${user.followings}" class="my-2  mx-2 text-center">
+            <a class="text-center" th:href="@{/users/{id}(id=${ following.friend.id })}">
+              <img th:src="${following.friend.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
+            </a>
+            <p th:text="${following.friend.firstName}"></p>
+          </div>
+        </div>
+      </div>
+<!--      PANTRY TAB-->
+      <div class="tab-pane pb-3" id="pantryTab">
+          <div class="row">
+            <div class="col-md-12">
+              <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>
+              <div class="text-center">
+                <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill" value="Add New Ingredient"/>
+              </div>
+              <div>
+                <input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />
+                <div id="searchResults" class="container text-center"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card my-3">
+            <table id="ingredientsTable" class="table d-none" >
+              <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Amount</th>
+                <th></th>
+              </tr>
+              </thead>
+              <!--    RENDERED DYNAMIC CONTENT-->
+              <tbody id="ingredientsBody">
+              </tbody>
+            </table>
+          </div>
+      </div>
+<!--      SUGGESTIONS TAB-->
+<!--      rendered via ajax-->
+      <div  class="tab-pane" id="suggestionsTab">
+      </div>
       </div>
     </div>
   </div>
+
+
 </main>
-<div class="d-flex justify-content-center">
 
-  <div class="w-75">
-    <div class="d-flex justify-content-center flex-wrap">
-      <!--todo:margins-->
-      <div class="col-md-8 mb-3 ">
-        <div class="card mb-3 h-100">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Full Name</h6>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <h6 class="mb-0">About me</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <span th:text="${user.aboutMe}"></span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <h6 class="mb-0">More Data</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                More Data..................
-              </div>
-            </div>
-            <hr>
+<!-- PROFILE OWNER ONLY MODALS-->
+<!--Delete Ingredient Modal-->
+<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+<!--      DELETE FORM-->
+      <form id="deleteIngredient">
+          <div class="modal-body">
+            <input name="id" type="hidden" value="'+pantryIngId+'"/>
+            <p>Are you sure you want to trash this?</p>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <ul class="nav" role="tablist">
-      <li role="presentation" class="active"><a href="#pantry" role="tab" class="btn btn-block blue-btn" data-toggle="tab">Pantry</a></li>
-      <li role="presentation"><a href="#userrecipes" class="btn btn-primary btn-block blue-btn" role="tab" data-toggle="tab">Your Recipes</a></li>
-      <li role="presentation"><a href="#saved_recipes" class="btn btn-primary btn-block blue-btn" role="tab" data-toggle="tab">Saved Recipes</a></li>
-      <li role="presentation"><a href="#profilesetting" class="btn btn-primary btn-block blue-btn" role="tab" data-toggle="tab">Profile Setting</a></li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="pantry">
-        <div class="col-md-12" th:each="pantry : ${pantry}">
-          <div class="card w-100">
-            <div class="card-body">
-              <!-- Responsive table -->
-              <!--Todo: Loop Through user ads & posts into table-->
-              <div class="table-responsive">
-                <table class="table m-0">
-                  <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Date</th>
-                    <th scope="col"></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="pantryIngredients : ${pantryIngredients}">
-                    <th scope="row" th:text="${pantryIngredients.id}"></th>
-                    <th scope="row" th:text="${pantryIngredients.ingredient.id}"></th>
-                    <td th:text="${pantryIngredients.ingredient.name}">type_ph</td>
-                    <td><span th:text="${pantryIngredients.amount}"></span><span th:text="${pantryIngredients.unit}"></span></td>
-                    <td>
-                      <!-- Call to action buttons -->
-                      <ul class="list-inline m-0">
-                        <li class="list-inline-item">
-                          <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-table"></i>
-                          </button>
-                        </li>
-                        <!-- Button trigger modal -->
-                        <li class="list-inline-item">
-                          <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#modal" data-placement="top"
-                                  title="Edit"><i class="fa fa-edit"></i>
-                          </button>
-                        </li>
-                        <li class="list-inline-item">
-                          <!--Todo: Delete Button Not Working-->
-                          <form th:action="@{/ingredient/{id}/delete (id=${pantryIngredients.id})}" th:method="post">
-                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i>
-                            </button>
-                          </form>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-green">Confirm</button>
           </div>
-        </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="userrecipes">
-        <div class="row row-cols-1 row-cols-md-2">
-          <div class="col mb-4">
-            <div th:each="userRecipes : ${user.recipes}">
-              <div class="card-deck">
-                <!--Card Body -->
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <h2 class="card-title" th:text="${userRecipes.title}"></h2>
-                    </div>
-                    <div class="col-3">
-                      <!--Todo: reactive and sizing-->
-                      <div class="row">
-                        <h5 th:text="${userRecipes.favoritedBy.size()}" class="text-center"></h5>
-                        <i class="far fa-bookmark ml-2 align-center"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <!--Card-->
-                  <div class="row">
-                    <div class="col-md-6 my-1">
-                      <div class="view overlay z-depth-1 ">
-                        <img class="img-fluid" src="https://i.ibb.co/RjRC3TV/img02.jpg" alt="">
-                        <a>
-                          <div class="mask waves-effect waves-light rgba-white-slight"></div>
-                        </a>
-                        <div class="description rgba-stylish-light text-white">
-                          <div class="title ml-2">
-                            <div class="d-flex mt-3">
-                              <div th:each="recipeCategories : ${userRecipes.categories}">
-                                <p class="mr-2" th:text="${recipeCategories.name}"></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="container">
-                              <div class="row">
-                                <div class="col">
-                                  <i class="fas fa-utensils"></i>
-                                  <h5 th:text="${userRecipes.favoritedBy.size()}">7/10 ingredients</h5>
-                                </div>
-                                <div class="col">
-                                  <i class="fas fa-user-friends"></i>
-                                  <h5 th:text="${userRecipes.favoritedBy.size()}">Serves</h5>
-                                </div>
-                                <div class="col">
-                                  <i class="fas fa-utensils"></i>
-                                  <h5 th:text="${userRecipes.difficulty}"></h5>
-                                </div>
-                                <div class="col">
-                                  <i class="far fa-clock text-center"></i>
-                                  <h5 th:text="${userRecipes.cookTime}"></h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="saved_recipes">
-        <div class="row row-cols-1 row-cols-md-2">
-          <div class="col mb-4">
-            <div th:each="favRecipe : ${user.favorites}">
-              <div class="card-deck">
-                <!--Card Body -->
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <h2 class="card-title" th:text="${favRecipe.title}"></h2>
-                    </div>
-                    <div class="col-3">
-                      <!--Todo: reactive and sizing-->
-                      <div class="row">
-                        <h5 th:text="${favRecipe.favoritedBy.size()}" class="text-center"></h5>
-                        <i class="far fa-bookmark ml-2 align-center"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <!--Card-->
-                  <div class="row">
-                    <div class="col-md-6 my-1">
-                      <div class="view overlay z-depth-1 ">
-                        <img class="img-fluid" src="https://i.ibb.co/RjRC3TV/img02.jpg" alt="">
-                        <a>
-                          <div class="mask waves-effect waves-light rgba-white-slight"></div>
-                        </a>
-                        <div class="description rgba-stylish-light text-white">
-                          <div class="title ml-2">
-                            <div class="d-flex mt-3">
-                              <div th:each="recipeCategories : ${favRecipe.categories}">
-                                <p class="mr-2" th:text="${recipeCategories.name}"></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="container">
-                              <div class="row">
-                                <div class="col">
-                                  <i class="fas fa-utensils"></i>
-                                  <h5 th:text="${favRecipe.favoritedBy.size()}">7/10 ingredients</h5>
-                                </div>
-                                <div class="col">
-                                  <i class="fas fa-user-friends"></i>
-                                  <h5 th:text="${favRecipe.favoritedBy.size()}">Serves</h5>
-                                </div>
-                                <div class="col">
-                                  <i class="fas fa-utensils"></i>
-                                  <h5 th:text="${favRecipe.difficulty}"></h5>
-                                </div>
-                                <div class="col">
-                                  <i class="far fa-clock text-center"></i>
-                                  <h5 th:text="${favRecipe.cookTime}"></h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="profilesetting">
-        <div class="registration-form">
-          <form th:action="@{/users/{id}/edit(id=${user.id})}" method="POST" th:object="${user}">
-            <div class="form-group">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="first_name" placeholder="First name" th:field="*{firstName}">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="last_name" placeholder="Last name" th:field="*{lastName}">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="email" placeholder="Email" th:field="*{email}">
-            </div>
-            <div class="form-group">
-              <input type="password" class="form-control" id="password" placeholder="Password" th:field="*{password}">
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" th:field="*{isAdmin}" value="false" checked>
-              <label class="form-check-label" for="flexRadioDefault1">
-                User
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" th:field="*{isAdmin}" value="true">
-              <label class="form-check-label" for="flexRadioDefault2">
-                Admin
-              </label>
-            </div>
-            <!--Todo: More user setting-->
-            <div class="form-group">
-              <button type="submit" class="btn btn-block create-account">Edit Profile</button>
-            </div>
-          </form>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+<!-- Add Ingredient Modal -->
+<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+<!--      ADD/EDIT INGREDIENT FORM-->
+      <form id="ingredientForm" >
+          <div class="modal-body"  id="ingredientModalContent">
+            <div class="form-group">
+              <input name="name" type="hidden" class="form-control" id="ingredientName">
+            </div>
+            <div class="container d-flex justify-content-center">
+              <div class="form-group">
+                <label class="green-text font-weight-bold">Amount</label>
+                <div id="formQty" class="qty mt-1">
+                  <span class="minus"><i class="fas fa-minus-circle"></i></span>
+                  <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05" required>
+                  <span class="plus"><i class="fas fa-plus-circle"></i></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="green-text font-weight-bold">Unit</label>
+                <div class="mt-1">
+                  <select name="unit" required>
+                    <option th:value="teaspoon">Teaspoon (tsp)</option>
+                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                    <option th:value="ounce">Ounce (oz)</option>
+                    <option th:value="cup">Cup (c)</option>
+                    <option th:value="pint">Pint (pt)</option>
+                    <option th:value="quart">Quart (qt)</option>
+                    <option th:value="gallon">Gallon (gal)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-red" data-dismiss="modal">Cancel</button>
+            <div id="typeSubmit"></div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--! MODALS-->
+
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<!--JS SCRIPTS-->
+<div th:replace="partials/scripts :: scripts"></div>
+<!--List of Ingredients-->
+<script th:src="@{/js/ingredients.js}"></script>
+<!--Get userId from Thyme to use in JS-->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+    const userId = /*[[${user.id}]]*/ '';
+  /*]]>*/
+</script>
+<script th:src="@{/js/profile.js}"></script>
+<script th:src="@{/js/fraction_converter.js}"></script>
 </body>
 </html>

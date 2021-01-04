@@ -34,9 +34,13 @@ const numberToFraction = (amount) => {
     }
     return amount;
 };
+const convertAllRationals =()=>{
+    let els = document.getElementsByClassName("rational");
+    [].forEach.call(els, function (el) {
+        let rational = el.innerText;
+        el.innerText = numberToFraction(rational);
+    });
+}
 
-let els = document.getElementsByClassName("rational");
-[].forEach.call(els, function (el) {
-    let rational = el.innerText;
-    el.innerText = numberToFraction(rational);
-});
+convertAllRationals();
+

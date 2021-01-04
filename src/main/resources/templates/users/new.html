@@ -1,73 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-   
-    <title>Title</title>
-</head>
-<body>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="partials/head :: head(title)"></head>
+<body id="registerBody">
+<!--<header th:include="partials/navbar.html :: nav"></header>-->
 <div class="container">
-    <form id="createUser" th:action="@{/users/create}"  th:method="post" th:object="${user}">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input th:field="*{email}" type="text" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
-            <small id="titleHelp" class="form-text text-muted"></small>
+    <div class="row mt-5">
+        <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
         </div>
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input th:field="*{firstName}"  type="text" class="form-control" id="firstName" placeholder="">
+        <div class="col-md-6 mb-4">
+            <div class="card rounded-card">
+                <form th:replace="users/forms :: register"></form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="password">Content</label>
-            <input th:field="*{password}"  type="password" class="form-control" id="password" placeholder="password">
-        </div>
-        <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
+    <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+    </div>
 </div>
-<div id="users"></div>
-<script
-        src="https://code.jquery.com/jquery-3.1.1.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-        crossorigin="anonymous"
->
-</script>
-<script>
-    (function($) {
-        // var request = $.ajax({'url': '/api/users'});
-        // request.done(function (users) {
-        //     var html = '';
-        //     users.forEach(function(user) {
-        //         html += '<div>';
-        //         html += '<h1>' + user.firstName + '</h1>';
-        //         html += '<p>' + user.lastName + '</p>';
-        //         html += '<p>' + user.email+ '</p>';
-        //         html += '</div>';
-        //     });
-        //     $('#users').html(html);
-        // });
-
-        // $("#createUser").submit(function(e) {
-        //
-        //     e.preventDefault(); // avoid to execute the actual submit of the form.
-        //
-        //     var form = $(this);
-        //     var url = form.attr('action');
-        //     var formData = JSON.stringify($(this).serializeArray());
-        //     console.log(formData);
-        //     $.ajax({
-        //         type: "POST",
-        //         url: url,
-        //         data: formData,
-        //         dataType: "json",
-        //         contentType : "application/json"
-        //     });
-        //
-        //
-        // });
-
-
-
-    })(jQuery);
-    </script>
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<div th:replace="partials/scripts :: scripts"></div>
 </body>
 </html>
+

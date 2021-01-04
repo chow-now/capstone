@@ -3,13 +3,12 @@ package com.chownow.capstone.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,15 +47,21 @@ public class User {
     @Column(nullable = false, length = 20)
     private String firstName;
 
-	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
+//	@Pattern(regexp = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)",message = "Invalid file type")
 	@Column(length = 250)
 	private String avatar;
 
 	@Column(columnDefinition = "TEXT")
 	private String aboutMe;
 
-	@Column(columnDefinition = "boolean default false", nullable = false)
+
+	@Column
+	@JsonIgnore
 	private Boolean isAdmin;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name= "auth_provider")
+	private AuthenticationProvider authProvider;
     
     @OneToMany(
             mappedBy = "chef",
@@ -64,28 +69,28 @@ public class User {
             cascade = CascadeType.PERSIST
     )
     @JsonBackReference("recipeRef")
-    private List<Recipe> recipes;
+    private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
     @JsonIgnore
-    private Set<Follow> followings;
+    private Set<Follow> followings = new HashSet<>();
 
     @OneToMany(
             mappedBy = "friend",
             cascade = CascadeType.ALL
     )
     @JsonIgnore
-    private Set<Follow> followers;
+    private Set<Follow> followers = new HashSet<>();
 
 
     @ManyToMany(mappedBy = "favoritedBy",
             cascade = CascadeType.ALL
     )
     @JsonBackReference(value="favRef")
-    private Set<Recipe> favorites = new HashSet<Recipe>();
+    private Set<Recipe> favorites = new HashSet<>();
 
 
 	@OneToOne(
@@ -99,12 +104,17 @@ public class User {
 
 	public User(){}
 
+
+	// Update User
+	public User(String email, String firstName) {
+		this.email = email;
+		this.firstName = firstName.trim();
+	}
 	// Setter
 	public User(String email, String firstName, String password) {
 		this.email = email;
 		this.firstName = firstName.trim();
 		this.password = password;
-		this.isAdmin = false;
 	}
 	// Getter
 	public User(long id, String email, String firstName, String password, String avatar, String aboutMe, Boolean isAdmin) {
@@ -115,6 +125,14 @@ public class User {
 		this.avatar = avatar;
 		this.aboutMe = aboutMe;
 		this.isAdmin = isAdmin;
+	}
+
+	// security
+	public User(User copy) {
+		id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+		email = copy.email;
+		firstName = copy.firstName;
+		password = copy.password;
 	}
 
 	public long getId() {
@@ -211,5 +229,13 @@ public class User {
 
 	public void setPantry(Pantry pantry) {
 		this.pantry = pantry;
+	}
+
+	public AuthenticationProvider getAuthProvider() {
+		return authProvider;
+	}
+
+	public void setAuthProvider(AuthenticationProvider authProvider) {
+		this.authProvider = authProvider;
 	}
 }

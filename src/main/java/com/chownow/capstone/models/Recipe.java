@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,29 +12,32 @@ import java.util.Set;
 @Entity
 @Table(name="recipes")
 //@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
+// generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
-    @Size(min = 2, message = "Title should be a bit longer.")
+
+    @Size(min = 0, message = "Title should be a bit longer.")
     @Size(max = 100,message = "Title is too long")
     @NotBlank(message= "Recipe needs a title")
     @Column(nullable = false,length = 100)
     private String title;
 
     @Size(min = 5, message = "Description should be a bit longer")
-    @Size(max = 500,message = "That's a bit long winded")
+    @Size(max = 5000,message = "That's a bit long winded")
     @NotBlank(message= "Recipe needs a description")
-    @Column(nullable = false,length = 500)
+    @Column(nullable = false,length = 5000)
     private String description;
+
+    @Column
+    private boolean isPublished;
 
     @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
     @NotBlank(message= "Directions would be useful here. Please provides some.")
-    @Column(nullable = false,columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String directions;
 
 
@@ -41,15 +45,15 @@ public class Recipe {
     @Column(nullable = false,length = 100)
     private String difficulty;
 
-    @Min(1)
+    @Min(0)
     @Max(999)
     @NotNull(message= "Oops. Looks like the cook time is missing.")
     @Column(nullable = false)
     private int cookTime;
 
-    @Min(1)
+    @Min(0)
     @Max(999)
-    @NotNull(message= "Oops. Looks like the prem time is missing.")
+    @NotNull(message= "Oops. Looks like the prep time is missing.")
     @Column(nullable = false)
     private int prepTime;
 
@@ -67,33 +71,20 @@ public class Recipe {
             mappedBy = "recipe",
             orphanRemoval = true,
             cascade = CascadeType.PERSIST)
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "recipe",
             cascade = CascadeType.PERSIST,
             orphanRemoval = true
     )
-    @JsonIgnore
-    private List<RecipeIngredient> RecipeIngredients;
+    @JsonManagedReference
+    private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name="recipe_categories",
-            joinColumns=@JoinColumn(name="recipe_id"),
-            inverseJoinColumns=@JoinColumn(name="category_id")
-    )
+    @ManyToMany
     private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name="favorites",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="user_id")}
-    )
+    @ManyToMany
     private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
@@ -224,5 +215,13 @@ public class Recipe {
 
     public void setChef(User chef) {
         this.chef = chef;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }
