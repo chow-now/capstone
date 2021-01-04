@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name="recipe_ingredients")
@@ -22,8 +23,8 @@ public class RecipeIngredient {
     @Column(nullable = false)
     private String unit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne
@@ -31,6 +32,12 @@ public class RecipeIngredient {
     private Ingredient ingredient;
 
     public RecipeIngredient(){}
+
+    public RecipeIngredient(double amount, String unit, Ingredient ingredient) {
+        this.amount = amount;
+        this.unit = unit;
+        this.ingredient = ingredient;
+    }
 
     public RecipeIngredient(double amount, String unit, Recipe recipe, Ingredient ingredient) {
         this.amount = amount;
@@ -46,6 +53,7 @@ public class RecipeIngredient {
         this.recipe = recipe;
         this.ingredient = ingredient;
     }
+
 
     public long getId() {
         return id;
