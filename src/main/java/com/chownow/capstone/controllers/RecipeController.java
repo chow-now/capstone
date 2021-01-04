@@ -104,7 +104,7 @@ public class RecipeController {
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
 
-        return "/recipes/new";
+        return "recipes/new";
     }
 
     // CREATE A NEW RECIPE INGREDIENT
