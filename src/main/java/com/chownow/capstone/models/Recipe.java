@@ -81,6 +81,7 @@ public class Recipe {
     @JsonManagedReference
     private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
 
+
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE

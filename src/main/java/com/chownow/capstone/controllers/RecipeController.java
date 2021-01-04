@@ -1,12 +1,10 @@
 package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
-import com.chownow.capstone.repos.CategoryRepository;
-import com.chownow.capstone.repos.RecipeIngredientRepository;
-import com.chownow.capstone.repos.RecipeRepository;
-import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.repos.*;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +15,7 @@ import javax.validation.Valid;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -24,19 +23,30 @@ public class RecipeController {
 
     @Autowired
     private RecipeRepository recipeDao;
+
     @Autowired
     private UserRepository userDoa;
+
     @Autowired
-    private RecipeIngredientRepository recipeIngredientsDao;
+    private IngredientRepository ingredientDao;
+
+    @Autowired
+    PantryIngredientRepository pantryIngDao;
+
+    @Autowired
+    private RecipeIngredientRepository recipeIngDao;
+
     @Autowired
     private CategoryRepository categoryDao;
 
+    @Autowired
+    private UserService userServ;
 
 
-    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
-        this.recipeDao = recipeDao;
-        this.userDoa = userDoa;
-    }
+//    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
+//        this.recipeDao = recipeDao;
+//        this.userDoa = userDoa;
+//    }
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -66,6 +76,11 @@ public class RecipeController {
 
     @GetMapping("/recipes/new")
     public String showCreateRecipe(Model model) {
+        User currentUser = userServ.loggedInUser();
+        System.out.println(currentUser);
+//        model.addAttribute("isFollowing", true);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
         return "recipes/new";
     }
@@ -77,45 +92,63 @@ public class RecipeController {
             Errors validation,
             Model model
     ) {
-
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
-//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        recipeToBeSaved.setChef(userDb);
-        
-        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+        User currentUser = userServ.loggedInUser();
+        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
-        return "recipes/addingredients";
+        model.addAttribute("recipe",recipeToBeSaved);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+
+        return "/recipes/new";
     }
 
-    @GetMapping("/recipes/addingredients")
-    public String addIngredients() {
-        return "recipes/addingredients";
-    }
-    @PostMapping("/recipes/addingredients")
-    public String submitIngredients() {
-        return "recipes/addcategories";
+    // CREATE A NEW RECIPE INGREDIENT
+    @RequestMapping(value = "/recipe/{recipeId}/ingredient/new", method = RequestMethod.POST, headers = "Content-Type" +
+            "=application/json")
+    public @ResponseBody
+    String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient,
+                                @PathVariable long recipeId) {
+        Recipe currentRecipe = recipeDao.getOne(recipeId);
+        System.out.println(currentRecipe);
+        Ingredient dbIngredient = null;
+        boolean isNotInDb = true;
+        for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
+            if (recipeIngredient.getName().equalsIgnoreCase(i.getName())) {
+                dbIngredient = i;
+                isNotInDb = false;
+                break;
+            }
+        }
+        if (isNotInDb) {
+            dbIngredient = ingredientDao.save(new Ingredient(recipeIngredient.getName().toLowerCase()));
+        }
+        RecipeIngredient newRecipeIng = new RecipeIngredient(
+                recipeIngredient.getAmount(),
+                recipeIngredient.getUnit(),
+                currentRecipe,
+                dbIngredient
+        );
+        recipeIngDao.save(newRecipeIng);
+        return "im done";
     }
 
-    @GetMapping("/recipes/addcategories")
-    public String addCategories(Model model) { return "recipes/addcategories"; }
-    @PostMapping("/recipes/addcategories")
-    public String submitCategories() {
-        return "recipes/addimages";
+    // EDIT RECIPE INGREDIENT
+    @RequestMapping(value = "/recipe/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type" +
+            "=application/json")
+    public @ResponseBody
+    String editRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
+        RecipeIngredient pi = recipeIngDao.getOne(recipeIngredient.getId());
+        pi.setAmount(recipeIngredient.getAmount());
+        pi.setUnit(recipeIngredient.getUnit());
+        recipeIngDao.save(pi);
+        return "update complete";
     }
 
-    @GetMapping("/recipes/addimages")
-    public String addImages() {
-        return "recipes/addimages";
-    }
-    @PostMapping("/recipes/addimages")
-    public String submitImages() {
-        return "redirect:/recipes";
-    }
 
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
@@ -126,6 +159,9 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
+        User currentUser = userServ.loggedInUser();
+        model.addAttribute("user", currentUser);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
         return "recipes/edit";
     }
 
@@ -140,9 +176,9 @@ public class RecipeController {
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/" + recipeToBeSaved.getId() + "/edit";
         }
-//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+        User currentUser = userServ.loggedInUser();
+        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes/" + dbRecipe.getId();
+        return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
 }
