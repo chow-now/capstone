@@ -12,14 +12,14 @@ import java.util.Set;
 @Entity
 @Table(name="recipes")
 //@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
+// generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
     @Size(min = 0, message = "Title should be a bit longer.")
     @Size(max = 100,message = "Title is too long")
     @NotBlank(message= "Recipe needs a title")
@@ -35,8 +35,8 @@ public class Recipe {
     @Column
     private boolean isPublished;
 
-//    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
-//    @NotBlank(message= "Directions would be useful here. Please provides some.")
+    // @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
+// @NotBlank(message= "Directions would be useful here. Please provides some.")
     @Column(columnDefinition = "TEXT")
     private String directions;
 
@@ -81,28 +81,15 @@ public class Recipe {
     @JsonManagedReference
     private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name="recipe_categories",
-            joinColumns=@JoinColumn(name="recipe_id"),
-            inverseJoinColumns=@JoinColumn(name="category_id")
-    )
+    @ManyToMany
     private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name="favorites",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="user_id")}
-    )
+    @ManyToMany
     private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
 
-    //setter
+    //se tter
     public Recipe(String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.title = title.trim();
         this.description = description.trim();
