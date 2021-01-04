@@ -22,7 +22,7 @@
 
     // SUGGESTIONS AJAX
     $( "#suggestions" ).click(function() {
-        $.ajax({'url': 'users/'+userId+'/matches'}).done(function (recipes) {
+        $.ajax({'url': '/users/'+userId+'/matches'}).done(function (recipes) {
             $('#suggestionsTab').html(recipes);
             $('[data-toggle="tooltip"]').tooltip();
         });
@@ -44,6 +44,13 @@
 
     // CREATE HTML FOR PANTRY TEMPLATE
     const renderPantry = ()=>{
+        if( inventoryIngredients.length > 0 ){
+            $("#ingredientsTable").removeClass("d-none");
+        }else{
+            if(!$("#ingredientsTable").hasClass("d-none")){
+                $("#ingredientsTable").addClass("d-none")
+            }
+        }
         // SORT INGREDIENTS BY NAME
         inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
         let pantryHtml = "";
@@ -275,4 +282,6 @@
         }, 1500);
         return false;
     })
+
+    $('[data-toggle="tooltip"]').tooltip();
 })(jQuery);
