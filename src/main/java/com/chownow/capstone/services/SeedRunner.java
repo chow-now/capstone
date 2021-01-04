@@ -87,8 +87,11 @@ public class SeedRunner {
             LOGGER.info("SEEDING RECIPE IMAGES");
             seedRecipeImages();
             LOGGER.info("RECIPE IMAGES DONE");
-            User initialUser = new User("seeder@seeder.com","firstName","Password03!");
+            User initialUser = new User("seeder@seeder.com","firstName","Password123!");
+            initialUser.setPassword(passwordEncoder.encode(initialUser.getPassword()));
             initialUser.setAdmin(true);
+            initialUser.setAboutMe(faker.buffy().quotes());
+            initialUser.setAvatar(randomAvatar());
             userDao.save(initialUser);
         }else{
             LOGGER.info("Seeder has already run");
