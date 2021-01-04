@@ -19,7 +19,6 @@
 <main>
   <!--Main Container-->
     <!-- USER INFO -->
-
   <div th:each="ingredient : ${pantryIngredients}">
     <p th:text="${ingredient}"></p>
   </div>
@@ -182,7 +181,7 @@
         </div>
       </div>
 <!--      PANTRY TAB-->
-      <div class="tab-pane" id="pantryTab">
+      <div class="tab-pane pb-3" id="pantryTab">
           <div class="row">
             <div class="col-md-12">
               <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>
@@ -195,8 +194,8 @@
               </div>
             </div>
           </div>
-          <div class="card shadow mt-3">
-            <table class="table table-striped">
+          <div class="card my-3">
+            <table class="table">
               <thead>
               <tr>
                 <th>Ingredient</th>
