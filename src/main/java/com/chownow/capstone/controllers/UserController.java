@@ -181,7 +181,7 @@ public class UserController {
             return "users/edit";
         }
         //reset password
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         model.addAttribute("user",userDao.save(user));
         return "redirect:/users/"+id;
     }

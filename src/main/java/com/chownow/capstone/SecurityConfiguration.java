@@ -28,15 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /*  Method to authenticate the user and encrypt password */
-//    @Bean
-//    DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(usersLoader);
-//        return daoAuthenticationProvider;
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
