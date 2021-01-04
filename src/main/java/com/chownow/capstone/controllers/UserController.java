@@ -130,7 +130,7 @@ public class UserController {
             model.addAttribute("canChange",true);
         };
         model.addAttribute("user",user);
-        return "/users/edit";
+        return "users/edit";
     }
 
     // POST MAPPING FOR USER RELATED TO PROFILE DASHBOARD
