@@ -1,6 +1,6 @@
 package com.chownow.capstone.services;
 
-import com.chownow.capstone.dto.RecipeDto;
+import com.chownow.capstone.models.SpoonApiDto;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 @Service
 public class RecipeService {
@@ -42,13 +44,14 @@ public class RecipeService {
     @Autowired
     private FavoritesRepository favoritesRepository;
 
+
     /**
-     * Here used transactional because we save daa to 8 tables, during saving something happen it will rollback the data
+     * Here used transactional because we save data to 8 tables, during saving, if something happens it will rollback the data
      * @param recipe
      * @return
      */
     @Transactional // Do this sequentially
-    public String saveRecipe(RecipeDto recipe){
+    public String saveRecipe(SpoonApiDto recipe){
 // Hard-coded for now
 // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
@@ -59,7 +62,7 @@ public class RecipeService {
         String servings = "";
 
 /**
- * When cook time not define it set as a 0
+ * Handles cookTime when it's null from the front-end
  */
         if (recipe.getCook().equals("")){
             cookTime = "0";
@@ -68,7 +71,7 @@ public class RecipeService {
         }
 
 /**
- * When preparation time not define it set as a 0
+ * Handles prepTime when it's null from the front-end
  */
         if (recipe.getPrep().equals("")){
             prepTime = "0";
@@ -76,7 +79,7 @@ public class RecipeService {
             prepTime = recipe.getPrep();
         }
 /**
- * When serving is not define it set as a 0
+ * Handles servings when it's null from the front-end
  */
         if (recipe.getServings().equals("")){
             servings = "0";
@@ -92,7 +95,7 @@ public class RecipeService {
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setDifficulty("NA");
         recipeEntity.setDirections(recipe.getDirections());
-        recipeEntity.setPublished(false);
+        //recipeEntity.setPublished(false);
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
         recipeEntity.setServings(Integer.parseInt(servings));
         recipeEntity.setTitle(recipe.getTitle());
@@ -109,13 +112,10 @@ public class RecipeService {
         List<RecipeCategory> recipeCategoryList = new ArrayList<>();
 
         for (String ingredient: ingredients) {
-/**
- * In the UI there are many ingredients so they are coming to java end like below
- * Ingredient1@@Ingredient2@@Ingredient3@@Ingredient4@@Ingredient5@@
- *
- * So we have to split using @@ to get the actual Ingredients from above array
- * that's why here used split method
- */
+            // In the front-end there are many ingredients so they are coming to java end like below
+            // Ingredient1@@Ingredient2@@Ingredient3@@Ingredient4@@Ingredient5@@
+            // So we have to split using @@ to get the actual Ingredients from above array
+            // that's why here used split method
             String ingredientObjects[] = ingredient.split("@@");
 
 /**
@@ -150,7 +150,7 @@ public class RecipeService {
         }
 
 /**
- * In the UI there are many Categories so they are coming to java end like below
+ * In the UI there are many Categories so they are coming to java end like this:
  * Category1##Category2##Category3##Category4##Category5##
  *
  * So we have to split using ## to get the actual Ingredients from above array
@@ -195,7 +195,7 @@ public class RecipeService {
         imageEntity.setUrl(recipe.getImage());
         imageRepository.save(imageEntity);
 
-        System.out.println("Successfully saved !");
+        System.out.println("Recipe saved!!");
 
         return recipeEntity.getId() + "";
     }
