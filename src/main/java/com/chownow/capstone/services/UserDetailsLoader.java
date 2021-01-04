@@ -1,25 +1,28 @@
-//package com.chownow.capstone.services;
-//
-//import com.chownow.capstone.models.User;
-//import com.chownow.capstone.models.UserWithRoles;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//
-//public class UserDetailsLoader implements UserDetailsService {
-//	private final User users;
-//
-//	public UserDetailsLoader(User users) {
-//		this.users = users;
-//	}
-//
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		User user = users.findByUsername(username);
-//		if (user == null) {
-//			throw new UsernameNotFoundException("No user found for " + username);
-//		}
-//
-//		return new UserWithRoles(user);
-//	}
-//}
+package com.chownow.capstone.services;
+
+import com.chownow.capstone.models.User;
+import com.chownow.capstone.models.UserWithRoles;
+import com.chownow.capstone.repos.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserDetailsLoader implements UserDetailsService {
+    private final UserRepository usersDao;
+
+    public UserDetailsLoader(UserRepository usersDao) {
+        this.usersDao = usersDao;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = usersDao.findFirstByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("No user found for " + email);
+        }
+//      Returns copy constructor of user
+        return new UserWithRoles(user);
+    }
+}

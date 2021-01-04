@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -51,23 +48,25 @@ public class ApiUserController {
     // get user recipes
     @GetMapping("/{id}/recipes")
     public @ResponseBody List<Recipe> getUserRecipes(@PathVariable (value="id") long userId) {
+        List<Recipe> recipes = new ArrayList<>();
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
             return dbUser.getRecipes();
         }
-        return null;
+        return recipes;
     }
     
     // get user favorites
     @GetMapping("/{id}/favorites")
     public @ResponseBody Set<Recipe> getUserFavorites(@PathVariable (value="id") long userId) {
+        Set<Recipe> recipes = new HashSet<>();
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
             return dbUser.getFavorites();
         }
-        return null;
+        return recipes;
     }
 
     // get user pantry

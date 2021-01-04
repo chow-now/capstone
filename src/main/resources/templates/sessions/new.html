@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="partials/head :: head(title)"></head>
+<body id="loginBody">
+<!--<header th:include="partials/navbar.html :: nav"></header>-->
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card rounded-card">
+                <form th:replace="users/forms :: login"></form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+    </div>
+</div>
+
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<div th:replace="partials/scripts :: scripts"></div>
+</body>
+</html>
+

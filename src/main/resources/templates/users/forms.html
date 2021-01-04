@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${user}">
+
+    <p class="h4 mb-4">Sign up</p>
+
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- First name -->
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+        </div>
+    </div>
+
+    <!-- E-mail -->
+    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+
+    <!-- Password -->
+    <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+    <small class="form-text text-muted mb-3">
+        <em>At least 8 characters, 1 digit, and 1 special character</em>
+    </small>
+    <!-- Sign up button -->
+    <button class="btn btn-green rounded-pill" type="submit">Register</button>
+
+    <!-- Social register -->
+    <div class="or-seperator"><i>or</i></div>
+
+    <a th:href="@{/oauth2/authorization/google}" class="mx-2 btn rounded-pill bg-danger text-white" role="button"><i class="fab fa-google"></i> sign up with google</a>
+</form>
+
+<form th:fragment="login" th:action="@{/login}" th:method="POST" class="text-center px-3 py-4 green-text">
+
+    <p class="h4 mb-4">Login</p>
+    
+    <!-- E-mail -->
+    <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-4" placeholder="E-mail">
+
+    <!-- Password -->
+    <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" name="password" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
+    <!-- Login button -->
+    <button class="btn btn-green rounded-pill" type="submit" value="Log In">Login</button>
+
+    <!-- Social login -->
+    <div class="or-seperator"><i>or sign in with:</i></div>
+    <a th:href="@{/oauth2/authorization/google}" class=" text-danger" role="button"><i class="fab fa-google light-blue-text"></i></a>
+</form>
+
+<form th:fragment="edit" th:action="@{/users/{id}/edit(id=${user.id})}" th:method="post" class=" p-4" th:object="${user}">
+
+    <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Edit</p>
+    
+    <div class="form-group">
+        <label for="editFormName">Name</label>
+        <input type="text" id="editFormName" class="form-control mb-4" placeholder="Name" th:field="*{firstName}">
+    </div>
+
+    <div class="form-group">
+        <label for="editFormEmail">Email</label>
+        <input type="email" id="editFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+    </div>
+
+    <div class="form-group">
+        <label for="editFormAbout">About Me</label>
+        <textarea id="editFormAbout" class="form-control mb-4" placeholder="Quick summary about yourself" th:field="*{aboutMe}"></textarea>
+    </div>
+
+    <!-- submit button -->
+    <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Update</button>
+</form>
+
+<form th:fragment="resetPassword" th:action="@{/users/{id}/reset(id=${user.id})}" th:method="post" class=" p-4">
+    <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Reset Password</p>
+    <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <input id="currentPassword" name="password" class="form-control" type="password">
+    </div>
+    <div class="form-group">
+        <label for="new_password">New Password</label>
+        <input id="new_password" name="new_password" class="form-control" type="password">
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" name="confirm_password" class="form-control" type="password">
+    </div>
+    <!-- submit button -->
+    <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Reset</button>
+</form>
+</body>
+</html>
