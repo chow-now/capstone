@@ -4,15 +4,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <title>User Profile</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <title>Dashboard</title>
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!--  MAIN CSS -->
+  <link rel="stylesheet" th:href="@{/css/main.css}">
   <!--  CUSTOM PROFILE CSS -->
   <link rel="stylesheet" th:href="@{/css/profile.css}">
 
@@ -22,6 +19,10 @@
 <main>
   <!--Main Container-->
     <!-- USER INFO -->
+
+  <div th:each="ingredient : ${pantryIngredients}">
+    <p th:text="${ingredient}"></p>
+  </div>
     <div class="container mt-4">
       <div class="row px-2">
         <!-- IF CUSTOMER HAS PROFILE PICTURE -->
@@ -30,30 +31,24 @@
         </div>
         <div class="col-8 col-sm-9 mb-4">
           <div class="mb-2">
-            <h2 id="profileName" class="mb-0" th:text="${user.firstName}"></h2>
+            <h2 id="profileName" class="mb-0 text-black" th:text="${user.firstName}"></h2>
           </div>
           <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
-          <p>
+          <p class="text-white">
             <em>
               <small th:text="${user.getAboutMe()} ?: 'Introduce yourself to the community by writing a little about yourself.'"></small>
             </em>
           </p>
 
           <div>
-<!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">-->
-<!--              Register-->
-<!--            </button>-->
-<!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">-->
-<!--              Login-->
-<!--            </button>-->
             <!-- EDIT PROFILE LINK -->
-            <button sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn">
-              <a th:href="@{/users/{id}/edit(id=${user.id})}">Edit Profile</a>
-            </button>
+            
+              <a th:href="@{/users/{id}/edit(id=${user.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow">Edit Profile</a>
+
             <!-- FOLLOW USER BUTTON -->
             <div th:if="${not isOwner}">
-              <button th:if="${isFollowing}" class="btn" disabled> Following </button>
-              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn"> Follow </button>
+              <button th:if="${isFollowing}" class="btn btn-red rounded-pill" disabled> Following </button>
+              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn btn-red rounded-pill"> Follow </button>
             </div>
           </div>
         </div>
@@ -63,46 +58,46 @@
 <!--      DASHBOARD TABS-->
       <ul class="nav nav-tabs align-items-center justify-content-between">
         <li class="nav-item" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
-          <a class="nav-link" href="#recipesTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
-          <a class="nav-link" href="#favoritesTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
-          <a class="nav-link" href="#followersTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
           </a>
         </li>
         <li class="nav-item" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
-          <a class="nav-link" href="#followingTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
           </a>
         </li>
 <!--            PROFILE OWNER ONLY TABS-->
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
-          <a class="nav-link" href="#pantryTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#pantryTab" data-toggle="tab">
             <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
           </a>
         </li>
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
-          <a class="nav-link" href="#suggestionsTab" data-toggle="tab">
+          <a class="nav-link dashtab nav-tab-shadow" href="#suggestionsTab" data-toggle="tab">
             <i class="fas fa-drumstick-bite fa-2x"></i>
           </a>
         </li>
       </ul>
 <!--      !DASHBOARD TABS-->
     </div>
-  <div class="container">
+  <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
     <div class="tab-content ">
 <!--      RECIPES TAB-->
       <div class="tab-pane active" id="recipesTab">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3"></h3>
+            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
           <div th:each="recipe : ${user.recipes}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
@@ -135,7 +130,7 @@
       <div class="tab-pane" id="favoritesTab">
         <div class="row justify-content-center">
           <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3"></h3>
+            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
           <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
@@ -188,26 +183,44 @@
       </div>
 <!--      PANTRY TAB-->
       <div class="tab-pane" id="pantryTab">
+          <div class="row">
+            <div class="col-md-12">
+              <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>
+              <div class="text-center">
+                <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill" value="Add New Ingredient"/>
+              </div>
+              <div>
+                <input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />
+                <div id="searchResults" class="container text-center"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card shadow mt-3">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Amount</th>
+                <th></th>
+              </tr>
+              </thead>
               <!--    RENDERED CONTENT-->
-        <div id="pantryContent" class="mt-2"></div>
+              <tbody id="ingredientsBody">
+              </tbody>
+            </table>
+          </div>
       </div>
 <!--      SUGGESTIONS TAB-->
       <div  class="tab-pane" id="suggestionsTab">
-<!--        <div th:replace="users/suggestions :: suggestions"></div>-->
       </div>
-<!--      <div class="tab-pane" id="suggestionsTab">-->
-        <!--    RENDERED CONTENT-->
-<!--        <div id="suggestionsContent" class="mt-2 "></div>-->
       </div>
     </div>
   </div>
 
 
 </main>
-<!--MODALS-->
-<div th:replace="partials/modals"></div>
-<!--            PROFILE OWNER ONLY MODALS-->
 
+<!-- PROFILE OWNER ONLY MODALS-->
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -224,8 +237,8 @@
             <p>Are you sure you want to trash this?</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-green">Confirm</button>
           </div>
       </form>
     </div>
@@ -248,7 +261,7 @@
             </div>
             <div class="container d-flex justify-content-center">
               <div class="form-group">
-                <label >Amount</label>
+                <label class="green-text font-weight-bold">Amount</label>
                 <div id="formQty" class="qty mt-1">
                   <span class="minus"><i class="fas fa-minus-circle"></i></span>
                   <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05" required>
@@ -256,7 +269,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>Unit</label>
+                <label class="green-text font-weight-bold">Unit</label>
                 <div class="mt-1">
                   <select name="unit" required>
                     <option th:value="teaspoon">Teaspoon (tsp)</option>
@@ -272,7 +285,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-red" data-dismiss="modal">Cancel</button>
             <div id="typeSubmit"></div>
           </div>
       </form>
@@ -281,339 +294,19 @@
 </div>
 <!--! MODALS-->
 
-<!--Todo: FIX SCRIPT CONFIGURATION-->
-
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
+<!--MODALS-->
+<div th:replace="partials/modals"></div>
+<!--JS-->
+<div th:replace="partials/scripts :: scripts"></div>
+<!--List of Ingredients-->
 <script th:src="@{/js/ingredients.js}"></script>
+<!--Get userId from Thyme-->
 <script th:inline="javascript">
-
-  /* GET USER ID FROM THYMELEAF */
-  (function($) {
-
-    // get userId from Thyme
-    let userId = /*[[${user.id}]]*/ '';
-
-    $.ajaxSetup({
-      headers:
-              {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
-    });
-
-    setTimeout(function() {
-      // ENABLE TOOLTIPS ON UL MENU
-      $('[data-toggle="tooltip"]').tooltip()
-    }, 500);
-      
-    // recipesToRender.forEach((recipe)=> {
-    //   let favoritedHtml = "";
-    //   recipe.favoritedBy.forEach((favorite) => {
-    //     favoritedHtml += favorite.firstName + "<br/>";
-    //   })
-    // });
-
-    // FOLLOW BTN SUBMIT A FOLLOW REQUEST
-    $( "#addFriend" ).click(function() {
-      let formData = {
-        "friendId" : userId
-      }
-      let url = "/users/follow";
-      $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: url,
-        data: JSON.stringify(formData),
-        dataType: 'json'
-      });
-      $('#addFriend').text("Following");
-      $('#addFriend').prop("disabled", true);
-    });
-
-    /* PROFILE OWNER JS */
-
-    // RECIPE SUGGESTIONS
-    $( "#suggestions" ).click(function() {
-      $.ajax({'url': ''+userId+'/matches'}).done(function (recipes) {
-        $('#suggestionsTab').html(recipes);
-        $('[data-toggle="tooltip"]').tooltip();
-      });
-    });
-
-    // PANTRY API CALL
-    let pantryInventory;
-    let inventoryIngredients;
-    const makePantryAjaxCall = ()=>{
-      pantryInventory = [];
-      inventoryIngredients = [];
-      $.ajax({'url': '/api/users/'+userId+"/pantry"}).done(function (response) {
-        response.pantryIngredients.forEach(function(item) {
-          inventoryIngredients.push(item);
-          pantryInventory.push(item.ingredient.name.toLowerCase());
-        });
-      });
-    }
-
-    // CREATE HTML FOR PANTRY TEMPLATE
-    const renderPantry = ()=>{
-      // SORT INGREDIENTS BY NAME
-      inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
-      let pantryHtml = "";
-      pantryHtml +=
-              '<div class="container">'+
-              '<div class="row">'+
-              '<div class="col-md-12">'+
-              '<h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>'+
-              '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>'+
-              '<div class="">' +
-              '<input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />'+
-              '<div id="searchResults" class="container text-center"></div>'+
-              '</div>'+
-              '</div>'+
-              '</div>'
-      ;
-      // PANTRY INGREDIENT TABLE
-      pantryHtml += '<div class="card shadow mt-3">';
-      pantryHtml += '<table class="table table-striped">'+
-              '<thead>'+
-              '<tr>'+
-              '<th>Ingredient</th>'+
-              '<th>Amount</th>'+
-              '<th></th>'+
-              '</tr>'+
-              '</thead>'+
-              '<tbody>'
-      ;
-      // ADD ROWS TO PANTRY TABLE
-      inventoryIngredients.forEach((item)=>{
-        pantryHtml += '<tr>'+
-                '<td><span>' + item.ingredient.name + '</span></td>'+
-                '<td data-amount-float="'+item.amount+'-'+item.unit+'"><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
-                '<td  id="'+item.id+'" class="qty">'+
-                '<span class="minus type="button" data-toggle="modal" data-target="#deleteIngredientModal""><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
-                '<span class="plus" type="button" data-toggle="modal" data-target="#ingredientModal"><i class="fas fa-pencil-alt"></i></span>'+
-                '</td>'+
-                '</tr>'
-        ;
-      })
-      // CLOSE PANTRY HTML TEMPLATE
-      pantryHtml += '</tbody>'+
-              '</table>'+
-              '</div>'+
-              '</div>'
-      ;
-      // RENDER TEMPLATE
-      $('#pantryContent').html(pantryHtml);
-    }
-
-    $( "#userPantry" ).click(function() {
-      makePantryAjaxCall();
-      setTimeout(function() {
-        renderPantry();
-        convertAllRationals();
-      }, 500);
-    });
-
-    // AUTOSEARCH INGREDIENTS FOR PANTRY
-    $(document).on('keyup',"#ingredientSearch",function(){
-      let searchResults = $('#searchResults');
-      let searchInput = this.value.trim();
-      /* dont display any suggestions if empty string */
-      if(this.value === "") {
-        searchResults.empty();
-      }else if(pantryInventory.includes(searchInput.toLowerCase())){
-        console.log("found");
-        searchResults.empty();
-        searchResults.append(
-                '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal" disabled>'+searchInput.toLowerCase()+' is in pantry</button>'
-        );
-      }
-      else{
-        searchResults.empty();
-        searchResults.append(
-                '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+searchInput.toLowerCase()+'</button>'
-        );
-
-        /* search ingredients list to auto suggest ingredients and if not in list allow user to select own input */
-        ingredientsList.filter(function(ingredient){
-          if(ingredient.toLowerCase() === searchInput.toLowerCase()){
-            $("#ingredientInput").addClass("d-none");
-          }
-          if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
-            searchResults.append(
-                    '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">'+ingredient+'</button>'
-            );
-          }
-        });
-        searchResults.append("</div>");
-      }
-    });
-
-    // USER PANTRY ADD NEW PANTRY INPUT CLICK
-    $(document).on('click',"#showIngredientForm", function () {
-      let input = $("#ingredientSearch");
-      if(input.hasClass("d-none")){
-        $(this).prop('value', 'close');
-        input.removeClass("d-none");
-      }
-      else{
-        $(this).prop('value', 'Add New Ingredient');
-        input.addClass("d-none");
-      }
-    })
-
-    // INGREDIENT MODAL ON SHOW DYNAMIC INFO
-    $('#ingredientModal').on('show.bs.modal', function (event) {
-      let openModal = $(this);
-      let button = $(event.relatedTarget); // Button that triggered the modal
-      let tagType = button[0].tagName;
-      let clickedIngredient; // Ingredient name to be used
-
-      /* if tag type is span change ingredient form to an update form */
-      if(tagType === "SPAN"){
-        /* get data for update form from the tr element */
-        let pantryIngId = button.parent()[0].getAttribute("id");
-        let tableRow = button.parent().parent()[0];
-        let amountUnit = tableRow.firstChild.nextSibling.getAttribute("data-amount-float").split("-");
-        clickedIngredient = tableRow.firstChild.innerText;
-        /* set form values for update */
-        openModal.find('select').val(amountUnit[1].split(" ")[0].toLowerCase()); // set unit select value
-        openModal.find('.modal-title').text("Update " + clickedIngredient); // place ingredient name on title
-        openModal.find('.modal-body input').val(clickedIngredient);
-        count.val(parseFloat(amountUnit[0]));// set amount value
-        $("#typeSubmit").html(
-                '<input name="id" type="hidden" value="'+pantryIngId+'"/>'+
-                '<button id="updateIngredient" type="submit" class="btn btn-primary">Update</button>'
-        );// set edit submit button
-      }
-      /* else ingredient form is a new ingredient form */
-      else{
-        clickedIngredient = button[0].innerHTML;
-        $("#typeSubmit").html('<button id="addIngredient" type="submit" class="btn btn-primary">Save</button>');
-        openModal.find('.modal-title').text("Add "+ clickedIngredient +" to pantry");
-        openModal.find('.modal-body input').val(clickedIngredient);
-        count.val(1);
-      }
-
-    })
-
-    // Plus Minus Count for Ingredient Form modal
-    let count = $('#ingredientForm').find('input.count');
-    $(document).on('click','#formQty .plus',function(){
-      if (count.val() == 0) {
-        count.val(0);
-      }
-      count.val(parseFloat(count.val()) + 1);
-    });
-    $(document).on('click','#formQty .minus',function(){
-      count.val(parseFloat(count.val()) - 1);
-      if (count.val() == 0) {
-        count.val(1);
-      }
-    });
-
-    // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO PANTRY
-    $(document).on('click','#addIngredient',function(){
-      $('#ingredientModal').modal('toggle');
-      let form = $('#ingredientForm');
-      let url = "/users/pantry/ingredient/new";
-      let formData = JSON.stringify({
-        "name" : form.find('input#ingredientName').val(),
-        "amount": form.find('input.count').val(),
-        "unit" : form.find('select  option:selected').text()
-      });
-      $.ajax({
-          type: "POST",
-          contentType: "application/json",
-          url: url,
-          data: formData,
-          dataType: "json",
-      });
-
-      setTimeout(function() {
-        makePantryAjaxCall();
-      }, 1000);
-      setTimeout(function() {
-        renderPantry();
-        convertAllRationals();
-      }, 1500);
-
-      return false;
-    })
-
-    // UPDATE INGREDIENT
-    $(document).on('click','#updateIngredient',function(){
-    $('#ingredientModal').modal('toggle');
-    let form = $('#ingredientForm');
-    let url = "/users/pantry/ingredient/edit";
-    let formData = JSON.stringify({
-      "id" : form.find('input[name=id]').val(),
-      "amount": form.find('input.count').val(),
-      "unit" : form.find('select  option:selected').text()
-    });
-    $.ajax({
-      type: "POST",
-      contentType: "application/json",
-      url: url,
-      data: formData,
-      dataType: "json",
-    });
-
-    setTimeout(function() {
-      makePantryAjaxCall();
-    }, 1000);
-    setTimeout(function() {
-      renderPantry();
-      convertAllRationals();
-    }, 1500);
-
-    return false;
-  })
-
-  // INGREDIENT MODAL ON SHOW DYNAMIC INFO
-  $('#deleteIngredientModal').on('show.bs.modal', function (event) {
-    let openModal = $(this);
-    let button = $(event.relatedTarget); // Button that triggered the modal
-    let clickedIngredient; // Ingredient name to be used
-    /* get data for update form from the tr element */
-    let pantryIngId = button.parent()[0].getAttribute("id");
-    let tableRow = button.parent().parent()[0];
-    clickedIngredient = tableRow.firstChild.innerText;
-    /* set form values for update */
-    openModal.find('.modal-title').text("Remove " + clickedIngredient); // place ingredient name on title
-    openModal.find('.modal-body input').val(pantryIngId);
-  })
-
-  // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM PANTRY
-  $("#deleteIngredient").submit(function(){
-    $('#deleteIngredientModal').modal('toggle');
-    let form = $(this);
-    let ingredientId = form.find('input[name=id]').val();
-    let url = '/api/pantry-ingredients/'+ingredientId+'/delete';
-    $.ajax({
-      type: "POST",
-      url: url,
-      contentType: "application/json",
-      dataType: 'json'
-    });
-    setTimeout(function () {
-      makePantryAjaxCall();
-    }, 1000);
-    setTimeout(function () {
-      renderPantry();
-      convertAllRationals();
-    }, 1500);
-    return false;
-  })
-  })(jQuery);
-
+  /*<![CDATA[*/
+    const userId = /*[[${user.id}]]*/ '';
   /*]]>*/
 </script>
+<script th:src="@{/js/profile.js}"></script>
 <script th:src="@{/js/fraction_converter.js}"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center p-5" th:object="${user}">
+<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${user}">
 
     <p class="h4 mb-4">Sign up</p>
 
@@ -22,20 +22,19 @@
 
     <!-- Password -->
     <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
-    <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
-        At least 8 characters, 1 digit, and 1 special character
+    <small class="form-text text-muted mb-3">
+        <em>At least 8 characters, 1 digit, and 1 special character</em>
     </small>
     <!-- Sign up button -->
-    <button class="btn btn-info my-4 btn-block" type="submit">Register</button>
+    <button class="btn btn-green rounded-pill" type="submit">Register</button>
 
     <!-- Social register -->
-    <p>or sign up with:</p>
+    <div class="or-seperator"><i>or</i></div>
 
-    <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
-    <a th:href="@{/oauth2/authorization/google}" class="mx-2" role="button"><i class="fab fa-google light-blue-text"></i></a>
+    <a th:href="@{/oauth2/authorization/google}" class="mx-2 btn rounded-pill bg-danger text-white" role="button"><i class="fab fa-google"></i> sign up with google</a>
 </form>
 
-<form th:fragment="login" th:action="@{/login}" th:method="POST" class="text-center p-5">
+<form th:fragment="login" th:action="@{/login}" th:method="POST" class="text-center px-3 py-4 green-text">
 
     <p class="h4 mb-4">Login</p>
     
@@ -43,20 +42,18 @@
     <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-4" placeholder="E-mail">
 
     <!-- Password -->
-    <input type="password" id="defaultLoginFormPassword" class="form-control" name="password" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
+    <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" name="password" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
     <!-- Login button -->
-    <button class="btn btn-info my-4 btn-block" type="submit" value="Log In">Login</button>
+    <button class="btn btn-green rounded-pill" type="submit" value="Log In">Login</button>
 
     <!-- Social login -->
-    <p>or sign in with:</p>
-
-    <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
-    <a th:href="@{/oauth2/authorization/google}" class="mx-2" role="button"><i class="fab fa-google light-blue-text"></i></a>
+    <div class="or-seperator"><i>or sign in with:</i></div>
+    <a th:href="@{/oauth2/authorization/google}" class=" text-danger" role="button"><i class="fab fa-google light-blue-text"></i></a>
 </form>
 
-<form th:fragment="edit" th:action="@{/users/{id}/edit(id=${user.id})}" th:method="post" class=" p-5" th:object="${user}">
+<form th:fragment="edit" th:action="@{/users/{id}/edit(id=${user.id})}" th:method="post" class=" p-4" th:object="${user}">
 
-    <p class="h4 mb-4 text-center">Edit</p>
+    <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Edit</p>
     
     <div class="form-group">
         <label for="editFormName">Name</label>
@@ -74,11 +71,11 @@
     </div>
 
     <!-- submit button -->
-    <button class="btn btn-info my-4 btn-block" type="submit">Update</button>
+    <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Update</button>
 </form>
 
-<form th:fragment="resetPassword" th:action="@{/users/{id}/reset(id=${user.id})}" th:method="post" class=" p-5">
-    <p class="h4 mb-4 text-center">Reset Password</p>
+<form th:fragment="resetPassword" th:action="@{/users/{id}/reset(id=${user.id})}" th:method="post" class=" p-4">
+    <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Reset Password</p>
     <div class="form-group">
         <label for="currentPassword">Current Password</label>
         <input id="currentPassword" name="password" class="form-control" type="password">
@@ -92,7 +89,7 @@
         <input id="confirm_password" name="confirm_password" class="form-control" type="password">
     </div>
     <!-- submit button -->
-    <button class="btn btn-info my-4 btn-block" type="submit">Reset</button>
+    <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Reset</button>
 </form>
 </body>
 </html>

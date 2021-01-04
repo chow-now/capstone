@@ -35,8 +35,8 @@ public class Recipe {
     @Column
     private boolean isPublished;
 
-    // @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
-// @NotBlank(message= "Directions would be useful here. Please provides some.")
+    @Size(min = 20, message = "Directions should be a bit longer than 20 characters")
+    @NotBlank(message= "Directions would be useful here. Please provides some.")
     @Column(columnDefinition = "TEXT")
     private String directions;
 
@@ -89,7 +89,7 @@ public class Recipe {
 
     public Recipe(){}
 
-    //se tter
+    //setter
     public Recipe(String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.title = title.trim();
         this.description = description.trim();
