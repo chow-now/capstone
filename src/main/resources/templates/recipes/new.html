@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:include="partials/head :: head(title='Create a Recipe')">
+<!--<head th:include="partials/head :: head(title='Create a Recipe')">-->
+<head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <!--  CUSTOM PROFILE CSS -->
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
 
@@ -10,31 +20,6 @@
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
 <div class="container">
     <h2>Create your recipe!</h2>
-
-    <!--    RECIPE CREATION TABS-->
-    <!--    <ul class="nav nav-tabs" id="myTab" role="tablist">-->
-    <!--        <li class="nav-item" role="presentation">-->
-    <!--            <a class="nav-link active" id="add-info-tab" data-toggle="tab" href="#addInfo" role="tab"-->
-    <!--               aria-controls="nav-info"-->
-    <!--               aria-selected="true"><span class="badge badge-pill badge-secondary">1</span> Recipe Info</a>-->
-    <!--        </li>-->
-    <!--        <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">-->
-    <!--            <a class="nav-link" data-toggle="tab" href="#recipeTab" role="tab"-->
-    <!--               aria-controls="nav-ingredients"-->
-    <!--               aria-selected="false"><span class="badge badge-pill badge-secondary">2</span> Add Ingredients</a>-->
-    <!--        </li>-->
-    <!--        <li class="nav-item" role="presentation">-->
-    <!--            <a class="nav-link" data-toggle="tab" href="#addImages" role="tab"-->
-    <!--               aria-controls="nav-images" aria-selected="false"><span class="badge badge-pill badge-secondary">3</span>-->
-    <!--                Upload Images</a>-->
-    <!--        </li>-->
-    <!--        <li class="nav-item" role="presentation">-->
-    <!--            <a class="nav-link" data-toggle="tab" href="#addCategories" role="tab"-->
-    <!--               aria-controls="nav-categories" aria-selected="false"><span class="badge badge-pill badge-secondary">4-->
-    <!--            </span>-->
-    <!--                Categorize</a>-->
-    <!--        </li>-->
-    <!--    </ul>-->
     <!--    TAB CONTENTS-->
     <div class="tab-content" id="myTabContent">
 
@@ -46,7 +31,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Begin creating your recipe by providing some general information.</p>
-                <p th:text="${recipe.id}"></p>
+                    <p th:text="${recipe.id}" hidden></p>
                 </div>
                 <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
                     <!--    ENTER A RECIPE TITLE   -->
@@ -70,21 +55,19 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
                                    th:field="*{difficulty}" value="easy">
-                            <label class="form-check-label" th:for="*{difficulty}">
-                                Easy
-                            </label>
+                            <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
                                    th:field="*{difficulty}" value="medium">
-                            <label class="form-check-label" th:for="*{difficulty}">
+                            <label class="form-check-label mr-2" th:for="*{difficulty}">
                                 Medium
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
                                    th:field="*{difficulty}" value="hard">
-                            <label class="form-check-label" th:for="*{difficulty}">
+                            <label class="form-check-label mr-2" th:for="*{difficulty}">
                                 Hard
                             </label>
                             <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
@@ -125,16 +108,16 @@
 
                     <!-- SUBMIT RECIPE INFO -->
                     <div class="card-footer text-muted">
-                        <div class="nav-item" role="presentation">
+                        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                             <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                                aria-controls="nav-ingredients"
                                aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
                         </div>
                         <div>
                             <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
-                                    type="submit">Submit</button>
+                                    type="submit">Submit
+                            </button>
                         </div>
-
                     </div>
                 </form>
             </div>
@@ -148,6 +131,7 @@
                 </div>
 
                 <p id="recipe-id" th:text="${recipe.id}"></p>
+                <p id="recipe" th:object="${recipe}"></p>
 
                 <div class="card-body">
                     <p class="card-text">Next, let's add an ingredients list to the recipe.</p>
@@ -156,7 +140,7 @@
                 <div id="recipeContent" class="mt-2"></div>
 
                 <div class="card-footer text-muted">
-                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                    <div class="nav-item" role="presentation">
                         <a id="add-images-tab" href="#addImages" data-toggle="tab" role="tab"
                            aria-controls="nav-images"
                            aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
@@ -188,7 +172,8 @@
         </div>
 
         <!--        ADD CATEGORIES TAB-->
-        <div class="tab-pane fade" id="addCategories" role="tabpanel" aria-labelledby="add-categories-tab">
+        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
+             role="tabpanel" aria-labelledby="add-categories-tab">
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     Categories
@@ -236,7 +221,7 @@
 </div>
 
 <!-- Add Ingredient Modal -->
-<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
+<div class="modal fade" id="ingredientModal" tabindex="-1"
      role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -300,8 +285,6 @@
     /* GET USER ID FROM THYMELEAF */
     (function ($) {
 
-        // TEMPORARY HARD-CODED RECIPE
-        let recipeId = document.getElementById('recipe-id');
 
         $.ajaxSetup({
             headers:
@@ -314,6 +297,12 @@
         const makeRecipeAjaxCall = () => {
             recipeInventory = [];
             inventoryIngredients = [];
+
+            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+            console.log(recipeId);
+            console.log(typeof recipeId);
+
+
             $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
                 response.recipeIngredients.forEach(function (item) {
                     inventoryIngredients.push(item);
@@ -479,9 +468,11 @@
 
         // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO RECIPE
         $(document).on('click', '#addIngredient', function () {
-            $('#ingredientModal').modal('toggle');
+            $('#ingredientModal').modal('toggle')
+            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+
             let form = $('#ingredientForm');
-            let url = "/users/recipe/ingredient/new";
+            let url = "/recipe/" + recipeId + "/ingredient/new";
             let formData = JSON.stringify({
                 "name": form.find('input#ingredientName').val(),
                 "amount": form.find('input.count').val(),
@@ -510,7 +501,7 @@
         $(document).on('click', '#updateIngredient', function () {
             $('#ingredientModal').modal('toggle');
             let form = $('#ingredientForm');
-            let url = "/users/recipe/ingredient/edit";
+            let url = "/recipe/ingredient/edit";
             let formData = JSON.stringify({
                 "id": form.find('input[name=id]').val(),
                 "amount": form.find('input.count').val(),

@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -91,26 +92,29 @@ public class RecipeController {
             Errors validation,
             Model model
     ) {
-//        if (validation.hasErrors()) {
-//            model.addAttribute("errors", validation);
-//            model.addAttribute("recipe", recipeToBeSaved);
-//            return "recipes/new";
-//        }
+        if (validation.hasErrors()) {
+            model.addAttribute("errors", validation);
+            model.addAttribute("recipe", recipeToBeSaved);
+            return "recipes/new";
+        }
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
-        model.addAttribute(recipeToBeSaved);
+        model.addAttribute("recipe",recipeToBeSaved);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
 
         return "/recipes/new";
     }
 
     // CREATE A NEW RECIPE INGREDIENT
-    @RequestMapping(value = "/users/recipe/ingredient/new", method = RequestMethod.POST, headers = "Content-Type" +
+    @RequestMapping(value = "/recipe/{recipeId}/ingredient/new", method = RequestMethod.POST, headers = "Content-Type" +
             "=application/json")
     public @ResponseBody
-    String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
-        User currentUser = userServ.loggedInUser();
+    String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient,
+                                @PathVariable long recipeId) {
+        Recipe currentRecipe = recipeDao.getOne(recipeId);
+        System.out.println(currentRecipe);
         Ingredient dbIngredient = null;
         boolean isNotInDb = true;
         for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
@@ -126,8 +130,7 @@ public class RecipeController {
         RecipeIngredient newRecipeIng = new RecipeIngredient(
                 recipeIngredient.getAmount(),
                 recipeIngredient.getUnit(),
-//                currentUser.getRecipes(),
-
+                currentRecipe,
                 dbIngredient
         );
         recipeIngDao.save(newRecipeIng);
@@ -135,7 +138,7 @@ public class RecipeController {
     }
 
     // EDIT RECIPE INGREDIENT
-    @RequestMapping(value = "/users/recipe/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type" +
+    @RequestMapping(value = "/recipe/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type" +
             "=application/json")
     public @ResponseBody
     String editRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
@@ -156,6 +159,9 @@ public class RecipeController {
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
+        User currentUser = userServ.loggedInUser();
+        model.addAttribute("user", currentUser);
+        model.addAttribute("isOwner",userServ.isOwner(currentUser));
         return "recipes/edit";
     }
 
@@ -170,9 +176,9 @@ public class RecipeController {
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/" + recipeToBeSaved.getId() + "/edit";
         }
-//        User userDb = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        recipeToBeSaved.setChef(userDoa.getOne(1L)); //Hard-coding Chef
+        User currentUser = userServ.loggedInUser();
+        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes/" + dbRecipe.getId();
+        return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
 }

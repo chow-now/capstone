@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name="recipe_ingredients")
@@ -52,6 +53,7 @@ public class RecipeIngredient {
         this.recipe = recipe;
         this.ingredient = ingredient;
     }
+
 
     public long getId() {
         return id;
