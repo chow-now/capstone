@@ -11,10 +11,8 @@ a.nostyle:visited {
 }
 
 .jumbotron{
-    /* Set a specific height */
     background-size: cover;
     height: 100vh;
-    /* Position and center the image to scale nicely on all screens */
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
@@ -22,6 +20,7 @@ a.nostyle:visited {
 
 #loginBody, #registerBody{
     background-image: url('/img/cn-bg.png');
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;

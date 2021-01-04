@@ -41,8 +41,7 @@
 
           <div>
             <!-- EDIT PROFILE LINK -->
-            
-              <a th:href="@{/users/{id}/edit(id=${user.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow">Edit Profile</a>
+            <a th:href="@{/users/{id}/edit(id=${user.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow font-weight-bold">Edit Profile</a>
 
             <!-- FOLLOW USER BUTTON -->
             <div th:if="${not isOwner}">
@@ -56,32 +55,38 @@
 
 <!--      DASHBOARD TABS-->
       <ul class="nav nav-tabs align-items-center justify-content-between">
+<!--        recipes-->
         <li class="nav-item" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
           <a class="nav-link dashtab nav-tab-shadow" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
           </a>
         </li>
+<!--        favorites-->
         <li class="nav-item" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
           <a class="nav-link dashtab nav-tab-shadow" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
           </a>
         </li>
+<!--        followers-->
         <li class="nav-item" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
           <a class="nav-link dashtab nav-tab-shadow" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
           </a>
         </li>
+<!--        following-->
         <li class="nav-item" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
           <a class="nav-link dashtab nav-tab-shadow" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
           </a>
         </li>
 <!--            PROFILE OWNER ONLY TABS-->
+<!--        pantry-->
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
           <a class="nav-link dashtab nav-tab-shadow" href="#pantryTab" data-toggle="tab">
             <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
           </a>
         </li>
+<!--        suggested recipes based on pantry-->
         <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
           <a class="nav-link dashtab nav-tab-shadow" href="#suggestionsTab" data-toggle="tab">
             <i class="fas fa-drumstick-bite fa-2x"></i>
@@ -115,7 +120,7 @@
                     <p th:text="${recipe.chef.firstName}"></p>
                   </div>
                   <div class="col-3">
-                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="'+favoritedHtml+'">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
                       <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
                     </div>
                   </div>
@@ -148,7 +153,7 @@
                     <p th:text="${recipe.chef.firstName}"></p>
                   </div>
                   <div class="col-3">
-                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="'+favoritedHtml+'">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
                       <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
                     </div>
                   </div>
@@ -161,6 +166,9 @@
 <!--      FOLLOWERS TAB-->
       <div class="tab-pane" id="followersTab">
         <div class="row align-items-center justify-content-around p-3">
+          <div class="col-md-12">
+            <h3 th:text="${'Followers'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
           <div th:each="follower : ${user.followers}" class="my-2  mx-2 text-center">
             <a class="text-center" th:href="@{/users/{id}(id=${ follower.user.id })}">
               <img th:src="${follower.user.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
@@ -172,6 +180,9 @@
 <!--      FOLLOWING TAB-->
       <div class="tab-pane" id="followingTab">
         <div class="row align-items-center justify-content-around p-3">
+          <div class="col-md-12">
+            <h3 th:text="${'Following'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
+          </div>
           <div th:each="following : ${user.followings}" class="my-2  mx-2 text-center">
             <a class="text-center" th:href="@{/users/{id}(id=${ following.friend.id })}">
               <img th:src="${following.friend.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
@@ -195,7 +206,7 @@
             </div>
           </div>
           <div class="card my-3">
-            <table class="table">
+            <table id="ingredientsTable" class="table d-none" >
               <thead>
               <tr>
                 <th>Ingredient</th>
@@ -203,13 +214,14 @@
                 <th></th>
               </tr>
               </thead>
-              <!--    RENDERED CONTENT-->
+              <!--    RENDERED DYNAMIC CONTENT-->
               <tbody id="ingredientsBody">
               </tbody>
             </table>
           </div>
       </div>
 <!--      SUGGESTIONS TAB-->
+<!--      rendered via ajax-->
       <div  class="tab-pane" id="suggestionsTab">
       </div>
       </div>
@@ -230,6 +242,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+<!--      DELETE FORM-->
       <form id="deleteIngredient">
           <div class="modal-body">
             <input name="id" type="hidden" value="'+pantryIngId+'"/>
@@ -253,6 +266,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+<!--      ADD/EDIT INGREDIENT FORM-->
       <form id="ingredientForm" >
           <div class="modal-body"  id="ingredientModalContent">
             <div class="form-group">
@@ -295,11 +309,11 @@
 
 <!--MODALS-->
 <div th:replace="partials/modals"></div>
-<!--JS-->
+<!--JS SCRIPTS-->
 <div th:replace="partials/scripts :: scripts"></div>
 <!--List of Ingredients-->
 <script th:src="@{/js/ingredients.js}"></script>
-<!--Get userId from Thyme-->
+<!--Get userId from Thyme to use in JS-->
 <script th:inline="javascript">
   /*<![CDATA[*/
     const userId = /*[[${user.id}]]*/ '';
