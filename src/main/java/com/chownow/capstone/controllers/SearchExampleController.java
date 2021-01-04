@@ -37,7 +37,6 @@ public class SearchExampleController {
                               @ModelAttribute SpoonApiDto recipe){
 
         recipeService.saveRecipe(recipe);
-
         return "recipes/search";
     }
 }
