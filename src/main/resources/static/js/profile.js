@@ -22,7 +22,7 @@
 
     // SUGGESTIONS AJAX
     $( "#suggestions" ).click(function() {
-        $.ajax({'url': 'users/'+userId+'/matches'}).done(function (recipes) {
+        $.ajax({'url': '/users/'+userId+'/matches'}).done(function (recipes) {
             $('#suggestionsTab').html(recipes);
             $('[data-toggle="tooltip"]').tooltip();
         });
@@ -44,6 +44,13 @@
 
     // CREATE HTML FOR PANTRY TEMPLATE
     const renderPantry = ()=>{
+        if( inventoryIngredients.length > 0 ){
+            $("#ingredientsTable").removeClass("d-none");
+        }else{
+            if(!$("#ingredientsTable").hasClass("d-none")){
+                $("#ingredientsTable").addClass("d-none")
+            }
+        }
         // SORT INGREDIENTS BY NAME
         inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
         let pantryHtml = "";
@@ -179,7 +186,7 @@
     $(document).on('click','#addIngredient',function(){
         $('#ingredientModal').modal('toggle');
         let form = $('#ingredientForm');
-        let url = "/users/pantry/ingredient/new";
+        let url = "/pantry/ingredient/new";
         let formData = JSON.stringify({
             "name" : form.find('input#ingredientName').val(),
             "amount": form.find('input.count').val(),
@@ -211,7 +218,7 @@
     $(document).on('click','#updateIngredient',function(){
         $('#ingredientModal').modal('toggle');
         let form = $('#ingredientForm');
-        let url = "/users/pantry/ingredient/edit";
+        let url = "/pantry/ingredient/edit";
         let formData = JSON.stringify({
             "id" : form.find('input[name=id]').val(),
             "amount": form.find('input.count').val(),
@@ -275,4 +282,6 @@
         }, 1500);
         return false;
     })
+
+    $('[data-toggle="tooltip"]').tooltip();
 })(jQuery);

@@ -1,28 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="partials/head :: head(title)"></head>
-<style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChowNow</title>
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!--  MAIN CSS -->
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <!--  LANDING CSS -->
+  <link rel="stylesheet" th:href="@{/css/landing.css}">
+</head>
 
-</style>
-<body>
+<body class="bg-green">
 <!--<nav th:include="partials/navbar.html :: nav"></nav>-->
 <div class="jumbotron m-0" style="background-image: url('img/cn-bg.png');">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-12 text-center mb-5">
-        <img src="img/cn-text.png" id="chowText"  >
+        <img src="img/cn-text.png" id="chowText" >
       </div>
-      <div class="btn btn-pink btn-lg rounded-pill register-btn" data-toggle="modal" data-target="#registerModal">REGISTER</div>
+      <div class="col-12 text-center">
+        <div id="headerSlide" class="carousel carousel-fade" data-ride="carousel" data-interval="3000" data-pause="false">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <span class="text-white">get your next dinner idea</span>
+            </div>
+            <div class="carousel-item">
+              <span class="text-white">cook bake create </span>
+            </div>
+            <div class="carousel-item">
+              <span class="text-white">recipes tailored for you</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 text-center mt-2">
+        <div class="btn btn-pink btn-lg rounded-pill scroll-btn text-white"><span class="font-weight-bold"><i class="fas fa-chevron-down"></i></span></div>
+      </div>
     </div>
   </div>
 </div>
-<div class="card">
-
+<!--RECIPE HIGHLIGHTS FOR GUEST-->
+<div id="favoritesContainer" class="container-fluid bg-light rounded-card">
+  <div class="row justify-content-center py-4">
+    <div th:each="recipe : ${topRecipes}" class="align-items-center justify-content-around">
+      <div class="h-100 px-2 my-2 border-none bg-transparent top-recipes" style="width: 18rem;" >
+      <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+        <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+      </a>
+      <div class="card-body bg-transparent">
+        <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+        <div class="row align-items-baseline top-subcategories">
+          <div class="col-2">
+            <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+              <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+            </a>
+          </div>
+          <div class="col-6">
+            <p th:text="${recipe.chef.firstName}"></p>
+          </div>
+          <div class="col-3">
+            <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
+              <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
 </div>
+<section id="showRegistration" class="toggle-reg"></section>
 <!--MODALS-->
 <div th:replace="partials/modals"></div>
 <div th:replace="partials/scripts :: scripts"></div>
-
+<script th:src="@{/js/landing.js}"></script>
 </body>
-
 </html>

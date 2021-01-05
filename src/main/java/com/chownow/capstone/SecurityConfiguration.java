@@ -28,15 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /*  Method to authenticate the user and encrypt password */
-//    @Bean
-//    DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(usersLoader);
-//        return daoAuthenticationProvider;
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -62,7 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/users/{id}",
                         "/dashboard",
                         "/users/{id}/*",
-                        "/api"
+                        "/api",
+                        "/api/*"
                 ).authenticated()
                 /* Pages that require a role */
 //                .antMatchers("/admin/*","/admin").hasRole("Admin")

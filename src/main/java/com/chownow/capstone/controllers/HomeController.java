@@ -2,6 +2,7 @@ package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.User;
 import com.chownow.capstone.repos.*;
+import com.chownow.capstone.services.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,8 +29,12 @@ public class HomeController {
     @Autowired
     private PantryRepository pantryDao;
 
+    @Autowired
+    private RecipeService recipeServ;
+
     @GetMapping("/")
     public String showHomepage(Model model) {
+        model.addAttribute("topRecipes",recipeServ.getTopFavorites());
         return "index";
     }
 }
