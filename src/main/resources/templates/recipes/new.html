@@ -1,203 +1,209 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<!--<head th:include="partials/head :: head(title='Create a Recipe')">-->
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <title>Create a New Recipe</title>
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!--  MAIN CSS -->
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--  CUSTOM PROFILE CSS -->
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
-</head>
 
+</head>
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
-<div class="container mt-4">
-<!--    <h2>Create your recipe!</h2>-->
-    <!--    TAB CONTENTS-->
-    <div class="tab-content" id="myTabContent">
+<main>
+    <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
+        <!--    <h2>Create your recipe!</h2>-->
+        <!--    TAB CONTENTS-->
+        <div class="tab-content" id="myTabContent">
 
-        <!--    ADD RECIPE INFO TAB-->
-        <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
-            <div class="card rounded-card">
-<!--                <div class="card-header bg-primary text-white">-->
-<!--                    Recipe Info-->
-<!--                </div>-->
-                <div class="card-body">
-                    <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Begin creating
-                        your recipe by providing some general information.</h3>
-                    <p th:text="${recipe.id}" hidden></p>
-                </div>
-                <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
-                    <!--    ENTER A RECIPE TITLE   -->
-                    <div class="form-group input-group mb-3 px-4">
-                        <span class="input-group-text" id="title">Title</span>
-                        <input type="text" class="form-control" aria-label="Title"
-                               aria-describedby="title" th:field="*{title}"/>
-                        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            <!--    ADD RECIPE INFO TAB-->
+            <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
+                <div>
+                    <!--                <div class="card-header bg-primary text-white">-->
+                    <!--                    Recipe Info-->
+                    <!--                </div>-->
+                    <div class="card-body">
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Begin creating
+                            your recipe by providing some general information.</h3>
+                        <p id="recipe-id" th:text="${recipe.id}" hidden></p>
                     </div>
-
-                    <!--    ENTER RECIPE DESCRIPTION -->
-                    <div class="form-group input-group px-4">
-                        <span class="input-group-text">Description</span>
-                        <textarea class="form-control" aria-label="description" rows="3"
-                                  th:field="*{description}"></textarea>
-                        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-                    </div>
-
-                    <!--    ENTER DIFFICULTY LEVEL    -->
-                    <div class="form-group input-group px-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
-                                   th:field="*{difficulty}" value="easy">
-                            <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
+                    <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
+                        <!--    ENTER A RECIPE TITLE   -->
+                        <div class="form-group input-group mb-3 px-4">
+                            <span class="input-group-text" id="title">Title</span>
+                            <input type="text" class="form-control" aria-label="Title"
+                                   aria-describedby="title" th:field="*{title}"/>
+                            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
-                                   th:field="*{difficulty}" value="medium">
-                            <label class="form-check-label mr-2" th:for="*{difficulty}">
-                                Medium
-                            </label>
+
+                        <!--    ENTER RECIPE DESCRIPTION -->
+                        <div class="form-group input-group px-4">
+                            <span class="input-group-text">Description</span>
+                            <textarea class="form-control" aria-label="description" rows="3"
+                                      th:field="*{description}"></textarea>
+                            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
-                                   th:field="*{difficulty}" value="hard">
-                            <label class="form-check-label mr-2" th:for="*{difficulty}">
-                                Hard
-                            </label>
-                            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+
+                        <!--    ENTER DIFFICULTY LEVEL    -->
+                        <div class="form-group input-group px-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
+                                       th:field="*{difficulty}" value="easy">
+                                <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
+                                       th:field="*{difficulty}" value="medium">
+                                <label class="form-check-label mr-2" th:for="*{difficulty}">
+                                    Medium
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
+                                       th:field="*{difficulty}" value="hard">
+                                <label class="form-check-label mr-2" th:for="*{difficulty}">
+                                    Hard
+                                </label>
+                                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!--    ENTER PREP TIME IN MINUTES   -->
-                    <div class="form-group input-group mb-3 px-4">
-                        <span class="input-group-text" id="prep-time">Prep-time</span>
-                        <input type="number" class="form-control" aria-label="Prep-time"
-                               aria-describedby="prep-time" th:field="*{prepTime}">
-                        <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
-                    </div>
+                        <!--    ENTER PREP TIME IN MINUTES   -->
+                        <div class="form-group input-group mb-3 px-4">
+                            <span class="input-group-text" id="prep-time">Prep-time</span>
+                            <input type="number" class="form-control" aria-label="Prep-time"
+                                   aria-describedby="prep-time" th:field="*{prepTime}">
+                            <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                        </div>
 
-                    <!--    ENTER COOK TIME IN MINUTES   -->
-                    <div class="form-group input-group mb-3 px-4">
-                        <span class="input-group-text" id="cook-time">Cook-time</span>
-                        <input type="number" class="form-control" aria-label="Cook-time"
-                               aria-describedby="cook-time" th:field="*{cookTime}">
-                        <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
-                    </div>
+                        <!--    ENTER COOK TIME IN MINUTES   -->
+                        <div class="form-group input-group mb-3 px-4">
+                            <span class="input-group-text" id="cook-time">Cook-time</span>
+                            <input type="number" class="form-control" aria-label="Cook-time"
+                                   aria-describedby="cook-time" th:field="*{cookTime}">
+                            <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+                        </div>
 
-                    <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
-                    <div class="form-group input-group mb-3 px-4">
-                        <span class="input-group-text" id="servings">Servings</span>
-                        <input type="number" class="form-control" aria-label="Servings"
-                               aria-describedby="servings" th:field="*{servings}">
-                        <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
-                    </div>
+                        <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
+                        <div class="form-group input-group mb-3 px-4">
+                            <span class="input-group-text" id="servings">Servings</span>
+                            <input type="number" class="form-control" aria-label="Servings"
+                                   aria-describedby="servings" th:field="*{servings}">
+                            <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                        </div>
 
-                    <!--    ENTER COOKING DIRECTIONS  -->
-                    <div class="form-group input-group px-4">
-                        <span class="input-group-text">Directions</span>
-                        <textarea class="form-control" aria-label="directions" rows="5"
-                                  th:field="*{directions}"></textarea>
-                        <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
-                    </div>
+                        <!--    ENTER COOKING DIRECTIONS  -->
+                        <div class="form-group input-group px-4">
+                            <span class="input-group-text">Directions</span>
+                            <textarea class="form-control" aria-label="directions" rows="5"
+                                      th:field="*{directions}"></textarea>
+                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
+                        </div>
 
-                    <!-- SUBMIT RECIPE INFO -->
-                    <div class="card-footer text-muted">
+                        <!-- SUBMIT RECIPE INFO -->
                         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                             <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                                aria-controls="nav-ingredients"
                                aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
                         </div>
+                        <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
+                                type="submit">Submit
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+
+            <!--        ADD RECIPE INGREDIENTS TAB-->
+            <div class="tab-pane pb-3" id="recipeTab">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Recipe
+                            Ingredients</h2>
+                        <div class="text-center">
+                            <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
+                                   value="Add New Ingredient"/>
+                        </div>
                         <div>
-                            <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
-                                    type="submit">Submit
-                            </button>
+                            <input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text"
+                                   id="ingredientSearch"/>
+                            <div id="searchResults" class="container text-center"></div>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!--        ADD RECIPE INGREDIENTS TAB-->
-        <div class="tab-pane fade" id="recipeTab" role="tabpanel" aria-labelledby="add-ingredients-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Ingredients List
                 </div>
-
-                <p id="recipe-id" th:text="${recipe.id}"></p>
-                <p id="recipe" th:object="${recipe}"></p>
-
-                <div class="card-body">
-                    <p class="card-text">Next, let's add an ingredients list to the recipe.</p>
-                </div>
-                <!--    RENDERED CONTENT-->
-                <div id="recipeContent" class="mt-2"></div>
-
-                <div class="card-footer text-muted">
-                    <div class="nav-item" role="presentation">
-                        <a id="add-images-tab" href="#addImages" data-toggle="tab" role="tab"
-                           aria-controls="nav-images"
+                <div class="card my-3">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Ingredient</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <!--    RENDERED CONTENT-->
+                        <tbody id="ingredientsBody">
+                        </tbody>
+                    </table>
+                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                        <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
+                           aria-controls="nav-ingredients"
                            aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
                     </div>
-                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
-
                 </div>
             </div>
-        </div>
 
-        <!--        UPLOAD IMAGES TAB-->
-        <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Images
-                </div>
-                <div class="card-body">
-                    <p class="card-text">You can upload an image of your dish here.</p>
-                </div>
-                <div class="card-footer text-muted">
+            <!--        UPLOAD IMAGES TAB-->
+            <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
+                <div>
+                    <!--                    <div class="card-header bg-primary text-white">-->
+                    <!--                        Images-->
+                    <!--                    </div>-->
+                    <div class="card-body">
+                        <p class="card-text">You can upload an image of your dish here.</p>
+                    </div>
+                    <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="add-categories-tab" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-images"
                            aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
                     </div>
                     <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
+                    <!--                    </div>-->
                 </div>
             </div>
-        </div>
 
-        <!--        ADD CATEGORIES TAB-->
-        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
-             role="tabpanel" aria-labelledby="add-categories-tab">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Categories
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Finally, categorize your recipe, so it is easier for others to
-                        discover!</p>
-                </div>
-                <div class="card-footer text-muted">
+            <!--        ADD CATEGORIES TAB-->
+            <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
+                 role="tabpanel" aria-labelledby="add-categories-tab">
+                <div>
+                    <!--                    <div class="card-header bg-primary text-white">-->
+                    <!--                        Categories-->
+                    <!--                    </div>-->
+                    <div class="card-body">
+                        <p class="card-text">Finally, categorize your recipe, so it is easier for others to
+                            discover!</p>
+                    </div>
+                    <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="publishRecipe" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-publish"
                            aria-selected="false" class="btn btn-primary float-right nav-link">Publish</a>
+                        <!--                        </div>-->
+                        <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                     </div>
-                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+</main>
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
      role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
@@ -215,16 +221,15 @@
                     <p>Are you sure you want to trash this?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-green">Confirm</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <!-- Add Ingredient Modal -->
-<div class="modal fade" id="ingredientModal" tabindex="-1"
+<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
      role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -241,7 +246,7 @@
                     </div>
                     <div class="container d-flex justify-content-center">
                         <div class="form-group">
-                            <label>Amount</label>
+                            <label class="green-text font-weight-bold">Amount</label>
                             <div id="formQty" class="qty mt-1">
                                 <span class="minus"><i class="fas fa-minus-circle"></i></span>
                                 <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05"
@@ -250,7 +255,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Unit</label>
+                            <label class="green-text font-weight-bold">Unit</label>
                             <div class="mt-1">
                                 <select name="unit" required>
                                     <option th:value="teaspoon">Teaspoon (tsp)</option>
@@ -266,140 +271,113 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-red" data-dismiss="modal">Cancel</button>
                     <div id="typeSubmit"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<!--! MODALS-->
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 <!-- Bootstrap core JavaScript -->
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
 <script th:src="@{/js/ingredients.js}"></script>
 <script th:inline="javascript">
-
-    /* GET USER ID FROM THYMELEAF */
     (function ($) {
-
-
+        // SETUP AJAX
         $.ajaxSetup({
             headers:
                 {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
         });
 
-        // RECIPE API CALL
+        let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+        console.log(recipeId);
+        console.log(typeof recipeId);
+
+        // RECIPE AJAX
         let recipeInventory;
         let inventoryIngredients;
         const makeRecipeAjaxCall = () => {
             recipeInventory = [];
             inventoryIngredients = [];
-
-            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-            console.log(recipeId);
-            console.log(typeof recipeId);
-
-
             $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
                 response.recipeIngredients.forEach(function (item) {
                     inventoryIngredients.push(item);
                     recipeInventory.push(item.ingredient.name.toLowerCase());
                 });
             });
-        }
+        };
 
         // CREATE HTML FOR RECIPE TEMPLATE
         const renderRecipe = () => {
             // SORT INGREDIENTS BY NAME
             inventoryIngredients.sort((a, b) => (a.ingredient.name > b.ingredient.name) ? 1 : -1);
             let recipeHtml = "";
-            recipeHtml +=
-                '<div class="container">' +
-                '<div class="row">' +
-                '<div class="col-md-12">' +
-                '<div class="text-center"><input type="button" id="showIngredientForm" class="btn btn-sm" value="Add New Ingredient"/></div>' +
-                '<div class="">' +
-                '<input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />' +
-                '<div id="searchResults" class="container text-center"></div>' +
-                '</div>' +
-                '</div>' +
-                '</div>'
-            ;
-            // RECIPE INGREDIENT TABLE
-            recipeHtml += '<div class="card shadow mt-3">';
-            recipeHtml += '<table class="table table-striped">' +
-                '<thead>' +
-                '<tr>' +
-                '<th>Ingredient</th>' +
-                '<th>Amount</th>' +
-                '<th></th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody>'
-            ;
-            // ADD ROWS TO RECIPE TABLE
+            // ADD ROWS TO PANTRY TABLE
             inventoryIngredients.forEach((item) => {
                 recipeHtml += '<tr>' +
-                    '<td><span>' + item.ingredient.name + '</span></td>' +
-                    '<td data-amount-float="' + item.amount + '-' + item.unit + '"><span class="rational">' + item.amount + '</span><span> ' + item.unit + '</span></td>' +
+                    '<td><span class="green-text">' + item.ingredient.name + '</span></td>' +
+                    '<td class="green-text" data-amount-float="' + item.amount + '-' + item.unit + '"><span class="rational">' + item.amount + '</span><span> ' + item.unit + '</span></td>' +
                     '<td  id="' + item.id + '" class="qty">' +
-                    '<span class="minus type="button" data-toggle="modal" data-target="#deleteIngredientModal""><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
-                    '<span class="plus" type="button" data-toggle="modal" data-target="#ingredientModal"><i class="fas fa-pencil-alt"></i></span>' +
+                    '<span  type="button" data-toggle="modal" data-target="#deleteIngredientModal" style="font-size: 0.8em!important;"><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
+                    '<span  type="button" data-toggle="modal" data-target="#ingredientModal" ><i class="fas fa-pencil-alt"></i></span>' +
                     '</td>' +
                     '</tr>'
                 ;
             })
-            // CLOSE RECIPE HTML TEMPLATE
-            recipeHtml += '</tbody>' +
-                '</table>' +
-                '</div>' +
-                '</div>'
-            ;
             // RENDER TEMPLATE
-            $('#recipeContent').html(recipeHtml);
+            $('#ingredientsBody').html(recipeHtml);
         }
 
+        // ONCLICK EVENT FOR USER PANTRY
         $("#userRecipe").click(function () {
+            // GET RECIPE INGREDIENTS
             makeRecipeAjaxCall();
+            // RENDER INGREDIENTS
             setTimeout(function () {
                 renderRecipe();
                 convertAllRationals();
             }, 500);
         });
 
-        // AUTOSEARCH INGREDIENTS FOR RECIPE
+        // AUTO-SEARCH INGREDIENTS FOR PANTRY
         $(document).on('keyup', "#ingredientSearch", function () {
             let searchResults = $('#searchResults');
             let searchInput = this.value.trim();
             /* dont display any suggestions if empty string */
             if (this.value === "") {
                 searchResults.empty();
+                /* if input string is already in pantry notify user */
             } else if (recipeInventory.includes(searchInput.toLowerCase())) {
-                console.log("found");
                 searchResults.empty();
                 searchResults.append(
-                    '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal" disabled>' + searchInput.toLowerCase() + ' is in recipe</button>'
+                    '<button id="ingredientInput" type="button" class="btn btn-yellow rounded-pill m-2" data-toggle="modal" data-target="#ingredientModal" disabled>' + searchInput.toLowerCase() + ' is in recipe</button>'
                 );
-            } else {
+            }
+            /* create suggestions buttons that user can select */
+            else {
                 searchResults.empty();
                 searchResults.append(
-                    '<button id="ingredientInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + searchInput.toLowerCase() + '</button>'
+                    '<button id="ingredientInput" type="button" class="btn btn-yellow rounded-pill m-2" data-toggle="modal" data-target="#ingredientModal">' + searchInput.toLowerCase() + '</button>'
                 );
 
-                /* search ingredients list to auto suggest ingredients and if not in list allow user to select own input */
+                /* search existing ingredients list to auto suggest ingredients and if not in list allow user to select own input */
                 ingredientsList.filter(function (ingredient) {
                     if (ingredient.toLowerCase() === searchInput.toLowerCase()) {
                         $("#ingredientInput").addClass("d-none");
                     }
                     if (ingredient.toLowerCase().startsWith(searchInput.toLowerCase())) {
                         searchResults.append(
-                            '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">' + ingredient + '</button>'
+                            '<button type="button" class="btn btn-yellow rounded-pill m-2" data-toggle="modal" data-target="#ingredientModal">' + ingredient + '</button>'
                         );
                     }
                 });
@@ -415,6 +393,8 @@
                 input.removeClass("d-none");
             } else {
                 $(this).prop('value', 'Add New Ingredient');
+                $("#searchResults").empty();
+                $("#ingredientSearch").val("")
                 input.addClass("d-none");
             }
         })
@@ -440,13 +420,13 @@
                 count.val(parseFloat(amountUnit[0]));// set amount value
                 $("#typeSubmit").html(
                     '<input name="id" type="hidden" value="' + recipeIngId + '"/>' +
-                    '<button id="updateIngredient" type="submit" class="btn btn-primary">Update</button>'
+                    '<button id="updateIngredient" type="submit" class="btn btn-green">Update</button>'
                 );// set edit submit button
             }
             /* else ingredient form is a new ingredient form */
             else {
                 clickedIngredient = button[0].innerHTML;
-                $("#typeSubmit").html('<button id="addIngredient" type="submit" class="btn btn-primary">Save</button>');
+                $("#typeSubmit").html('<button id="addIngredient" type="submit" class="btn btn-green">Save</button>');
                 openModal.find('.modal-title').text("Add " + clickedIngredient + " to recipe");
                 openModal.find('.modal-body input').val(clickedIngredient);
                 count.val(1);
@@ -469,11 +449,9 @@
             }
         });
 
-        // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO RECIPE
+        // ON INGREDIENT MODAL SUBMIT POST REQUEST ADD INGREDIENT TO PANTRY
         $(document).on('click', '#addIngredient', function () {
-            $('#ingredientModal').modal('toggle')
-            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-
+            $('#ingredientModal').modal('toggle');
             let form = $('#ingredientForm');
             let url = "/recipe/" + recipeId + "/ingredient/new";
             let formData = JSON.stringify({
@@ -481,6 +459,7 @@
                 "amount": form.find('input.count').val(),
                 "unit": form.find('select  option:selected').text()
             });
+            // CREATE POST REQUEST FOR INGREDIENT
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -488,15 +467,17 @@
                 data: formData,
                 dataType: "json",
             });
-
+            // GET RECIPE INGREDIENTS AFTER CREATE
             setTimeout(function () {
                 makeRecipeAjaxCall();
             }, 1000);
+            // RENDER THE RECIPE INGREDIENTS
             setTimeout(function () {
+                $("#searchResults").empty();
+                $("#ingredientSearch").val("")
                 renderRecipe();
                 convertAllRationals();
             }, 1500);
-
             return false;
         })
 
@@ -510,6 +491,7 @@
                 "amount": form.find('input.count').val(),
                 "unit": form.find('select  option:selected').text()
             });
+            // MAKE UPDATE POST REQUEST FOR INGREDIENT
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -517,17 +499,17 @@
                 data: formData,
                 dataType: "json",
             });
-
+            // GET RECIPE INGREDIENTS AFTER UPDATE
             setTimeout(function () {
                 makeRecipeAjaxCall();
             }, 1000);
+            // RENDER THE RECIPE INGREDIENTS
             setTimeout(function () {
                 renderRecipe();
                 convertAllRationals();
             }, 1500);
-
             return false;
-        })
+        });
 
         // INGREDIENT MODAL ON SHOW DYNAMIC INFO
         $('#deleteIngredientModal').on('show.bs.modal', function (event) {
@@ -543,21 +525,24 @@
             openModal.find('.modal-body input').val(recipeIngId);
         })
 
-        // ON DELETE INGREDIENT MODAL SUBMIT POST REQUEST REMOVE INGREDIENT FROM RECIPE
+        // ON DELETE INGREDIENT MODAL SUBMIT REMOVE INGREDIENT FROM RECIPE
         $("#deleteIngredient").submit(function () {
             $('#deleteIngredientModal').modal('toggle');
             let form = $(this);
-            let ingredientId = form.find('input[name=id]').val();
+            let ingredientId = form.find('input[name=id]').val(); // GETS INGREDIENT ID
             let url = '/api/recipe-ingredients/' + ingredientId + '/delete';
+            // MAKE DELETE REQUEST FOR INGREDIENT
             $.ajax({
                 type: "POST",
                 url: url,
                 contentType: "application/json",
                 dataType: 'json'
             });
+            // AFTER DELETE GET RECIPE INGREDIENTS
             setTimeout(function () {
                 makeRecipeAjaxCall();
             }, 1000);
+            // RENDER THE RECIPE INGREDIENTS
             setTimeout(function () {
                 renderRecipe();
                 convertAllRationals();
@@ -566,9 +551,10 @@
         })
     })(jQuery);
 
-    /*]]>*/
+
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>
 
+</main>
 </body>
 </html>
