@@ -1,6 +1,10 @@
 package com.chownow.capstone.controllers;
 
+import com.chownow.capstone.models.Ingredient;
+import com.chownow.capstone.models.Recipe;
+import com.chownow.capstone.models.RecipeIngredient;
 import com.chownow.capstone.models.SpoonApiDto;
+import com.chownow.capstone.repos.RecipeRepository;
 import com.chownow.capstone.services.RecipeService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,9 @@ public class SearchExampleController {
     private String spoonApi;
 
     @Autowired
+    private RecipeRepository recipeDao;
+
+    @Autowired
     private RecipeService recipeService;
 
     // With Javascript
@@ -34,9 +41,14 @@ public class SearchExampleController {
 
     @PostMapping("/search")
     public String saveRecipes(Model viewModel,
-                              @ModelAttribute SpoonApiDto recipe){
+                              @ModelAttribute SpoonApiDto recipe,
+                              @ModelAttribute Recipe recipe1){
 
-        recipeService.saveRecipe(recipe);
+        Recipe existingRecipe = recipeDao.findFirstBySpoonApiId(recipe1.getSpoonApiId());
+
+        if (existingRecipe == null) {
+            recipeService.saveRecipe(recipe);
+        }
         return "recipes/search";
     }
 }

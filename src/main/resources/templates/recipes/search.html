@@ -3,7 +3,17 @@
 <head th:replace="partials/head :: head('Results')">
     <meta charset="UTF-8">
     <title>Results</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <!--  CUSTOM PROFILE CSS -->
+    <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
+
 <body>
 <!--<nav th:replace="partials/navbar :: nav"></nav>-->
 <div class="form-outline">
@@ -79,6 +89,7 @@
                     <button type="submit" class="btn btn-primary">Add to favorites</button>
                 </div>
             </div>
+            <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
             <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
             <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
             <input type="hidden" id="hidden-recipe-prep" th:name="prep" value=""/>
@@ -114,7 +125,7 @@
             type: 'GET',
             url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
             success: function (results) {
-            //console.log(results);
+            console.log(results);
                 let recipe = "";
 
                 recipe += `<div class="col-md-12">
@@ -129,7 +140,7 @@
                         type: 'GET',
                         url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
                         success: function (singleRecipe) {
-                        //console.log(singleRecipe);
+                        console.log(singleRecipe);
 
                             $('.recipes').append(
                                 `<div class="col">
@@ -171,6 +182,7 @@
                                         let servings = "";
 
                                         let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
+                                        let hiddenSpoonApiId = modalRecipe.id;
                                         let hiddenImage = modalRecipe.image;
                                         let hiddenPrepTime = modalRecipe.preparationMinutes;
                                         let hiddenCook = modalRecipe.cookingMinutes;
@@ -251,7 +263,8 @@
                                         $('.recipe-ingredients').html(ingredients);
                                         $('.recipe-directions').html(instructions);
 
-                                        // Display to Hidden Fields
+                                        // Hidden Fields
+                                        $('#hidden-spoonApi-id').val(hiddenSpoonApiId);
                                         $('#hidden-recipe-title').val(hiddenTitle);
                                         $('#hidden-recipe-image').val(hiddenImage);
                                         $('#hidden-recipe-prep').val(hiddenPrepTime);

@@ -2,7 +2,7 @@ package com.chownow.capstone.models;
 
 // Data Transfer
 public class SpoonApiDto {
-
+    private long spoonApiId;
     private String title;
     private String image;
     private String prep;
@@ -12,6 +12,14 @@ public class SpoonApiDto {
     private String categories;
     private String ingredients;
     private String directions;
+
+    public long getSpoonApiId() {
+        return spoonApiId;
+    }
+
+    public void setSpoonApiId(long spoonApiId) {
+        this.spoonApiId = spoonApiId;
+    }
 
     public String getTitle() {
         return title;

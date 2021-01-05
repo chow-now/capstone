@@ -52,7 +52,7 @@ public class RecipeService {
      */
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
-// Hard-coded for now
+// Hard-coded for now, security implementation
 // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
         Pantry pantry = pantryRepository.getFirstByOwner(user);
@@ -91,6 +91,7 @@ public class RecipeService {
  * Create a recipe entity object to be saved
  */
         Recipe recipeEntity = new Recipe();
+        recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setCookTime(Integer.parseInt(cookTime));
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setDifficulty("NA");

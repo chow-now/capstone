@@ -20,6 +20,10 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    // Spoon API ID
+    @Column(nullable = true)
+    private long spoonApiId;
+
     @Size(min = 0, message = "Title should be a bit longer.")
     @Size(max = 100,message = "Title is too long")
     @NotBlank(message= "Recipe needs a title")
@@ -90,7 +94,8 @@ public class Recipe {
     public Recipe(){}
 
     //setter
-    public Recipe(String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
+    public Recipe(long spoonApiId, String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
+        this.spoonApiId = spoonApiId;
         this.title = title.trim();
         this.description = description.trim();
         this.directions = directions.trim();
@@ -101,8 +106,9 @@ public class Recipe {
         this.chef = chef;
     }
     //getter
-    public Recipe(long id, String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
+    public Recipe(long id, long spoonApiId, String title, String description, String directions, String difficulty, int cookTime, int prepTime, int servings, User chef) {
         this.id = id;
+        this.spoonApiId = spoonApiId;
         this.title = title;
         this.description = description;
         this.directions = directions;
@@ -119,6 +125,14 @@ public class Recipe {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getSpoonApiId() {
+        return spoonApiId;
+    }
+
+    public void setSpoonApiId(long spoonApiId) {
+        this.spoonApiId = spoonApiId;
     }
 
     public String getTitle() {
