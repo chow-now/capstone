@@ -57,18 +57,21 @@
     }
 
     .modify-size{
-        margin-top: 50% !important;
-        width: 80% !important;
+        margin-top: 25% !important;
+        width: 95% !important;
     }
 
     .carousel-item span {
         font-size: 1.5em!important;
     }
+    .modify-position{
+        margin-top: -28rem!important;
+    }
 
 }
 
 /* Landscape phones and down */
-@media screen and (max-width: 480px) {
+@media screen and (min-width: 381px)and (max-width: 480px) {
     .top-recipes{
         width: 11rem!important;
     }
