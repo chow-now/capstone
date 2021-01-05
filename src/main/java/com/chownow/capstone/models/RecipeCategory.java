@@ -22,6 +22,11 @@ public class RecipeCategory {
 // @JsonIgnore
     private Category category;
 
+    public RecipeCategory() {}
+
+    public RecipeCategory(long id) {
+        this.id = id;
+    }
 
     public Recipe getRecipe() {
         return recipe;

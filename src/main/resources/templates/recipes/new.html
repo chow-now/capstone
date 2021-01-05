@@ -187,9 +187,6 @@
             <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
                  role="tabpanel" aria-labelledby="add-categories-tab">
                 <div>
-                    <!--                    <div class="card-header bg-primary text-white">-->
-                    <!--                        Categories-->
-                    <!--                    </div>-->
                     <div class="card-body">
                         <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Finally, categorize your
                             recipe, so it is easier for others to
@@ -198,7 +195,7 @@
 
                             <div id="categoriesBody"></div>
 
-                            <button type="submit">Submit</button>
+                            <button id="categoriesSubmit" type="submit">Submit</button>
 
                         </form>
 
@@ -312,7 +309,10 @@
                     {'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')}
             });
 
+            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
 
+
+            // AJAX CATEGORIES
             let categories;
             const makeRecipeCategoriesAjaxCall = () => {
                 categories = [];
@@ -323,14 +323,15 @@
                 });
             };
 
+            // CREATE CATEGORIES HTML
             const renderCategories = () => {
                 let categoriesHtml = "";
                 categories.forEach((item) => {
                     categoriesHtml +=
                         '<div class="form-check">' +
-                        '<input class="form-check-input" type="checkbox" value="' + item.id +
-                        '" id="flexCheckDefault">' +
-                        '<label class="form-check-label" for="flexCheckDefault">' + item.name +
+                        '<input class="form-check-input" type="checkbox" name="category" value="' + item.id +
+                        '" id="categories">' +
+                        '<label class="form-check-label" for="categories">' + item.name +
                         '</label>' +
                         '</div>';
                 });
@@ -348,10 +349,28 @@
                 }, 500);
             });
 
-
-
-
-            let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+            // SUMBIT POST REQUEST TO ADD CATEGORIES TO RECIPE
+            $(document).on('click', '#categoriesSubmit', function () {
+                let form = $('#add-categories-form');
+                let recipeCategories = [];
+                form.find('input:checkbox:checked').each(function(){
+                    recipeCategories.push(parseInt($(this).val()));
+                })
+                let url = "/recipes/" + recipeId + "/categories/new";
+                let formData = JSON.stringify({
+                    recipesCategories
+                });
+                // CREATE POST REQUEST FOR RECIPE CATEGORIES
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: url,
+                    data: formData,
+                    dataType: "json",
+                });
+                console.log("categories sent!");
+                console.log(formData);
+            });
 
             // RECIPE AJAX
             let recipeInventory;
