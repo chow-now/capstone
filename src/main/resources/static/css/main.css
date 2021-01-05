@@ -133,7 +133,9 @@ input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
 .rounded-card {
     border-radius: 1.2rem!important;
 }
-
+#chowText{
+    transition: ease all .5s;
+}
 @media screen and (max-width: 768px){
     #chowText{
         margin-top: 40%;

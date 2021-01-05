@@ -226,4 +226,16 @@ public class RecipeService {
         }
         return possibleRecipes;
     }
+    /** RECIPE MOST FAVORITED **/
+    public List<Recipe> getTopFavorites(){
+        List<Recipe> recipes = recipeDao.findAll();
+        List<Recipe> favorites = new ArrayList<>();
+
+        for (Recipe r : recipes){
+                if (r.getFavoritedBy().size() > 5 && favorites.size()<10){
+                    favorites.add(r);
+                }
+        }
+        return favorites;
+    }
 }

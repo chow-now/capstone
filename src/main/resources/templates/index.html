@@ -2,27 +2,106 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/head :: head(title)"></head>
 <style>
+  #favoritesContainer, .top-recipes{
+    transition: ease all .75s;
+  }
+  @media only screen and (max-width: 500px) {
+    .top-recipes{
+      width: 10rem!important;
+    }
+    .top-subcategories{
+      display: none;
+    }
+  }
+  .modify-position{
+    position: absolute;
+    margin-top: -32rem;
+  }
 
+  @media screen and (max-width: 768px){
+    .modify-size{
+      margin-top: 30% !important;
+      width: 60% !important;
+    }
+  }
 </style>
-<body>
+<body class="bg-green">
 <!--<nav th:include="partials/navbar.html :: nav"></nav>-->
 <div class="jumbotron m-0" style="background-image: url('img/cn-bg.png');">
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-12 text-center mb-5">
-        <img src="img/cn-text.png" id="chowText"  >
+        <img src="img/cn-text.png" id="chowText" >
       </div>
       <div class="btn btn-pink btn-lg rounded-pill register-btn" data-toggle="modal" data-target="#registerModal">REGISTER</div>
     </div>
   </div>
 </div>
-<div class="card">
-
+<div id="favoritesContainer" class="container-fluid bg-light rounded-card">
+  <div class="row justify-content-center py-4">
+    <div th:each="recipe : ${topRecipes}" class="align-items-center justify-content-around">
+      <div class="h-100 px-2 my-2 border-none bg-transparent top-recipes" style="width: 18rem;" >
+      <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+        <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+      </a>
+      <div class="card-body bg-transparent">
+        <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+        <div class="row align-items-baseline top-subcategories">
+          <div class="col-2">
+            <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+              <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+            </a>
+          </div>
+          <div class="col-6">
+            <p th:text="${recipe.chef.firstName}"></p>
+          </div>
+          <div class="col-3">
+            <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
+              <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
 </div>
+<section id="theTarget" class="toggle-reg"></section>
 <!--MODALS-->
 <div th:replace="partials/modals"></div>
 <div th:replace="partials/scripts :: scripts"></div>
 
+<script>
+  window.onscroll = function() {
+    scrollFunction()
+  };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+      $("#chowText").addClass("modify-size");
+      $("#favoritesContainer").addClass("modify-position");
+      $(".register-btn").hide(600);
+    } else {
+      $("#chowText").removeClass("modify-size",{duration:600});
+      $("#favoritesContainer").removeClass("modify-position",{duration:1200})
+      $(".register-btn").show(600);
+      $("#theTarget").addClass("toggle-reg")
+    }
+  }
+
+  const target = document.querySelector('#theTarget');
+
+  document.addEventListener('scroll', () => {
+    if (window.scrollY >= target.getBoundingClientRect().top) {
+      if($("#theTarget").hasClass("toggle-reg")){
+        $("#theTarget").removeClass("toggle-reg");
+        setTimeout(function() {
+          $("#registerModal").modal("toggle");
+        }, 1000);
+      }
+    }
+  })
+</script>
 </body>
 
 </html>
