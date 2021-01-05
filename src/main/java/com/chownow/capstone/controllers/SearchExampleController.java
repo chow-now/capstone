@@ -43,9 +43,10 @@ public class SearchExampleController {
     public String saveRecipes(Model viewModel,
                               @ModelAttribute SpoonApiDto recipe,
                               @ModelAttribute Recipe recipe1){
-
+        // Find if recipe already exists in DB
         Recipe existingRecipe = recipeDao.findFirstBySpoonApiId(recipe1.getSpoonApiId());
 
+        // If not found, save to DB
         if (existingRecipe == null) {
             recipeService.saveRecipe(recipe);
         }
