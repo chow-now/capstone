@@ -112,9 +112,11 @@
                         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                             <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                                aria-controls="nav-ingredients"
-                               aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                               aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                                Step</a>
                         </div>
-                        <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
+                        <button th:if="${recipe.id == 0}"
+                                class="btn btn-red rounded-pill m-2 float-right nav-link shadow px-2"
                                 type="submit">Submit
                         </button>
 
@@ -126,8 +128,8 @@
             <div class="tab-pane pb-3" id="recipeTab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Recipe
-                            Ingredients</h2>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Add Ingredients to
+                            your recipe.</h3>
                         <div class="text-center">
                             <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
                                    value="Add New Ingredient"/>
@@ -155,7 +157,8 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                            Step</a>
                     </div>
                 </div>
             </div>
@@ -167,13 +170,15 @@
                     <!--                        Images-->
                     <!--                    </div>-->
                     <div class="card-body">
-                        <p class="card-text">You can upload an image of your dish here.</p>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
+                            image of your dish here.</h3>
                     </div>
                     <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="add-categories-tab" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-images"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                            Step</a>
                     </div>
                     <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                     <!--                    </div>-->
@@ -188,14 +193,14 @@
                     <!--                        Categories-->
                     <!--                    </div>-->
                     <div class="card-body">
-                        <p class="card-text">Finally, categorize your recipe, so it is easier for others to
-                            discover!</p>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Finally, categorize your recipe, so it is easier for others to
+                            discover!</h3>
                     </div>
                     <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="publishRecipe" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-publish"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Publish</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Publish</a>
                         <!--                        </div>-->
                         <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
                     </div>
