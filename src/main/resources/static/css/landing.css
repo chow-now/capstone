@@ -33,7 +33,7 @@
     }
 }
 
-@media screen and (min-width: 769px)   {
+@media screen and (min-width: 769px) and (max-width: 1023px)   {
     #chowText{
         width: 50%;
     }
@@ -120,5 +120,33 @@
 @media screen and (min-width: 2500px) {
     #chowText{
         width: 25%!important;
+    }
+}
+
+/*--cover up mac , mac-book---*/
+
+@media only screen and (min-width: 1024px) and (max-width: 1920px) {
+    .modify-position{
+        margin-top: -25rem!important;
+    }
+    #chowText{
+        width: 45%!important;
+    }
+    .carousel-item span {
+        font-size: 3em;
+    }
+}
+
+/*--mac book pro , and mac-book retina display screen---*/
+
+@media only screen and (min-width: 1920px) and (max-width: 2560px) {
+    .modify-position{
+        margin-top: -25rem!important;
+    }
+    #chowText{
+        width: 45%!important;
+    }
+    .carousel-item span {
+        font-size: 3em;
     }
 }
