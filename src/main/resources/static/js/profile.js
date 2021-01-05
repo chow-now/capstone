@@ -186,7 +186,7 @@
     $(document).on('click','#addIngredient',function(){
         $('#ingredientModal').modal('toggle');
         let form = $('#ingredientForm');
-        let url = "/users/pantry/ingredient/new";
+        let url = "/pantry/ingredient/new";
         let formData = JSON.stringify({
             "name" : form.find('input#ingredientName').val(),
             "amount": form.find('input.count').val(),
@@ -218,7 +218,7 @@
     $(document).on('click','#updateIngredient',function(){
         $('#ingredientModal').modal('toggle');
         let form = $('#ingredientForm');
-        let url = "/users/pantry/ingredient/edit";
+        let url = "/pantry/ingredient/edit";
         let formData = JSON.stringify({
             "id" : form.find('input[name=id]').val(),
             "amount": form.find('input.count').val(),

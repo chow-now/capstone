@@ -73,7 +73,7 @@ public class AmazonServiceImpl implements AmazonService {
             long timeStamp = new Date().getTime();
             /* set the filepath to save file */
             String filepath = "users/"+user.getId()+"/avatar/";
-            /* add filepath to filename to map directory in cloud */
+            /* add filepath to filename to map directory in s3 */
             String fileName =
                     filepath +
                     timeStamp + "-" +
@@ -112,7 +112,7 @@ public class AmazonServiceImpl implements AmazonService {
             long timeStamp = new Date().getTime();
             /* set the filepath to save file */
             String filepath = "recipes/"+recipe.getId()+"/images/";
-            /* add filepath to filename to map directory in cloud */
+            /* add filepath to filename to map directory in s3 */
             String fileName =
                     filepath +
                     timeStamp + "-" +

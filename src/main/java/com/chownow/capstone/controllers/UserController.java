@@ -3,6 +3,7 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import com.chownow.capstone.services.AmazonService;
+import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -34,13 +33,7 @@ public class UserController {
     private FollowRepository followDao;
 
     @Autowired
-    private IngredientRepository ingredientDao;
-
-    @Autowired
-    PantryIngredientRepository pantryIngDao;
-
-    @Autowired
-    PantryRepository pantryDao;
+    private PantryRepository pantryDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,10 +42,9 @@ public class UserController {
     private UserService userServ;
 
     @Autowired
-    private RecipeRepository recipeDao;
+    private RecipeService recipeServ;
 
     // CREATE USER
-
     @GetMapping("/register")
     public String registerUser(Model model) {
         if(userServ.isLoggedIn()){
@@ -68,42 +60,57 @@ public class UserController {
             Errors validation,
             Model model
     ) {
+        // validate if email already exists in db
         User existingEmail = userDao.getFirstByEmail(user.getEmail());
-
         if(existingEmail != null){
             validation.rejectValue("email", "user.email", "Duplicate email " + user.getEmail());
         }
-
+        // user model validations
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("user", user);
             return "users/new";
         }
+        // encrypt password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // add fields to the existing user
         user.setAdmin(false);
         user.setAvatar("/img/chef-avatar.jpg");
+        // save th user to db
         User dbUser = userDao.save(user);
+        // create pantry for the user
         Pantry pantry = new Pantry(dbUser);
         pantryDao.save(pantry);
+        // login the registered user
         userServ.authenticate(dbUser);
         model.addAttribute(dbUser);
         return "redirect:/users/"+dbUser.getId()+"/edit";
     }
 
+    // PARTIAL REGISTER FORM
+    @GetMapping("/register-form")
+    public String getRegisterForm(Model model) {
+        model.addAttribute("user", new User());
+        return "users/forms :: register";
+    }
 
     // GET USER PROFILE BY ID
     @GetMapping("/users/{id}")
     public String showUserProfile(@PathVariable long id, Model model) {
+        // logged in user
         User currentUser = userServ.loggedInUser();
-        System.out.println(currentUser);
+        // profile owner
         User user = userDao.findFirstById(id);
+        // if profile page for user doesnt exist send to recipes index
         if(user == null){
             return "redirect:/recipes";
         }
+        // check if logged in user is following the profile owner
         if (followDao.findByUserAndFriend(currentUser, user) != null) {
             model.addAttribute("isFollowing", true);
         }
         model.addAttribute("user", user);
+        // check if logged in user is the profile owner
         model.addAttribute("isOwner",userServ.isOwner(user));
         return "users/profile";
     }
@@ -112,7 +119,6 @@ public class UserController {
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
-        System.out.println(currentUser);
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
@@ -123,14 +129,16 @@ public class UserController {
     @GetMapping("/users/{id}/edit")
     public String showEditUser(@PathVariable long id, Model model) {
         User user = userDao.getOne(id);
+        // restrict access to owner redirects others
         if(!userServ.isOwner(user)){
             return "redirect:/recipes";
         }
+        // do not allow Oauth users to have password reset
         if(user.getAuthProvider()==null){
             model.addAttribute("canChange",true);
-        };
+        }
         model.addAttribute("user",user);
-        return "/users/edit";
+        return "users/edit";
     }
 
     // POST MAPPING FOR USER RELATED TO PROFILE DASHBOARD
@@ -139,14 +147,17 @@ public class UserController {
     @PostMapping("/users/{id}/edit")
     public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
         User user = userDao.getOne(id);
+        // user model validations
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("user", editUser);
             return "users/edit";
         }
+        // add fields to the existing user
         user.setFirstName(editUser.getFirstName());
         user.setEmail(editUser.getEmail());
         user.setAboutMe(editUser.getAboutMe());
+        // submit update
         user = userDao.save(user);
         model.addAttribute("user",user);
         return "redirect:/users/"+id;
@@ -186,8 +197,7 @@ public class UserController {
         return "redirect:/users/"+id;
     }
 
-    // SUBMIT UPLOAD USER AVATAR FORM
-
+    // UPLOAD USER AVATAR
     @PostMapping("/users/{id}/upload")
     public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
         User user = userDao.getOne(id);
@@ -206,9 +216,6 @@ public class UserController {
         return "redirect:/";
     }
 
-
-    /* AJAX POST REQUESTS */
-
     // Create a follow request
     @RequestMapping(value = "/users/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
@@ -222,105 +229,12 @@ public class UserController {
         return dbFollow;
     }
 
-
-    // CREATE A NEW PANTRY ITEM
-    @RequestMapping(value = "/users/pantry/ingredient/new", method = RequestMethod.POST, headers = "Content-Type=application/json")
-    public @ResponseBody
-    String postPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient) {
-        User currentUser = userServ.loggedInUser();
-        Ingredient dbIngredient = null;
-        boolean isNotInDb = true;
-        for (Ingredient i : ingredientDao.findAllByNameLike(pantryIngredient.getName())) {
-            if (pantryIngredient.getName().equalsIgnoreCase(i.getName())) {
-                dbIngredient = i;
-                isNotInDb = false;
-                break;
-            }
-        }
-        if (isNotInDb) {
-            dbIngredient = ingredientDao.save(new Ingredient(pantryIngredient.getName().toLowerCase()));
-        }
-        PantryIngredient newPantryIng = new PantryIngredient(
-                pantryIngredient.getAmount(),
-                pantryIngredient.getUnit(),
-                currentUser.getPantry(),
-                dbIngredient
-        );
-        pantryIngDao.save(newPantryIng);
-        return "im done";
-    }
-
-    // EDIT PANTRY ITEM
-    @RequestMapping(value = "/users/pantry/ingredient/edit", method = RequestMethod.POST, headers = "Content-Type=application/json")
-    public @ResponseBody
-    String editPantryIngredient(@RequestBody AjaxPantryIngredientRequest pantryIngredient) {
-        PantryIngredient pi = pantryIngDao.getOne(pantryIngredient.getId());
-        pi.setAmount(pantryIngredient.getAmount());
-        pi.setUnit(pantryIngredient.getUnit());
-        pantryIngDao.save(pi);
-        return "update complete";
-    }
-
-    // USER RECIPE MATCHES
-    public List<Recipe> getMatches(User user){
-        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
-        List<Recipe> recipes = recipeDao.findAll();
-
-        List<Recipe> possibleRecipes = new ArrayList<>();
-
-        ArrayList<Long> ingredientsToMap= new ArrayList<>();
-        System.out.println("Ingredients in Users Pantry");
-        for(PantryIngredient pi : pantryIngredients){
-            ingredientsToMap.add(pi.getIngredient().getId());
-            System.out.println(pi.getIngredient().getId());
-        }
-        for(Recipe r : recipes){
-            boolean canMake = true;
-            for(RecipeIngredient ri : r.getRecipeIngredients()){
-                if(!ingredientsToMap.contains(ri.getIngredient().getId())){
-                    System.out.println("Ingredient not in pantry :" +ri.getIngredient().getId());
-                    canMake = false;
-                    break;
-                }
-            }
-            if(canMake) possibleRecipes.add(r);
-        }
-        return possibleRecipes;
-    }
-
+    // USER RECIPE MATCHES RETURNS PARTIAL
     @GetMapping("users/{id}/matches")
     public String getMatches(@PathVariable (value="id") long userId, Model model){
         User user = userDao.getById(userId);
-        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
-        List<Recipe> recipes = recipeDao.findAll();
-
-        List<Recipe> possibleRecipes = new ArrayList<>();
-
-        ArrayList<Long> ingredientsToMap= new ArrayList<>();
-        System.out.println("Ingredients in Users Pantry");
-        for(PantryIngredient pi : pantryIngredients){
-            ingredientsToMap.add(pi.getIngredient().getId());
-            System.out.println(pi.getIngredient().getId());
-        }
-        for(Recipe r : recipes){
-            boolean canMake = true;
-            for(RecipeIngredient ri : r.getRecipeIngredients()){
-                if(!ingredientsToMap.contains(ri.getIngredient().getId())){
-                    System.out.println("Ingredient not in pantry :" +ri.getIngredient().getId());
-                    canMake = false;
-                    break;
-                }
-            }
-            if(canMake) possibleRecipes.add(r);
-        }
-        model.addAttribute("suggestions",possibleRecipes);
+        model.addAttribute("suggestions",recipeServ.getMatches(user));
         model.addAttribute("user",user);
         return "users/suggestions :: suggestions";
-    }
-
-    @GetMapping("/register-form")
-    public String getRegisterForm(Model model) {
-        model.addAttribute("user", new User());
-        return "users/forms :: register";
     }
 }
