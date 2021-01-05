@@ -26,6 +26,22 @@ a.nostyle:visited {
     position: relative;
     height: 100vh;
 }
+
+.bg-green{
+    background-color: #03b090;
+}
+
+.bg-yellow{
+    background-color: #fec82e
+}
+
+.bg-pink{
+    background-color: #fba9c8;
+}
+
+.bg-red{
+    background-color: #ff686d;
+}
 .btn-pink{
     background-color: #fba9c8;
     color: whitesmoke;
@@ -49,6 +65,22 @@ a.nostyle:visited {
     color: whitesmoke;
     font-weight: bold;
 }
+.btn-green:hover{
+    background-color: #167664;
+    color:ghostwhite;
+}
+.btn-yellow:hover{
+    background-color: #cea52a;
+    color:ghostwhite;
+}
+.btn-pink:hover{
+    background-color: #ec7ba2;
+    color:ghostwhite;
+}
+.btn-red:hover{
+    background-color: #ba4b4f;
+    color:ghostwhite;
+}
 
 .green-text{
     color: #03b090;
@@ -62,12 +94,26 @@ a.nostyle:visited {
     color: #fec82e;
 }
 
-::placeholder {
-    color: #03b090;
+input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
+    color: #03b090!important;
+}
+
+.form-control:focus {
+    border-color: #f6dc5c;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #FFC107
 }
 
 .modal-content{
     border-radius: 1.5rem!important;
+    background-color: #f8f9fa;;
+}
+
+.login-signup-toggle{
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+}
+.login-signup-toggle:hover{
+    color: rgb(51, 51, 51);
 }
 
 .or-seperator {
@@ -78,7 +124,7 @@ a.nostyle:visited {
 
 .or-seperator i {
     padding: 0 10px;
-    background: white;
+    background: #f8f9fa;
     position: relative;
     top: -11px;
     z-index: 1;

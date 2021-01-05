@@ -199,4 +199,31 @@ public class RecipeService {
 
         return recipeEntity.getId() + "";
     }
+
+/**    RECIPE MATCHES BASED ON USER PANTRY ITEMS    **/
+    public List<Recipe> getMatches(User user) {
+        List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
+        List<Recipe> recipes = recipeDao.findAll();
+
+        List<Recipe> possibleRecipes = new ArrayList<>();
+
+        ArrayList<Long> ingredientsToMap = new ArrayList<>();
+        System.out.println("Ingredients in Users Pantry");
+        for (PantryIngredient pi : pantryIngredients) {
+            ingredientsToMap.add(pi.getIngredient().getId());
+            System.out.println(pi.getIngredient().getId());
+        }
+        for (Recipe r : recipes) {
+            boolean canMake = true;
+            for (RecipeIngredient ri : r.getRecipeIngredients()) {
+                if (!ingredientsToMap.contains(ri.getIngredient().getId())) {
+                    System.out.println("Ingredient not in pantry :" + ri.getIngredient().getId());
+                    canMake = false;
+                    break;
+                }
+            }
+            if (canMake) possibleRecipes.add(r);
+        }
+        return possibleRecipes;
+    }
 }
