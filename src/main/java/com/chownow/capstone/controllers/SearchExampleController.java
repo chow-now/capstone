@@ -40,7 +40,12 @@ public class SearchExampleController {
     }
 
     @PostMapping("/search")
-    public String saveRecipes(@ModelAttribute SpoonApiDto recipe){
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
+                              Model model){
+
+        String message = recipeService.saveRecipe(recipe);
+        // For testing/indicator
+        model.addAttribute("message", message);
 
         return "recipes/search";
     }

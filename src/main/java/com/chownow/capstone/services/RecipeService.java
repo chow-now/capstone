@@ -53,18 +53,23 @@ public class RecipeService {
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
 
+        // Hard-coded for now, security implementation
+        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
+        Pantry pantry = pantryRepository.getFirstByOwner(user);
+
         // Find if recipe already exists in DB
         Recipe existingRecipe = recipeDao.findFirstBySpoonApiId(recipe.getSpoonApiId());
 
-        // If not found, save to DB
-        if (existingRecipe == null) {
-            recipeService.saveRecipe(recipe);
-        }
+        // If existing, save to favorite DB
+        if (existingRecipe != null) {
 
-// Hard-coded for now, security implementation
-// User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
-        Pantry pantry = pantryRepository.getFirstByOwner(user);
+            Favorites favoriteEntity = new Favorites();
+            favoriteEntity.setRecipe(existingRecipe);
+            favoriteEntity.setUser(user);
+            favoritesRepository.save(favoriteEntity);
+            return "Added to the favorites";
+        }
 
         String cookTime = "";
         String prepTime = "";
@@ -105,7 +110,7 @@ public class RecipeService {
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setDifficulty("NA");
         recipeEntity.setDirections(recipe.getDirections());
-        //recipeEntity.setPublished(false);
+//recipeEntity.setPublished(false);
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
         recipeEntity.setServings(Integer.parseInt(servings));
         recipeEntity.setTitle(recipe.getTitle());
@@ -207,10 +212,10 @@ public class RecipeService {
 
         System.out.println("Recipe saved!!");
 
-        return recipeEntity.getId() + "";
+        return "New Recipe Added & Added to the favorites";
     }
 
-/**    RECIPE MATCHES BASED ON USER PANTRY ITEMS    **/
+    /* RECIPE MATCHES BASED ON USER PANTRY ITEMS */
     public List<Recipe> getMatches(User user) {
         List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
         List<Recipe> recipes = recipeDao.findAll();
@@ -236,15 +241,16 @@ public class RecipeService {
         }
         return possibleRecipes;
     }
-    /** RECIPE MOST FAVORITED **/
+
+    /* RECIPE MOST FAVORITED */
     public List<Recipe> getTopFavorites(){
         List<Recipe> recipes = recipeDao.findAll();
         List<Recipe> favorites = new ArrayList<>();
 
         for (Recipe r : recipes){
-                if (r.getFavoritedBy().size() > 5 && favorites.size()<10){
-                    favorites.add(r);
-                }
+            if (r.getFavoritedBy().size() > 5 && favorites.size()<10){
+                favorites.add(r);
+            }
         }
         return favorites;
     }
