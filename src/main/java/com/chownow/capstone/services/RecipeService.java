@@ -4,6 +4,7 @@ import com.chownow.capstone.models.SpoonApiDto;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -54,8 +55,8 @@ public class RecipeService {
     public String saveRecipe(SpoonApiDto recipe){
 
         // Hard-coded for now, security implementation
-        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
+         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
         Pantry pantry = pantryRepository.getFirstByOwner(user);
 
         // Find if recipe already exists in DB

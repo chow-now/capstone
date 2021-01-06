@@ -35,7 +35,7 @@ public class HomeController {
     @GetMapping("/")
     public String showHomepage(Model model) {
         model.addAttribute("topRecipes",recipeServ.getTopFavorites());
-        return "index";
+        return "/index";
     }
 }
 

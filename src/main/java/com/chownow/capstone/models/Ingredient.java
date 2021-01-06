@@ -21,7 +21,7 @@ public class Ingredient {
     @NotBlank(message= "Please provide a name")
     @Size(min = 2, message = "Name should be a bit longer.")
 //    @Pattern(regexp = "^([^0-9]*)", message = "Name must not contain numbers") // allow to save number
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 1000)
     private String name;
 
     @OneToMany(
