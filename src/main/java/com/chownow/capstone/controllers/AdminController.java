@@ -127,7 +127,7 @@ public class AdminController {
 		return "users/admin/index";
 	}
 
-	@PostMapping("/admin/recipes/new")
+	@PostMapping("/admin/recipes/delete")
 	public String deleteRecipe(@RequestBody Recipe recipe){
 		recipeDao.deleteById(recipe.getId());
 		return "users/admin/index";
