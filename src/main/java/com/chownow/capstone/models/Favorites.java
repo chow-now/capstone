@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 
 @Entity
-@Table(name="favorites")
+// Writing unique key combination in JPA
+@Table(name="favorites", indexes = {@Index(name = "uk_recipe_user", columnList = "recipe_id,user_id")},
+        uniqueConstraints={@UniqueConstraint(columnNames ={"recipe_id","user_id"})})
+
 public class Favorites {
 
     @Id

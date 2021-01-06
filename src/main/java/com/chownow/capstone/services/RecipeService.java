@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 @Service
 public class RecipeService {
@@ -63,12 +63,19 @@ public class RecipeService {
 
         // If existing, save to favorite DB
         if (existingRecipe != null) {
-
+        try {
+            Favorites isExistingFavorite = favoritesRepository.findByUserAndRecipe(user.getId(), existingRecipe.getId());
+            if (isExistingFavorite != null) {
+                return "Cannot duplicate favorites";
+            }
             Favorites favoriteEntity = new Favorites();
             favoriteEntity.setRecipe(existingRecipe);
             favoriteEntity.setUser(user);
             favoritesRepository.save(favoriteEntity);
             return "Added to the favorites";
+        } catch (Exception ex) {
+                return "Cannot duplicate favorites";
+            }
         }
 
         String cookTime = "";
@@ -110,7 +117,7 @@ public class RecipeService {
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setDifficulty("NA");
         recipeEntity.setDirections(recipe.getDirections());
-//recipeEntity.setPublished(false);
+        //recipeEntity.setPublished(false);
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
         recipeEntity.setServings(Integer.parseInt(servings));
         recipeEntity.setTitle(recipe.getTitle());
