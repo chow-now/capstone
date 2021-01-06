@@ -40,16 +40,8 @@ public class SearchExampleController {
     }
 
     @PostMapping("/search")
-    public String saveRecipes(Model viewModel,
-                              @ModelAttribute SpoonApiDto recipe,
-                              @ModelAttribute Recipe recipe1){
-        // Find if recipe already exists in DB
-        Recipe existingRecipe = recipeDao.findFirstBySpoonApiId(recipe1.getSpoonApiId());
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe){
 
-        // If not found, save to DB
-        if (existingRecipe == null) {
-            recipeService.saveRecipe(recipe);
-        }
         return "recipes/search";
     }
 }

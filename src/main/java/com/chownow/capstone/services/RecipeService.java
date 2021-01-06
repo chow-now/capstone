@@ -52,6 +52,15 @@ public class RecipeService {
      */
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
+
+        // Find if recipe already exists in DB
+        Recipe existingRecipe = recipeDao.findFirstBySpoonApiId(recipe.getSpoonApiId());
+
+        // If not found, save to DB
+        if (existingRecipe == null) {
+            recipeService.saveRecipe(recipe);
+        }
+
 // Hard-coded for now, security implementation
 // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getUserByEmail("sahara.tijol@gmail.com");
