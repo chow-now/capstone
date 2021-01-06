@@ -211,7 +211,7 @@ public class UserController {
 
     // DELETE USER
     @PostMapping("/users/{id}/delete")
-    public String deleteAd(@PathVariable long id) {
+    public String deleteUser(@PathVariable long id) {
         userDao.deleteById(id);
         return "redirect:/";
     }
