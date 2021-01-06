@@ -329,7 +329,7 @@
                 categories.forEach((item) => {
                     categoriesHtml +=
                         '<div class="form-check">' +
-                        '<input class="form-check-input" type="checkbox" name="category" value="' + item.id +
+                        '<input class="category form-check-input" type="checkbox" name="category" value="' + item.id +
                         '" id="categories">' +
                         '<label class="form-check-label" for="categories">' + item.name +
                         '</label>' +
@@ -349,18 +349,28 @@
                 }, 500);
             });
 
-            // SUMBIT POST REQUEST TO ADD CATEGORIES TO RECIPE
+            // SUBMIT POST REQUEST TO ADD CATEGORIES TO RECIPE
+            function arrayOfCheckedCategories() {
+                let catArray = [];
+                let cat = $('.category');
+                let catLen = $('.category').length;
+                console.log(catLen);
+                for (let i = 0; i < catLen; i++) {
+                    let ckCat = cat[i];
+                    if (ckCat.checked) {
+                        catArray.push({"category_id": ckCat.value});
+                        console.log(ckCat.value);
+                    }
+                }
+                let catJsonString = JSON.stringify(catArray);
+                console.log('result: ', catArray);
+
+                return catJsonString;
+            }
+
             $(document).on('click', '#categoriesSubmit', function () {
-                let form = $('#add-categories-form');
-                let recipeCategories = [];
-                form.find('input:checkbox:checked').each(function(){
-                    recipeCategories.push(parseInt($(this).val()));
-                })
                 let url = "/recipes/" + recipeId + "/categories/new";
-                let formData = JSON.stringify({
-                    recipesCategories
-                });
-                // CREATE POST REQUEST FOR RECIPE CATEGORIES
+                let formData = arrayOfCheckedCategories();
                 $.ajax({
                     type: "POST",
                     contentType: "application/json",
@@ -368,9 +378,31 @@
                     data: formData,
                     dataType: "json",
                 });
-                console.log("categories sent!");
-                console.log(formData);
+                console.log(formData, " has been sent");
             });
+
+
+            // $(document).on('click', '#categoriesSubmit', function () {
+            //     let form = $('#add-categories-form');
+            //     let recipeCategories = [];
+            //     form.find('input:checkbox:checked').each(function(){
+            //         recipeCategories.push(parseInt($(this).val()));
+            //     })
+            //     let url = "/recipes/" + recipeId + "/categories/new";
+            //     let formData = JSON.stringify({
+            //         recipeCategories
+            //     });
+            //     // CREATE POST REQUEST FOR RECIPE CATEGORIES
+            //     $.ajax({
+            //         type: "POST",
+            //         contentType: "application/json",
+            //         url: url,
+            //         data: formData,
+            //         dataType: "json",
+            //     });
+            //     console.log("categories sent!");
+            //     console.log(formData);
+            // });
 
             // RECIPE AJAX
             let recipeInventory;

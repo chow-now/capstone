@@ -2,7 +2,6 @@ package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
-//import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.http.HttpHeaders;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 
 @Controller
 public class RecipeController {
@@ -42,11 +38,6 @@ public class RecipeController {
     @Autowired
     private UserService userServ;
 
-
-//    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
-//        this.recipeDao = recipeDao;
-//        this.userDoa = userDoa;
-//    }
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -77,8 +68,6 @@ public class RecipeController {
     @GetMapping("/recipes/new")
     public String showCreateRecipe(Model model) {
         User currentUser = userServ.loggedInUser();
-        System.out.println(currentUser);
-//        model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
@@ -114,7 +103,6 @@ public class RecipeController {
     String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient,
                                 @PathVariable long recipeId) {
         Recipe currentRecipe = recipeDao.getOne(recipeId);
-        System.out.println(currentRecipe);
         Ingredient dbIngredient = null;
         boolean isNotInDb = true;
         for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
@@ -181,4 +169,21 @@ public class RecipeController {
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
+    // CREATE NEW RECIPE CATEGORIES
+    @RequestMapping(
+            value = "/recipe/{recipeId}/categories/new",
+            method = RequestMethod.POST,
+            headers = "Content-Type=application/json")
+    public void createRecipeCategories(
+            @RequestBody Map<String, Object> payload,
+            @PathVariable long recipeId) {
+
+        System.out.println(payload);
+
+    }
+
+
+
+
+
 }
