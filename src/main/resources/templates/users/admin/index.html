@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <title>User Profile</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Chownow</title>
+  <title>Dashboard</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <!-- Bootstrap CSS -->
@@ -15,11 +14,56 @@
 
   <!-- DataTables -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.23/datatables.min.css"/>
+    <!--  MAIN CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <style>
+        .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #03b090;
+            border-color: #03b090;
+        }
+        .page-link:hover {
+            z-index: 3;
+            color: #fff;
+            background-color: #fba9c8;
+            border-color: #fba9c8;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color:  #fba9c8;
+            border-color:   #fba9c8;
+        }
+        thead{
+            background-color:#03b090;
+            color: whitesmoke;
+        }
+        tbody{
+            font-weight: bold;
+        }
+        .fa-eye{
+            color: #03b090
+        }
+        .fa-pencil-alt{
+            color: #fec82e
+        }
+        .fa-trash-alt{
+            color: #ff686d;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .tab-content{
+                margin-left: 3rem;
+                margin-right: 3rem
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-green">
 <!--<header th:include="fragments/navbar.html :: nav"></header>-->
 <div class="container">
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs text-center" role="tablist">
             <li >
                 <a href="#tab-table1" data-toggle="tab">Users</a>
             </li>
@@ -33,9 +77,13 @@
                   <a href="#tab-table4" data-toggle="tab">Categories</a>
               </li>
         </ul>
-        <div class="tab-content">
+</div>
+
+        <div class="tab-content bg-light rounded-card px-3">
+
             <div class="tab-pane active" id="tab-table1">
-                <table id="myTable1" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                <h3 class="green-text font-weight-bold text-center mt-2"> USERS</h3>
+                <table id="myTable1" class="display table-responsive table table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -45,7 +93,6 @@
                             <th>Admin</th>
                             <th>Auth</th>
                             <th>View</th>
-                            <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -54,18 +101,20 @@
                             <td th:text="${user.id}"></td>
                             <td th:text="${user.firstName}"></td>
                             <td th:text="${user.email}"></td>
-                            <td th:text="${user.avatar}"></td>
+                            <td th:text="${user.avatar}" style="width:10%"></td>
                             <td th:text="${user.admin}"></td>
                             <td th:text="${user.getAuthProvider()}"></td>
                             <td class="text-center"><a th:href="@{/users/{id}(id=${user.id})}"><i class="fas fa-eye"></i></a></td>
-                            <td class="text-center"><a th:href="@{/users/{id}/edit(id=${user.id})}"><i class="fas fa-pencil-alt"></i></a></td>
+<!--                            <td class="text-center"><a th:href="@{/users/{id}/edit(id=${user.id})}"><i class="fas fa-pencil-alt"></i></a></td>-->
                           <td class="text-center"><a th:href="@{/api/users/{id}/delete(id=${user.id})}" ><i class="far fa-trash-alt"></i></a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="tab-pane" id="tab-table2">
-                <table id="myTable2" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+    <h3 class="green-text font-weight-bold text-center mt-2"> RECIPES</h3>
+
+                    <table id="myTable2" class="display table-responsive table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -99,7 +148,9 @@
                 </table>
             </div>
         <div class="tab-pane" id="tab-table3">
-                <table id="myTable3" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+            <h3 class="green-text font-weight-bold text-center mt-2">INGREDIENTS</h3>
+
+                            <table id="myTable3" class="display table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -119,7 +170,9 @@
                 </table>
            </div>
          <div class="tab-pane" id="tab-table4">
-                <table id="myTable4" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+             <h3 class="green-text font-weight-bold text-center mt-2"> CATEGORIES</h3>
+
+                             <table id="myTable4" class="display table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                          <tr>
                             <th>ID</th>
@@ -140,6 +193,7 @@
             </div>
         </div>
 </div>
+
 
 
 
