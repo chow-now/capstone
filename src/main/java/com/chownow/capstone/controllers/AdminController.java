@@ -8,10 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -55,55 +52,58 @@ public class AdminController {
 			return "/error/403";	
 		}
 		model.addAttribute("currentUser",currentUser);
-		model.addAttribute("users",userDao.findAll());
-		model.addAttribute("userModel",new User());
-		model.addAttribute("ingredients",ingredientDao.findAll());
-		model.addAttribute("ingredientModel",new Ingredient());
-		model.addAttribute("categories",catDao.findAll());
-		model.addAttribute("categoryModel",new Category());
-		model.addAttribute("recipes",recipeDao.findAll());
-		model.addAttribute("recipeModel",new Recipe());
-		model.addAttribute("pantries",pantryDao.findAll());
-		model.addAttribute("images",imageDao.findAll());
-		model.addAttribute("pantryIngredients",pantryIngDao.findAll());
-		model.addAttribute("recipeIngredients",recipeIngDao.findAll());
+		userServ.setAdminDash(model);
 		return "users/admin/index";
 	}
 
 	@PostMapping("/admin/ingredients/new")
-	public String createIngredient(@RequestBody Ingredient ingredient){
+	public String createIngredient(@ModelAttribute Ingredient ingredient){
 		ingredientDao.save(ingredient);
-		return "users/admin/index";
+		return "redirect:/admin";
+	}
+
+	@GetMapping("/admin/ingredients/{id}/edit")
+	public String getFormIngredient(@PathVariable long id,Model model){
+		model.addAttribute("ingredientModel",ingredientDao.findById(id));
+		return "users/admin/forms :: ingredientEdit";
 	}
 
 	@PostMapping("/admin/ingredients/edit")
-	public String editIngredient(@RequestBody Ingredient ingredient){
-		ingredientDao.save(ingredient);
-		return "users/admin/index";
+	public String editIngredient(@RequestParam("name") String name, @RequestParam("id") long id){
+		Ingredient i = ingredientDao.getOne(id);
+		i.setName(name);
+		ingredientDao.save(i);
+		return "redirect:/admin";
 	}
 
-	@PostMapping("/admin/ingredients/delete")
-	public String deleteIngredient(@RequestBody Ingredient ingredient){
-		ingredientDao.deleteById(ingredient.getId());
-		return "users/admin/index";
+	@PostMapping("/admin/ingredients/{id}/delete")
+	public String deleteIngredient(@PathVariable long id){
+		ingredientDao.deleteById(id);
+		return "redirect:/admin";
 	}
 
 	@PostMapping("/admin/categories/new")
-	public String createCategory(@RequestBody Category category){
+	public String createCategory(@ModelAttribute Category category){
 		catDao.save(category);
-		return "users/admin/index";
+		return "redirect:/admin";
+	}
+
+	@GetMapping("/admin/categories/{id}/edit")
+	public String getFormCategory(@PathVariable long id,Model model){
+		model.addAttribute("categoryModel",catDao.findById(id));
+		return "users/admin/forms :: categoryEdit";
 	}
 
 	@PostMapping("/admin/categories/edit")
-	public String editCategory(@RequestBody Category category){
+	public String editCategory(@ModelAttribute Category category){
 		catDao.save(category);
-		return "users/admin/index";
+		return "redirect:/admin";
 	}
 
-	@PostMapping("/admin/categories/delete")
-	public String deleteCategory(@RequestBody Category category){
-		catDao.deleteById(category.getId());
-		return "users/admin/index";
+	@PostMapping("/admin/categories/{id}/delete")
+	public String deleteCategory(@PathVariable long id){
+		catDao.deleteById(id);
+		return "redirect:/admin";
 	}
 
 	@PostMapping("/admin/users/new")
@@ -118,9 +118,10 @@ public class AdminController {
 		}
 		// user model validations
 		if (validation.hasErrors()) {
+			userServ.setAdminDash(model);
 			model.addAttribute("errors", validation);
 			model.addAttribute("userModel", user);
-			return "users/new";
+			return "users/admin/index";
 		}
 		// encrypt password
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -132,24 +133,25 @@ public class AdminController {
 		// create pantry for the user
 		Pantry pantry = new Pantry(dbUser);
 		pantryDao.save(pantry);
-		// login the registered user
-		userServ.authenticate(dbUser);
-		model.addAttribute(dbUser);
-		return "users/admin/index";
+		return "redirect:/admin";
 	}
 
-	@PostMapping("/admin/users/grant")
-	public String makeAdmin(@RequestBody User user){
-		User dbUser = userDao.getOne(user.getId());
-		dbUser.setAdmin(true);
-		userDao.save(user);
-		return "users/admin/index";
+	@PostMapping("/admin/users/{id}/grant")
+	public String makeAdmin(@PathVariable long id){
+		User dbUser = userDao.getOne(id);
+		if (dbUser.getAdmin()) {
+			dbUser.setAdmin(false);
+		} else {
+			dbUser.setAdmin(true);
+		}
+		userDao.save(dbUser);
+		return "redirect:/admin";
 	}
 
-	@PostMapping("/admin/users/delete")
-	public String deleteUser(@RequestBody User user){
-		userDao.deleteById(user.getId());
-		return "users/admin/index";
+	@PostMapping("/admin/users/{id}/delete")
+	public String deleteUser(@PathVariable long id){
+		userDao.deleteById(id);
+		return "redirect:/admin";
 	}
 
 	@PostMapping("/admin/recipes/new")
@@ -163,12 +165,12 @@ public class AdminController {
 			return "recipes/new";
 		}
 		recipeDao.save(recipe);
-		return "users/admin/index";
+		return "redirect:/admin";
 	}
 
-	@PostMapping("/admin/recipes/delete")
-	public String deleteRecipe(@RequestBody Recipe recipe){
-		recipeDao.deleteById(recipe.getId());
-		return "users/admin/index";
+	@PostMapping("/admin/recipes/{id}/delete")
+	public String deleteRecipe(@PathVariable long id){
+		recipeDao.deleteById(id);
+		return "redirect:/admin";
 	}
 }
