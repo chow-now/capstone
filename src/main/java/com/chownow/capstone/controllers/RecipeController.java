@@ -75,6 +75,7 @@ public class RecipeController {
     @PostMapping("/recipes")
     public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
                               Model viewModel){
+
         String message = recipeService.saveRecipe(recipe);
         // For testing/indicator
         viewModel.addAttribute("message", message);

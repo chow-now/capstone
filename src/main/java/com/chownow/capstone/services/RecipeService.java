@@ -33,6 +33,9 @@ public class RecipeService {
     @Autowired
     private ImageRepository imageRepository;
 
+    @Autowired
+    private UserService userServ;
+
     /**
      * Here used transactional because we save data to 8 tables, during saving, if something happens it will rollback the data
      * @param recipe
@@ -43,6 +46,7 @@ public class RecipeService {
         // Hard-coded for now
         // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getById((long)userDao.findAll().size());
+        //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
@@ -104,6 +108,7 @@ public class RecipeService {
             //********* How are we checking if duplicate ingredient *******************************
             Ingredient ingredientEntity = ingredientRepository.save(new Ingredient(ingredientObjects[2]));
 
+
             /** Create a RecipeIngredient entity object to be saved */
             RecipeIngredient recipeIngredientEntity = new RecipeIngredient();
             recipeIngredientEntity.setAmount(Double.parseDouble(ingredientObjects[0]));
@@ -132,8 +137,8 @@ public class RecipeService {
         /** Create a Recipe Categories to be saved **/
         recipeEntity.setCategories(categoriesToSet);
         recipeDao.save(recipeEntity);
-        /** Create a Favorites entity object to be saved **/
 
+        /** Create a Favorites entity object to be saved **/
             Set<User> favoritedBy = recipeEntity.getFavoritedBy();
             favoritedBy.add(user);
             recipeEntity.setFavoritedBy(favoritedBy);
