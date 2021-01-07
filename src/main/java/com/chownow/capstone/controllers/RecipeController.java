@@ -36,11 +36,7 @@ public class RecipeController {
     private CategoryRepository categoryDao;
 
     @Autowired
-    private RecipeCategoryRepository recipeCategoryDao;
-
-    @Autowired
     private UserService userServ;
-
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -91,12 +87,8 @@ public class RecipeController {
             return "recipes/new";
         }
 
-//        HARD-CODED FOR TESTING
-        Set<RecipeCategory> categories = null;
-
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
-        recipeToBeSaved.setRecipeCategories(categories);
         recipeDao.save(recipeToBeSaved);
 
         model.addAttribute("recipe",recipeToBeSaved);

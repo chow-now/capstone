@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Forms</title>
+</head>
+<body>
+<form th:fragment="ingredientNew" th:action="@{/admin/ingredients/new}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${ingredientModel}">
+
+    <p class="h4 mb-4">Ingredient</p>
+
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- name -->
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+        </div>
+    </div>
+    <!-- Submit button -->
+    <button class="btn btn-green rounded-pill" type="submit">Submit</button>
+</form>
+
+<form th:fragment="ingredientEdit" th:action="@{/admin/ingredients/edit}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${ingredientModel}">
+
+    <p class="h4 mb-4">Ingredient Edit</p>
+    <input type="hidden" placeholder="id" th:field="*{id}">
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- name -->
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+        </div>
+    </div>
+    <!-- Submit button -->
+    <button class="btn btn-green rounded-pill" type="submit">Update</button>
+</form>
+
+<form th:fragment="categoryNew" th:action="@{/admin/categories/new}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${categoryModel}">
+
+    <p class="h4 mb-4">Ingredient</p>
+
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- name -->
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+        </div>
+    </div>
+    <!-- Submit button -->
+    <button class="btn btn-green rounded-pill" type="submit">Submit</button>
+</form>
+
+<form th:fragment="categoryEdit" th:action="@{/admin/categories/edit}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${categoryModel}">
+
+    <p class="h4 mb-4">Ingredient Edit</p>
+    <input type="hidden" placeholder="id" th:field="*{id}">
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- name -->
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+        </div>
+    </div>
+    <!-- Submit button -->
+    <button class="btn btn-green rounded-pill" type="submit">Update</button>
+</form>
+
+<form th:fragment="createUser" th:action="@{/admin/users/new}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${userModel}">
+
+    <p class="h4 mb-4">Sign up</p>
+
+    <div class="form-row mb-4">
+        <div class="col">
+            <!-- First name -->
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+        </div>
+    </div>
+
+    <!-- E-mail -->
+    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+
+    <!-- Password -->
+    <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+    <small class="form-text text-muted mb-3">
+        <em>At least 8 characters, 1 digit, and 1 special character</em>
+    </small>
+
+    <!-- Sign up button -->
+    <button class="btn btn-green rounded-pill" type="submit">Create</button>
+</form>
+
+<form th:fragment="makeAdmin" th:action="@{/admin/users/grant}" th:method="post" class=" p-4" th:object="${userModel}">
+    <p class="h4 mb-4 text-center green-text text-uppercase font-weight-bold">Edit</p>
+    <input type="hidden" placeholder="id" th:field="*{id}">
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="inlineRadio" value="true">
+        <label class="form-check-label" for="inlineRadio">Grant Admin Permissions</label>
+    </div>
+
+    <!-- submit button -->
+    <button class="btn btn-green my-4 btn-block rounded-pill" type="submit">Confirm</button>
+</form>
+
+<form th:fragment="recipeNew" class=" p-4 green-text text font-weight-bold" th:action="@{/admin/recipes/new}" th:method="post" th:object="${recipeModel}">
+    <!--    ENTER A RECIPE TITLE   -->
+    <p class="h4 mb-4 text-center">Create Recipe</p>
+
+    <label for="title">Title</label>
+        <input id="title" placeholder="title" type="text" class="form-control" aria-label="Title" aria-describedby="title" th:field="*{title}"/>
+        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+
+        <label for="chef">Chef</label>
+        <select class="form-control" th:field="*{chef}" id="chef">
+            <option value="" disabled="disabled" selected="selected">Choose your option</option>
+            <option th:each="user : ${users}" th:value="${user}" th:text="${user.id + '-' + user.firstName }"></option>
+        </select>
+
+    
+
+
+    <!--    ENTER RECIPE DESCRIPTION -->
+
+        <label for="description">Description</label>
+        <textarea id="description" class="form-control" aria-label="description" rows="3" th:field="*{description}"></textarea>
+        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+
+
+    <!--    ENTER DIFFICULTY LEVEL    -->
+
+    <label>Difficulty</label>
+    <div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
+                   th:field="*{difficulty}" value="easy">
+            <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
+                   th:field="*{difficulty}" value="medium">
+            <label class="form-check-label mr-2" th:for="*{difficulty}">
+                Medium
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
+                   th:field="*{difficulty}" value="hard">
+            <label class="form-check-label mr-2" th:for="*{difficulty}">
+                Hard
+            </label>
+            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+        </div>
+    </div>
+
+
+    <!--    ENTER PREP TIME IN MINUTES   -->
+
+    <label for="prepTime">Prep Time</label>
+    <input id="prepTime" type="number" class="form-control" aria-label="Prep-time" aria-describedby="prep-time" th:field="*{prepTime}">
+    <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+
+
+    <!--    ENTER COOK TIME IN MINUTES   -->
+    <label for="cookTime">Cook Time</label>
+    <input id="cookTime" type="number" class="form-control" aria-label="Cook-time" aria-describedby="cook-time" th:field="*{cookTime}">
+    <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+
+
+    <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
+    <label for="servings">Servings</label>
+    <input id="servings" type="number" class="form-control" aria-label="Servings" aria-describedby="servings" th:field="*{servings}">
+    <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+
+
+    <!--    ENTER COOKING DIRECTIONS  -->
+    <label for="directions">Directions</label>
+    <textarea  id="directions" class="form-control" aria-label="directions" rows="5" th:field="*{directions}"></textarea>
+    <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
+
+
+    <!-- SUBMIT RECIPE INFO -->
+    <div class="card-footer text-muted">
+        <button class="btn btn-green rounded-pill text-center" type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>
+
