@@ -81,10 +81,23 @@ public class Recipe {
     @JsonManagedReference
     private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name="recipe_categories",
+            joinColumns=@JoinColumn(name="recipe_id"),
+            inverseJoinColumns=@JoinColumn(name="category_id")
+    )
     private Set<Category> categories = new HashSet<Category>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name="favorites",
+            joinColumns={@JoinColumn(name="recipe_id")},
+            inverseJoinColumns={@JoinColumn(name="user_id")}
+    )
     private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
@@ -224,4 +237,6 @@ public class Recipe {
     public void setPublished(boolean published) {
         isPublished = published;
     }
+
+
 }

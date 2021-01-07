@@ -26,10 +26,8 @@ public class PantryIngredient {
     @ManyToOne
     @JsonIgnore
     private Pantry pantry;
-
-
+    
     @ManyToOne
-//    @JsonIgnore
     private Ingredient ingredient;
 
     public PantryIngredient(){}

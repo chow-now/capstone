@@ -53,7 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/users/{id}",
                         "/dashboard",
                         "/users/{id}/*",
-                        "/api"
+                        "/api",
+                        "/api/*"
                 ).authenticated()
                 /* Pages that require a role */
 //                .antMatchers("/admin/*","/admin").hasRole("Admin")

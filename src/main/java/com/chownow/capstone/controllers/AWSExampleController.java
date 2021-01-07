@@ -36,8 +36,7 @@ public class AWSExampleController {
     @PostMapping("/aws/{id}/upload")
     public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
         User user = userDao.getOne(id);
-        if(user.getAvatar() != null){
-            System.out.println(user.getAvatar());
+        if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
             s3.deleteFile(user.getAvatar());
         }
         s3.uploadAvatar(multipartFile, user);

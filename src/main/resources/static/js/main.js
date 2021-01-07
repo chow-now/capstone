@@ -8,4 +8,9 @@
             $('#regForm').html(form);
         });
     });
+
+    $(".login-signup-toggle").click(function () {
+        $("#loginModal").modal("toggle");
+        $("#registerModal").modal("toggle");
+    })
 })(jQuery);

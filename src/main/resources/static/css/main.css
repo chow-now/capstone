@@ -1,35 +1,30 @@
-a.nostyle:link {
-    text-decoration: inherit;
-    color: inherit;
-    cursor: auto;
+/*chownow background colors*/
+
+.bg-green{
+    background-color: #03b090;
 }
 
-a.nostyle:visited {
-    text-decoration: inherit;
-    color: inherit;
-    cursor: auto;
+.bg-yellow{
+    background-color: #fec82e
 }
 
-.jumbotron{
-    background-size: cover;
-    height: 100vh;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
+.bg-pink{
+    background-color: #fba9c8;
 }
 
-#loginBody, #registerBody{
-    background-image: url('/img/cn-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    height: 100vh;
+.bg-red{
+    background-color: #ff686d;
 }
+
+/* chownow buttons colors */
 .btn-pink{
     background-color: #fba9c8;
     color: whitesmoke;
     font-weight: bold;
+}
+.btn-pink:hover{
+    background-color: #ec7ba2;
+    color:ghostwhite;
 }
 
 .btn-green{
@@ -37,11 +32,19 @@ a.nostyle:visited {
     color: whitesmoke;
     font-weight: bold;
 }
+.btn-green:hover{
+    background-color: #167664;
+    color:ghostwhite;
+}
 
 .btn-yellow{
     background-color: #fec82e;
     color: darkslategrey;
     font-weight: bold;
+}
+.btn-yellow:hover{
+    background-color: #cea52a;
+    color:ghostwhite;
 }
 
 .btn-red{
@@ -50,6 +53,12 @@ a.nostyle:visited {
     font-weight: bold;
 }
 
+.btn-red:hover{
+    background-color: #ba4b4f;
+    color:ghostwhite;
+}
+
+/*chownow text colors*/
 .green-text{
     color: #03b090;
 }
@@ -62,12 +71,37 @@ a.nostyle:visited {
     color: #fec82e;
 }
 
-::placeholder {
-    color: #03b090;
+.pink-text{
+    color: #fba9c8;
 }
 
-.modal-content{
-    border-radius: 1.5rem!important;
+/*chownow form element colors*/
+input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
+    color: #03b090!important;
+}
+
+.form-control:focus {
+    border-color: #f6dc5c;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #FFC107
+}
+
+/*login register css*/
+
+#loginBody, #registerBody{
+    background-image: url('/img/cn-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 100vh;
+}
+
+.login-signup-toggle{
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+}
+.login-signup-toggle:hover{
+    color: rgb(51, 51, 51);
 }
 
 .or-seperator {
@@ -78,25 +112,30 @@ a.nostyle:visited {
 
 .or-seperator i {
     padding: 0 10px;
-    background: white;
+    background: #f8f9fa;
     position: relative;
     top: -11px;
     z-index: 1;
 }
 
+ /*custom css*/
 .rounded-card {
     border-radius: 1.2rem!important;
 }
 
-@media screen and (max-width: 768px){
-    #chowText{
-        margin-top: 40%;
-        width: 100%
-    }
+.modal-content{
+    border-radius: 1.5rem!important;
+    background-color: #f8f9fa;;
 }
 
-@media screen and (min-width: 769px)   {
-    #chowText{
-        width: 50%;
-    }
+a.nostyle:link {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: auto;
+}
+
+a.nostyle:visited {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: auto;
 }

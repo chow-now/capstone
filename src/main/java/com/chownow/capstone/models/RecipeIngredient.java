@@ -9,9 +9,7 @@ import java.util.Optional;
 
 @Entity
 @Table(name="recipe_ingredients")
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
+
 public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
