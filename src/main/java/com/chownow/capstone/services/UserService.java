@@ -54,5 +54,6 @@ public class UserService {
         context.setAuthentication(auth);
     }
 
+    // Set defaults
 
 }

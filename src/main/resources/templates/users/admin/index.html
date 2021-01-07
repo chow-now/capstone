@@ -118,6 +118,9 @@
 <div class="tab-content bg-light rounded-card px-3 py-3">
     <div class="tab-pane active" id="tab-table1">
         <h3 class="green-text font-weight-bold text-center mt-2"> USERS</h3>
+        <div class=text-center><button type="button" class="btn btn-yellow" data-toggle="modal" data-target="#userNewModal">
+            New
+        </button></div>
         <table id="myTable1" class="display table-responsive table table-bordered" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -148,6 +151,9 @@
     </div>
     <div class="tab-pane" id="tab-table2">
         <h3 class="green-text font-weight-bold text-center mt-2"> RECIPES</h3>
+        <div class=text-center><button type="button" class="btn btn-yellow" data-toggle="modal" data-target="#recipeNewModal">
+            New
+        </button></div>
         <table id="myTable2" class="display table-responsive table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -183,6 +189,9 @@
     </div>
     <div class="tab-pane" id="tab-table3">
         <h3 class="green-text font-weight-bold text-center mt-2">INGREDIENTS</h3>
+        <div class=text-center><button type="button" class="btn btn-yellow" data-toggle="modal" data-target="#ingredientNewModal">
+            New
+        </button></div>
         <table id="myTable3" class="display table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -204,6 +213,9 @@
     </div>
     <div class="tab-pane" id="tab-table4">
         <h3 class="green-text font-weight-bold text-center mt-2"> CATEGORIES</h3>
+        <div class=text-center><button type="button" class="btn btn-yellow" data-toggle="modal" data-target="#categoryNewModal">
+            New
+        </button></div>
         <table id="myTable4" class="display table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -222,6 +234,98 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ingredientNewModal" tabindex="-1" role="dialog" aria-labelledby="ingredientNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: ingredientNew"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ingredientEditModal" tabindex="-1" role="dialog" aria-labelledby="ingredientEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: ingredientEdit"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryNewModal" tabindex="-1" role="dialog" aria-labelledby="categoryNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: categoryNew"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryEditModal" tabindex="-1" role="dialog" aria-labelledby="categoryEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: categoryEdit"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userNewModal" tabindex="-1" role="dialog" aria-labelledby="userNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: createUser"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="grantAccessModal" tabindex="-1" role="dialog" aria-labelledby="grantAccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: makeAdmin"></form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="recipeNewModal" tabindex="-1" role="dialog" aria-labelledby="recipeNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form th:replace="users/admin/forms :: recipeNew"></form>
+            </div>
+        </div>
     </div>
 </div>
 

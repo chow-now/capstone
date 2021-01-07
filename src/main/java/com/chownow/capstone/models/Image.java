@@ -7,9 +7,6 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name="images")
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

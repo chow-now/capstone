@@ -252,8 +252,11 @@ public class SeedRunner {
             int max = faker.number().numberBetween(0,4);
             Set<Category> categories = new HashSet<Category>();
             for(int j = 0;j < max; j++){
-                long index = faker.number().numberBetween(1,categoriesSize+1);
+                long index = faker.number().numberBetween(1,categoriesSize);
                 categories.add(catDao.getOne(index));
+            }
+            for(Category c :categories){
+                System.out.println(c.getId());
             }
             recipe.setCategories(categories);
             recipeDao.save(recipe);
