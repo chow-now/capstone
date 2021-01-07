@@ -119,6 +119,9 @@ public class UserController {
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
+        if(currentUser.getAdmin()){
+            return "redirect:/admin";
+        }
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
@@ -211,7 +214,7 @@ public class UserController {
 
     // DELETE USER
     @PostMapping("/users/{id}/delete")
-    public String deleteAd(@PathVariable long id) {
+    public String deleteUser(@PathVariable long id) {
         userDao.deleteById(id);
         return "redirect:/";
     }
