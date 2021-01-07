@@ -36,6 +36,9 @@ public class RecipeController {
     private CategoryRepository categoryDao;
 
     @Autowired
+    private RecipeCategoryRepository recipeCategoryDao;
+
+    @Autowired
     private UserService userServ;
 
 
@@ -71,6 +74,7 @@ public class RecipeController {
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
+        model.addAttribute("categories", categoryDao.findAll());
         return "recipes/new";
     }
 
@@ -86,12 +90,18 @@ public class RecipeController {
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
+
+//        HARD-CODED FOR TESTING
+        Set<RecipeCategory> categories = null;
+
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
+        recipeToBeSaved.setRecipeCategories(categories);
         recipeDao.save(recipeToBeSaved);
 
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        model.addAttribute("categories", categoryDao.findAll());
 
         return "recipes/new";
     }
@@ -137,7 +147,6 @@ public class RecipeController {
         return "update complete";
     }
 
-
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
         recipeDao.deleteById(id);
@@ -149,6 +158,7 @@ public class RecipeController {
         model.addAttribute("recipe", recipeDao.getOne(id));
         User currentUser = userServ.loggedInUser();
         model.addAttribute("user", currentUser);
+        model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         return "recipes/edit";
     }
@@ -170,19 +180,26 @@ public class RecipeController {
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
     // CREATE NEW RECIPE CATEGORIES
-    @RequestMapping(
-            value = "/recipe/{recipeId}/categories/new",
-            method = RequestMethod.POST,
-            headers = "Content-Type=application/json")
-    public void createRecipeCategories(
-            @RequestBody Map<String, Object> payload,
-            @PathVariable long recipeId) {
+//    @RequestMapping(
+//            value = "/recipes/{recipeId}/categories/new",
+//            method = RequestMethod.POST,
+//            headers = "Content-Type=application/json")
+//    public void createRecipeCategories(
+//            @RequestBody Map<String, Object> payload,
+//            @PathVariable long recipeId) {
+//
+//        System.out.println(payload);
+//
+//    }
 
-        System.out.println(payload);
+    @PostMapping("/recipes/{id}/categories/new")
+    @ResponseBody
+    public String addRecipeCategories(@PathVariable long id) {
 
+
+
+        return "done";
     }
-
-
 
 
 

@@ -85,6 +85,9 @@ public class Recipe {
     private Set<Category> categories = new HashSet<Category>();
 
     @ManyToMany
+    private Set<RecipeCategory> recipeCategories = new HashSet<RecipeCategory>();
+
+    @ManyToMany
     private Set<User> favoritedBy = new HashSet<User>();
 
     public Recipe(){}
@@ -224,4 +227,9 @@ public class Recipe {
     public void setPublished(boolean published) {
         isPublished = published;
     }
+
+    public void setRecipeCategories(Set<RecipeCategory> recipeCategories){ this.recipeCategories = recipeCategories;}
+
+    public Set<RecipeCategory> getRecipeCategories() {return recipeCategories;}
+
 }

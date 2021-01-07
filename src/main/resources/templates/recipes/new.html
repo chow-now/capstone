@@ -36,38 +36,42 @@
                         <p id="recipe-id" th:text="${recipe.id}" hidden></p>
                     </div>
                     <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
+
+
+
                         <!--    ENTER A RECIPE TITLE   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="title">Title</span>
+                        <div class="form-group mb-3 px-4">
+                            <label  id="title">Title</label>
                             <input type="text" class="form-control" aria-label="Title"
                                    aria-describedby="title" th:field="*{title}"/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
 
                         <!--    ENTER RECIPE DESCRIPTION -->
-                        <div class="form-group input-group px-4">
-                            <span class="input-group-text">Description</span>
+                        <div class="form-group px-4">
+                            <label>Description</label>
                             <textarea class="form-control" aria-label="description" rows="3"
                                       th:field="*{description}"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
 
                         <!--    ENTER DIFFICULTY LEVEL    -->
-                        <div class="form-group input-group px-4">
+                        <div class="form-group px-4">
+                            <label>Difficulty</label><br>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
+                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
                                        th:field="*{difficulty}" value="easy">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
+                                <input class="form-check-input" type="radio" name="difficulty" id="medium"
                                        th:field="*{difficulty}" value="medium">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Medium
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
+                                <input class="form-check-input" type="radio" name="difficulty" id="hard"
                                        th:field="*{difficulty}" value="hard">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Hard
@@ -77,36 +81,40 @@
                         </div>
 
                         <!--    ENTER PREP TIME IN MINUTES   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="prep-time">Prep-time</span>
+                        <div class="form-group mb-3 px-4">
+                            <label id="prep-time">Prep-time</label>
                             <input type="number" class="form-control" aria-label="Prep-time"
                                    aria-describedby="prep-time" th:field="*{prepTime}">
                             <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
                         </div>
 
                         <!--    ENTER COOK TIME IN MINUTES   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="cook-time">Cook-time</span>
+                        <div class="form-group mb-3 px-4">
+                            <label id="cook-time">Cook-time</label>
                             <input type="number" class="form-control" aria-label="Cook-time"
                                    aria-describedby="cook-time" th:field="*{cookTime}">
                             <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
                         </div>
 
                         <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="servings">Servings</span>
+                        <div class="form-group mb-3 px-4">
+                            <span id="servings">Servings</span>
                             <input type="number" class="form-control" aria-label="Servings"
                                    aria-describedby="servings" th:field="*{servings}">
                             <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
                         </div>
 
                         <!--    ENTER COOKING DIRECTIONS  -->
-                        <div class="form-group input-group px-4">
-                            <span class="input-group-text">Directions</span>
+                        <div class="form-group px-4">
+                            <label id="directions">Directions</label>
                             <textarea class="form-control" aria-label="directions" rows="5"
                                       th:field="*{directions}"></textarea>
                             <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
                         </div>
+
+                        <!--    CATEGORIZE THE RECIPE   -->
+                        <input type="checkbox" name="categories" th:each="category : ${categories}"
+                               th:text="${category.name}" th:value="${category.id}" th:field="*{categories}">
 
                         <!-- SUBMIT RECIPE INFO -->
                         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
@@ -124,7 +132,7 @@
                 </div>
             </div>
 
-            <!--        ADD RECIPE INGREDIENTS TAB-->
+            <!--    ADD RECIPE INGREDIENTS TAB-->
             <div class="tab-pane pb-3" id="recipeTab">
                 <div class="row">
                     <div class="col-md-12">
@@ -163,7 +171,7 @@
                 </div>
             </div>
 
-            <!--        UPLOAD IMAGES TAB-->
+            <!--    UPLOAD IMAGES TAB-->
             <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div>
                     <div class="card-body">
@@ -179,34 +187,6 @@
                             Step</a>
                     </div>
                     <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
-                    <!--                    </div>-->
-                </div>
-            </div>
-
-            <!--        ADD CATEGORIES TAB-->
-            <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
-                 role="tabpanel" aria-labelledby="add-categories-tab">
-                <div>
-                    <div class="card-body">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Finally, categorize your
-                            recipe, so it is easier for others to
-                            discover!</h3>
-                        <form id="add-categories-form">
-
-                            <div id="categoriesBody"></div>
-
-                            <button id="categoriesSubmit" type="submit">Submit</button>
-
-                        </form>
-
-                    </div>
-                    <!--                    <div class="card-footer text-muted">-->
-                    <!--                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">-->
-                    <!--                        <a id="publishRecipe" href="#addCategories" data-toggle="tab" role="tab"-->
-                    <!--                           aria-controls="nav-publish"-->
-                    <!--                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Publish</a>-->
-                    <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
-                    <!--                        &lt;!&ndash;                        <button class="btn btn-primary" type="submit">Submit</button>&ndash;&gt;-->
                     <!--                    </div>-->
                 </div>
             </div>
@@ -310,99 +290,6 @@
             });
 
             let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-
-
-            // AJAX CATEGORIES
-            let categories;
-            const makeRecipeCategoriesAjaxCall = () => {
-                categories = [];
-                $.ajax({'url': '/api/categories'}).done(function (data) {
-                    data.forEach(function (item) {
-                        categories.push(item);
-                    });
-                });
-            };
-
-            // CREATE CATEGORIES HTML
-            const renderCategories = () => {
-                let categoriesHtml = "";
-                categories.forEach((item) => {
-                    categoriesHtml +=
-                        '<div class="form-check">' +
-                        '<input class="category form-check-input" type="checkbox" name="category" value="' + item.id +
-                        '" id="categories">' +
-                        '<label class="form-check-label" for="categories">' + item.name +
-                        '</label>' +
-                        '</div>';
-                });
-                $('#categoriesBody').html(categoriesHtml);
-                console.log(categoriesHtml);
-            };
-
-            // ONCLICK EVENT FOR RECIPE CATEGORIES
-            $("#recipeCategories").click(function () {
-                // GET RECIPE CATEGORIES
-                makeRecipeCategoriesAjaxCall();
-                // RENDER CATEGORIES
-                setTimeout(function () {
-                    renderCategories();
-                }, 500);
-            });
-
-            // SUBMIT POST REQUEST TO ADD CATEGORIES TO RECIPE
-            function arrayOfCheckedCategories() {
-                let catArray = [];
-                let cat = $('.category');
-                let catLen = $('.category').length;
-                console.log(catLen);
-                for (let i = 0; i < catLen; i++) {
-                    let ckCat = cat[i];
-                    if (ckCat.checked) {
-                        catArray.push({"category_id": ckCat.value});
-                        console.log(ckCat.value);
-                    }
-                }
-                let catJsonString = JSON.stringify(catArray);
-                console.log('result: ', catArray);
-
-                return catJsonString;
-            }
-
-            $(document).on('click', '#categoriesSubmit', function () {
-                let url = "/recipes/" + recipeId + "/categories/new";
-                let formData = arrayOfCheckedCategories();
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json",
-                    url: url,
-                    data: formData,
-                    dataType: "json",
-                });
-                console.log(formData, " has been sent");
-            });
-
-
-            // $(document).on('click', '#categoriesSubmit', function () {
-            //     let form = $('#add-categories-form');
-            //     let recipeCategories = [];
-            //     form.find('input:checkbox:checked').each(function(){
-            //         recipeCategories.push(parseInt($(this).val()));
-            //     })
-            //     let url = "/recipes/" + recipeId + "/categories/new";
-            //     let formData = JSON.stringify({
-            //         recipeCategories
-            //     });
-            //     // CREATE POST REQUEST FOR RECIPE CATEGORIES
-            //     $.ajax({
-            //         type: "POST",
-            //         contentType: "application/json",
-            //         url: url,
-            //         data: formData,
-            //         dataType: "json",
-            //     });
-            //     console.log("categories sent!");
-            //     console.log(formData);
-            // });
 
             // RECIPE AJAX
             let recipeInventory;

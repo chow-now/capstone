@@ -28,6 +28,17 @@ public class RecipeCategory {
         this.id = id;
     }
 
+    public RecipeCategory(long id, Recipe recipe) {
+        this.id = id;
+        this.recipe = recipe;
+    }
+
+    public RecipeCategory(long id, Recipe recipe, Category category) {
+        this.id = id;
+        this.recipe = recipe;
+        this.category = category;
+    }
+
     public Recipe getRecipe() {
         return recipe;
     }
