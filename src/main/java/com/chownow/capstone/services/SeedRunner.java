@@ -51,7 +51,7 @@ public class SeedRunner {
 
     @EventListener
     public void eventListener(ApplicationStartedEvent event){
-        seederHasRun = userDao.getFirstByEmail("seeder@seeder.com")!=null;
+        seederHasRun = userDao.getFirstByEmail("chef@chownow.com")!=null;
         if(!seederHasRun){
             LOGGER.info("Start Seeding");
             LOGGER.info("SEEDING CATEGORIES");
@@ -87,12 +87,13 @@ public class SeedRunner {
             LOGGER.info("SEEDING RECIPE IMAGES");
             seedRecipeImages();
             LOGGER.info("RECIPE IMAGES DONE");
-            User initialUser = new User("seeder@seeder.com","firstName","Password123!");
+            User initialUser = new User("chef@chownow.com","ChowNow","Password123!");
             initialUser.setPassword(passwordEncoder.encode(initialUser.getPassword()));
             initialUser.setAdmin(true);
             initialUser.setAboutMe(faker.buffy().quotes());
-            initialUser.setAvatar(randomAvatar());
+            initialUser.setAvatar("/img/chef-avatar.jpg");
             userDao.save(initialUser);
+
         }else{
             LOGGER.info("Seeder has already run");
         }
