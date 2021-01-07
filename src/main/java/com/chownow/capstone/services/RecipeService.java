@@ -47,6 +47,14 @@ public class RecipeService {
         String prepTime;
         String servings;
 
+//        if (user.getRecipes().contains(recipe.getSpoonApiId())) {
+//            return "Recipe already exists";
+//        }
+
+        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
+            return  "recipe already exists";
+        }
+
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){
             cookTime = "0";
@@ -72,6 +80,7 @@ public class RecipeService {
         Recipe recipeEntity = new Recipe();
         recipeEntity.setCookTime(Integer.parseInt(cookTime));
         recipeEntity.setDescription(recipe.getSummary());
+        recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setDifficulty("N/A");
         recipeEntity.setDirections(recipe.getDirections());
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
@@ -124,10 +133,11 @@ public class RecipeService {
         recipeEntity.setCategories(categoriesToSet);
         recipeDao.save(recipeEntity);
         /** Create a Favorites entity object to be saved **/
-        Set<User> favoritedBy = recipeEntity.getFavoritedBy();
-        favoritedBy.add(user);
-        recipeEntity.setFavoritedBy(favoritedBy);
-        userDao.save(user);
+
+            Set<User> favoritedBy = recipeEntity.getFavoritedBy();
+            favoritedBy.add(user);
+            recipeEntity.setFavoritedBy(favoritedBy);
+            userDao.save(user);
 
         /** Create a Image entity object to be saved **/
         imageRepository.save(new Image(recipe.getImage(),recipeEntity));

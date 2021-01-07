@@ -4,14 +4,18 @@ import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 //import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +46,38 @@ public class RecipeController {
     @Autowired
     private UserService userServ;
 
+    @Value("${spoonacular.api.key}")
+    private String spoonApi;
+
+    @Autowired
+    private RecipeService recipeService;
+
 
 //    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
 //        this.recipeDao = recipeDao;
 //        this.userDoa = userDoa;
 //    }
 
+//    @GetMapping("/recipes")
+//    public String index(Model model) {
+//        model.addAttribute("recipes", recipeDao.findAll());
+//        return "recipes/index";
+//    }
+    /** Search recipes through Spoon API **/
     @GetMapping("/recipes")
-    public String index(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
+    public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
+        viewModel.addAttribute("term", term);
+        viewModel.addAttribute("spoonApi", spoonApi);
+        viewModel.addAttribute("recipe", new SpoonApiDto());
+        return "recipes/index";
+    }
+    /** List results **/
+    @PostMapping("/recipes")
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
+                              Model viewModel){
+        String message = recipeService.saveRecipe(recipe);
+        // For testing/indicator
+        viewModel.addAttribute("message", message);
         return "recipes/index";
     }
 
