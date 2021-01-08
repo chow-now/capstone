@@ -5,7 +5,9 @@
     <title>Results</title>
 </head>
 <body>
-<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
 <div class="form-outline">
     <form class="w-50 mt-4 mx-auto" th:action="@{/search}" method="get">
         <input type="text" class="form-control" id="main_search"

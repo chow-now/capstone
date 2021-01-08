@@ -1,67 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Navbar Fragment</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
-</head>
 <body>
-
-<header th:fragment="nav">
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
-    <a class="navbar-brand" href="#" th:href="@{~/}"><strong>ChowNow</strong></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#" th:href="@{~/about}">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" th:href="@{~/recipes}">Recipes</a>
-        </li>
-        <li sec:authorize="isAuthenticated()" class="nav-item active">
-          <a class="nav-link" href="#" th:href="@{~/users}"><span class="sr-only">(current)</span>Users</a>
-        <li class="nav-item">
-            <a class="nav-link text-light" th:href="@{/recipes/new}">Create Recipe</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav nav-flex-icons">
-        <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
-          <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link"><i class="fas fa-user-plus"></i></a>
-          </li>
-          <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link"><i class="fas fa-user-lock"></i></a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-            <a class="nav-link"><i class="fas fa-sign-out-alt"></i></a>
-          </li>
-        </form>
-      </ul>
+<nav th:fragment="nav" class="main-nav">
+    <div class="container-fluid px-0">
+        <div class="logo">
+            <a href="/">CHOWNOW</a>
+        </div>
+        <div id="mainListDiv" class="main_list">
+            <ul class="navlinks">
+                <li><a th:href="@{/recipes}">Recipes</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/dashboard}">Dashboard</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/recipes/new}">New Recipe</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" th:method="POST">
+                        <a href="#">
+                            <button style="background-color:transparent;border:none;color: inherit">Logout</button>
+                        </a>
+                    </form>
+                </li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Register</a></li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+            </ul>
+        </div>
+        <span class="navTrigger">
+            <i></i>
+            <i></i>
+            <i></i>
+        </span>
     </div>
-  </nav>
-</header>
-<!--Main Navigation-->
-
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+</nav>
 </body>
 </html>
