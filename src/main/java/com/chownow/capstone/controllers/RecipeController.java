@@ -3,12 +3,14 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 
+import com.chownow.capstone.services.AmazonService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -37,6 +39,9 @@ public class RecipeController {
 
     @Autowired
     private UserService userServ;
+
+    @Autowired
+    private AmazonService s3;
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -132,10 +137,10 @@ public class RecipeController {
             "=application/json")
     public @ResponseBody
     String editRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
-        RecipeIngredient pi = recipeIngDao.getOne(recipeIngredient.getId());
-        pi.setAmount(recipeIngredient.getAmount());
-        pi.setUnit(recipeIngredient.getUnit());
-        recipeIngDao.save(pi);
+        RecipeIngredient ri = recipeIngDao.getOne(recipeIngredient.getId());
+        ri.setAmount(recipeIngredient.getAmount());
+        ri.setUnit(recipeIngredient.getUnit());
+        recipeIngDao.save(ri);
         return "update complete";
     }
 
@@ -171,27 +176,21 @@ public class RecipeController {
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
-    // CREATE NEW RECIPE CATEGORIES
-//    @RequestMapping(
-//            value = "/recipes/{recipeId}/categories/new",
-//            method = RequestMethod.POST,
-//            headers = "Content-Type=application/json")
-//    public void createRecipeCategories(
-//            @RequestBody Map<String, Object> payload,
-//            @PathVariable long recipeId) {
-//
-//        System.out.println(payload);
-//
-//    }
 
-    @PostMapping("/recipes/{id}/categories/new")
+    // UPLOAD RECIPE IMAGE
+    @PostMapping("/recipes/{id}/images/upload")
     @ResponseBody
-    public String addRecipeCategories(@PathVariable long id) {
-
-
-
-        return "done";
+    public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
+        Recipe recipe = recipeDao.getFirstById(id);
+//        if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
+//            s3.deleteFile(user.getAvatar());
+//        }
+        s3.uploadRecipeImage(multipartFile, recipe);
+        model.addAttribute("recipe",recipe);
+        return "image uploaded";
     }
+
+
 
 
 

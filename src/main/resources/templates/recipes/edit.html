@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:include="partials/head :: head('Update a Recipe')">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -166,6 +166,7 @@
                     <div class="card-body">
                         <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
                             image of your dish here.</h3>
+
 
                     </div>
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
@@ -520,7 +521,5 @@
 
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>
-
-</main>
 </body>
 </html>

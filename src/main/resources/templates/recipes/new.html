@@ -170,6 +170,11 @@
                         <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
                             image of your dish here.</h3>
 
+<!--                        RENDERED CONTENT-->
+                        <div id="images-added"></div>
+
+                        <button id="add-image" type="button">Add Image</button>
+
                     </div>
                     <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
@@ -178,8 +183,6 @@
                            aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
                             Step</a>
                     </div>
-                    <!--                        <button class="btn btn-primary" type="submit">Submit</button>-->
-                    <!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -261,7 +264,7 @@
 </div>
 <!--JS SCRIPTS-->
 <div th:replace="partials/scripts :: scripts"></div>
-
+<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
 <script th:src="@{/js/ingredients.js}"></script>
 <script>
     (function ($) {
@@ -273,6 +276,44 @@
         });
 
         let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+
+        // RENDER IMAGE ADD FORM
+        let addImageFormHtml = "";
+        const renderAddRecipeImagesForm = () => {
+            addImageFormHtml +=
+                '<form th:action="@{/recipes/{id}/images/upload(id=${recipe.id})}" th:method="post" enctype="multipart/form-data"><div class="form-group"><img id="image_upload_preview" th:src="img" class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200" height="200"><br><br><label class="btn mb-0"><i class="fas fa-pencil-alt"></i>  Edit <input class="profilePicture" accept=".jpg,.png,.jpeg" name="file" type="file" hidden/></label><button type="submit" class="imageUpdate btn btn-sm btn-red" style="display: none;">Upload</button></div></form>';
+
+            $('#images-added').html(addImageFormHtml);
+
+        };
+
+
+        // ADD IMAGE
+        $("#add-image").click(function () {
+            console.log("add image")
+            renderAddRecipeImagesForm();
+        });
+
+
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#image_upload_preview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // if avatar image file is selected call preview function and shows avatar button
+        $(".profilePicture").on('change', function() {
+            $(".imageUpdate").show();
+            readURL(this);
+        });
 
         // RECIPE AJAX
         let recipeInventory;
