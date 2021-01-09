@@ -49,7 +49,7 @@
         if(st > 50){
             $('.main-nav,.navTrigger').addClass('affix');
             $('.main-nav').css("position", "fixed");
-
+            $('main').css("margin-top", "-25px");
         }else{
             $('.main-nav,.navTrigger').removeClass('affix');
             $('.main-nav').css("position", "relative");
@@ -67,11 +67,12 @@
             if(st + $(window).height() < $(document).height()) {
                 $('header').show("slow");
                 $('.main-nav, .nav-trigger').removeClass(".nav-padding");
-                $('main').css("margin-top", "-25px");
 
             }
         }
         lastScrollTop = st;
     }
+
+    console.log(window.location.href);
 
 })(jQuery);
