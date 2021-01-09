@@ -166,6 +166,29 @@
                     <div class="card-body">
                         <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
                             image of your dish here.</h3>
+<!--                        <img th:each="image : ${recipe.images}" th:src="${image.url}" class=" shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200" height="200">-->
+
+                        <form th:each="image : ${recipe.images}"
+                              th:action="@{/recipes/{recipeId}/image/{imageId}/upload(recipeId=${recipe.id}, imageId=${image.id})}"
+                              th:method="post"
+                              enctype="multipart/form-data">
+                            <p id="image-id" th:text="${image.id}"></p>
+                            <div class="form-group">
+                                <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
+                                     class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200" height="200">
+                                <br>
+                                <br>
+                                <label class="btn mb-0">
+                                    <i class="fas fa-pencil-alt"></i>  Edit <input accept=".jpg,.png,.jpeg"
+                                                                                   name="file" type='file'
+                                                                                   th:id="'profilePicture' + ${image.id}" hidden/>
+                                </label>
+                                <button th:id="'avatarUpdate' + ${image.id}" type="submit" class="btn btn-sm btn-red"
+                                        style="display: none;">Upload</button>
+                            </div>
+                        </form>
+
+
 
 
                     </div>
@@ -269,6 +292,30 @@
         });
 
         let recipeId = parseInt(document.getElementById('recipe-id').innerText);
+
+
+        let image = document.getElementById('image-id').innerText;
+
+        console.log(image);
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#image_upload_preview' + image).attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // if avatar image file is selected call preview function and shows avatar button
+        $("#profilePicture" + image).on('change', function() {
+            $("#avatarUpdate" + image).show();
+            readURL(this);
+        });
 
         // RECIPE AJAX
         let recipeInventory;

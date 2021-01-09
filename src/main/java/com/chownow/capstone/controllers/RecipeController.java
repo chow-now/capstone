@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
+@RequestMapping
 public class RecipeController {
 
     @Autowired
@@ -39,6 +40,10 @@ public class RecipeController {
 
     @Autowired
     private UserService userServ;
+
+    @Autowired
+    private ImageRepository imageDao;
+
 
     @Autowired
     private AmazonService s3;
@@ -76,6 +81,7 @@ public class RecipeController {
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
         model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("images", imageDao.findAll());
         return "recipes/new";
     }
 
@@ -99,6 +105,7 @@ public class RecipeController {
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("categories", categoryDao.findAll());
+//        model.addAttribute("images", imageDao.findAll());
 
         return "recipes/new";
     }
@@ -154,6 +161,7 @@ public class RecipeController {
     public String showEditRecipe(@PathVariable long id, Model model) {
         model.addAttribute("recipe", recipeDao.getOne(id));
         User currentUser = userServ.loggedInUser();
+        model.addAttribute("images",imageDao.findAll());
         model.addAttribute("user", currentUser);
         model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
@@ -178,20 +186,37 @@ public class RecipeController {
     }
 
     // UPLOAD RECIPE IMAGE
-    @PostMapping("/recipes/{id}/images/upload")
-    @ResponseBody
-    public String uploadAvatar(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
-        Recipe recipe = recipeDao.getFirstById(id);
-//        if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
-//            s3.deleteFile(user.getAvatar());
+//    @PostMapping("/recipes/{recipeId}/image/{imageId}/upload")
+//    public String uploadRecipeImage(
+//            @PathVariable long recipeId,
+//            @PathVariable long imageId,
+//            @RequestParam(value = "file") MultipartFile multipartFile,
+//            Model model){
+//        Recipe recipe = recipeDao.getOne(recipeId);
+//
+//        Image imageDb = imageDao.findAllById(imageId);
+//        if(imageDb.getUrl() != null && imageDb.getUrl().startsWith("https://s3")){
+//            s3.deleteFile(imageDb.getUrl());
 //        }
+//        s3.uploadRecipeImage(multipartFile, recipe);
+//        model.addAttribute("recipe",recipe);
+//        return "recipes/new";
+//    }
+
+    @PostMapping("/recipes/{id}/upload")
+    @ResponseBody
+    public String uploadRecipeImage(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
+        Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
         model.addAttribute("recipe",recipe);
-        return "image uploaded";
+        return "recipe/new";
     }
 
-
-
+    @PostMapping("/delete")
+    @ResponseBody
+    public void deleteFile(String imageUrl){
+        s3.deleteFile(imageUrl);
+    }
 
 
 }
