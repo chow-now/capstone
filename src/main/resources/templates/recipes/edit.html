@@ -15,7 +15,9 @@
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
 <body>
-<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
 <main>
     <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
         <div class="tab-content" id="myTabContent">
@@ -253,9 +255,8 @@
         </div>
     </div>
 </div>
-<!--JS SCRIPTS-->
-<div th:replace="partials/scripts :: scripts"></div>
-
+<!--! MODALS-->
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/ingredients.js}"></script>
 <script>
 

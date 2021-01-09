@@ -284,4 +284,29 @@
     })
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    const verifyViewport = ()=>{
+        let viewport = $(window).width();
+
+        if ( viewport <= 759 ) {
+            if($(".nav-tabs").children().length<5){
+                $(".nav-tabs").children().each(function () {
+                    $(this).removeClass("col-4")
+                    $(this).addClass("col-3");
+                })
+            }
+        }
+        else {
+            $(".nav-tabs").children().each(function () {
+                $(this).addClass("col-4")
+                $(this).removeClass("col-3");
+            })
+        };
+    }
+    $(window).ready(function() {
+        verifyViewport();
+    });
+    $(window).resize(function(){
+        verifyViewport();
+    });
 })(jQuery);
