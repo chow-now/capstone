@@ -175,20 +175,19 @@
                                 <div class="text-center">
                                     <label class="btn btn-green btn-sm rounded-pill">
                                         Add an Image <input accept=".jpg,.png,.jpeg" name="file" type='file'
-                                                            id="profilePicture" hidden/>
+                                                            id="recipePicture" hidden/>
                                     </label>
                                 </div>
                                 <div class="text-center">
-<!--                                    <img id="image_upload_preview" th:src="${recipe.images.get(0)}" class="shadow-lg"-->
-<!--                                         style="border: 5px solid rgb(255, 255, 255);" width="200" height="200">-->
-                                    <button id="avatarUpdate" type="submit" class="btn btn-sm btn-red"
+                                    <img id="image_upload_preview" src="" class="shadow-lg"
+                                         style="border: 5px solid rgb(255, 255, 255);" width="200" height="200">
+                                    <button id="imageUpdate" type="submit" class="btn btn-sm btn-red"
                                             style="display: none;">Upload
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <!--                    <div class="card-footer text-muted">-->
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-images"
@@ -289,22 +288,21 @@
 
         let recipeId = parseInt(document.getElementById('recipe-id').innerText);
 
-        function readURL(input) {
 
+
+        function readURL(input) {
             if (input.files && input.files[0]) {
                 let reader = new FileReader();
-
                 reader.onload = function (e) {
                     $('#image_upload_preview').attr('src', e.target.result);
                 }
-
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
         // if avatar image file is selected call preview function and shows avatar button
-        $("#profilePicture").on('change', function () {
-            $("#avatarUpdate").show();
+        $("#recipePicture").on('change', function () {
+            $("#imageUpdate").show();
             readURL(this);
         });
 
