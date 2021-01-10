@@ -181,16 +181,12 @@
                                 <label class="btn mb-0">
                                     <i class="fas fa-pencil-alt"></i>  Edit <input accept=".jpg,.png,.jpeg"
                                                                                    name="file" type='file'
-                                                                                   th:id="'profilePicture' + ${image.id}" hidden/>
+                                                                                   th:id="'recipePicture' + ${image.id}" hidden/>
                                 </label>
-                                <button th:id="'avatarUpdate' + ${image.id}" type="submit" class="btn btn-sm btn-red"
+                                <button th:id="'imageUpload' + ${image.id}" type="submit" class="btn btn-sm btn-red"
                                         style="display: none;">Upload</button>
                             </div>
                         </form>
-
-
-
-
                     </div>
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
@@ -312,8 +308,8 @@
         }
 
         // if avatar image file is selected call preview function and shows avatar button
-        $("#profilePicture" + image).on('change', function() {
-            $("#avatarUpdate" + image).show();
+        $("#recipePicture" + image).on('change', function() {
+            $("#imageUpload" + image).show();
             readURL(this);
         });
 
