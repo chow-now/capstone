@@ -5,13 +5,19 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Dashboard</title>
+  <link th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/x-icon">
   <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-  <!--  MAIN CSS -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/main.css}">
   <!--  CUSTOM PROFILE CSS -->
   <link rel="stylesheet" th:href="@{/css/profile.css}">
+  <style>
+
+
+  </style>
 
 </head>
 <body>
@@ -110,11 +116,23 @@
     <div class="tab-content ">
 <!--      RECIPES TAB-->
       <div class="tab-pane active" id="recipesTab">
-        <div class="row justify-content-center">
+        <ul sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav row align-items-center justify-content-center">
+          <li class="nav-item py-2">
+            <div class="nav-link text-center" id="publishedTab" >
+              <span class="text-black-50 mb-0 small font-weight-bold">Recipes</span>
+            </div>
+          </li>
+          <li class="nav-item py-2">
+            <div class="nav-link text-center" id="draftTab"  >
+              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span>
+            </div>
+          </li>
+        </ul>
+
+        <div id="publishedRecipes" class="row justify-content-center">
           <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
-          <div th:each="recipe : ${user.recipes}" class="align-items-center justify-content-around">
+          <div th:each="recipe : ${published}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
               <a th:href="@{/recipes/{id}(id=${recipe.id})}">
                 <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
@@ -140,13 +158,41 @@
             </div>
           </div>
         </div>
+        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" id="draftRecipes" class="row justify-content-center d-none">
+          <div class="col-md-12">
+<!--            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>-->
+          </div>
+          <div th:each="recipe : ${drafts}" class="align-items-center justify-content-around">
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              </a>
+              <div class="card-body bg-transparent">
+                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <div class="row align-items-baseline">
+                  <div class="col-2">
+                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <p th:text="${recipe.chef.firstName}"></p>
+                  </div>
+                  <div class="col-3">
+                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" title="">
+                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 <!--      FAVORITES TAB-->
       <div class="tab-pane" id="favoritesTab">
-        <div class="row justify-content-center">
-          <div class="col-md-12">
-            <h3 th:text="${user.firstName + 's Favorite Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
-          </div>
+        <div class="row justify-content-center py-5">
           <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
               <a th:href="@{/recipes/{id}(id=${recipe.id})}">
@@ -177,10 +223,7 @@
 <!--      FOLLOWERS TAB-->
       <div class="tab-pane" id="followersTab">
         <div class="row align-items-center justify-content-around p-3">
-          <div class="col-md-12">
-            <h3 th:text="${'Followers'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
-          </div>
-          <div th:each="follower : ${user.followers}" class="my-2  mx-2 text-center">
+          <div th:each="follower : ${user.followers}" class="my-2 mx-2 text-center">
             <a class="text-center" th:href="@{/users/{id}(id=${ follower.user.id })}">
               <img th:src="${follower.user.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);" alt="avatar">
             </a>
@@ -192,7 +235,6 @@
       <div class="tab-pane" id="followingTab">
         <div class="row align-items-center justify-content-around p-3">
           <div class="col-md-12">
-            <h3 th:text="${'Following'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>
           </div>
           <div th:each="following : ${user.followings}" class="my-2  mx-2 text-center">
             <a class="text-center" th:href="@{/users/{id}(id=${ following.friend.id })}">
@@ -204,21 +246,25 @@
       </div>
 <!--      PANTRY TAB-->
       <div class="tab-pane pb-3" id="pantryTab">
-          <div class="row">
-            <div class="col-md-12">
-              <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Pantry</h2>
-              <div class="text-center">
-                <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill" value="Add New Ingredient"/>
-              </div>
-              <div>
-                <input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text" id="ingredientSearch" />
-                <div id="searchResults" class="container text-center"></div>
+          <div class="row align-items-center justify-content-around pt-3">
+            <div class="col-12 col-md-6">
+              <h3 th:text="${'Pantry'}" class="my-3 text-center chow-font green-text text-uppercase font-weight-bold"></h3>
+            </div>
+            <div class="search-box col-12 col-md-6">
+              <input id="ingredientSearch" type="text" placeholder="Search by Name" class="input-box">
+              <div class="search-btn">
+                <i class="fa fa-plus" aria-hidden="true"></i>
               </div>
             </div>
           </div>
-          <div class="card my-3">
-            <table id="ingredientsTable" class="table d-none" >
-              <thead>
+          <div class="row">
+            <div class="col-12">
+              <div id="searchResults" class="container text-center"></div>
+            </div>
+          </div>
+          <div class="my-3">
+            <table id="ingredientsTable" class="table d-none table-borderless" >
+              <thead class="text-black-50">
               <tr>
                 <th>Ingredient</th>
                 <th>Amount</th>
@@ -296,13 +342,36 @@
                 <label class="green-text font-weight-bold">Unit</label>
                 <div class="mt-1">
                   <select name="unit" required>
-                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                    <option th:value="ounce">Ounce (oz)</option>
-                    <option th:value="cup">Cup (c)</option>
-                    <option th:value="pint">Pint (pt)</option>
-                    <option th:value="quart">Quart (qt)</option>
-                    <option th:value="gallon">Gallon (gal)</option>
+                    <optgroup label="misc">
+                      <option th:value="single">Single</option>
+                      <option th:value="bunch">Bunch</option>
+                    </optgroup>
+                    <optgroup label="Volume">
+                      <option th:value="drop">Drop</option>
+                      <option th:value="teaspoon">Teaspoon (tsp)</option>
+                      <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                      <option th:value="cup">Cup (c)</option>
+                      <option th:value="pint">Pint (pt)</option>
+                      <option th:value="quart">Quart (qt)</option>
+                      <option th:value="gallon">Gallon (gal)</option>
+                      <option th:value="ml">Milliliter (mL)</option>
+                      <option th:value="liter">Liter (L)</option>
+                    </optgroup>
+                    <optgroup label="Mass">
+                      <option th:value="pinch">Pinch</option>
+                      <option th:value="dash">Dash</option>
+                      <option th:value="ounce">Ounce (oz)</option>
+                      <option th:value="pound">Pound (lb)</option>
+                      <option th:value="mg">Milligrams (mg)</option>
+                      <option th:value="gram">Gram (g)</option>
+                      <option th:value="kilo">Kilogram (kg)</option>
+                    </optgroup>
+                    <optgroup label="Length">
+                      <option th:value="mm">mm</option>
+                      <option th:value="cm">cm</option>
+                      <option th:value="meter">Meter (m)</option>
+                      <option th:value="inch">Inch (in)</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>
@@ -332,5 +401,8 @@
 </script>
 <script th:src="@{/js/profile.js}"></script>
 <script th:src="@{/js/fraction_converter.js}"></script>
+<script>
+
+</script>
 </body>
 </html>

@@ -8,18 +8,18 @@
         </div>
         <div id="mainListDiv" class="main_list">
             <ul class="navlinks">
-                <li><a th:href="@{/recipes}">Recipes</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/dashboard}">Dashboard</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/recipes/new}">New Recipe</a></li>
+                <li><a th:href="@{/recipes}">recipes</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/dashboard}">dashboard</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/recipes/new}">create</a></li>
                 <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" th:method="POST">
                         <a href="#">
-                            <button style="background-color:transparent;border:none;color: inherit">Logout</button>
+                            <button style="background-color:transparent;border:none;color: inherit">logout</button>
                         </a>
                     </form>
                 </li>
-                <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Register</a></li>
-                <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/register}">register</a></li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/login}">login</a></li>
             </ul>
         </div>
         <span class="navTrigger">

@@ -3,10 +3,22 @@
     font-family: peace_sansregular;
     src: url('/css/peace_sansregular.otf') format("opentype");
 }
+
+@font-face {
+    font-family: corsa;
+    src: url('/css/corsa.otf') format("opentype");
+}
+
+@font-face {
+    font-family: corsa_bold;
+    src: url('/css/corsa_bold.otf') format("opentype");
+}
 * {
     margin:0; padding:0; box-sizing:border-box;
 }
-
+body{
+    font-family: 'corsa_bold';
+}
 .chow-font{
     color: #fec82e;
     font-family: peace_sansregular;
@@ -210,11 +222,13 @@ a.nostyle:visited {
     text-decoration: none;
     color: #fff;
     line-height: 65px;
+    font-family: 'corsa';
     font-size: 2rem;
 }
 
 .main-nav div.main_list ul li a:hover {
     color: #fec82e;
+    font-weight: 900;
 }
 
 .navTrigger {

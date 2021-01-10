@@ -14,14 +14,25 @@
         <div class="col">
             <!-- First name -->
             <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+            <p class="red-text" th:if="${#fields.hasErrors('firstName')}" th:text="${'Invalid Name'}"></p>
         </div>
     </div>
 
     <!-- E-mail -->
-    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+    <div class="form-row mb-4">
+        <div class="col">
+            <input type="email" id="defaultRegisterFormEmail" class="form-control" placeholder="E-mail" th:field="*{email}">
+            <p class="red-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+    </div>
 
     <!-- Password -->
-    <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+    <div class="form-row mb-4">
+        <div class="col">
+            <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+            <p class="red-text" th:if="${#fields.hasErrors('password')}" th:text="${'Invalid Password'}"></p>
+        </div>
+    </div>
     <small class="form-text text-muted mb-3">
         <em>At least 8 characters, 1 digit, and 1 special character</em>
     </small>
@@ -39,13 +50,19 @@
     <p class="h4 mb-4 chow-font">CHOW NOW</p>
     
     <!-- E-mail -->
-    <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-4" placeholder="E-mail">
-
+    <div class="form-row mb-4">
+        <div class="col">
+            <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-2" placeholder="E-mail" required>
+        </div>
+    </div>
     <!-- Password -->
-    <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" name="password" placeholder="Password" aria-describedby="defaultLoginFormPasswordHelpBlock">
+    <div class="form-row mb-2">
+        <div class="col">
+            <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" name="password" placeholder="Password" required>
+        </div>
+    </div>
     <!-- Login button -->
     <button class="btn btn-green rounded-pill" type="submit" value="Log In">Login</button>
-
     <!-- Social login -->
     <div class="or-seperator"><i>or sign in with:</i></div>
     <a th:href="@{/oauth2/authorization/google}" class=" text-danger" role="button"><i class="fab fa-google light-blue-text"></i></a>
@@ -57,17 +74,20 @@
     
     <div class="form-group">
         <label for="editFormName">Name</label>
-        <input type="text" id="editFormName" class="form-control mb-4" placeholder="Name" th:field="*{firstName}">
+        <input type="text" id="editFormName" class="form-control mb-2" placeholder="Name" th:field="*{firstName}">
+        <p class="red-text" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
     </div>
 
     <div class="form-group">
         <label for="editFormEmail">Email</label>
-        <input type="email" id="editFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+        <input type="email" id="editFormEmail" class="form-control mb-2" placeholder="E-mail" th:field="*{email}">
+        <p class="red-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
     </div>
 
     <div class="form-group">
         <label for="editFormAbout">About Me</label>
-        <textarea id="editFormAbout" class="form-control mb-4" placeholder="Quick summary about yourself" th:field="*{aboutMe}"></textarea>
+        <textarea id="editFormAbout" class="form-control mb-2" placeholder="Quick summary about yourself" th:field="*{aboutMe}"></textarea>
+        <p class="red-text" th:if="${#fields.hasErrors('aboutMe')}" th:errors="*{aboutMe}"></p>
     </div>
 
     <!-- submit button -->

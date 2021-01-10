@@ -13,6 +13,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByTitle(String term);
     List<Recipe> findAllByPrepTimeIsLessThanEqual(int time);
     List<Recipe> findAllByCookTimeIsLessThanEqual(int time);
-
-
+    List<Recipe> findAllByIsPublishedFalse();
+    List<Recipe> findAllByIsPublishedTrue();
+    List<Recipe> findAllByChefAndIsPublishedTrue(User chef);
+    List<Recipe> findAllByChefAndIsPublishedFalse(User chef);
 }

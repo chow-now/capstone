@@ -56,12 +56,12 @@
         let pantryHtml = "";
         // ADD ROWS TO PANTRY TABLE
         inventoryIngredients.forEach((item)=>{
-            pantryHtml += '<tr>'+
-                '<td><span class="green-text">' + item.ingredient.name + '</span></td>'+
-                '<td class="green-text" data-amount-float="'+item.amount+'-'+item.unit+'"><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
-                '<td  id="'+item.id+'" class="qty">'+
-                '<span  type="button" data-toggle="modal" data-target="#deleteIngredientModal" style="font-size: 0.8em!important;"><i class="far fa-trash-alt"></i></span>&nbsp&nbsp' +
-                '<span  type="button" data-toggle="modal" data-target="#ingredientModal" ><i class="fas fa-pencil-alt"></i></span>'+
+            pantryHtml += '<tr id="'+item.id+'">'+
+                '<td class="green-text" type="button" data-toggle="modal" data-target="#ingredientModal">' + item.ingredient.name + '</td>'+
+                '<td class="green-text"  data-amount-float="'+item.amount+'-'+item.unit+'"><span class="rational">' + item.amount + '</span><span> ' + item.unit+ '</span></td>'+
+                '<td class="qty">'+
+                '<span class="font-weight-bold red-text" type="button" data-toggle="modal" data-target="#deleteIngredientModal" style="font-size: 1.2em!important;">X</span>' +
+                // '<span  type="button" data-toggle="modal" data-target="#ingredientModal" ><i class="fas fa-pencil-alt"></i></span>'+
                 '</td>'+
                 '</tr>'
             ;
@@ -138,16 +138,16 @@
         let button = $(event.relatedTarget); // Button that triggered the modal
         let tagType = button[0].tagName;
         let clickedIngredient; // Ingredient name to be used
-
         /* if tag type is span change ingredient form to an update form */
-        if(tagType === "SPAN"){
+        if(tagType === "TD"){
             /* get data for update form from the tr element */
             let pantryIngId = button.parent()[0].getAttribute("id");
-            let tableRow = button.parent().parent()[0];
+            let tableRow = button.parent()[0];
             let amountUnit = tableRow.firstChild.nextSibling.getAttribute("data-amount-float").split("-");
+            let unit = amountUnit[1].split(" ")[0].toLowerCase();
             clickedIngredient = tableRow.firstChild.innerText;
             /* set form values for update */
-            openModal.find('select').val(amountUnit[1].split(" ")[0].toLowerCase()); // set unit select value
+            openModal.find('select').val(unit); // set unit select value
             openModal.find('.modal-title').text("Update " + clickedIngredient); // place ingredient name on title
             openModal.find('.modal-body input').val(clickedIngredient);
             count.val(parseFloat(amountUnit[0]));// set amount value
@@ -250,7 +250,7 @@
         let button = $(event.relatedTarget); // Button that triggered the modal
         let clickedIngredient; // Ingredient name to be used
         /* get data for update form from the tr element */
-        let pantryIngId = button.parent()[0].getAttribute("id");
+        let pantryIngId = button.parent().parent()[0].getAttribute("id");
         let tableRow = button.parent().parent()[0];
         clickedIngredient = tableRow.firstChild.innerText;
         /* set form values for update */
@@ -308,5 +308,25 @@
     });
     $(window).resize(function(){
         verifyViewport();
+    });
+
+    $("#draftTab").click(function () {
+        if($("#draftRecipes").hasClass("d-none")){
+            $("#draftRecipes").removeClass("d-none");
+            $("#publishedRecipes").addClass("d-none");
+        }
+
+    });
+    $("#publishedTab").click(function () {
+        if($("#publishedRecipes").hasClass("d-none")){
+            $("#draftRecipes").addClass("d-none");
+            $("#publishedRecipes").removeClass("d-none");
+        }
+    });
+
+    $(".search-btn").click(function(){
+        $(".input-box").toggleClass("active").focus;
+        $(this).toggleClass("animate");
+        $(".input-box").val("");
     });
 })(jQuery);
