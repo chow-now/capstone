@@ -38,9 +38,12 @@ public class RecipeController {
     @Autowired
     private UserService userServ;
 
+    @Autowired
+    private UserRepository userDao;
+
     @GetMapping("/recipes")
     public String index(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
+        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
         return "recipes/index";
     }
 
@@ -49,6 +52,10 @@ public class RecipeController {
         Recipe recipe = recipeDao.getFirstById(id);
         if(recipe == null){
             return "redirect:/recipes";
+        }
+        if(!recipe.isPublished()){
+            System.out.println("Not Published.... redirecting");
+            return "redirect:/recipes/"+recipe.getId()+"/edit";
         }
         model.addAttribute("recipe", recipe);
         String firstName = recipe.getChef().getFirstName();
@@ -147,11 +154,16 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
-        model.addAttribute("recipe", recipeDao.getOne(id));
-        User currentUser = userServ.loggedInUser();
-        model.addAttribute("user", currentUser);
+        Recipe recipe = recipeDao.getOne(id);
+        User user = userDao.getOne(recipe.getChef().getId());
+        // restrict access to owner redirects others
+        if(!userServ.isOwner(user)){
+            return "redirect:/recipes";
+        }
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("user", user);
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        model.addAttribute("isOwner",userServ.isOwner(user));
         return "recipes/edit";
     }
 

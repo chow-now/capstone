@@ -135,6 +135,11 @@ body{
     box-shadow: 0 -0.1rem 3rem rgba(0,0,0,0.175)!important;
 }
 
+#publishedTab span:hover,#draftTab span:hover{
+    cursor: pointer;
+    color: #fec82e!important;
+}
+
 @media only screen and (max-width: 500px) {
     .fas{
         font-size: 1rem;
