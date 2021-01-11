@@ -32,7 +32,30 @@
     <span th:if= "${message != null}" th:text="${message}"></span>
 
 
-<!--    <table>-->
+    <!-- Display all recipes isPublished True from DB -->
+    <div class="recipes row row-cols-1 row-cols-md-4 g-5">
+    <div th:each="recipe : ${allrecipe}">
+    <div class="col">
+        <div class="card h-100">
+            <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
+<!--            <img class="card-img-top" th:attr="src=${recipe.image}" alt="unavailable"/>-->
+            <div class="card-body">
+                <div>
+                    <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
+                </div>
+
+                <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                    <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
+                </div>
+
+                <button class="btn btn-primary viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" id=${recipe.id}>View</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!--    <table>-->
 <!--        <thead>-->
 <!--        <tr>-->
 <!--            <th> Title </th>-->
@@ -40,17 +63,15 @@
 <!--        </tr>-->
 <!--        </thead>-->
 <!--        <tbody>-->
-<!--        <tr th:if="${recipe.empty}">-->
-<!--            <td colspan="2"> No Books Available </td>-->
-<!--        </tr>-->
-<!--        <tr th:each="book : ${recipes}">-->
-<!--            <td><span th:text="${recipe.title}"> Title </span></td>-->
-<!--            <td><span th:text="${recipe.author}"> Author </span></td>-->
-<!--        </tr>-->
+<!--        <div th:each="recipe : ${allrecipe}">-->
+<!--            <td><span th:text="${recipe.title}"></span></td>-->
+<!--            <td><span th:text="${recipe.description}"></span></td>-->
+<!--        </div>-->
 <!--        </tbody>-->
 <!--    </table>-->
 
-    <!-- Display all recipes isPublished True -->
+
+
 </div>
 
 
@@ -269,7 +290,7 @@
                                             instructions += '<p>' + 'You can find more information in the main' +
                                                 '<a href="' + modalRecipe.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
 
-                                            hiddenDirections = 'Sorry, directions not available';
+                                            hiddenDirections = modalRecipe.sourceUrl;
                                         } else {
                                             for (let i = 0; i < modalRecipe.analyzedInstructions[0].steps.length; i++) {
                                                 instructions += `<li class="list-group">

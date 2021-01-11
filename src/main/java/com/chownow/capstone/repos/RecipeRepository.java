@@ -17,4 +17,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByIsPublishedTrue();
     List<Recipe> findAllByChefAndIsPublishedTrue(User chef);
     List<Recipe> findAllByChefAndIsPublishedFalse(User chef);
+    Recipe findBySpoonApiId(long id);
 }

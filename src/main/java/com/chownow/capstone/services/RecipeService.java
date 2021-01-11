@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +56,7 @@ public class RecipeService {
 //            return "Recipe already exists";
 //        }
 
+        // Prevent duplicate favorites if user signed in
         for(Recipe fav : user.getFavorites()){
             if(recipe.getSpoonApiId() == fav.getSpoonApiId()){
                 return "Already Exist";
@@ -85,19 +85,24 @@ public class RecipeService {
             servings = recipe.getServings();
         }
 
-        /** Create a recipe entity object to be saved **/
-        Recipe recipeEntity = new Recipe();
-        recipeEntity.setCookTime(Integer.parseInt(cookTime));
-        recipeEntity.setDescription(recipe.getSummary());
-        recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
-        recipeEntity.setDifficulty("N/A");
-        recipeEntity.setDirections(recipe.getDirections());
-        recipeEntity.setPrepTime(Integer.parseInt(prepTime));
-        recipeEntity.setServings(Integer.parseInt(servings));
-        recipeEntity.setTitle(recipe.getTitle());
-        recipeEntity.setChef(userDao.getFirstByEmail("chef@chownow.com"));
+        // Recipe recipeEntity = null;
+        //Recipe existedRecipe = recipeDao.getOne(recipe.getSpoonApiId());
 
-        recipeDao.save(recipeEntity); // Saves to recipe
+
+        /** Create a recipe entity object to be saved **/
+            Recipe recipeEntity = new Recipe();
+            recipeEntity.setCookTime(Integer.parseInt(cookTime));
+            recipeEntity.setDescription(recipe.getSummary());
+            recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
+            recipeEntity.setDifficulty("N/A");
+            recipeEntity.setDirections(recipe.getDirections());
+            recipeEntity.setPublished(true);
+            recipeEntity.setPrepTime(Integer.parseInt(prepTime));
+            recipeEntity.setServings(Integer.parseInt(servings));
+            recipeEntity.setTitle(recipe.getTitle());
+            recipeEntity.setChef(userDao.getFirstByEmail("chef@chownow.com"));
+
+            recipeDao.save(recipeEntity); // Saves to recipe
 
         /** Loop through the recipe ingredients and add to db **/
         String ingredients[] = recipe.getIngredients().split("##");
