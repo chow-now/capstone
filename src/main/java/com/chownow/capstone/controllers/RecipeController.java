@@ -62,7 +62,7 @@ public class RecipeController {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
         viewModel.addAttribute("recipe", new SpoonApiDto());
-        viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+        //viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
         return "recipes/index";
     }
 
