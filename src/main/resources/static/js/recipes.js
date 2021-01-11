@@ -8,6 +8,66 @@
 
     let recipeId = parseInt(document.getElementById('recipe-id').innerText);
 
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $('#image_preview').show().attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#recipePicture").on('change', function () {
+        $("#imageUpload").show();
+        readURL(this);
+        $('#imageUpload').on('click', function (e) {
+            e.preventDefault();
+
+            console.log("upload clicked");
+
+            $.ajax({
+                url: "/recipes/" + recipeId + "/upload",
+                method: "POST",
+                enctype: 'multipart/form-data',
+                data: new FormData($("#uploadImageForm")[0]),
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function () {
+                    console.log("success - sending to controller")
+                    location.reload();
+                },
+                error: function () {
+                    console.log("error - sending to controller")
+                }
+            });
+        });
+    });
+
+    let imageId = document.getElementById('image-id').innerText;
+    let imageUrl = document.getElementById('image-url').innerText;
+    $("#deleteImage" + imageId).on('click', function () {
+        console.log($("#deleteImage" + imageId).val());
+        $.ajax({
+            url: "/recipes/image/" + imageId + "/delete",
+            method: "POST",
+            data: {imageUrl},
+            dataType: "text",
+
+            success: function () {
+                console.log("success - sending to controller")
+                location.reload();
+            },
+            error: function () {
+                console.log("error - sending to controller")
+                location.reload();
+            }
+        });
+    });
+
+
     // RECIPE AJAX
     let recipeInventory;
     let inventoryIngredients;
@@ -256,5 +316,3 @@
     })
 
 })(jQuery);
-
-

@@ -3,18 +3,23 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 
+import com.chownow.capstone.services.AmazonService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
 import java.util.*;
 
 @Controller
+@RequestMapping
 public class RecipeController {
 
     @Autowired
@@ -39,7 +44,11 @@ public class RecipeController {
     private UserService userServ;
 
     @Autowired
-    private UserRepository userDao;
+    private ImageRepository imageDao;
+
+    @Autowired
+    private AmazonService s3;
+
 
     @GetMapping("/recipes")
     public String index(Model model) {
@@ -78,6 +87,8 @@ public class RecipeController {
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
         model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("images", imageDao.findAll());
+        model.addAttribute("recipeIgredients", recipeIngDao.findAll());
         return "recipes/new";
     }
 
@@ -101,6 +112,7 @@ public class RecipeController {
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("categories", categoryDao.findAll());
+//        model.addAttribute("images", imageDao.findAll());
 
         return "recipes/new";
     }
@@ -139,10 +151,10 @@ public class RecipeController {
             "=application/json")
     public @ResponseBody
     String editRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient) {
-        RecipeIngredient pi = recipeIngDao.getOne(recipeIngredient.getId());
-        pi.setAmount(recipeIngredient.getAmount());
-        pi.setUnit(recipeIngredient.getUnit());
-        recipeIngDao.save(pi);
+        RecipeIngredient ri = recipeIngDao.getOne(recipeIngredient.getId());
+        ri.setAmount(recipeIngredient.getAmount());
+        ri.setUnit(recipeIngredient.getUnit());
+        recipeIngDao.save(ri);
         return "update complete";
     }
 
@@ -154,6 +166,12 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
+
+        model.addAttribute("recipe", recipeDao.getOne(id));
+        User currentUser = userServ.loggedInUser();
+        model.addAttribute("images",imageDao.findAll());
+        model.addAttribute("user", currentUser);
+
         Recipe recipe = recipeDao.getOne(id);
         User user = userDao.getOne(recipe.getChef().getId());
         // restrict access to owner redirects others
@@ -183,27 +201,42 @@ public class RecipeController {
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
-    // CREATE NEW RECIPE CATEGORIES
-//    @RequestMapping(
-//            value = "/recipes/{recipeId}/categories/new",
-//            method = RequestMethod.POST,
-//            headers = "Content-Type=application/json")
-//    public void createRecipeCategories(
-//            @RequestBody Map<String, Object> payload,
-//            @PathVariable long recipeId) {
+
+    // UPLOAD RECIPE IMAGE
+//    @PostMapping("/recipes/{recipeId}/image/{imageId}/upload")
+//    public String uploadRecipeImage(
+//            @PathVariable long recipeId,
+//            @PathVariable long imageId,
+//            @RequestParam(value = "file") MultipartFile multipartFile,
+//            Model model){
+//        Recipe recipe = recipeDao.getOne(recipeId);
 //
-//        System.out.println(payload);
-//
+//        Image imageDb = imageDao.findAllById(imageId);
+//        if(imageDb.getUrl() != null && imageDb.getUrl().startsWith("https://s3")){
+//            s3.deleteFile(imageDb.getUrl());
+//        }
+//        s3.uploadRecipeImage(multipartFile, recipe);
+//        model.addAttribute("recipe",recipe);
+//        return "recipes/new";
 //    }
 
-    @PostMapping("/recipes/{id}/categories/new")
+    @RequestMapping(value = "/recipes/{id}/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String addRecipeCategories(@PathVariable long id) {
-
-
-
-        return "done";
+    public ResponseEntity<?> uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
+                                               Model model){
+        Recipe recipe = recipeDao.getOne(id);
+        s3.uploadRecipeImage(multipartFile, recipe);
+        model.addAttribute("recipe",recipe);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/recipes/image/{id}/delete")
+    @ResponseBody
+    public void deleteFile(@PathVariable long id, @RequestParam String imageUrl){
+        imageDao.deleteById(id);
+        s3.deleteFile(imageUrl);
+    }
+
 
 
    @PostMapping("/recipes/{id}/favorite")
@@ -220,4 +253,5 @@ public class RecipeController {
        userDao.save(currentUser);
        return "redirect:/recipes/" + id;
    }
+
 }
