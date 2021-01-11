@@ -214,6 +214,8 @@ public class SeedRunner {
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
         for(long i = 1; i<=60; i++){
+            long spoonApiId = faker.number().numberBetween(0, 999);
+            LOGGER.info("title = " + spoonApiId);
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
@@ -229,6 +231,7 @@ public class SeedRunner {
             int servings = faker.number().numberBetween(1,20);
             LOGGER.info("servings = " + servings);
             Recipe recipe = new Recipe(
+                    spoonApiId,
                     title,
                     description,
                     directions,

@@ -3,9 +3,12 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 
-import com.chownow.capstone.services.AmazonService;
+
+import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import com.chownow.capstone.services.AmazonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 @Controller
@@ -26,7 +31,7 @@ public class RecipeController {
     private RecipeRepository recipeDao;
 
     @Autowired
-    private UserRepository userDoa;
+    private UserRepository userDao;
 
     @Autowired
     private IngredientRepository ingredientDao;
@@ -50,9 +55,35 @@ public class RecipeController {
     private AmazonService s3;
 
 
+    @Value("${spoonacular.api.key}")
+    private String spoonApi;
+
+    @Autowired
+    private RecipeService recipeService;
+
+//    @GetMapping("/recipes")
+//    public String index(Model model) {
+//        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+//        return "recipes/index";
+//    }
+
     @GetMapping("/recipes")
-    public String index(Model model) {
-        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+    public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
+        viewModel.addAttribute("term", term);
+        viewModel.addAttribute("spoonApi", spoonApi);
+        viewModel.addAttribute("recipe", new SpoonApiDto());
+        //viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+        return "recipes/index";
+    }
+
+    /** List results **/
+    @PostMapping("/recipes")
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
+                              Model viewModel){
+
+        String message = recipeService.saveRecipe(recipe);
+        // For testing/indicator
+        viewModel.addAttribute("message", message);
         return "recipes/index";
     }
 
@@ -106,7 +137,7 @@ public class RecipeController {
         }
 
         User currentUser = userServ.loggedInUser();
-        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
+        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
         model.addAttribute("recipe",recipeToBeSaved);
@@ -197,7 +228,7 @@ public class RecipeController {
             return "recipes/" + recipeToBeSaved.getId() + "/edit";
         }
         User currentUser = userServ.loggedInUser();
-        recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
+        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
