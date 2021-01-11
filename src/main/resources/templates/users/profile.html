@@ -20,7 +20,7 @@
 <header>
   <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
-<main>
+<main class="mb-5">
   <!--Main Container-->
     <!-- USER INFO -->
   <div th:each="ingredient : ${pantryIngredients}">
@@ -100,6 +100,7 @@
           <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#suggestionsTab" data-toggle="tab">
               <i class="fas fa-drumstick-bite fa-2x"></i>
+              <span id="notification" th:data-internalId="${user.suggestedCount}" th:text="${notificationCount > user.suggestedCount ? notificationCount - user.suggestedCount : ''}" class="badge badge-danger rounded-pill" ></span>
               <p class="text-black-50 mb-0 small">suggestions</p>
             </a>
           </li>

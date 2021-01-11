@@ -4,7 +4,11 @@ package com.chownow.capstone.services;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
+import net.minidev.json.JSONArray;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +21,8 @@ import org.springframework.stereotype.Service;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 
 @Service
@@ -110,7 +116,7 @@ public class SeedRunner {
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,password);
             seedUser.setPassword(passwordEncoder.encode(seedUser.getPassword()));
-            seedUser.setAdmin(false);
+//            seedUser.setAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
             seedUser.setAvatar(randomAvatar());
             userDao.save(seedUser);
@@ -167,12 +173,7 @@ public class SeedRunner {
     }
 
     public void seedIngredients(){
-        for(int i = 0; i<=60; i++){
-            String name = makeSingular(faker.food().ingredient().toLowerCase());
-            LOGGER.info(name);
-            Ingredient seedIngredient = new Ingredient(name);
-            ingredientDao.save(seedIngredient);
-        }
+        getIngredients();
     }
 
     public void seedPantries(){
@@ -309,7 +310,7 @@ public class SeedRunner {
         int usersSize = userDao.findAll().size();
         int recipesSize = recipeDao.findAll().size();
 
-        for(long i = 1; i<=recipesSize; i++){
+        for(long i = 2; i<=recipesSize; i+=2){
             Recipe recipe = recipeDao.getFirstById(i);
             LOGGER.info(recipe.getTitle());
             int max = faker.number().numberBetween(1,10);
@@ -365,7 +366,26 @@ public class SeedRunner {
         return img;
     }
 
+    public void getIngredients(){
+        JSONParser parser = new JSONParser();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            Object jsonObject = parser.parse(new FileReader("src/main/resources/static/js/ingredients.json"));
+            JSONArray jsonArray = (JSONArray)jsonObject;
+            if (jsonArray != null) {
+                for(Object json : jsonArray){
+                    Ingredient i = objectMapper.readValue(json.toString(), Ingredient.class);
+                    ingredientDao.save(i);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String toEnglish(String word) {
         return word.replaceAll("[^A-Za-z0-9]", "");
     }
+
 }
