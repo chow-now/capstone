@@ -58,7 +58,11 @@ public class User {
 
 	@Column
 	@JsonIgnore
-	private Boolean isAdmin;
+	private Boolean isAdmin = false;
+
+	@Column(columnDefinition = "integer default 0")
+	@JsonIgnore
+	private int suggestedCount;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name= "auth_provider")
@@ -238,5 +242,13 @@ public class User {
 
 	public void setAuthProvider(AuthenticationProvider authProvider) {
 		this.authProvider = authProvider;
+	}
+
+	public int getSuggestedCount() {
+		return suggestedCount;
+	}
+
+	public void setSuggestedCount(int suggestedCount) {
+		this.suggestedCount = suggestedCount;
 	}
 }
