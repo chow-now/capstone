@@ -84,6 +84,7 @@ public class RecipeController {
         model.addAttribute("recipe", new Recipe());
         model.addAttribute("categories", categoryDao.findAll());
         model.addAttribute("images", imageDao.findAll());
+        model.addAttribute("recipeIgredients", recipeIngDao.findAll());
         return "recipes/new";
     }
 
