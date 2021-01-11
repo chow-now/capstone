@@ -141,6 +141,7 @@
                     <th>Cook TIme</th>
                     <th>Servings</th>
                     <th>Published</th>
+                    <th>Images</th>
                     <th>Chef</th>
                     <th>View</th>
                     <th>Edit</th>
@@ -156,6 +157,7 @@
                   <td th:text="${recipe.cookTime}"></td>
                   <td th:text="${recipe.servings}"></td>
                   <td th:text="${recipe.published}"></td>
+                  <td th:text="${recipe.images.size()}"></td>
                   <td th:text="${recipe.chef.id}"></td>
                   <td class="text-center"><a th:href="@{/recipes/{id}(id=${recipe.id})}"><i class="fas fa-eye"></i></a></td>
                   <td class="text-center"><a th:href="@{/recipes/{id}/edit(id=${recipe.id})}"><i class="fas fa-pencil-alt"></i></a></td>
@@ -249,7 +251,7 @@
 </div>
 
 <div class="modal fade" id="ingredientEditModal" tabindex="-1" role="dialog" aria-labelledby="ingredientEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -262,7 +264,7 @@
 </div>
 
 <div class="modal fade" id="categoryNewModal" tabindex="-1" role="dialog" aria-labelledby="categoryNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -275,7 +277,7 @@
 </div>
 
 <div class="modal fade" id="categoryEditModal" tabindex="-1" role="dialog" aria-labelledby="categoryEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -288,7 +290,7 @@
 </div>
 
 <div class="modal fade" id="userNewModal" tabindex="-1" role="dialog" aria-labelledby="userNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -301,7 +303,7 @@
 </div>
 
 <div class="modal fade" id="grantAccessModal" tabindex="-1" role="dialog" aria-labelledby="grantAccessModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -314,7 +316,7 @@
 </div>
 
 <div class="modal fade" id="recipeNewModal" tabindex="-1" role="dialog" aria-labelledby="recipeNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
