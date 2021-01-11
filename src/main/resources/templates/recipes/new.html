@@ -25,8 +25,8 @@
             <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
                 <div>
                     <div class="card-body">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Begin creating
-                            your recipe by providing some general information.</h3>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Tell us about your
+                            recipe...</h3>
                         <p id="recipe-id" th:text="${recipe.id}" hidden></p>
                     </div>
                     <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
@@ -128,8 +128,8 @@
             <div class="tab-pane pb-3" id="recipeTab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Add Ingredients to
-                            your recipe.</h3>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Tell us what your
+                            dish is made of...</h3>
                         <div class="text-center">
                             <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
                                    value="Add New Ingredient"/>
@@ -166,34 +166,47 @@
             <!--    UPLOAD IMAGES TAB-->
             <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div>
-                    <div class="card-body">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
-                            image of your dish here.</h3>
-                        <form th:action="@{/recipes/{id}/upload(id=${recipe.id})}" th:method="post"
-                              enctype="multipart/form-data">
-                            <div class="form-group">
-                                <div class="text-center">
-                                    <label class="btn btn-green btn-sm rounded-pill">
-                                        Add an Image <input accept=".jpg,.png,.jpeg" name="file" type='file'
-                                                            id="recipePicture" hidden/>
-                                    </label>
-                                </div>
-                                <div class="text-center">
-                                    <img id="image_upload_preview" src="" class="shadow-lg"
-                                         style="border: 5px solid rgb(255, 255, 255);" width="200" height="200">
-                                    <button id="imageUpdate" type="submit" class="btn btn-sm btn-red"
-                                            style="display: none;">Upload
+                    <div class="card-body ">
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Show us what your
+                            dish is made of...</h3>
+                        <div class="col justify-content-center">
+                            <div class="row text-center">
+                                <div class="m-1" th:each="image : ${recipe.images}">
+                                    <div id="image-id" th:text="${image.id}" hidden></div>
+                                    <div id="image-url" th:text="${image.url}" hidden></div>
+                                    <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
+                                         class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200"
+                                         height="200">
+                                    <br>
+
+                                    <button th:id="'deleteImage' + ${image.id}" th:value="${image.url}"
+                                            class="btn btn-sm btn-red p-1 m-2">Delete
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <br>
+                        <hr>
+                        <br>
+                        <form id="uploadImageForm">
+                            <div class="text-center">
+                                <label class="btn btn-green rounded-pill">Add an Image<input
+                                        accept=".jpg,.png,.jpeg" name="file" type='file' id="recipePicture" hidden/>
+                                </label>
+                            </div>
+                            <img th:id="image_preview" src="" class="shadow-lg"
+                                 style="display:none; border: 5px solid rgb(255, 255, 255);" width="200" height="200">
+                            <br>
+
+                            <button id="imageUpload" class="btn btn-sm btn-red" style="display: none;">Upload</button>
                         </form>
                     </div>
-                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                        <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
-                           aria-controls="nav-images"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                            Step</a>
-                    </div>
+                </div>
+                <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                    <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
+                       aria-controls="nav-images"
+                       aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Publish
+                    </a>
                 </div>
             </div>
         </div>
@@ -275,7 +288,6 @@
 </div>
 <!--JS SCRIPTS-->
 <div th:replace="partials/scripts :: scripts"></div>
-<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
 <script th:src="@{/js/ingredients.js}"></script>
 <script>
     (function ($) {
