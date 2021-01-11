@@ -2,25 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/head :: head(title)"></head>
 <body id="registerBody">
-<!--<header th:include="partials/navbar.html :: nav"></header>-->
-<div class="container">
-    <div class="row mt-5">
-        <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card rounded-card bg-light">
-                <form th:replace="users/forms :: register"></form>
-                <div class="text-center mb-3">
-                    <a href="/login" class="text-decoration-none">Already a member? Log in</a>
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card rounded-card bg-light">
+                    <form th:replace="users/forms :: register"></form>
+                    <div class="text-center mb-3">
+                        <a href="/login" class="text-decoration-none text-black-50">Already a member? Log in</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
+        </div>
     </div>
-    <div class="col-md-3 mb-5 mt-md-0 mt-5 white-text text-center text-md-left">
-    </div>
-</div>
+</main>
 <!--MODALS-->
-<div th:replace="partials/modals"></div>
+<!--<div th:replace="partials/modals"></div>-->
 <div th:replace="partials/scripts :: scripts"></div>
 </body>
 </html>

@@ -31,6 +31,8 @@ public class UserController {
 
     @Autowired
     private FollowRepository followDao;
+    @Autowired
+    private RecipeRepository recipeDao;
 
     @Autowired
     private PantryRepository pantryDao;
@@ -112,6 +114,10 @@ public class UserController {
         model.addAttribute("user", user);
         // check if logged in user is the profile owner
         model.addAttribute("isOwner",userServ.isOwner(user));
+        System.out.println(recipeDao.findAllByChefAndIsPublishedFalse(user).size());
+        System.out.println(recipeDao.findAllByChefAndIsPublishedTrue(user).size());
+        model.addAttribute("drafts",recipeDao.findAllByChefAndIsPublishedFalse(user));
+        model.addAttribute("published",recipeDao.findAllByChefAndIsPublishedTrue(user));
         return "users/profile";
     }
 
@@ -124,7 +130,13 @@ public class UserController {
         }
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        model.addAttribute("isOwner",true);
+        System.out.println("drafts: "+recipeDao.findAllByChefAndIsPublishedFalse(currentUser).size());
+        System.out.println("published: "+recipeDao.findAllByChefAndIsPublishedTrue(currentUser).size());
+
+        model.addAttribute("drafts",recipeDao.findAllByChefAndIsPublishedFalse(currentUser));
+        model.addAttribute("published",recipeDao.findAllByChefAndIsPublishedTrue(currentUser));
+
         return "users/profile";
     }
 

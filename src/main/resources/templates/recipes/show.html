@@ -1,88 +1,323 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="partials/head :: head('Show Recipe')">
+<head th:include="partials/head :: head('Show Recipe')">
   <meta charset="UTF-8">
   <title>Show Recipe</title>
+
 </head>
-<body>
-<div class="row">
-  <header th:include="/partials/navbar.html :: nav"></header>
-</div>
-<br><br><br>
-<!--Todo: if "search == null display /random recipes : display /recipesbyingredientorfilter"   -->
-<!--Todo:potentailly more robust where we can also search for recipes by title or categories.-->
-<div class="container">
-  <!--Card Body -->
-  <div class="card-body">
-    <div class="row">
-      <div class="col-3">
-        <!--Todo: reactive and sizing-->
-        <div class="row">
-          <h5 th:text="${recipe.favoritedBy.size()}" class="text-center"></h5>
-          <i class="far fa-bookmark ml-2 align-center"></i>
-        </div>
+<style>
+  /*share icons css */
+  .resp-sharing-button__link,
+  .resp-sharing-button__icon {
+    display: inline-block
+  }
+
+  .resp-sharing-button__link {
+    text-decoration: none;
+    color: black;
+    margin: 0.5em
+  }
+
+  .resp-sharing-button {
+    border-radius: 5px;
+    transition: 25ms ease-out;
+    padding: 0.5em 0.75em;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif
+  }
+
+  .resp-sharing-button__icon svg {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.4em;
+    vertical-align: top
+  }
+
+  .resp-sharing-button--small svg {
+    margin: 0;
+    vertical-align: middle
+  }
+
+  /* Non solid icons get a stroke */
+  .resp-sharing-button__icon {
+    stroke: #fff;
+    fill: none
+  }
+
+  /* Solid icons get a fill */
+  .resp-sharing-button__icon--solid,
+  .resp-sharing-button__icon--solidcircle {
+    fill:black;
+    stroke: none
+  }
+
+  /*recipe custom css*/
+  .recipe-image{
+    height: 600px;
+  }
+  .mobile-only{
+    display: none;
+  }
+  @media only screen and (max-width: 500px) {
+    .mobile-only{
+      display: block;
+    }
+    .not-mobile-only{
+      display: none;
+    }
+    #infoSection .col-4{
+      padding-left: 5px!important;
+      padding-right: 5px!important;
+    }
+    .card-body h5{
+      font-size: 1.2rem;
+    }
+  }
+  @media only screen and (max-width: 420px) {
+    .card-body h5{
+      font-size: .8rem;
+    }
+    .smallFont{
+      font-size: .7rem;
+    }
+  }
+  @media only screen and (max-width: 340px) {
+    .card-body h5{
+      font-size: .8rem;
+    }
+  }
+    @media only screen and (max-width: 768px) {
+    #imageSection{
+      padding-right: 0;
+      padding-left: 0;
+    }
+    .recipe-image{
+      width: 100% !important;
+      border-radius: 0!important;
+    }
+  }
+  @media only screen and (min-width: 769px) and (max-width: 1020px) {
+    .recipe-image{
+      width: 85% !important;
+      height: 450px;
+    }
+  }
+  @media only screen and (min-width: 1024px) and (max-width: 1920px) {
+    .recipe-image{
+      width: 80% !important;
+    }
+  }
+
+</style>
+<body class="bg-green">
+<header>
+  <nav th:replace="/partials/navbar.html :: nav"></nav>
+</header>
+<main>
+  <div id="imageSection" class="container-fluid mt-4 py-4 bg-white">
+    <div class="row text-center px-2 my-4">
+      <div class="col-12"></div>
+      <div class="col-12">
+        <span th:text="${recipe.recipeIngredients.size()+' ingredients'}"></span>
+        <span>&#183</span>
+        <span th:text="${recipe.getCookTime() + ' min'}"></span>
+      </div>
+      <div class="col-12">
+        <h3 th:text="${recipe.title}"></h3>
+      </div>
+      <div class="col-12">
+        <span th:text="${recipe.favoritedBy.size()}"></span><span>&nbsp;<i class="far fa-bookmark"></i> </span>
       </div>
     </div>
-    <!--Card-->
-    <div class="row">
-      <div class="col-md-6 my-1">
-        <div class="view overlay z-depth-1">
-            <div th:each="img : ${recipe.images}">
-              <img th:attr="src=${img.url},title=${img.url}" class="img-fluid" alt="user"/>
-            </div>
-            <div class="mask waves-effect waves-light rgba-white-slight"></div>
-          <div class="col-9">
-            <h2 class="card-title" th:text="${recipe.title}"></h2>
+    <section>
+      <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li th:each="image,index : ${recipe.images}" data-target="#carouselIndicators" th:data-slide-to="${index.count -1}" th:class="${index.count eq 1 ? 'active' : ''}"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div th:each="image,index : ${recipe.images}" th:class="${index.count eq 1 ? 'carousel-item active' : 'carousel-item'} + ${' d-flex justify-content-center'}">
+            <img class="d-block w-75 rounded-card recipe-image" th:src="${image.url}" alt="">
           </div>
-          <div class="row">
-            <div class="col">
-              <i class="fas fa-utensils"></i>
-              <h5 th:text="${recipe.favoritedBy.size()}">7/10 ingredients</h5>
-            </div>
-            <div class="col">
-              <i class="fas fa-user-friends"></i>
-              <h5 th:text="${recipe.favoritedBy.size()}">Serves</h5>
-            </div>
-            <div class="col">
-              <i class="fas fa-utensils"></i>
-              <h5 th:text="${recipe.difficulty}"></h5>
-            </div>
-            <div class="col">
-              <i class="far fa-clock text-center"></i>
-              <h5 th:text="${recipe.cookTime}"></h5>
-            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </section>
+    <div class="container px-2">
+      <div id="mediaShare">
+        <div class="row justify-content-around">
+          <form th:unless="${isOwner}" method="post" th:action="@{/recipes/{id}/favorite(id=${recipe.id})}">
+            <button  type="submit" id="addFavorite" style="background-color: transparent;border: none;"><i class="far fa-bookmark"></i> <span th:text="${canFavorite ? 'Save':'Forget'}"></span> </button>
+          </form>
+          <!-- EDIT PROFILE LINK -->
+          <div class="text-center p-2">
+            <a th:href="@{/recipes/{id}/edit(id=${recipe.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" class="btn btn-red rounded-pill">Edit Recipe</a>
           </div>
-          <div class="description rgba-stylish-light text-white">
-            <div class="title ml-2">
-              <div class="d-flex mt-3">
-                <div th:each="recipeCategories : ${recipe.categories}">
-                  <p class="mr-2" th:text="${recipeCategories.name}"></p>
-                </div>
+          <!-- Sharingbutton Facebook -->
+          <div>
+            <a class="resp-sharing-button__link" th:href="${'https://facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchownow.xyz%2Frecipes%2F'+recipe.id}" target="_blank" rel="noopener" aria-label="">
+              <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z"/></svg>
+              </div>
+              </div>
+            </a>
+
+            <!-- Sharingbutton Twitter -->
+            <a class="resp-sharing-button__link" th:href="${'https://twitter.com/intent/tweet/?text=Check%20out%20this%20recipe%20i%20found.&amp;url=https%3A%2F%2Fchownow.xyz%2Frecipes%2F'+recipe.id}" target="_blank" rel="noopener" aria-label="">
+              <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.44 4.83c-.8.37-1.5.38-2.22.02.93-.56.98-.96 1.32-2.02-.88.52-1.86.9-2.9 1.1-.82-.88-2-1.43-3.3-1.43-2.5 0-4.55 2.04-4.55 4.54 0 .36.03.7.1 1.04-3.77-.2-7.12-2-9.36-4.75-.4.67-.6 1.45-.6 2.3 0 1.56.8 2.95 2 3.77-.74-.03-1.44-.23-2.05-.57v.06c0 2.2 1.56 4.03 3.64 4.44-.67.2-1.37.2-2.06.08.58 1.8 2.26 3.12 4.25 3.16C5.78 18.1 3.37 18.74 1 18.46c2 1.3 4.4 2.04 6.97 2.04 8.35 0 12.92-6.92 12.92-12.93 0-.2 0-.4-.02-.6.9-.63 1.96-1.22 2.56-2.14z"/></svg>
+              </div>
+              </div>
+            </a>
+
+            <!-- Sharingbutton E-Mail -->
+            <a class="resp-sharing-button__link" th:href="${'mailto:?subject=Check%20out%20this%20recipe%20i%20found.&amp;body=https%3A%2F%2Fchownow.xyz%2Frecipes%2F'+recipe.id}" target="_self" rel="noopener" aria-label="">
+              <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 4H2C.9 4 0 4.9 0 6v12c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM7.25 14.43l-3.5 2c-.08.05-.17.07-.25.07-.17 0-.34-.1-.43-.25-.14-.24-.06-.55.18-.68l3.5-2c.24-.14.55-.06.68.18.14.24.06.55-.18.68zm4.75.07c-.1 0-.2-.03-.27-.08l-8.5-5.5c-.23-.15-.3-.46-.15-.7.15-.22.46-.3.7-.14L12 13.4l8.23-5.32c.23-.15.54-.08.7.15.14.23.07.54-.16.7l-8.5 5.5c-.08.04-.17.07-.27.07zm8.93 1.75c-.1.16-.26.25-.43.25-.08 0-.17-.02-.25-.07l-3.5-2c-.24-.13-.32-.44-.18-.68s.44-.32.68-.18l3.5 2c.24.13.32.44.18.68z"/></svg>
+              </div>
+              </div>
+            </a>
+
+            <!-- Sharingbutton Pinterest -->
+            <a class="resp-sharing-button__link" th:href="${'https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fchownow.xyz%2Frecipes%2F'+recipe.id+'&amp;media=https%3A%2F%2Fchownow.xyz%2Frecipes%2F'+recipe.id+'&amp;description=Check%20out%20this%20recipe%20i%20found.'}" target="_blank" rel="noopener" aria-label="">
+              <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.14.5C5.86.5 2.7 5 2.7 8.75c0 2.27.86 4.3 2.7 5.05.3.12.57 0 .66-.33l.27-1.06c.1-.32.06-.44-.2-.73-.52-.62-.86-1.44-.86-2.6 0-3.33 2.5-6.32 6.5-6.32 3.55 0 5.5 2.17 5.5 5.07 0 3.8-1.7 7.02-4.2 7.02-1.37 0-2.4-1.14-2.07-2.54.4-1.68 1.16-3.48 1.16-4.7 0-1.07-.58-1.98-1.78-1.98-1.4 0-2.55 1.47-2.55 3.42 0 1.25.43 2.1.43 2.1l-1.7 7.2c-.5 2.13-.08 4.75-.04 5 .02.17.22.2.3.1.14-.18 1.82-2.26 2.4-4.33.16-.58.93-3.63.93-3.63.45.88 1.8 1.65 3.22 1.65 4.25 0 7.13-3.87 7.13-9.05C20.5 4.15 17.18.5 12.14.5z"/></svg>
+              </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="recipeDescription" class="text-center text-dark">
+        <p th:text="${recipe.description}"></p>
+      </div>
+      <div class="container">
+        <div id="infoSection" class="row text-center ">
+          <div class="col-4">
+            <div class="card rounded-card" style="height: 7em;">
+              <div class="card-body">
+                <h5  class="text-dark font-weight-bold" th:text="${recipe.prepTime + ' MIN'}" ></h5>
+                <div class="smallFont" style="font-family: corsa" >prep time</div>
               </div>
             </div>
-            <div>
-              <div class="container">
-                <div class="row">
-                  <h4 th:text="${recipe.description}"></h4>
-                </div>
+          </div>
+          <div class="col-4">
+            <div class="card rounded-card" style="height: 7em;">
+              <div class="card-body">
+                <h5 class="text-dark font-weight-bold" th:text="${recipe.cookTime + ' MIN'}" ></h5>
+                <div class="smallFont" style="font-family: corsa" >cook time</div>
               </div>
-              <hr>
-              <div class="row">
-                <h4 th:text="${recipe.directions}"></h4>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card rounded-card" style="height: 7em;">
+              <div class="card-body">
+                <h5 th:text="${recipe.difficulty}" class="text-uppercase text-dark font-weight-bold"></h5>
+                <div class="smallFont" style="font-family: corsa">difficulty</div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="d-flex justify-content-start align-items-center my-3">
+        <div class="h3">Ingredients</div>
+      </div>
+      <div class="container justify-content-center align-items-center">
+        <div class="servings my-3">
+          <div class="not-mobile-only servings-label secondary-color my-2">Servings:</div>
+          <div class="d-flex justify-content-start align-items-center">
+            <div role="button" id="reduceServings">
+                <img alt="minus-servings" src="https://d2wtgwi3o396m5.cloudfront.net/static/images/minus-servings.c0b4f95ba822.svg">
+            </div>
+            <div id="servingAmount" class="h2 serving-size not-mobile-only" th:text="${recipe.servings}"></div>
+            <div class="mobile-only">
+              <span class="">Serves</span>
+              <span class="serving-size" th:text="${recipe.servings}"></span>
+            </div>
+            <div role="button" id="increaseServings">
+                <img alt="add-servings" src="https://d2wtgwi3o396m5.cloudfront.net/static/images/add-servings.acb91867470a.svg">
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="w-100 btn btn-green text-center rounded-pill">Ingredients List</div>
+        </div>
+        <table id="ingredientsTable" class="table " >
+          <tbody>
+            <tr th:each="ingredient : ${recipe.recipeIngredients}">
+              <td class="text-center" style="font-family: corsa;"><span th:data-internalid="${ingredient.amount}" class="rational" th:text="${ingredient.amount}"></span><span th:text="${' ' + ingredient.unit}"></span></td>
+              <td th:text="${ingredient.getIngredient().name}"></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-start align-items-center">
+          <div class="h3">Categories</div>
+        </div>
+        <div class="d-flex justify-content-start align-items-center">
+          <div class="btn btn-yellow rounded-pill m-2 text-center" th:each="category : ${recipe.categories}" th:text="${category.name}"></div>
+        </div>
+        <div class="d-flex justify-content-start align-items-center my-3">
+          <div class="h3">Directions:</div>
+        </div>
+        <div class="d-flex justify-content-start align-items-center my-3">
+          <div class="h5" th:text="${recipe.directions}"></div>
+        </div>
+
       </div>
     </div>
   </div>
-</div>
-</div>
-</div>
-</div>
-</div>
 
+</main>
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
+<script th:src="@{/js/fraction_converter.js}"></script>
+<script>
+  // sets the intial servings amout for the recipe
+  const defaultServingSize = parseInt($("#servingAmount").text())
+
+  // function to set the ingredient amount based on servings size
+  const changeIngredientAmount = (servings) => {
+    $(".rational").each(function (amount) {
+      // gets the intial ingredient amount
+      let ingAmt = parseFloat($(this).data('internalid'));
+      // finds what the ingredient amout would based on an individual serving size
+      let singleServingAmount = ingAmt / defaultServingSize;
+      // finds new amount based on single servings size * requested serving size
+      let newIngAmt = singleServingAmount * servings;
+      // renders it to the page
+      $(this).html(newIngAmt);
+    })
+    // converts all new ingredient amounts to franctions
+    convertAllRationals();
+  }
+
+  // reduces the amount  of servings
+  $("#reduceServings").click(function () {
+    let servings = parseInt($("#servingAmount").text());
+    if(servings > 1){
+      let newServing = servings-1;
+      $(".serving-size").html(newServing);
+      changeIngredientAmount(newServing);
+    }else{
+      $(".serving-size").html(1)
+    }
+  })
+
+  // increases the amount of servings
+  $("#increaseServings").click(function () {
+    let servings = parseInt($("#servingAmount").text());
+    let newServing = servings+1;
+    $(".serving-size").html(newServing);
+    changeIngredientAmount(newServing);
+
+  })
+
+
+</script>
 </body>
 </html>

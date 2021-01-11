@@ -46,32 +46,36 @@ public class RecipeController {
     @Autowired
     private ImageRepository imageDao;
 
-
     @Autowired
     private AmazonService s3;
 
+
     @GetMapping("/recipes")
     public String index(Model model) {
-        model.addAttribute("recipes", recipeDao.findAll());
+        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
         return "recipes/index";
     }
 
     @GetMapping("/recipes/{id}")
     public String showRecipe(@PathVariable long id, Model model) {
         Recipe recipe = recipeDao.getFirstById(id);
+        User currentUser = userServ.loggedInUser();
         if(recipe == null){
             return "redirect:/recipes";
         }
+        if(!recipe.isPublished()){
+            System.out.println("Not Published.... redirecting");
+            return "redirect:/recipes/"+recipe.getId()+"/edit";
+        }
+        Set<User> favoritedBy = recipe.getFavoritedBy();
+        boolean canFavorite = true;
+        if(favoritedBy.contains(currentUser)){
+            System.out.println("Already favorited");
+            canFavorite = false;
+        }
         model.addAttribute("recipe", recipe);
-        String firstName = recipe.getChef().getFirstName();
-        String chef = firstName;
-        model.addAttribute("chef", chef);
-        List<Image> images = recipe.getImages();
-        model.addAttribute("images", images);
-        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
-        model.addAttribute("ingredients", ingredients);
-        Set<Category> categories = recipe.getCategories();
-        model.addAttribute("categories", categories);
+        model.addAttribute("isOwner",userServ.isOwner(recipe.getChef()));
+        model.addAttribute("canFavorite",canFavorite);
         return "recipes/show";
 
     }
@@ -162,12 +166,22 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
+
         model.addAttribute("recipe", recipeDao.getOne(id));
         User currentUser = userServ.loggedInUser();
         model.addAttribute("images",imageDao.findAll());
         model.addAttribute("user", currentUser);
+
+        Recipe recipe = recipeDao.getOne(id);
+        User user = userDao.getOne(recipe.getChef().getId());
+        // restrict access to owner redirects others
+        if(!userServ.isOwner(user)){
+            return "redirect:/recipes";
+        }
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("user", user);
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        model.addAttribute("isOwner",userServ.isOwner(user));
         return "recipes/edit";
     }
 
@@ -222,5 +236,22 @@ public class RecipeController {
         imageDao.deleteById(id);
         s3.deleteFile(imageUrl);
     }
+
+
+
+   @PostMapping("/recipes/{id}/favorite")
+    public String toggleFavorite(@PathVariable long id){
+       User currentUser = userServ.loggedInUser();
+       Recipe recipe = recipeDao.getOne(id);
+       Set<User> favoritedBy = recipe.getFavoritedBy();
+       if(favoritedBy.contains(currentUser)){
+           favoritedBy.remove(currentUser);
+       }else{
+           favoritedBy.add(currentUser);
+       }
+       recipe.setFavoritedBy(favoritedBy);
+       userDao.save(currentUser);
+       return "redirect:/recipes/" + id;
+   }
 
 }

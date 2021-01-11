@@ -34,15 +34,6 @@ public class AdminController {
 	private  IngredientRepository ingredientDao;
 
 	@Autowired
-	private RecipeIngredientRepository recipeIngDao;
-
-	@Autowired
-	private PantryIngredientRepository pantryIngDao;
-
-	@Autowired
-	private  ImageRepository imageDao;
-
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/admin")

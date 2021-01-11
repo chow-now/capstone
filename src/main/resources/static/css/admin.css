@@ -1,0 +1,76 @@
+
+.page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #03b090;
+    border-color: #03b090;
+}
+.page-link:hover {
+    z-index: 3;
+    color: #fff;
+    background-color: #fba9c8;
+    border-color: #fba9c8;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color:  #fba9c8;
+    border-color:   #fba9c8;
+}
+thead{
+    background-color:#03b090;
+    color: whitesmoke;
+}
+tbody{
+    font-weight: bold;
+}
+.fa-eye{
+    color: #03b090
+}
+.fa-pencil-alt{
+    color: #fec82e
+}
+.fa-trash-alt{
+    color: #ff686d;
+}
+
+.dashtab{
+    color:#fec82e;
+}
+
+.nav-tabs {
+    border-bottom: none!important;
+}
+
+.nav-tabs .nav-link {
+    border-top-left-radius: .6rem;
+    border-top-right-radius: .6rem;
+    padding-top: 1rem;
+}
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border: none!important;
+    color:#ff686dd4;
+    /*background-color: #03b090!important;*/
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color:#ff686dd4;
+    background-color: #03b090!important;
+    border: none!important;
+}
+
+.nav-tab-shadow{
+    box-shadow: 0 -0.1rem 3rem rgba(0,0,0,0.175)!important;
+}
+
+@media only screen and (min-width: 768px) {
+    .tab-content{
+        margin-left: 3rem;
+        margin-right: 3rem
+    }
+}
+@media only screen and (max-width: 500px) {
+    .fas{
+        font-size: 1rem;
+    }
+}

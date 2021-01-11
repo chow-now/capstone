@@ -16,7 +16,9 @@
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
 <body>
-<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
 <main>
     <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
         <div class="tab-content" id="myTabContent">
@@ -214,7 +216,7 @@
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
      role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
@@ -238,7 +240,7 @@
 <!-- Add Ingredient Modal -->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
      role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
@@ -285,8 +287,9 @@
         </div>
     </div>
 </div>
-<!--JS SCRIPTS-->
-<div th:replace="partials/scripts :: scripts"></div>
+
+<!--! MODALS-->
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/ingredients.js}"></script>
 <script th:src="@{/js/recipes.js}"></script>
 <script th:src="@{/js/fraction_converter.js}"></script>
