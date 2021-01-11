@@ -7,7 +7,7 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Dashboard</title>
-  <!-- Font Awesome -->
+    <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -16,105 +16,70 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.23/datatables.min.css"/>
     <!--  MAIN CSS -->
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <style>
-        .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color: #03b090;
-            border-color: #03b090;
-        }
-        .page-link:hover {
-            z-index: 3;
-            color: #fff;
-            background-color: #fba9c8;
-            border-color: #fba9c8;
-        }
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff;
-            background-color:  #fba9c8;
-            border-color:   #fba9c8;
-        }
-        thead{
-            background-color:#03b090;
-            color: whitesmoke;
-        }
-        tbody{
-            font-weight: bold;
-        }
-        .fa-eye{
-            color: #03b090
-        }
-        .fa-pencil-alt{
-            color: #fec82e
-        }
-        .fa-trash-alt{
-            color: #ff686d;
-        }
-
-        .dashtab{
-            color:#fec82e;
-        }
-
-        .nav-tabs {
-            border-bottom: none!important;
-        }
-
-        .nav-tabs .nav-link {
-            border-top-left-radius: .6rem;
-            border-top-right-radius: .6rem;
-            padding-top: 1rem;
-        }
-        .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
-            border: none!important;
-            color:#ff686dd4;
-            /*background-color: #03b090!important;*/
-        }
-
-        .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-            color:#ff686dd4;
-            background-color: #03b090!important;
-            border: none!important;
-        }
-
-        .nav-tab-shadow{
-            box-shadow: 0 -0.1rem 3rem rgba(0,0,0,0.175)!important;
-        }
-
-        @media only screen and (min-width: 768px) {
-            .tab-content{
-                margin-left: 3rem;
-                margin-right: 3rem
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
-<body class="bg-green">
-<!--<header th:include="fragments/navbar.html :: nav"></header>-->
-<div class="container mt-4">
-    <ul class="nav nav-tabs align-items-center justify-content-between" role="tablist">
-        <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Users">
-            <a class="nav-link dashtab nav-tab-shadow"  href="#tab-table1" data-toggle="tab">
-                <i class="fas fa-users fa-2x"></i>
-            </a>
-        </li>
-        <li class="nav-item active" data-toggle="tooltip" data-placement="top" title="Recipes">
-            <a class="nav-link dashtab nav-tab-shadow"  href="#tab-table2" data-toggle="tab">
-                <i class="fas fa-utensils fa-2x"></i>
-            </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Ingredients">
-            <a class="nav-link dashtab nav-tab-shadow"  href="#tab-table3" data-toggle="tab">
-                <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
-            </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="top" title="Categories">
-            <a class="nav-link dashtab nav-tab-shadow"  href="#tab-table4" data-toggle="tab">
-                <i class="fas fa-th-list fa-2x"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+<body class="bg-green" >
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
+<main>
+    <div class="container mt-4">
+        <!-- USER INFO -->
+        <div class="row px-2">
+            <!-- IF HAS PROFILE PICTURE -->
+            <div class="col-4 col-sm-3 px-lg-5 mb-4 text-center">
+                <img width="100%" th:src="${currentUser.avatar}" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">
+            </div>
+            <div class="col-8 col-sm-9 mb-4">
+                <div class="mb-2">
+                    <h2 id="profileName" class="mb-0 text-black" th:text="${currentUser.firstName}"></h2>
+                </div>
+                <!-- IF CUSTOMER IS HAS ABOUT ME ELSE -->
+                <p class="text-white">
+                    <em>
+                        <small th:text="${currentUser.getAboutMe()} ?: 'Introduce yourself to the community by writing a little about yourself.'"></small>
+                    </em>
+                </p>
+
+                <div>
+                    <!-- EDIT PROFILE LINK -->
+                    <a th:href="@{/users/{id}/edit(id=${currentUser.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" type="button" class="btn yellow-text edit-btn rounded-pill shadow font-weight-bold">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        <!-- END USER INFO -->
+        <div class="container">
+            <ul class="nav nav-tabs row  align-items-center justify-content-center" role="tablist">
+                <li class="nav-item col-3 px-0" data-toggle="tooltip" data-placement="top" title="Users">
+                    <a class="nav-link dashtab nav-tab-shadow text-center"  href="#tab-table1" data-toggle="tab">
+                        <i class="fas fa-users fa-2x"></i>
+                        <p class="text-black-50 mb-0 small">users</p>
+                    </a>
+                </li>
+                <li class="nav-item active col-3 px-0" data-toggle="tooltip" data-placement="top" title="Recipes">
+                    <a class="nav-link dashtab nav-tab-shadow text-center"  href="#tab-table2" data-toggle="tab">
+                        <i class="fas fa-utensils fa-2x"></i>
+                        <p class="text-black-50 mb-0 small">recipes</p>
+                    </a>
+                </li>
+                <li class="nav-item col-3 px-0" data-toggle="tooltip" data-placement="top" title="Ingredients">
+                    <a class="nav-link dashtab nav-tab-shadow text-center"  href="#tab-table3" data-toggle="tab">
+                        <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
+                        <p class="text-black-50 mb-0 small">ingredients</p>
+                    </a>
+                </li>
+                <li class="nav-item col-3 px-0" data-toggle="tooltip" data-placement="top" title="Categories">
+                    <a class="nav-link dashtab nav-tab-shadow text-center"  href="#tab-table4" data-toggle="tab">
+                        <i class="fas fa-th-list fa-2x"></i>
+                        <p class="text-black-50 mb-0 small">categories</p>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</main>
+
 <div class="tab-content bg-light rounded-card px-3 py-3">
     <div class="tab-pane active" id="tab-table1">
         <h3 class="green-text font-weight-bold text-center mt-2"> USERS</h3>
@@ -130,6 +95,7 @@
                     <th>Avatar Url</th>
                     <th>Admin</th>
                      <th>Auth</th>
+                    <th>Grant Access</th>
                     <th>View</th>
                     <th>Delete</th>
                 </tr>
@@ -142,9 +108,20 @@
                     <td th:text="${user.avatar}" style="width:10%"></td>
                     <td th:text="${user.admin}"></td>
                     <td th:text="${user.getAuthProvider()}"></td>
-                    <td class="text-center"><a th:href="@{/users/{id}(id=${user.id})}"><i class="fas fa-eye"></i></a></td>
-                    <!--                            <td class="text-center"><a th:href="@{/users/{id}/edit(id=${user.id})}"><i class="fas fa-pencil-alt"></i></a></td>-->
-                    <td class="text-center"><a th:href="@{/api/users/{id}/delete(id=${user.id})}" ><i class="far fa-trash-alt"></i></a></td>
+                    <td class="text-center">
+                        <form class="grant-user" th:action="@{/admin/users/{id}/grant(id=${user.id})}" th:method="post">
+                            <button class="btn btn-sm btn-yellow" type="submit" th:text="${user.admin} ? 'Revoke' : 'Grant'"></button>
+                        </form>
+                    </td>
+                    <td class="text-center">
+                        <a th:href="@{/users/{id}(id=${user.id})}"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td class="text-center">
+                        <form class="delete-user" th:action="@{/admin/users/{id}/delete(id=${user.id})}" th:method="post">
+                            <button style="border:none;background-color: transparent;" type="submit"><i class="far fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
@@ -154,7 +131,7 @@
         <div class=text-center><button type="button" class="btn btn-yellow" data-toggle="modal" data-target="#recipeNewModal">
             New
         </button></div>
-        <table id="myTable2" class="display table-responsive table table-striped table-bordered" cellspacing="0" width="100%">
+        <table id="myTable2" class="display table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -164,6 +141,7 @@
                     <th>Cook TIme</th>
                     <th>Servings</th>
                     <th>Published</th>
+                    <th>Images</th>
                     <th>Chef</th>
                     <th>View</th>
                     <th>Edit</th>
@@ -179,10 +157,15 @@
                   <td th:text="${recipe.cookTime}"></td>
                   <td th:text="${recipe.servings}"></td>
                   <td th:text="${recipe.published}"></td>
+                  <td th:text="${recipe.images.size()}"></td>
                   <td th:text="${recipe.chef.id}"></td>
                   <td class="text-center"><a th:href="@{/recipes/{id}(id=${recipe.id})}"><i class="fas fa-eye"></i></a></td>
                   <td class="text-center"><a th:href="@{/recipes/{id}/edit(id=${recipe.id})}"><i class="fas fa-pencil-alt"></i></a></td>
-                  <td class="text-center"><a th:href="@{/recipes/{id}/delete(id=${recipe.id})}"><i class="far fa-trash-alt"></i></a></td>
+                  <td class="text-center">
+                      <form class="delete-recipe" th:action="@{/admin/recipes/{id}/delete(id=${recipe.id})}" th:method="post">
+                          <button style="border:none;background-color: transparent;" type="submit"><i class="far fa-trash-alt"></i></button>
+                      </form>
+                  </td>
                 </tr>
             </tbody>
         </table>
@@ -205,8 +188,16 @@
             <tr th:each="ingredient : ${ingredients}">
                 <td th:text="${ingredient.id}"></td>
                 <td th:text="${ingredient.name}"></td>
-                <td class="text-center"><a th:href="@{/api/ingredient/{id}/edit(id=${ingredient.id})}"><i class="fas fa-pencil-alt"></i></a></td>
-                <td class="text-center"><a th:href="@{/api/ingredient/{id}/delete(id=${ingredient.id})}"><i class="far fa-trash-alt"></i></a></td>
+                <td class="text-center">
+                    <button style="border: none;background-color: transparent;" class="ingredient-edit" th:id="${ingredient.id}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </td>
+                <td class="text-center">
+                    <form class="delete-ingredient" th:action="@{/admin/ingredients/{id}/delete(id=${ingredient.id})}" th:method="post">
+                        <button style="border:none;background-color: transparent;" type="submit"><i class="far fa-trash-alt"></i></button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -229,8 +220,16 @@
                 <tr th:each="category : ${categories}">
                     <td th:text="${category.id}"></td>
                     <td th:text="${category.name}"></td>
-                    <td class="text-center"><a th:href="@{/api/category/{id}/edit(id=${category.id})}"><i class="fas fa-pencil-alt"></i></a></td>
-                    <td class="text-center"><a th:href="@{/api/category/{id}/delete(id=${category.id})}"><i class="far fa-trash-alt"></i></a></td>
+                    <td class="text-center">
+                        <button style="border: none;background-color: transparent;" class="category-edit" th:id="${category.id}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </td>
+                    <td class="text-center">
+                        <form class="delete-category" th:action="@{/admin/categories/{id}/delete(id=${category.id})}" th:method="post">
+                            <button style="border:none;background-color: transparent;" type="submit"><i class="far fa-trash-alt"></i></button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -252,20 +251,20 @@
 </div>
 
 <div class="modal fade" id="ingredientEditModal" tabindex="-1" role="dialog" aria-labelledby="ingredientEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <form th:replace="users/admin/forms :: ingredientEdit"></form>
+                <div id="ingredientEditRender"></div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="categoryNewModal" tabindex="-1" role="dialog" aria-labelledby="categoryNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -278,20 +277,20 @@
 </div>
 
 <div class="modal fade" id="categoryEditModal" tabindex="-1" role="dialog" aria-labelledby="categoryEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <form th:replace="users/admin/forms :: categoryEdit"></form>
+                <div id="catEditRender"></div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="userNewModal" tabindex="-1" role="dialog" aria-labelledby="userNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -304,7 +303,7 @@
 </div>
 
 <div class="modal fade" id="grantAccessModal" tabindex="-1" role="dialog" aria-labelledby="grantAccessModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -317,7 +316,7 @@
 </div>
 
 <div class="modal fade" id="recipeNewModal" tabindex="-1" role="dialog" aria-labelledby="recipeNewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -329,18 +328,34 @@
     </div>
 </div>
 
-<!--jQuery, Popper.js, and Bootstrap JS-->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+<!--JS SCRIPTS-->
+<div th:replace="partials/scripts :: scripts"></div>
+<script>
+    $('.delete-recipe, .delete-category, .delete-ingredient, .delete-user,.grant-user').submit(function(event) {
+        event.preventDefault(); //this will prevent the default submit
+        let c = confirm("Click OK to continue?")
+        if(c){
+            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+        }
+    })
+
+    $( ".ingredient-edit" ).click(function() {
+        $.ajax({'url': '/admin/ingredients/'+this.id+'/edit'}).done(function (response) {
+            $('#ingredientEditRender').html(response);
+        });
+        $("#ingredientEditModal").modal("toggle");
+    });
+
+    $( ".category-edit" ).click(function() {
+        $.ajax({'url': '/admin/categories/'+this.id+'/edit'}).done(function (response) {
+            $('#catEditRender').html(response);
+        });
+        $("#categoryEditModal").modal("toggle");
+    });
+</script>
 <!--Data tables-->
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/datatables.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $('table.display').DataTable();
-  } );
-  $('[data-toggle="tooltip"]').tooltip();
-</script>
+<script th:src="@{/js/admin.js}"></script>
 </body>
 </html>
 

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
+<head th:include="partials/head :: head('Update a Recipe')">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Create a New Recipe</title>
+    <title>Dashboard</title>
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!--  MAIN CSS -->
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--  CUSTOM PROFILE CSS -->
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
-
 </head>
 <body>
-<!--<nav th:replace="partials/navbar :: nav"></nav>-->
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
 <main>
     <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
-        <!--    <h2>Create your recipe!</h2>-->
-        <!--    TAB CONTENTS-->
         <div class="tab-content" id="myTabContent">
 
             <!--    ADD RECIPE INFO TAB-->
@@ -33,38 +31,40 @@
                         <p id="recipe-id" th:text="${recipe.id}" hidden></p>
                     </div>
                     <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
+
                         <!--    ENTER A RECIPE TITLE   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="title">Title</span>
+                        <div class="form-group mb-3 px-4">
+                            <label  id="title">Title</label>
                             <input type="text" class="form-control" aria-label="Title"
                                    aria-describedby="title" th:field="*{title}"/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
 
                         <!--    ENTER RECIPE DESCRIPTION -->
-                        <div class="form-group input-group px-4">
-                            <span class="input-group-text">Description</span>
+                        <div class="form-group px-4">
+                            <label>Description</label>
                             <textarea class="form-control" aria-label="description" rows="3"
                                       th:field="*{description}"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
 
                         <!--    ENTER DIFFICULTY LEVEL    -->
-                        <div class="form-group input-group px-4">
+                        <div class="form-group px-4">
+                            <label>Difficulty</label><br>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="easy"
+                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
                                        th:field="*{difficulty}" value="easy">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="medium"
+                                <input class="form-check-input" type="radio" name="difficulty" id="medium"
                                        th:field="*{difficulty}" value="medium">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Medium
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="hard"
+                                <input class="form-check-input" type="radio" name="difficulty" id="hard"
                                        th:field="*{difficulty}" value="hard">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Hard
@@ -74,60 +74,61 @@
                         </div>
 
                         <!--    ENTER PREP TIME IN MINUTES   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="prep-time">Prep-time</span>
+                        <div class="form-group mb-3 px-4">
+                            <label id="prep-time">Prep-time</label>
                             <input type="number" class="form-control" aria-label="Prep-time"
                                    aria-describedby="prep-time" th:field="*{prepTime}">
                             <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
                         </div>
 
                         <!--    ENTER COOK TIME IN MINUTES   -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="cook-time">Cook-time</span>
+                        <div class="form-group mb-3 px-4">
+                            <label id="cook-time">Cook-time</label>
                             <input type="number" class="form-control" aria-label="Cook-time"
                                    aria-describedby="cook-time" th:field="*{cookTime}">
                             <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
                         </div>
 
                         <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
-                        <div class="form-group input-group mb-3 px-4">
-                            <span class="input-group-text" id="servings">Servings</span>
+                        <div class="form-group mb-3 px-4">
+                            <span id="servings">Servings</span>
                             <input type="number" class="form-control" aria-label="Servings"
                                    aria-describedby="servings" th:field="*{servings}">
                             <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
                         </div>
 
                         <!--    ENTER COOKING DIRECTIONS  -->
-                        <div class="form-group input-group px-4">
-                            <span class="input-group-text">Directions</span>
+                        <div class="form-group px-4">
+                            <label id="directions">Directions</label>
                             <textarea class="form-control" aria-label="directions" rows="5"
                                       th:field="*{directions}"></textarea>
                             <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
                         </div>
 
+                        <!--    CATEGORIZE THE RECIPE   -->
+                        <input type="checkbox" name="categories" th:each="category : ${categories}"
+                               th:text="${category.name}" th:value="${category.id}" th:field="*{categories}">
+
                         <!-- SUBMIT RECIPE INFO -->
-
-<!--                        ***** ISSUE: SUBMITTING THIS FORM DESTROYS RELATED DB INFO *****-->
-
                         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                            <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
+                            <a id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                                aria-controls="nav-ingredients"
-                               aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                               aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                                Step</a>
                         </div>
-                        <button th:if="${recipe.id == 0}" class="btn btn-primary float-right nav-link px-2"
+                        <button class="btn btn-red rounded-pill m-2 float-right nav-link shadow px-2"
                                 type="submit">Submit
                         </button>
-
                     </form>
                 </div>
             </div>
 
-            <!--        ADD RECIPE INGREDIENTS TAB-->
+            <!--    ADD RECIPE INGREDIENTS TAB-->
             <div class="tab-pane pb-3" id="recipeTab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2 class="pt-3 pb-4 text-center font-bold font-up deep-purple-text">Your Recipe
-                            Ingredients</h2>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Add Ingredients to
+                            your recipe.</h3>
                         <div class="text-center">
                             <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
                                    value="Add New Ingredient"/>
@@ -155,41 +156,25 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                            Step</a>
                     </div>
                 </div>
             </div>
 
-            <!--        UPLOAD IMAGES TAB-->
+            <!--    UPLOAD IMAGES TAB-->
             <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div>
-
                     <div class="card-body">
-                        <p class="card-text">You can upload an image of your dish here.</p>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">You can upload an
+                            image of your dish here.</h3>
+
                     </div>
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                        <a id="add-categories-tab" href="#addCategories" data-toggle="tab" role="tab"
+                        <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
                            aria-controls="nav-images"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Next Step</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <!--        ADD CATEGORIES TAB-->
-            <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="tab-pane fade" id="addCategories"
-                 role="tabpanel" aria-labelledby="add-categories-tab">
-                <div>
-
-                    <div class="card-body">
-                        <p class="card-text">Finally, categorize your recipe, so it is easier for others to
-                            discover!</p>
-                    </div>
-                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                        <a id="publishRecipe" href="#addCategories" data-toggle="tab" role="tab"
-                           aria-controls="nav-publish"
-                           aria-selected="false" class="btn btn-primary float-right nav-link">Publish</a>
-
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
+                            Step</a>
                     </div>
                 </div>
             </div>
@@ -199,7 +184,7 @@
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
      role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
@@ -223,7 +208,7 @@
 <!-- Add Ingredient Modal -->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
      role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
@@ -271,20 +256,12 @@
     </div>
 </div>
 <!--! MODALS-->
-<!-- JQuery -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/ingredients.js}"></script>
-<script th:inline="javascript">
+<script>
+
     (function ($) {
+
         // SETUP AJAX
         $.ajaxSetup({
             headers:
@@ -292,8 +269,6 @@
         });
 
         let recipeId = parseInt(document.getElementById('recipe-id').innerText);
-        console.log(recipeId);
-        console.log(typeof recipeId);
 
         // RECIPE AJAX
         let recipeInventory;
@@ -330,7 +305,7 @@
             $('#ingredientsBody').html(recipeHtml);
         }
 
-        // ONCLICK EVENT FOR USER PANTRY
+        // ONCLICK EVENT FOR USER RECIPE
         $("#userRecipe").click(function () {
             // GET RECIPE INGREDIENTS
             makeRecipeAjaxCall();
@@ -541,8 +516,8 @@
             }, 1500);
             return false;
         })
-    })(jQuery);
 
+    })(jQuery);
 
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>

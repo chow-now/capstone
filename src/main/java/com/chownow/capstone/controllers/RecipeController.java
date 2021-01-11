@@ -2,11 +2,9 @@ package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
-//import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,12 +13,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 import java.io.IOException;
-import java.net.http.HttpHeaders;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.ParseException;
+import java.util.*;
 
 @Controller
 public class RecipeController {
@@ -46,31 +42,30 @@ public class RecipeController {
     @Autowired
     private UserService userServ;
 
+    @Autowired
+    private UserRepository userDao;
+
     @Value("${spoonacular.api.key}")
     private String spoonApi;
 
     @Autowired
     private RecipeService recipeService;
 
-
-//    public RecipeController(RecipeRepository recipeDao, UserRepository userDoa) {
-//        this.recipeDao = recipeDao;
-//        this.userDoa = userDoa;
-//    }
-
 //    @GetMapping("/recipes")
 //    public String index(Model model) {
-//        model.addAttribute("recipes", recipeDao.findAll());
+//        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
 //        return "recipes/index";
 //    }
-    /** Search recipes through Spoon API **/
+
     @GetMapping("/recipes")
     public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
         viewModel.addAttribute("recipe", new SpoonApiDto());
+        viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
         return "recipes/index";
     }
+
     /** List results **/
     @PostMapping("/recipes")
     public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
@@ -85,19 +80,23 @@ public class RecipeController {
     @GetMapping("/recipes/{id}")
     public String showRecipe(@PathVariable long id, Model model) {
         Recipe recipe = recipeDao.getFirstById(id);
+        User currentUser = userServ.loggedInUser();
         if(recipe == null){
             return "redirect:/recipes";
         }
+        if(!recipe.isPublished()){
+            System.out.println("Not Published.... redirecting");
+            return "redirect:/recipes/"+recipe.getId()+"/edit";
+        }
+        Set<User> favoritedBy = recipe.getFavoritedBy();
+        boolean canFavorite = true;
+        if(favoritedBy.contains(currentUser)){
+            System.out.println("Already favorited");
+            canFavorite = false;
+        }
         model.addAttribute("recipe", recipe);
-        String firstName = recipe.getChef().getFirstName();
-        String chef = firstName;
-        model.addAttribute("chef", chef);
-        List<Image> images = recipe.getImages();
-        model.addAttribute("images", images);
-        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
-        model.addAttribute("ingredients", ingredients);
-        Set<Category> categories = recipe.getCategories();
-        model.addAttribute("categories", categories);
+        model.addAttribute("isOwner",userServ.isOwner(recipe.getChef()));
+        model.addAttribute("canFavorite",canFavorite);
         return "recipes/show";
 
     }
@@ -105,11 +104,10 @@ public class RecipeController {
     @GetMapping("/recipes/new")
     public String showCreateRecipe(Model model) {
         User currentUser = userServ.loggedInUser();
-        System.out.println(currentUser);
-//        model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("recipe", new Recipe());
+        model.addAttribute("categories", categoryDao.findAll());
         return "recipes/new";
     }
 
@@ -125,12 +123,14 @@ public class RecipeController {
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
+
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(userDoa.getOne(currentUser.getId()));
         recipeDao.save(recipeToBeSaved);
 
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        model.addAttribute("categories", categoryDao.findAll());
 
         return "recipes/new";
     }
@@ -142,7 +142,6 @@ public class RecipeController {
     String postRecipeIngredient(@RequestBody AjaxRecipeIngredientRequest recipeIngredient,
                                 @PathVariable long recipeId) {
         Recipe currentRecipe = recipeDao.getOne(recipeId);
-        System.out.println(currentRecipe);
         Ingredient dbIngredient = null;
         boolean isNotInDb = true;
         for (Ingredient i : ingredientDao.findAllByNameLike(recipeIngredient.getName())) {
@@ -177,7 +176,6 @@ public class RecipeController {
         return "update complete";
     }
 
-
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
         recipeDao.deleteById(id);
@@ -186,10 +184,16 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}/edit")
     public String showEditRecipe(@PathVariable long id, Model model) {
-        model.addAttribute("recipe", recipeDao.getOne(id));
-        User currentUser = userServ.loggedInUser();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+        Recipe recipe = recipeDao.getOne(id);
+        User user = userDao.getOne(recipe.getChef().getId());
+        // restrict access to owner redirects others
+        if(!userServ.isOwner(user)){
+            return "redirect:/recipes";
+        }
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("user", user);
+        model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("isOwner",userServ.isOwner(user));
         return "recipes/edit";
     }
 
@@ -209,4 +213,41 @@ public class RecipeController {
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
     }
+    // CREATE NEW RECIPE CATEGORIES
+//    @RequestMapping(
+//            value = "/recipes/{recipeId}/categories/new",
+//            method = RequestMethod.POST,
+//            headers = "Content-Type=application/json")
+//    public void createRecipeCategories(
+//            @RequestBody Map<String, Object> payload,
+//            @PathVariable long recipeId) {
+//
+//        System.out.println(payload);
+//
+//    }
+
+    @PostMapping("/recipes/{id}/categories/new")
+    @ResponseBody
+    public String addRecipeCategories(@PathVariable long id) {
+
+
+
+        return "done";
+    }
+
+
+   @PostMapping("/recipes/{id}/favorite")
+    public String toggleFavorite(@PathVariable long id){
+       User currentUser = userServ.loggedInUser();
+       Recipe recipe = recipeDao.getOne(id);
+       Set<User> favoritedBy = recipe.getFavoritedBy();
+       if(favoritedBy.contains(currentUser)){
+           favoritedBy.remove(currentUser);
+       }else{
+           favoritedBy.add(currentUser);
+       }
+       recipe.setFavoritedBy(favoritedBy);
+       userDao.save(currentUser);
+       return "redirect:/recipes/" + id;
+   }
 }

@@ -1,8 +1,7 @@
 package com.chownow.capstone.services;
 
-import com.chownow.capstone.models.User;
-import com.chownow.capstone.models.UserWithRoles;
-import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.models.*;
+import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,11 +10,33 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository userDao;
+
+    @Autowired
+    private RecipeRepository recipeDao;
+
+    @Autowired
+    private PantryRepository pantryDao;
+
+    @Autowired
+    private CategoryRepository catDao;
+
+    @Autowired
+    private IngredientRepository ingredientDao;
+
+    @Autowired
+    private RecipeIngredientRepository recipeIngDao;
+
+    @Autowired
+    private PantryIngredientRepository pantryIngDao;
+
+    @Autowired
+    private  ImageRepository imageDao;
 
     public boolean isLoggedIn() {
         boolean isAnonymousUser =
@@ -34,7 +55,12 @@ public class UserService {
 
     // Checks if the user is the owner of the recipe
     public boolean isOwner(User user){
-        return isLoggedIn() && (user.getId() == loggedInUser().getId());
+        boolean isOwner = false;
+        isOwner = isLoggedIn() && (user.getId() == loggedInUser().getId());
+        if( loggedInUser().getAdmin()){
+            isOwner = true;
+        }
+        return  isOwner;
     }
 
     // if the user is logged in and is the profile owner allow edit
@@ -54,6 +80,21 @@ public class UserService {
         context.setAuthentication(auth);
     }
 
-    // Set defaults
+    // Set admin dashboard
+    public Model setAdminDash(Model model){
+        model.addAttribute("users",userDao.findAll());
+        model.addAttribute("userModel",new User());
+        model.addAttribute("ingredients",ingredientDao.findAll());
+        model.addAttribute("ingredientModel",new Ingredient());
+        model.addAttribute("categories",catDao.findAll());
+        model.addAttribute("categoryModel",new Category());
+        model.addAttribute("recipes",recipeDao.findAll());
+        model.addAttribute("recipeModel",new Recipe());
+        model.addAttribute("pantries",pantryDao.findAll());
+        model.addAttribute("images",imageDao.findAll());
+        model.addAttribute("pantryIngredients",pantryIngDao.findAll());
+        model.addAttribute("recipeIngredients",recipeIngDao.findAll());
+        return model;
+    }
 
 }

@@ -45,7 +45,7 @@ public class RecipeService {
     public String saveRecipe(SpoonApiDto recipe){
         // Hard-coded for now
         // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getById((long)userDao.findAll().size());
+        User user = userDao.getById((long)userDao.findAll().size()); // for the last user
         //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
@@ -153,7 +153,7 @@ public class RecipeService {
     /**    RECIPE MATCHES BASED ON USER PANTRY ITEMS    **/
     public List<Recipe> getMatches(User user) {
         List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
-        List<Recipe> recipes = recipeDao.findAll();
+        List<Recipe> recipes = recipeDao.findAllByIsPublishedTrue();
 
         List<Recipe> possibleRecipes = new ArrayList<>();
 
@@ -179,7 +179,7 @@ public class RecipeService {
 
     /** RECIPE MOST FAVORITED **/
     public List<Recipe> getTopFavorites(){
-        List<Recipe> recipes = recipeDao.findAll();
+        List<Recipe> recipes = recipeDao.findAllByIsPublishedTrue();
         List<Recipe> favorites = new ArrayList<>();
 
         for (Recipe r : recipes){

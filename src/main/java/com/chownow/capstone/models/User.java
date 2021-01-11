@@ -24,19 +24,20 @@ public class User {
 	@Column(nullable = false)
 	@Size(min = 8,message = "Password must be at least 8 characters")
 	@Pattern.List({
-					@Pattern(regexp = "(?=.*[0-9]).+", message = "Password must contain one digit."),
-					@Pattern(regexp = "(?=.*[a-z]).+", message = "Password must contain one lowercase letter."),
-					@Pattern(regexp = "(?=.*[A-Z]).+", message = "Password must contain one upper letter."),
-					@Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+", message ="Password must contain one special character."),
-					@Pattern(regexp = "(?=\\S+$).+", message = "Password must contain no whitespace.")
+					@Pattern(regexp = "(?=.*[0-9]).+"),
+					@Pattern(regexp = "(?=.*[a-z]).+"),
+					@Pattern(regexp = "(?=.*[A-Z]).+"),
+					@Pattern(regexp = "(?=.*[!@#\\$%\\^&\\*]).+"),
+					@Pattern(regexp = "(?=\\S+$).+")
 	})
 	@JsonIgnore
 	private String password;
 
     @Email(message = "Email can't be empty")
+	@NotBlank(message = "Email can't be empty")
     @Pattern(
             regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6})*$",
-            message = "Please provide a valid email address"
+            message = "Invalid Password"
     )
     @Column(nullable = false, length = 100, unique = true)
     private String email;

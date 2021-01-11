@@ -251,4 +251,6 @@ public class Recipe {
     public void setPublished(boolean published) {
         isPublished = published;
     }
+
+
 }

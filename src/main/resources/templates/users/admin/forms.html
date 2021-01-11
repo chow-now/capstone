@@ -13,7 +13,7 @@
     <div class="form-row mb-4">
         <div class="col">
             <!-- name -->
-            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}" required>
         </div>
     </div>
     <!-- Submit button -->
@@ -27,7 +27,7 @@
     <div class="form-row mb-4">
         <div class="col">
             <!-- name -->
-            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}" required>
         </div>
     </div>
     <!-- Submit button -->
@@ -41,7 +41,7 @@
     <div class="form-row mb-4">
         <div class="col">
             <!-- name -->
-            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}" required>
         </div>
     </div>
     <!-- Submit button -->
@@ -55,7 +55,7 @@
     <div class="form-row mb-4">
         <div class="col">
             <!-- name -->
-            <input type="text" class="form-control" placeholder="name" th:field="*{name}">
+            <input type="text" class="form-control" placeholder="name" th:field="*{name}" required>
         </div>
     </div>
     <!-- Submit button -->
@@ -64,26 +64,29 @@
 
 <form th:fragment="createUser" th:action="@{/admin/users/new}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${userModel}">
 
-    <p class="h4 mb-4">Sign up</p>
+    <p class="h4 mb-4">New User</p>
 
     <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}" required>
+            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" ></p>
         </div>
     </div>
 
     <!-- E-mail -->
-    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}">
+    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail" th:field="*{email}" required>
+    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
 
     <!-- Password -->
-    <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+    <input type="password" placeholder="Password" value="Password123!" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+           class="form-control" th:field="*{password}" required>
+    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></p>
     <small class="form-text text-muted mb-3">
         <em>At least 8 characters, 1 digit, and 1 special character</em>
     </small>
-
     <!-- Sign up button -->
-    <button class="btn btn-green rounded-pill" type="submit">Create</button>
+    <button class="btn btn-green rounded-pill " type="submit">Create</button>
 </form>
 
 <form th:fragment="makeAdmin" th:action="@{/admin/users/grant}" th:method="post" class=" p-4" th:object="${userModel}">
@@ -104,7 +107,7 @@
     <p class="h4 mb-4 text-center">Create Recipe</p>
 
     <label for="title">Title</label>
-        <input id="title" placeholder="title" type="text" class="form-control" aria-label="Title" aria-describedby="title" th:field="*{title}"/>
+        <input id="title" placeholder="title" type="text" class="form-control" aria-label="Title" aria-describedby="title" th:field="*{title}" required/>
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
 
         <label for="chef">Chef</label>
@@ -119,7 +122,7 @@
     <!--    ENTER RECIPE DESCRIPTION -->
 
         <label for="description">Description</label>
-        <textarea id="description" class="form-control" aria-label="description" rows="3" th:field="*{description}"></textarea>
+        <textarea id="description" class="form-control" aria-label="description" rows="3" th:field="*{description}" required></textarea>
         <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
 
 
@@ -153,25 +156,25 @@
     <!--    ENTER PREP TIME IN MINUTES   -->
 
     <label for="prepTime">Prep Time</label>
-    <input id="prepTime" type="number" class="form-control" aria-label="Prep-time" aria-describedby="prep-time" th:field="*{prepTime}">
+    <input id="prepTime" type="number" class="form-control" aria-label="Prep-time" aria-describedby="prep-time" th:field="*{prepTime}" required>
     <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
 
 
     <!--    ENTER COOK TIME IN MINUTES   -->
     <label for="cookTime">Cook Time</label>
-    <input id="cookTime" type="number" class="form-control" aria-label="Cook-time" aria-describedby="cook-time" th:field="*{cookTime}">
+    <input id="cookTime" type="number" class="form-control" aria-label="Cook-time" aria-describedby="cook-time" th:field="*{cookTime}" required>
     <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
 
 
     <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
     <label for="servings">Servings</label>
-    <input id="servings" type="number" class="form-control" aria-label="Servings" aria-describedby="servings" th:field="*{servings}">
+    <input id="servings" type="number" class="form-control" aria-label="Servings" aria-describedby="servings" th:field="*{servings}" required>
     <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
 
 
     <!--    ENTER COOKING DIRECTIONS  -->
     <label for="directions">Directions</label>
-    <textarea  id="directions" class="form-control" aria-label="directions" rows="5" th:field="*{directions}"></textarea>
+    <textarea  id="directions" class="form-control" aria-label="directions" rows="5" th:field="*{directions}" required></textarea>
     <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
 
 
