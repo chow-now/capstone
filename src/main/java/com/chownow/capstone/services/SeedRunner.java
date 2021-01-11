@@ -135,11 +135,34 @@ public class SeedRunner {
     }
 
     public void seedCategories(){
-        for(int i = 0; i<=30; i++){
-            String name = makeSingular(faker.nation().nationality().split(" ")[0]);
+        List<String> categories = new ArrayList<>();
+        categories.add("African");
+        categories.add("American");
+        categories.add("British");
+        categories.add("Cajun");
+        categories.add("Chinese");
+        categories.add("Caribbean");
+        categories.add("European");
+        categories.add("French");
+        categories.add("German");
+        categories.add("Greek");
+        categories.add("Indian");
+        categories.add("Irish");
+        categories.add("Italian");
+        categories.add("Japanese");
+        categories.add("Jewish");
+        categories.add("Korean");
+        categories.add("Latin");
+        categories.add("Mediterranean");
+        categories.add("Mexican");
+        categories.add("Middle Eastern");
+        categories.add("Southern");
+        categories.add("Spanish");
+        categories.add("Thai");
+        categories.add("Vietnamese");
+        for(String name : categories){
             LOGGER.info(name);
-            Category seedCategory = new Category(name);
-            catDao.save(seedCategory);
+            catDao.save(new Category(name));
         }
     }
 
@@ -191,6 +214,8 @@ public class SeedRunner {
         levels.add("easy");levels.add("medium");levels.add("hard");
         int usersSize = userDao.findAll().size();
         for(long i = 1; i<=60; i++){
+            long spoonApiId = faker.number().numberBetween(0, 999);
+            LOGGER.info("title = " + spoonApiId);
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
             String description = faker.friends().quote();
@@ -206,6 +231,7 @@ public class SeedRunner {
             int servings = faker.number().numberBetween(1,20);
             LOGGER.info("servings = " + servings);
             Recipe recipe = new Recipe(
+                    spoonApiId,
                     title,
                     description,
                     directions,
@@ -215,6 +241,9 @@ public class SeedRunner {
                     servings,
                     userDao.getOne((long) faker.number().numberBetween(1,usersSize+1))
             );
+            if(i%2==0){
+                recipe.setPublished(true);
+            }
             recipeDao.save(recipe);
         }
     }

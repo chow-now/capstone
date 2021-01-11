@@ -33,6 +33,9 @@ public class RecipeService {
     @Autowired
     private ImageRepository imageRepository;
 
+    @Autowired
+    private UserService userServ;
+
     /**
      * Here used transactional because we save data to 8 tables, during saving, if something happens it will rollback the data
      * @param recipe
@@ -42,10 +45,19 @@ public class RecipeService {
     public String saveRecipe(SpoonApiDto recipe){
         // Hard-coded for now
         // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getById((long)userDao.findAll().size());
+        User user = userDao.getById((long)userDao.findAll().size()); // for the last user
+        //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
+
+//        if (user.getRecipes().contains(recipe.getSpoonApiId())) {
+//            return "Recipe already exists";
+//        }
+
+        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
+            return  "recipe already exists";
+        }
 
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){
@@ -72,6 +84,7 @@ public class RecipeService {
         Recipe recipeEntity = new Recipe();
         recipeEntity.setCookTime(Integer.parseInt(cookTime));
         recipeEntity.setDescription(recipe.getSummary());
+        recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setDifficulty("N/A");
         recipeEntity.setDirections(recipe.getDirections());
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
@@ -94,6 +107,7 @@ public class RecipeService {
             /** Create a Ingredient entity object to be saved */
             //********* How are we checking if duplicate ingredient *******************************
             Ingredient ingredientEntity = ingredientRepository.save(new Ingredient(ingredientObjects[2]));
+
 
             /** Create a RecipeIngredient entity object to be saved */
             RecipeIngredient recipeIngredientEntity = new RecipeIngredient();
@@ -123,11 +137,12 @@ public class RecipeService {
         /** Create a Recipe Categories to be saved **/
         recipeEntity.setCategories(categoriesToSet);
         recipeDao.save(recipeEntity);
+
         /** Create a Favorites entity object to be saved **/
-        Set<User> favoritedBy = recipeEntity.getFavoritedBy();
-        favoritedBy.add(user);
-        recipeEntity.setFavoritedBy(favoritedBy);
-        userDao.save(user);
+            Set<User> favoritedBy = recipeEntity.getFavoritedBy();
+            favoritedBy.add(user);
+            recipeEntity.setFavoritedBy(favoritedBy);
+            userDao.save(user);
 
         /** Create a Image entity object to be saved **/
         imageRepository.save(new Image(recipe.getImage(),recipeEntity));
@@ -138,7 +153,7 @@ public class RecipeService {
     /**    RECIPE MATCHES BASED ON USER PANTRY ITEMS    **/
     public List<Recipe> getMatches(User user) {
         List<PantryIngredient> pantryIngredients = user.getPantry().getPantryIngredients();
-        List<Recipe> recipes = recipeDao.findAll();
+        List<Recipe> recipes = recipeDao.findAllByIsPublishedTrue();
 
         List<Recipe> possibleRecipes = new ArrayList<>();
 
@@ -164,7 +179,7 @@ public class RecipeService {
 
     /** RECIPE MOST FAVORITED **/
     public List<Recipe> getTopFavorites(){
-        List<Recipe> recipes = recipeDao.findAll();
+        List<Recipe> recipes = recipeDao.findAllByIsPublishedTrue();
         List<Recipe> favorites = new ArrayList<>();
 
         for (Recipe r : recipes){

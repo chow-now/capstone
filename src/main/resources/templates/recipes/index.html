@@ -1,122 +1,309 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Recipes Index')">
-    <meta charset="utf-8">
-    <title>Recipes Index</title>
+<head th:replace="partials/head :: head('Results')">
+    <meta charset="UTF-8">
+    <title>Results</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+    <title>Dashboard</title>
+    <link th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/x-icon">
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <!--  CUSTOM PROFILE CSS -->
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
 <body>
-<!-- Navbar needed to be fixed, its commented out for now -->
-<!--<nav th:replace="partials/navbar :: nav"></nav>-->
-<!--Todo: if "search == null display /random recipes : display /recipesbyingredientorfilter"   -->
-<!--Todo:potentailly more robust where we can also search for recipes by title or categories.-->
-<div class="container">
-    <!--Search-->
-    <form class="form-inline d-flex justify-content-center md-form form-sm active-cyan-2 mt-2">
-        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-               aria-label="Search">
-        <i class="fas fa-search" aria-hidden="true"></i>
+<header>
+    <nav th:replace="partials/navbar.html :: nav"></nav>
+</header>
+<div class="form-outline">
+    <form class="w-50 mt-4 mx-auto" th:action="@{/recipes}" method="get">
+        <input type="text" class="form-control" id="main_search"
+               placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
     </form>
-    <!--Filters-->
-    <div class="row">
-        <div class="col-6">
-            <select class="custom-select" multiple>
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-        </div>
-        <div class="col-6">
-            <select class="custom-select" multiple>
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-        </div>
-    </div>
+
+    <!--    For Test-->
+    <span th:if= "${message != null}" th:text="${message}"></span>
+
+    <!-- Display all recipes isPublished True -->
+</div>
 
 
-    <div class="row">
-        <!-- Grid row -->
-        <div class="row my-5">
-            <!-- Grid column -->
-            <div class="col-md-6 mb-4">
-                <h2>Random Recipies</h2>
-                <div th:each="recipe : ${recipes}">
-                    <div class="card-deck">
-                        <!--Card Body -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h2 class="card-title" th:text="${recipe.title}"></h2>
-                                </div>
-                                <div class="col-3">
-                                    <!--Todo: reactive and sizing-->
-                                    <div class="row">
-                                        <h5 th:text="${recipe.favoritedBy.size()}" class="text-center"></h5>
-                                        <i class="far fa-bookmark ml-2 align-center"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Card-->
-                            <div class="row">
-                                <div class="col-md-6 my-1">
-                                    <div class="view overlay z-depth-1">
-                                        <a href="">
-                                            <div th:each="img : ${recipe.images}">
-                                                <img th:attr="src=${img.url},title=${img.url}" class="img-fluid"
-                                                     alt="user"/>
-                                            </div>
-                                        </a>
-                                        <a>
-                                            <div class="mask waves-effect waves-light rgba-white-slight"></div>
-                                        </a>
-                                        <div class="description rgba-stylish-light text-white">
-                                            <div class="title ml-2">
-                                                <div class="d-flex mt-3">
-                                                    <div th:each="recipeCategories : ${recipe.categories}">
-                                                        <p class="mr-2" th:text="${recipeCategories.name}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <i class="fas fa-utensils"></i>
-                                                            <h5 th:text="${recipe.favoritedBy.size()}">7/10
-                                                                ingredients</h5>
-                                                        </div>
-                                                        <div class="col">
-                                                            <i class="fas fa-user-friends"></i>
-                                                            <h5 th:text="${recipe.favoritedBy.size()}">Serves</h5>
-                                                        </div>
-                                                        <div class="col">
-                                                            <i class="fas fa-utensils"></i>
-                                                            <h5 th:text="${recipe.difficulty}"></h5>
-                                                        </div>
-                                                        <div class="col">
-                                                            <i class="far fa-clock text-center"></i>
-                                                            <h5 th:text="${recipe.cookTime}"></h5>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <h4 th:text="${recipe.description}"></h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!-- // Dump recipes here-->
+
+<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
+
+<!--- Modal to display recipe information - This can be changed later on --->
+<div
+        class="modal fade"
+        id="viewRecipeModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog modal-xl">
+        <form th:action="@{/recipes}" th:object="${recipe}" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+
+                <!-- Display Image -->
+                <div class="recipe-image mx-auto"></div>
+
+                <div class="modal-body">
+                    <!-- Display Prep Time -->
+                    <h4>Prep Time</h4>
+                    <div class="recipe-prep"></div>
+
+                    <!-- Display Cook Time -->
+                    <h4>Cook Time</h4>
+                    <div class="recipe-cook"></div>
+
+                    <!-- Display summary -->
+                    <h4>Summary</h4>
+                    <div class="recipe-summary"></div>
+
+                    <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                    <h4>Categories</h4>
+                    <ul class="recipe-categories"></ul>
+
+                    <!-- Display current servings -->
+                    <h4>Servings</h4>
+                    <div class="recipe-servings"></div>
+
+                    <!-- Display Ingredients -->
+                    <h4>Ingredients</h4>
+                    <ul class="recipe-ingredients"></ul>
+
+                    <!-- Display Instructions -->
+                    <h4>Directions</h4>
+                    <ol class="recipe-directions"></ol>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Add to favorites</button>
                 </div>
             </div>
-        </div>
+            <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
+            <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
+            <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
+            <input type="hidden" id="hidden-recipe-prep" th:name="prep" value=""/>
+            <input type="hidden" id="hidden-recipe-cook" th:name="cook" value=""/>
+            <input type="hidden" id="hidden-recipe-servings" th:name="servings" value=""/>
+            <input type="hidden" id="hidden-recipe-summary" th:name="summary" value=""/>
+            <input type="hidden" id="hidden-recipe-categories" th:name="categories" value=""/>
+            <input type="hidden" id="hidden-recipe-ingredients" th:name="ingredients" value=""/>
+            <input type="hidden" id="hidden-recipe-directions" th:name="directions" value=""/>
+        </form>
     </div>
-    <th:block th:include="partials/scripts :: scripts"></th:block>
 </div>
+
+
+<th:block th:include="partials/scripts :: scripts"></th:block>
+
+<script th:inline="javascript">
+
+    // In the head
+    const spoonApi = document.querySelector('meta.spoonApi').content;
+
+    if (document.getElementById('main_search') == null) {
+        console.log("yo, it's null");
+    } else {
+        let searchString;
+        let urlSearchString = window.location.href;
+        let url = new URL(urlSearchString);
+        let searchParam = url.searchParams.get("term");
+        searchString = searchParam.replace(/,|,\s/g, ",+");
+        console.log("url string" + searchString);
+
+        $.ajax({
+            type: 'GET',
+            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
+            success: function (results) {
+                //console.log(results);
+                let recipe = "";
+
+                recipe += `<div class="col-md-12">
+                                <h3 class="my-3 text-center">Results</h3>
+                            </div>`;
+
+                $('.recipes').html(recipe);
+
+
+                $.each(results, function (i, recipe) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
+                        success: function (singleRecipe) {
+                            //console.log(singleRecipe);
+
+                            $('.recipes').append(
+                                `<div class="col">
+                                    <div class="card h-100">
+                                        <h5 class="card-title text-center">${singleRecipe.title}</h5>
+                                            <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
+                                    <div class="card-body">
+                                        <div>
+                                            <h6 class="mb3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
+                                        </div>
+
+                                    <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                                        <p style="line-height: 20px;">${singleRecipe.summary}</p>
+                                    </div>
+
+                                    <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>View</button>
+                                    </div>
+                                    </div>
+                                </div>`)
+
+                            // Trigger Recipe Modal
+                            $('.viewRecipe').unbind().click(function () {
+                                //console.log(this.id + " button clicked");
+
+                                $.ajax(`https://api.spoonacular.com/recipes/${this.id}/information?includeNutrition=false&apiKey=${spoonApi}`)
+                                    .done(function (modalRecipe) {
+                                        console.log(modalRecipe)
+                                        //console.log(modalRecipe.title)
+
+                                        // Recipe Information
+                                        let image = "";
+                                        let summary = "";
+                                        let title = "";
+                                        let ingredients = "";
+                                        let instructions = "";
+                                        let category = "";
+                                        let prepTime = "";
+                                        let cookTime = "";
+                                        let servings = "";
+
+                                        let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
+                                        let hiddenSpoonApiId = modalRecipe.id;
+                                        let hiddenImage = modalRecipe.image;
+                                        let hiddenPrepTime = modalRecipe.preparationMinutes;
+                                        let hiddenCook = modalRecipe.cookingMinutes;
+                                        let hiddenServings = modalRecipe.servings;
+                                        let hiddenSummary = modalRecipe.summary;
+                                        let hiddenCategories = "";
+                                        let hiddenIngredients = "";
+                                        let hiddenDirections = "";
+
+                                        image += `<img class="img-fluid" src=${modalRecipe.image} alt="" />`;
+
+                                        // a hrefs are not working with template literals
+                                        title += modalRecipe.title + ' by ' + '<a href="' + modalRecipe.sourceUrl + '">' + modalRecipe.sourceName + '</a>';
+
+                                        prepTime += `<p>${modalRecipe.preparationMinutes} mins</p>`;
+
+                                        cookTime += `<p>${modalRecipe.cookingMinutes} mins</p>`;
+
+                                        servings += `<p>${modalRecipe.servings} servings</p>`
+
+                                        summary += `<p>${modalRecipe.summary}</p>`;
+
+                                        // Categories List
+                                        if (modalRecipe.cuisines.length == 0) {
+                                            category += `<li class="">Unknown category</li>`;
+
+                                            hiddenCategories = 'Unknown category';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.cuisines.length; i++) {
+                                                category += `<li class="list-group">${modalRecipe.cuisines[i]}</li>`;
+
+                                                hiddenCategories += modalRecipe.cuisines[i] + '##'
+                                            }
+                                        }
+
+                                        // Ingredients List
+                                        if (modalRecipe.extendedIngredients.length == 0) {
+                                            ingredients += 'No ingredients recorded';
+                                            hiddenIngredients = 'No ingredients recorded';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.extendedIngredients.length; i++) {
+                                                ingredients += `<li>${modalRecipe.extendedIngredients[i].amount}
+                                                                    ${modalRecipe.extendedIngredients[i].unit}
+                                                                    ${modalRecipe.extendedIngredients[i].originalName}
+                                                                </li>`;
+
+                                                hiddenIngredients += modalRecipe.extendedIngredients[i].amount + '@@' + modalRecipe.extendedIngredients[i].unit + '@@' + modalRecipe.extendedIngredients[i].originalName + '##';
+                                            }
+                                        }
+
+                                        // Grab Instructions
+                                        if (modalRecipe.analyzedInstructions.length === 0) {
+                                            instructions += '<p>' + 'Sorry, directions not available' + '</p>';
+                                            instructions += '<p>' + 'You can find more information in the main' +
+                                                '<a href="' + modalRecipe.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
+
+                                            hiddenDirections = 'Sorry, directions not available';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.analyzedInstructions[0].steps.length; i++) {
+                                                instructions += `<li class="list-group">
+                                                                    <p>${modalRecipe.analyzedInstructions[0].steps[i].number}.
+                                                                    <span>${modalRecipe.analyzedInstructions[0].steps[i].step}</span>
+                                                                    </p>
+                                                                    </li>`;
+
+                                                hiddenDirections += modalRecipe.analyzedInstructions[0].steps[i].number + ' ' + modalRecipe.analyzedInstructions[0].steps[i].step + '##'
+                                            }
+                                        }
+
+                                        // Display to modal
+                                        $('.recipe-title').html(title);
+                                        $('.recipe-image').html(image);
+                                        $('.recipe-prep').html(prepTime);
+                                        $('.recipe-cook').html(cookTime);
+                                        $('.recipe-servings').html(servings);
+                                        $('.recipe-summary').html(summary);
+                                        $('.recipe-categories').html(category);
+                                        $('.recipe-ingredients').html(ingredients);
+                                        $('.recipe-directions').html(instructions);
+
+                                        // Hidden Fields
+                                        $('#hidden-spoonApi-id').val(hiddenSpoonApiId);
+                                        $('#hidden-recipe-title').val(hiddenTitle);
+                                        $('#hidden-recipe-image').val(hiddenImage);
+                                        $('#hidden-recipe-prep').val(hiddenPrepTime);
+                                        $('#hidden-recipe-cook').val(hiddenCook);
+                                        $('#hidden-recipe-servings').val(hiddenServings);
+                                        $('#hidden-recipe-summary').val(hiddenSummary);
+                                        $('#hidden-recipe-categories').val(hiddenCategories);
+                                        $('#hidden-recipe-ingredients').val(hiddenIngredients);
+                                        $('#hidden-recipe-directions').val(hiddenDirections);
+                                    })
+                            })
+                        },
+                        complete: function () {
+                            console.log("FINISHED");
+                            $('.spinner-grow').hide();
+                            $('.spinner-grow').addClass('d-none');
+                        }
+                    })
+                })
+
+            }
+        })
+
+// TODO: Start on fetching Categories (cuisines)
+// TODO: Work on Favorites, have fields saved to backend (PostMapping controller w/ dynamic params)
+
+    }
+</script>
+<script th:src="@{/js/fraction_converter.js}"></script>
 </body>
 </html>
