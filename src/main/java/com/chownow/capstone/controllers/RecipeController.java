@@ -6,6 +6,8 @@ import com.chownow.capstone.repos.*;
 import com.chownow.capstone.services.AmazonService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -203,18 +205,20 @@ public class RecipeController {
 //        return "recipes/new";
 //    }
 
-    @PostMapping("/recipes/{id}/upload")
+    @RequestMapping(value = "/recipes/{id}/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String uploadRecipeImage(@PathVariable long id, @RequestParam(value="file") MultipartFile multipartFile, Model model){
+    public ResponseEntity<?> uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
+                                               Model model){
         Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
         model.addAttribute("recipe",recipe);
-        return "recipe/new";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/recipes/image/{id}/delete")
     @ResponseBody
-    public void deleteFile(String imageUrl){
+    public void deleteFile(@PathVariable long id, @RequestParam String imageUrl){
+        imageDao.deleteById(id);
         s3.deleteFile(imageUrl);
     }
 

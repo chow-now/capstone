@@ -31,7 +31,6 @@
                     </div>
                     <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
 
-
                         <!--    ENTER A RECIPE TITLE   -->
                         <div class="form-group mb-3 px-4">
                             <label id="title">Title</label>
@@ -108,6 +107,7 @@
                         <!--    CATEGORIZE THE RECIPE   -->
                         <input type="checkbox" name="categories" th:each="category : ${categories}"
                                th:text="${category.name}" th:value="${category.id}" th:field="*{categories}">
+
 
                         <!-- SUBMIT RECIPE INFO -->
                         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
