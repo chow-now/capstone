@@ -4,9 +4,12 @@ import com.chownow.capstone.models.SpoonApiDto;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +46,8 @@ public class RecipeService {
      **/
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
-        // Hard-coded for now
-        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getById((long)userDao.findAll().size()); // for the last user
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getById(user1.getId());
         //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
@@ -55,9 +57,12 @@ public class RecipeService {
 //            return "Recipe already exists";
 //        }
 
-        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
-            return  "recipe already exists";
+        for(Recipe fav : user.getFavorites()){
+            if(recipe.getSpoonApiId() == fav.getSpoonApiId()){
+                return "Already Exist";
+            }
         }
+
 
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){

@@ -71,8 +71,8 @@ public class RecipeController {
     public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
-        viewModel.addAttribute("recipe", new SpoonApiDto());
-        //viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+        //viewModel.addAttribute("recipe", new SpoonApiDto());
+        viewModel.addAttribute("recipe", recipeDao.findAllByIsPublishedTrue()); // from DB
         return "recipes/index";
     }
 
