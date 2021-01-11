@@ -6,7 +6,7 @@ $('[data-toggle="tooltip"]').tooltip();
 const verifyViewport = ()=>{
     let viewport = $(window).width();
 
-    if ( viewport <= 759 ) {
+    if ( viewport <= 1200 ) {
         $("#myTable2").addClass("table-responsive");
     }
     else {

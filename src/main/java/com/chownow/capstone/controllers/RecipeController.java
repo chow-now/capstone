@@ -50,6 +50,7 @@ public class RecipeController {
     @GetMapping("/recipes/{id}")
     public String showRecipe(@PathVariable long id, Model model) {
         Recipe recipe = recipeDao.getFirstById(id);
+        User currentUser = userServ.loggedInUser();
         if(recipe == null){
             return "redirect:/recipes";
         }
@@ -57,16 +58,15 @@ public class RecipeController {
             System.out.println("Not Published.... redirecting");
             return "redirect:/recipes/"+recipe.getId()+"/edit";
         }
+        Set<User> favoritedBy = recipe.getFavoritedBy();
+        boolean canFavorite = true;
+        if(favoritedBy.contains(currentUser)){
+            System.out.println("Already favorited");
+            canFavorite = false;
+        }
         model.addAttribute("recipe", recipe);
-        String firstName = recipe.getChef().getFirstName();
-        String chef = firstName;
-        model.addAttribute("chef", chef);
-        List<Image> images = recipe.getImages();
-        model.addAttribute("images", images);
-        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
-        model.addAttribute("ingredients", ingredients);
-        Set<Category> categories = recipe.getCategories();
-        model.addAttribute("categories", categories);
+        model.addAttribute("isOwner",userServ.isOwner(recipe.getChef()));
+        model.addAttribute("canFavorite",canFavorite);
         return "recipes/show";
 
     }
@@ -206,5 +206,18 @@ public class RecipeController {
     }
 
 
-
+   @PostMapping("/recipes/{id}/favorite")
+    public String toggleFavorite(@PathVariable long id){
+       User currentUser = userServ.loggedInUser();
+       Recipe recipe = recipeDao.getOne(id);
+       Set<User> favoritedBy = recipe.getFavoritedBy();
+       if(favoritedBy.contains(currentUser)){
+           favoritedBy.remove(currentUser);
+       }else{
+           favoritedBy.add(currentUser);
+       }
+       recipe.setFavoritedBy(favoritedBy);
+       userDao.save(currentUser);
+       return "redirect:/recipes/" + id;
+   }
 }

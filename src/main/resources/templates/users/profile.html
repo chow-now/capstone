@@ -14,10 +14,6 @@
   <link rel="stylesheet" th:href="@{/css/main.css}">
   <!--  CUSTOM PROFILE CSS -->
   <link rel="stylesheet" th:href="@{/css/profile.css}">
-  <style>
-
-
-  </style>
 
 </head>
 <body>
@@ -291,7 +287,7 @@
 <!-- PROFILE OWNER ONLY MODALS-->
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
@@ -315,7 +311,7 @@
 </div>
 <!-- Add Ingredient Modal -->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
