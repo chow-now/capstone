@@ -112,14 +112,19 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/new")
-    public String showCreateRecipe(Model model) {
+    public String showCreateRecipe(
+            Model model)
+    {
+        Recipe recipe = new Recipe();
+//        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
+//        recipe.setImages(imageDao.findAllByRecipe(recipe));
+
         User currentUser = userServ.loggedInUser();
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
-        model.addAttribute("recipe", new Recipe());
+        model.addAttribute("recipe", recipe);
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("images", imageDao.findAll());
-        model.addAttribute("recipeIgredients", recipeIngDao.findAll());
+
         return "recipes/new";
     }
 
@@ -128,13 +133,19 @@ public class RecipeController {
     public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
-            Model model
-    ) {
+            Model model) {
+
+        // RECIPE MODEL VALIDATIONS
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
+
+        // ADD FIELDS TO EXISTING RECIPE
+//        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
+//        recipe.setImages(recipeToBeSaved.getImages());
+
 
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
@@ -143,7 +154,6 @@ public class RecipeController {
         model.addAttribute("recipe",recipeToBeSaved);
         model.addAttribute("isOwner",userServ.isOwner(currentUser));
         model.addAttribute("categories", categoryDao.findAll());
-//        model.addAttribute("images", imageDao.findAll());
 
         return "recipes/new";
     }
@@ -196,41 +206,51 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/{id}/edit")
-    public String showEditRecipe(@PathVariable long id, Model model) {
-
-        model.addAttribute("recipe", recipeDao.getOne(id));
-        User currentUser = userServ.loggedInUser();
-        model.addAttribute("images",imageDao.findAll());
-        model.addAttribute("user", currentUser);
-
+    public String showEditRecipe(
+            @PathVariable long id,
+            Model model)
+    {
         Recipe recipe = recipeDao.getOne(id);
-        User user = userDao.getOne(recipe.getChef().getId());
+        User userId = userDao.getOne(recipe.getChef().getId());
         // restrict access to owner redirects others
-        if(!userServ.isOwner(user)){
+        if(!userServ.isOwner(userId)){
             return "redirect:/recipes";
         }
+        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
+        recipe.setImages(imageDao.findAllByRecipe(recipe));
         model.addAttribute("recipe", recipe);
-        model.addAttribute("user", user);
+        User currentUser = userServ.loggedInUser();
+        model.addAttribute("user", currentUser);
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("isOwner",userServ.isOwner(user));
+        model.addAttribute("isOwner",userServ.isOwner(userId));
         return "recipes/edit";
     }
 
     @PostMapping("/recipes/{id}/edit")
     public String editRecipe(
+            @PathVariable long id,
             @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model) {
 
+        Recipe recipe = recipeDao.getOne(id);
+        // RECIPE MODEL VALIDATIONS
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/" + recipeToBeSaved.getId() + "/edit";
         }
-        User currentUser = userServ.loggedInUser();
-        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
-        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
+        // ADD FIELDS TO EXISTING RECIPE
+        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
+        recipe.setImages(recipeToBeSaved.getImages());
+
+        recipe = recipeDao.save(recipe);
+        model.addAttribute("recipe", recipe);
+
+//        User currentUser = userServ.loggedInUser();
+//        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
+//        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
+        return "redirect:/recipes/" + recipe.getId() +"/edit";
     }
 
     // UPLOAD RECIPE IMAGE
@@ -257,7 +277,7 @@ public class RecipeController {
                                                Model model){
         Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
-        model.addAttribute("recipe",recipe);
+//        model.addAttribute("recipe",recipe);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

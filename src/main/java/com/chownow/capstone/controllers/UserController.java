@@ -160,7 +160,12 @@ public class UserController {
 
     // SUBMIT USER EDIT FORM
     @PostMapping("/users/{id}/edit")
-    public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
+    public String editUser(
+            @PathVariable(name="id") long id,
+            @Valid User editUser,
+            Errors validation,
+            Model model) {
+
         User user = userDao.getOne(id);
         // user model validations
         if (validation.hasErrors()) {
