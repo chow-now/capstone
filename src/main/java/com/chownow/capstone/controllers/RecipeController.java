@@ -298,18 +298,23 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/image/{id}/delete")
-    @ResponseBody
-    public void deleteFile(@PathVariable long id, @RequestParam String imageUrl){
+    public @ResponseBody String deleteFile(@PathVariable long id){
+        Image image = imageDao.getOne(id);
+        if(image.getUrl() != null && image.getUrl().startsWith("https://s3")){
+            s3.deleteFile(image.getUrl());
+        }
         imageDao.deleteById(id);
-        s3.deleteFile(imageUrl);
+
+        return "success";
     }
 
     @PostMapping("/recipes/{id}/publish")
-    public String publishRecipe(@PathVariable long id){
+    public @ResponseBody String publishRecipe(@PathVariable long id){
         Recipe recipe = recipeDao.getOne(id);
         recipe.setPublished(true);
+        recipeDao.save(recipe);
 
-        return "users/profile";
+        return "publish successful";
     }
 
 

@@ -168,20 +168,23 @@
             <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div>
                     <div class="card-body ">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your recipe images.</h3>
+                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your recipe
+                            images.</h3>
                         <div class="col justify-content-center">
                             <div class="row text-center">
                                 <div class="m-1" th:each="image : ${recipe.images}">
-                                    <div id="image-id" th:value="${image.id}" hidden></div>
-                                    <div id="image-url" th:value="${image.url}" hidden></div>
-                                    <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
-                                         class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200"
-                                         height="200">
-                                    <br>
+                                    <!--                                    <div id="image-id" th:value="${image.id}" hidden></div>-->
+                                    <!--                                    <div id="image-url" th:value="${image.url}" hidden></div>-->
+                                    <div class="image-preview">
+                                        <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
+                                             class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200"
+                                             height="200">
+                                        <br>
 
-                                    <button th:id="'deleteImage' + ${image.id}" th:value="${image.url}"
-                                            class="btn btn-sm btn-red p-1 m-2">Delete
-                                    </button>
+                                        <button th:id="${image.id}" th:value="${image.url}"
+                                                class="delete-image btn btn-sm btn-red p-1 m-2">Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -202,12 +205,7 @@
                         </form>
                     </div>
                 </div>
-                <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                    <a id="recipeCategories" href="#addCategories" data-toggle="tab" role="tab"
-                       aria-controls="nav-images"
-                       aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Publish
-                    </a>
-                </div>
+                <button id="recipePublish" class="btn btn-sm btn-red">Publish</button>
             </div>
         </div>
     </div>
