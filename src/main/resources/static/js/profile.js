@@ -362,6 +362,9 @@
                 notificationCount = tempCount;
             }
         }
+        if(notificationCount <= 0){
+            notificationCount = "";
+        }
         // render the count to html notfication
         $("#notification").html(notificationCount);
     }
