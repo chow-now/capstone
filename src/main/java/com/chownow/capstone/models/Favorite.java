@@ -3,32 +3,32 @@ package com.chownow.capstone.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name="images")
-public class Image {
+@Table(name="favorites")
+public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false,length = 100)
-    private String url;
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 
     @ManyToOne
     @JsonIgnore
     private Recipe recipe;
 
-    public Image(){}
+    public Favorite(){}
 
-    public Image(long id, String url, Recipe recipe) {
-        this.id = id;
-        this.url = url;
+    public Favorite(User user, Recipe recipe) {
+        this.user = user;
         this.recipe = recipe;
     }
 
-    public Image(String url, Recipe recipe) {
-        this.url = url;
+    public Favorite(long id, User user, Recipe recipe) {
+        this.id = id;
+        this.user = user;
         this.recipe = recipe;
     }
 
@@ -40,19 +40,19 @@ public class Image {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public Recipe getRecipe() {
         return recipe;
     }
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

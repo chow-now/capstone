@@ -10,4 +10,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Image findAllById(long id);
 
     List<Image> findAllByRecipe(Recipe recipe);
+
 }
