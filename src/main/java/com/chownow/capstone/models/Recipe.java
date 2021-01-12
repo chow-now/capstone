@@ -84,7 +84,10 @@ public class Recipe {
     @JsonManagedReference
     private Set<RecipeIngredient> RecipeIngredients = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name="recipe_categories",
             joinColumns=@JoinColumn(name="recipe_id"),

@@ -1,5 +1,6 @@
 package com.chownow.capstone.repos;
 
+import com.chownow.capstone.models.Ingredient;
 import com.chownow.capstone.models.Pantry;
 import com.chownow.capstone.models.PantryIngredient;
 import com.chownow.capstone.models.User;
@@ -12,4 +13,5 @@ public interface PantryIngredientRepository extends JpaRepository<PantryIngredie
     // Get the list of posts in order by ingredient name.
     List<PantryIngredient> findAllByPantry_OwnerOrderByIngredient(User user);
     void deleteAllByPantry(Pantry pantry);
+    void deleteAllByIngredient(Ingredient ingredient);
 }

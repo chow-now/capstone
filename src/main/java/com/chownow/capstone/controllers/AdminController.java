@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +45,12 @@ public class AdminController {
 	@Autowired
 	private RecipeService recipeServ;
 
+	@Autowired
+	private PantryIngredientRepository pantryIngDao;
+
+	@Autowired
+	private RecipeIngredientRepository recipeIngDao;
+
 	@GetMapping("/admin")
 	public String getDashboard(Model model) {
 		User currentUser = userServ.loggedInUser();
@@ -76,7 +83,11 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/ingredients/{id}/delete")
+	@Transactional
 	public String deleteIngredient(@PathVariable long id){
+		Ingredient ingredient = ingredientDao.getOne(id);
+		pantryIngDao.deleteAllByIngredient(ingredient);
+		recipeIngDao.deleteAllByIngredient(ingredient);
 		ingredientDao.deleteById(id);
 		return "redirect:/admin";
 	}
@@ -100,7 +111,14 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/categories/{id}/delete")
+	@Transactional
 	public String deleteCategory(@PathVariable long id){
+		Category category = catDao.getOne(id);
+		for(Recipe r : category.getRecipes()){
+			r.getCategories().remove(category);
+			recipeDao.save(r);
+		}
+		catDao.save(category);
 		catDao.deleteById(id);
 		return "redirect:/admin";
 	}
