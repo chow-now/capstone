@@ -26,7 +26,7 @@ public class RecipeIngredient {
     private Recipe recipe;
 
     @ManyToOne
-//    @JsonIgnore
+    @JsonIgnore
     private Ingredient ingredient;
 
     public RecipeIngredient(){}

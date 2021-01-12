@@ -109,13 +109,15 @@ public class UserController {
         if(user == null){
             return "redirect:/recipes";
         }
+        boolean isFollowing = false;
         // check if logged in user is following the profile owner
         if (followDao.findByUserAndFriend(currentUser, user) != null) {
-            model.addAttribute("isFollowing", true);
+            isFollowing = true;
         }
         model.addAttribute("user", user);
         // check if logged in user is the profile owner
         model.addAttribute("isOwner",userServ.isOwner(user));
+        model.addAttribute("isFollowing", isFollowing);
         model.addAttribute("drafts",recipeDao.findAllByChefAndIsPublishedFalse(user));
         model.addAttribute("published",recipeDao.findAllByChefAndIsPublishedTrue(user));
 
@@ -126,10 +128,10 @@ public class UserController {
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
-        List<Recipe> currentSuggestions = recipeServ.getMatches(currentUser);
         if(currentUser.getAdmin()){
             return "redirect:/admin";
         }
+        List<Recipe> currentSuggestions = recipeServ.getMatches(currentUser);
         if(currentSuggestions.size()<currentUser.getSuggestedCount()){
             currentUser.setSuggestedCount(currentSuggestions.size());
             userDao.save(currentUser);
@@ -164,7 +166,12 @@ public class UserController {
 
     // SUBMIT USER EDIT FORM
     @PostMapping("/users/{id}/edit")
-    public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
+    public String editUser(
+            @PathVariable(name="id") long id,
+            @Valid User editUser,
+            Errors validation,
+            Model model) {
+
         User user = userDao.getOne(id);
         // user model validations
         if (validation.hasErrors()) {
@@ -238,14 +245,16 @@ public class UserController {
     // Create a follow request
     @RequestMapping(value = "/users/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
-    Follow postFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
+    String toggleFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
         User currentUser = userServ.loggedInUser();
         User friend = userDao.getById(ajaxFollowRequest.getFriendId());
-        Follow dbFollow = null;
-        if (followDao.findByUserAndFriend(currentUser, friend) == null) {
-            dbFollow = followDao.save(new Follow(currentUser, friend));
+        Follow follow = followDao.findByUserAndFriend(currentUser, friend);
+        if (follow == null) {
+            followDao.save(new Follow(currentUser, friend));
+        }else{
+            followDao.delete(follow);
         }
-        return dbFollow;
+        return "done";
     }
 
     // USER RECIPE MATCHES RETURNS PARTIAL

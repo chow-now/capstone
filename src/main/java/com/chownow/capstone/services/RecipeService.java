@@ -38,6 +38,8 @@ public class RecipeService {
     @Autowired
     private UserService userServ;
 
+    @Autowired FavoriteRepository favDao;
+
     /**
      * Here used transactional because we save data to 8 tables, during saving, if something happens it will rollback the data
      * @param recipe
@@ -149,10 +151,7 @@ public class RecipeService {
         recipeDao.save(recipeEntity);
 
         /** Create a Favorites entity object to be saved **/
-            Set<User> favoritedBy = recipeEntity.getFavoritedBy();
-            favoritedBy.add(user);
-            recipeEntity.setFavoritedBy(favoritedBy);
-            userDao.save(user);
+            favDao.save(new Favorite(user,recipeEntity));
 
         /** Create a Image entity object to be saved **/
         imageRepository.save(new Image(recipe.getImage(),recipeEntity));
@@ -198,5 +197,14 @@ public class RecipeService {
             }
         }
         return favorites;
+    }
+    @Transactional
+    public void deleteRecipe(Recipe recipe){
+        recipeIngredientRepository.deleteAllByRecipe(recipe);
+        imageRepository.deleteAllByRecipe(recipe);
+        recipe.getCategories().removeAll(recipe.getCategories());
+        favDao.deleteAllByRecipe(recipe);
+        recipeDao.save(recipe);
+        recipeDao.delete(recipe);
     }
 }
