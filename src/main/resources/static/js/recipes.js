@@ -87,6 +87,7 @@
         recipeInventory = [];
         inventoryIngredients = [];
         $.ajax({'url': '/api/recipes/' + recipeId}).done(function (response) {
+            console.log(response);
             response.recipeIngredients.forEach(function (item) {
                 inventoryIngredients.push(item);
                 recipeInventory.push(item.ingredient.name.toLowerCase());
