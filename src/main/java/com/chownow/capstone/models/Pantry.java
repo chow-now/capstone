@@ -3,13 +3,11 @@ package com.chownow.capstone.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="pantries")
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
 public class Pantry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +18,8 @@ public class Pantry {
     @JsonIgnore
     private User owner;
 
-    @OneToMany(
-            mappedBy = "pantry",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<PantryIngredient> pantryIngredients;
+    @OneToMany(mappedBy = "pantry")
+    private List<PantryIngredient> pantryIngredients = new ArrayList<>();
 
     public Pantry(){}
 

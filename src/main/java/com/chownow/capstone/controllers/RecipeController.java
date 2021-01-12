@@ -61,6 +61,9 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
+    @Autowired
+    private FavoriteRepository favDao;
+
 //    @GetMapping("/recipes")
 //    public String index(Model model) {
 //        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
@@ -98,9 +101,9 @@ public class RecipeController {
             System.out.println("Not Published.... redirecting");
             return "redirect:/recipes/"+recipe.getId()+"/edit";
         }
-        Set<User> favoritedBy = recipe.getFavoritedBy();
+        Favorite favorite = favDao.findByUserAndAndRecipe(currentUser,recipe);
         boolean canFavorite = true;
-        if(favoritedBy.contains(currentUser)){
+        if(favorite != null){
             System.out.println("Already favorited");
             canFavorite = false;
         }
@@ -191,7 +194,7 @@ public class RecipeController {
 
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
-        recipeDao.deleteById(id);
+        recipeService.deleteRecipe(recipeDao.getOne(id));
         return "redirect:/recipes";
     }
 
@@ -274,14 +277,12 @@ public class RecipeController {
     public String toggleFavorite(@PathVariable long id){
        User currentUser = userServ.loggedInUser();
        Recipe recipe = recipeDao.getOne(id);
-       Set<User> favoritedBy = recipe.getFavoritedBy();
-       if(favoritedBy.contains(currentUser)){
-           favoritedBy.remove(currentUser);
+       Favorite favorite = favDao.findByUserAndAndRecipe(currentUser,recipe);
+       if(favorite != null){
+           favDao.delete(favorite);
        }else{
-           favoritedBy.add(currentUser);
+           favDao.save(new Favorite(currentUser,recipe));
        }
-       recipe.setFavoritedBy(favoritedBy);
-       userDao.save(currentUser);
        return "redirect:/recipes/" + id;
    }
 

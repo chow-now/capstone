@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,25 +19,16 @@ public class Ingredient {
 
     @NotBlank(message= "Please provide a name")
     @Size(min = 2, message = "Name should be a bit longer.")
-//    @Pattern(regexp = "^([^0-9]*)", message = "Name must not contain numbers") // allow to save number
     @Column(nullable = false, length = 1000)
     private String name;
 
-    @OneToMany(
-            mappedBy = "ingredient",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "ingredient")
     @JsonIgnore
-    private List<PantryIngredient> pantryIngredients;
+    private List<PantryIngredient> pantryIngredients = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "ingredient",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "ingredient")
     @JsonIgnore
-    private List<RecipeIngredient> recipeIngredients;
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
     
     public Ingredient(){}
     //setter

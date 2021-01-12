@@ -16,8 +16,9 @@
             data: JSON.stringify(formData),
             dataType: 'json'
         });
-        $('#addFriend').text("Following");
-        $('#addFriend').prop("disabled", true);
+        setTimeout(function () {
+            $('#addFriend').text()== "Follow" ? $('#addFriend').text('Unfollow'): $('#addFriend').text('Follow');
+        },1000)
     });
 
     const getMoreSuggestions = ()=>{
