@@ -70,6 +70,15 @@
         });
     });
 
+    // // PUBLISH RECIPE
+    // $("#recipePublish").on('click', function () {
+    //     $.ajax({
+    //         url: "/recipes/" + recipeId + "/publish",
+    //         method: "POST"
+    //     })
+    // });
+
+
 
     // RECIPE AJAX
     let recipeInventory;

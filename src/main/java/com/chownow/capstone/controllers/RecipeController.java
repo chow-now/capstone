@@ -141,7 +141,6 @@ public class RecipeController {
             model.addAttribute("recipe", recipeToBeSaved);
             return "recipes/new";
         }
-
         // ADD FIELDS TO EXISTING RECIPE
 //        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
 //        recipe.setImages(recipeToBeSaved.getImages());
@@ -216,8 +215,8 @@ public class RecipeController {
         if(!userServ.isOwner(userId)){
             return "redirect:/recipes";
         }
-        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
-        recipe.setImages(imageDao.findAllByRecipe(recipe));
+//        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
+//        recipe.setImages(imageDao.findAllByRecipe(recipe));
         model.addAttribute("recipe", recipe);
         User currentUser = userServ.loggedInUser();
         model.addAttribute("user", currentUser);
@@ -253,32 +252,14 @@ public class RecipeController {
         return "redirect:/recipes/" + recipe.getId() +"/edit";
     }
 
-    // UPLOAD RECIPE IMAGE
-//    @PostMapping("/recipes/{recipeId}/image/{imageId}/upload")
-//    public String uploadRecipeImage(
-//            @PathVariable long recipeId,
-//            @PathVariable long imageId,
-//            @RequestParam(value = "file") MultipartFile multipartFile,
-//            Model model){
-//        Recipe recipe = recipeDao.getOne(recipeId);
-//
-//        Image imageDb = imageDao.findAllById(imageId);
-//        if(imageDb.getUrl() != null && imageDb.getUrl().startsWith("https://s3")){
-//            s3.deleteFile(imageDb.getUrl());
-//        }
-//        s3.uploadRecipeImage(multipartFile, recipe);
-//        model.addAttribute("recipe",recipe);
-//        return "recipes/new";
-//    }
-
     @RequestMapping(value = "/recipes/{id}/upload", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
+    public String uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
                                                Model model){
         Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
 //        model.addAttribute("recipe",recipe);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return "uploaded";
     }
 
     @PostMapping("/recipes/image/{id}/delete")
@@ -286,6 +267,14 @@ public class RecipeController {
     public void deleteFile(@PathVariable long id, @RequestParam String imageUrl){
         imageDao.deleteById(id);
         s3.deleteFile(imageUrl);
+    }
+
+    @PostMapping("/recipes/{id}/publish")
+    public String publishRecipe(@PathVariable long id){
+        Recipe recipe = recipeDao.getOne(id);
+        recipe.setPublished(true);
+
+        return "users/profile";
     }
 
 
