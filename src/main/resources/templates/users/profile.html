@@ -120,13 +120,17 @@
           </li>
           <li class="nav-item py-2">
             <div class="nav-link text-center" id="draftTab"  >
-              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span>
+              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span> <span th:text="${drafts.size() > 0 ? drafts.size() : ''}" class="badge badge-secondary rounded-pill" ></span>
             </div>
           </li>
         </ul>
 
         <div id="publishedRecipes" class="row justify-content-center">
           <div class="col-md-12">
+            <div class="text-center py-3" th:if="${published.size() < 1}">
+              <h5>Start Creating Some Recipes</h5>
+              <a class="btn btn-red" href="/recipes/new" >Create</a>
+            </div>
           </div>
           <div th:each="recipe : ${published}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
