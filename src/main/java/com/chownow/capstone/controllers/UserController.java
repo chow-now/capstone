@@ -128,10 +128,10 @@ public class UserController {
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
-        List<Recipe> currentSuggestions = recipeServ.getMatches(currentUser);
         if(currentUser.getAdmin()){
             return "redirect:/admin";
         }
+        List<Recipe> currentSuggestions = recipeServ.getMatches(currentUser);
         if(currentSuggestions.size()<currentUser.getSuggestedCount()){
             currentUser.setSuggestedCount(currentSuggestions.size());
             userDao.save(currentUser);
