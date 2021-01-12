@@ -2,16 +2,15 @@ package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="users")
@@ -67,43 +66,35 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	@Column(name= "auth_provider")
 	private AuthenticationProvider authProvider;
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_at")
+	private Date createdAt;
+
+	@UpdateTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updated_at")
+	private Date updatedAt;
     
-    @OneToMany(
-            mappedBy = "chef",
-            orphanRemoval = true,
-            cascade = CascadeType.PERSIST
-    )
+    @OneToMany(mappedBy = "chef", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonBackReference("recipeRef")
     private List<Recipe> recipes = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
     private Set<Follow> followings = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "friend",
-            cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "friend")
     @JsonIgnore
     private Set<Follow> followers = new HashSet<>();
 
 
-    @ManyToMany(mappedBy = "favoritedBy",
-            cascade = CascadeType.ALL
-    )
-    @JsonBackReference(value="favRef")
-    private Set<Recipe> favorites = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private Set<Favorite> favorites = new HashSet<>();
 
 
-	@OneToOne(
-					mappedBy="owner",
-					cascade = CascadeType.ALL,
-					fetch = FetchType.LAZY,
-					optional = false
-	)
+	@OneToOne(mappedBy="owner")
 	@JsonBackReference(value="pantryRef")
 	private Pantry pantry;
 
@@ -220,11 +211,11 @@ public class User {
 		this.followers = followers;
 	}
 
-	public Set<Recipe> getFavorites() {
+	public Set<Favorite> getFavorites() {
 		return favorites;
 	}
 
-	public void setFavorites(Set<Recipe> favorites) {
+	public void setFavorites(Set<Favorite> favorites) {
 		this.favorites = favorites;
 	}
 

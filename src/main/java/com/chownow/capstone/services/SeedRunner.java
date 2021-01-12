@@ -50,6 +50,9 @@ public class SeedRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private FavoriteRepository favDao;
+
     private final Faker faker = new Faker();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SeedRunner.class);
@@ -116,7 +119,6 @@ public class SeedRunner {
             LOGGER.info("password = " + password);
             User seedUser = new User(email,firstName,password);
             seedUser.setPassword(passwordEncoder.encode(seedUser.getPassword()));
-//            seedUser.setAdmin(false);
             seedUser.setAboutMe(faker.buffy().quotes());
             seedUser.setAvatar(randomAvatar());
             userDao.save(seedUser);
@@ -317,13 +319,11 @@ public class SeedRunner {
             Recipe recipe = recipeDao.getFirstById(i);
             LOGGER.info(recipe.getTitle());
             int max = faker.number().numberBetween(1,10);
-            Set<User> favarators = new HashSet<User>();
             for(int j = 0;j < max; j++){
                 long index = faker.number().numberBetween(1,usersSize+1);
-                favarators.add(userDao.getOne(index));
+                User user = userDao.getOne(index);
+                favDao.save(new Favorite(user,recipe));
             }
-            recipe.setFavoritedBy(favarators);
-            recipeDao.save(recipe);
         }
     }
 

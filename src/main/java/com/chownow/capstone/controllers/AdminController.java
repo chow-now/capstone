@@ -2,6 +2,7 @@ package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
+import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AdminController {
@@ -35,6 +40,9 @@ public class AdminController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RecipeService recipeServ;
 
 	@GetMapping("/admin")
 	public String getDashboard(Model model) {
@@ -141,7 +149,8 @@ public class AdminController {
 
 	@PostMapping("/admin/users/{id}/delete")
 	public String deleteUser(@PathVariable long id){
-		userDao.deleteById(id);
+		User user = userDao.getOne(id);
+		userServ.deleteUser(user);
 		return "redirect:/admin";
 	}
 
@@ -161,7 +170,7 @@ public class AdminController {
 
 	@PostMapping("/admin/recipes/{id}/delete")
 	public String deleteRecipe(@PathVariable long id){
-		recipeDao.deleteById(id);
+		recipeServ.deleteRecipe(recipeDao.getOne(id));
 		return "redirect:/admin";
 	}
 }

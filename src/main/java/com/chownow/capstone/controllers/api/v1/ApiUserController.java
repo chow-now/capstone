@@ -1,10 +1,7 @@
 package com.chownow.capstone.controllers.api.v1;
 
 import com.chownow.capstone.models.*;
-import com.chownow.capstone.repos.FollowRepository;
-import com.chownow.capstone.repos.PantryRepository;
-import com.chownow.capstone.repos.RecipeRepository;
-import com.chownow.capstone.repos.UserRepository;
+import com.chownow.capstone.repos.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +24,9 @@ public class ApiUserController {
 
     @Autowired
     private FollowRepository followDao;
+
+    @Autowired
+    private FavoriteRepository favDao;
 
     /* GET MAPPINGS */
     // get all users
@@ -64,7 +64,9 @@ public class ApiUserController {
         Optional<User> user = userDao.findById(userId);
         if(user.isPresent()){
             User dbUser = user.get();
-            return dbUser.getFavorites();
+            for(Favorite f : favDao.findAllByUser(dbUser)){
+                recipes.add(f.getRecipe());
+            }
         }
         return recipes;
     }
