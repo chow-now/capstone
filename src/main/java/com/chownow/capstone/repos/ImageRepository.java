@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Image findAllById(long id);
-
+    void deleteAllByRecipe(Recipe recipe);
     List<Image> findAllByRecipe(Recipe recipe);
 
 }
