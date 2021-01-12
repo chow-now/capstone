@@ -46,7 +46,7 @@
     const hasScrolled = () => {
         let st = $(this).scrollTop();
         // Add bg to nav if past top else remove
-        if(st > 50){
+        if(st > 100){
             $('.main-nav,.navTrigger').addClass('affix');
             $('.main-nav').css("position", "fixed");
             $('main').css("margin-top", "-25px");

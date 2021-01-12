@@ -20,12 +20,20 @@
         $('#addFriend').prop("disabled", true);
     });
 
-    // SUGGESTIONS AJAX
-    $( "#suggestions" ).click(function() {
+    const getMoreSuggestions = ()=>{
         $.ajax({'url': '/users/'+userId+'/matches'}).done(function (recipes) {
             $('#suggestionsTab').html(recipes);
             $('[data-toggle="tooltip"]').tooltip();
         });
+    }
+
+    // SUGGESTIONS AJAX
+    $( "#suggestions" ).click(function() {
+          getMoreSuggestions();
+        $.post( '/users/'+userId+'/matches/update', function( data ) {
+            userMatchCount = data;
+        });
+        $("#notification").html("");
     });
 
     // PANTRY AJAX
@@ -209,8 +217,13 @@
             $("#searchResults").empty();
             $("#ingredientSearch").val("")
             renderPantry();
+            getMoreSuggestions();
             convertAllRationals();
         }, 1500);
+        // RENDER NOTIFICATION IF NEW SUGGESTIONS FROM NEW INGREDIENTS
+        setTimeout(function () {
+            updateNotification()
+        },2000);
         return false;
     })
 
@@ -240,6 +253,7 @@
         setTimeout(function() {
             renderPantry();
             convertAllRationals();
+
         }, 1500);
         return false;
     });
@@ -329,4 +343,29 @@
         $(this).toggleClass("animate");
         $(".input-box").val("");
     });
+
+    // NOTIFICATION
+    let userMatchCount = parseInt($("#notification").data('internalid'));
+    const updateNotification = ()=>{
+        // the actual notification count
+        let notificationCount = parseInt($("#notification").text());
+
+        // the users current matching recipes
+        let currentMatches = $(".suggestions-card").length;
+
+        // if the user doesnt have notifcations update count
+        if(isNaN(notificationCount)){
+            notificationCount = currentMatches - userMatchCount;
+        }else{
+            let tempCount = currentMatches - userMatchCount;
+            if(tempCount > notificationCount){
+                notificationCount = tempCount;
+            }
+        }
+        if(notificationCount <= 0){
+            notificationCount = "";
+        }
+        // render the count to html notfication
+        $("#notification").html(notificationCount);
+    }
 })(jQuery);
