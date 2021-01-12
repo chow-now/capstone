@@ -26,28 +26,33 @@
             e.preventDefault();
 
             console.log("upload clicked");
-
+            let data = new FormData($("#uploadImageForm")[0]);
+            console.log(data);
             $.ajax({
                 url: "/recipes/" + recipeId + "/upload",
                 method: "POST",
                 enctype: 'multipart/form-data',
-                data: new FormData($("#uploadImageForm")[0]),
+                data: data,
                 processData: false,
                 contentType: false,
                 cache: false,
                 success: function () {
-                    console.log("success - sending to controller")
+
                     location.reload();
                 },
                 error: function () {
-                    console.log("error - sending to controller")
+
                 }
             });
         });
     });
 
-    let imageId = document.getElementById('image-id').innerText;
-    let imageUrl = document.getElementById('image-url').innerText;
+    let imageId = document.getElementById('image-id');
+    console.log(imageId)
+
+    let imageUrl = document.getElementById('image-url');
+    console.log(imageUrl)
+
     $("#deleteImage" + imageId).on('click', function () {
         console.log($("#deleteImage" + imageId).val());
         $.ajax({
@@ -57,15 +62,22 @@
             dataType: "text",
 
             success: function () {
-                console.log("success - sending to controller")
                 location.reload();
             },
             error: function () {
-                console.log("error - sending to controller")
                 location.reload();
             }
         });
     });
+
+    // // PUBLISH RECIPE
+    // $("#recipePublish").on('click', function () {
+    //     $.ajax({
+    //         url: "/recipes/" + recipeId + "/publish",
+    //         method: "POST"
+    //     })
+    // });
+
 
 
     // RECIPE AJAX
