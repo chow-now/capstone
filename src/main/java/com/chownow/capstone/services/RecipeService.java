@@ -188,6 +188,7 @@ public class RecipeService {
         }
         return favorites;
     }
+
     @Transactional
     public void deleteRecipe(Recipe recipe){
         recipeIngredientRepository.deleteAllByRecipe(recipe);

@@ -53,22 +53,22 @@
     let imageUrl = document.getElementById('image-url');
     console.log(imageUrl)
 
-    $("#deleteImage" + imageId).on('click', function () {
-        console.log($("#deleteImage" + imageId).val());
-        $.ajax({
-            url: "/recipes/image/" + imageId + "/delete",
-            method: "POST",
-            data: {imageUrl},
-            dataType: "text",
-
-            success: function () {
-                location.reload();
-            },
-            error: function () {
-                location.reload();
-            }
-        });
-    });
+    // $("#deleteImage" + imageId).on('click', function () {
+    //     console.log($("#deleteImage" + imageId).val());
+    //     $.ajax({
+    //         url: "/recipes/image/" + imageId + "/delete",
+    //         method: "POST",
+    //         data: {imageUrl},
+    //         dataType: "text",
+    //
+    //         success: function () {
+    //             location.reload();
+    //         },
+    //         error: function () {
+    //             location.reload();
+    //         }
+    //     });
+    // });
 
     // // PUBLISH RECIPE
     // $("#recipePublish").on('click', function () {

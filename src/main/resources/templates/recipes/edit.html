@@ -19,109 +19,124 @@
 <header>
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
-<main>
-    <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
+<main class="">
+    <div class="container bg-light tab-card rounded-card shadow-lg my-4 p-3">
         <div class="tab-content" id="myTabContent">
 
             <!--    ADD RECIPE INFO TAB-->
             <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
                 <div>
                     <div class="card-body">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your
-                            recipe info.</h3>
+                        <div class="d-flex justify-content-between">
+                            <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your
+                                recipe info.</h3>
+                            <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post" th:object="${recipe}">
+                                <button style="border: none;background-color: transparent" class="red-text"><i class="fas fa-backspace fa-2x"></i></button>
+                                <p class="text-muted">Delete</p>
+                            </form>
+                        </div>
+
                         <p id="recipe-id" th:text="${recipe.id}" hidden></p>
                     </div>
                     <form th:action="@{/recipes/{id}/edit(id=${recipe.id})}" th:method="post" th:object="${recipe}">
-
-
                         <!--    ENTER A RECIPE TITLE   -->
                         <div class="form-group mb-3 px-4">
                             <label id="title">Title</label>
                             <input type="text" class="form-control" aria-label="Title"
-                                   aria-describedby="title" th:field="*{title}"/>
+                                   aria-describedby="title" th:field="*{title}" required placeholder="Your yummy title .."/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
 
                         <!--    ENTER RECIPE DESCRIPTION -->
                         <div class="form-group px-4">
                             <label>Description</label>
-                            <textarea class="form-control" aria-label="description" rows="3"
-                                      th:field="*{description}"></textarea>
+                            <textarea class="form-control" placeholder="your savory description .." aria-label="description" rows="3" th:field="*{description}" minlength="10"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                        </div>
+
+
+                        <div class="form-row px-4">
+                            <!--    ENTER PREP TIME IN MINUTES   -->
+                            <div class="col-md-4 mb-3">
+                                <label id="prep-time">Prep-time</label>
+                                <input type="number" class="form-control" aria-label="Prep-time"
+                                       aria-describedby="prep-time" th:field="*{prepTime}" min="0">
+                                <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                            </div>
+
+                            <!--    ENTER COOK TIME IN MINUTES   -->
+                            <div class="col-md-4 mb-3">
+                                <label id="cook-time">Cook-time</label>
+                                <input type="number" class="form-control" aria-label="Cook-time"
+                                       aria-describedby="cook-time" th:field="*{cookTime}" min="0">
+                                <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+                            </div>
+
+                            <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
+                            <div class="col-md-4 mb-3">
+                                <label id="servings">Servings</label>
+                                <input type="number" class="form-control" aria-label="Servings"
+                                       aria-describedby="servings" th:field="*{servings}" min="1" max="20" value="1">
+                                <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                            </div>
                         </div>
 
                         <!--    ENTER DIFFICULTY LEVEL    -->
                         <div class="form-group px-4">
                             <label>Difficulty</label><br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
-                                       th:field="*{difficulty}" value="easy">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="difficulty" id="easy" th:field="*{difficulty}" value="easy" checked>
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="difficulty" id="medium"
                                        th:field="*{difficulty}" value="medium">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Medium
                                 </label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="difficulty" id="hard"
                                        th:field="*{difficulty}" value="hard">
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">
                                     Hard
                                 </label>
-                                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
                             </div>
+                            <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
                         </div>
 
-                        <!--    ENTER PREP TIME IN MINUTES   -->
-                        <div class="form-group mb-3 px-4">
-                            <label id="prep-time">Prep-time</label>
-                            <input type="number" class="form-control" aria-label="Prep-time"
-                                   aria-describedby="prep-time" th:field="*{prepTime}">
-                            <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
-                        </div>
-
-                        <!--    ENTER COOK TIME IN MINUTES   -->
-                        <div class="form-group mb-3 px-4">
-                            <label id="cook-time">Cook-time</label>
-                            <input type="number" class="form-control" aria-label="Cook-time"
-                                   aria-describedby="cook-time" th:field="*{cookTime}">
-                            <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
-                        </div>
-
-                        <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
-                        <div class="form-group mb-3 px-4">
-                            <span id="servings">Servings</span>
-                            <input type="number" class="form-control" aria-label="Servings"
-                                   aria-describedby="servings" th:field="*{servings}">
-                            <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                        <!--    CATEGORIZE THE RECIPE   -->
+                        <div class="form-group px-4">
+                            <label id="cusine">Cusine</label>
+                            <select name="categories" class="form-control" multiple>
+                                <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" th:field="*{categories}"></option>
+                            </select>
                         </div>
 
                         <!--    ENTER COOKING DIRECTIONS  -->
                         <div class="form-group px-4">
                             <label id="directions">Directions</label>
-                            <textarea class="form-control" aria-label="directions" rows="5"
-                                      th:field="*{directions}"></textarea>
-                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
+                            <textarea class="form-control" placeholder="Step one create something delicious .." aria-label="directions" rows="5"
+                                      th:field="*{directions}" minlength="20" required ></textarea>
+                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" ></p>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center">
+                            <button sec:authorize="isAuthenticated()" class="btn btn-yellow text-center rounded-pill nav-link shadow-sm px-2" type="submit">
+                                Update 
+                            </button>
                         </div>
 
-                        <!--    CATEGORIZE THE RECIPE   -->
-                        <input type="checkbox" name="categories" th:each="category : ${categories}"
-                               th:text="${category.name}" th:value="${category.id}" th:field="*{categories}">
 
                         <!-- SUBMIT RECIPE INFO -->
-                        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                            <a id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
-                               aria-controls="nav-ingredients"
-                               aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                                Step</a>
-                        </div>
-                        <button class="btn btn-red rounded-pill m-2 float-right nav-link shadow px-2"
-                                type="submit">Submit
-                        </button>
+
                     </form>
+                </div>
+                <div class="form-group d-flex justify-content-end align-items-center">
+                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
+                        <a id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
+                           aria-controls="nav-ingredients"
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add Ingredients</a>
+                    </div>
                 </div>
             </div>
 
