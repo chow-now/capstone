@@ -16,8 +16,13 @@
 * {
     margin:0; padding:0; box-sizing:border-box;
 }
+
 body{
     font-family: 'corsa_bold';
+    height: 100vh;
+}
+main{
+    padding-bottom: 50px;
 }
 .chow-font{
     color: #fec82e;

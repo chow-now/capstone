@@ -20,281 +20,106 @@
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
 <main mt-5>
-    <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3">
-        <div class="tab-content" id="myTabContent">
-
-            <!--    ADD RECIPE INFO TAB-->
-            <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
-                <div>
-                    <div class="card-body">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Tell us about your
-                            recipe...</h3>
-                        <p id="recipe-id" th:text="${recipe.id}" hidden></p>
-                    </div>
-                    <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
-
-                        <!--    ENTER A RECIPE TITLE   -->
-                        <div class="form-group mb-3 px-4">
-                            <label id="title">Title</label>
-                            <input type="text" class="form-control" aria-label="Title"
-                                   aria-describedby="title" th:field="*{title}"/>
-                            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
-                        </div>
-
-                        <!--    ENTER RECIPE DESCRIPTION -->
-                        <div class="form-group px-4">
-                            <label>Description</label>
-                            <textarea class="form-control" aria-label="description" rows="3"
-                                      th:field="*{description}"></textarea>
-                            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-                        </div>
-
-                        <!--    ENTER DIFFICULTY LEVEL    -->
-                        <div class="form-group px-4">
-                            <label>Difficulty</label><br>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
-                                       th:field="*{difficulty}" value="easy">
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="difficulty" id="medium"
-                                       th:field="*{difficulty}" value="medium">
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">
-                                    Medium
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="difficulty" id="hard"
-                                       th:field="*{difficulty}" value="hard">
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">
-                                    Hard
-                                </label>
-                                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
-                            </div>
-                        </div>
-
-                        <!--    ENTER PREP TIME IN MINUTES   -->
-                        <div class="form-group mb-3 px-4">
-                            <label id="prep-time">Prep-time</label>
-                            <input type="number" class="form-control" aria-label="Prep-time"
-                                   aria-describedby="prep-time" th:field="*{prepTime}">
-                            <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
-                        </div>
-
-                        <!--    ENTER COOK TIME IN MINUTES   -->
-                        <div class="form-group mb-3 px-4">
-                            <label id="cook-time">Cook-time</label>
-                            <input type="number" class="form-control" aria-label="Cook-time"
-                                   aria-describedby="cook-time" th:field="*{cookTime}">
-                            <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
-                        </div>
-
-                        <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
-                        <div class="form-group mb-3 px-4">
-                            <span id="servings">Servings</span>
-                            <input type="number" class="form-control" aria-label="Servings"
-                                   aria-describedby="servings" th:field="*{servings}">
-                            <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
-                        </div>
-
-                        <!--    ENTER COOKING DIRECTIONS  -->
-                        <div class="form-group px-4">
-                            <label id="directions">Directions</label>
-                            <textarea class="form-control" aria-label="directions" rows="5"
-                                      th:field="*{directions}"></textarea>
-                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
-                        </div>
-
-                        <!--    CATEGORIZE THE RECIPE   -->
-                        <input type="checkbox" name="categories" th:each="category : ${categories}"
-                               th:text="${category.name}" th:value="${category.id}" th:field="*{categories}">
-
-
-                        <!-- SUBMIT RECIPE INFO -->
-                        <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                            <a th:if="${recipe.id != 0}" id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
-                               aria-controls="nav-ingredients"
-                               aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                                Step</a>
-                        </div>
-                        <button th:if="${recipe.id == 0}"
-                                class="btn btn-red rounded-pill m-2 float-right nav-link shadow px-2"
-                                type="submit">Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!--    ADD RECIPE INGREDIENTS TAB-->
-            <div class="tab-pane pb-3" id="recipeTab">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Tell us what your
-                            dish is made of...</h3>
-                        <div class="text-center">
-                            <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
-                                   value="Add New Ingredient"/>
-                        </div>
-                        <div>
-                            <input class="form-control my-2 py-1 pl-3 d-none" placeholder="Search by Name." type="text"
-                                   id="ingredientSearch"/>
-                            <div id="searchResults" class="container text-center"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card my-3">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Ingredient</th>
-                            <th>Amount</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <!--    RENDERED CONTENT-->
-                        <tbody id="ingredientsBody">
-                        </tbody>
-                    </table>
-                    <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                        <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
-                           aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                            Step</a>
-                    </div>
-                </div>
-            </div>
-
-            <!--    UPLOAD IMAGES TAB-->
-            <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
-                <div>
-                    <div class="card-body ">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Show us what your
-                            dish is made of...</h3>
-                        <div class="col justify-content-center">
-                            <div class="row text-center">
-                                <div class="m-1" th:each="image : ${recipe.images}">
-                                    <div id="image-id" th:value="${image.id}" hidden></div>
-                                    <div id="image-url" th:value="${image.url}" hidden></div>
-                                    <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
-                                         class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200"
-                                         height="200">
-                                    <br>
-
-                                    <a th:id="'deleteImage' + ${image.id}" th:value="${image.url}"
-                                            class="btn btn-sm btn-red p-1 m-2">Delete
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <hr>
-                        <br>
-                        <form id="uploadImageForm">
-                            <div class="text-center">
-                                <label class="btn btn-green rounded-pill">Add an Image<input
-                                        accept=".jpg,.png,.jpeg" name="file" type='file' id="recipePicture" hidden/>
-                                </label>
-                            </div>
-                            <img th:id="image_preview" src="" class="shadow-lg"
-                                 style="display:none; border: 5px solid rgb(255, 255, 255);" width="200" height="200">
-                            <br>
-
-                            <button id="imageUpload" class="btn btn-sm btn-red" style="display: none;">Upload</button>
-                        </form>
-                    </div>
-                </div>
-                <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
-                    <button id="recipePublish" type="submit" method="post"
-                            th:action="@{/recipes/{id}/publish(id=${recipe.id})}"
-                            data-toggle="tab"
-                       role="tab" aria-controls="nav-images" aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Publish
-                    </button>
-                </div>
-            </div>
+    <div class="container bg-light tab-card rounded-card shadow-lg mt-4 p-3 green-text font-weight-bold">
+        <div>
+            <h3 class="my-3 text-center chow-font">Tell us about your
+                recipe...</h3>
         </div>
-    </div>
-    </div>
-</main>
-<!--Delete Ingredient Modal-->
-<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
-     role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteIngredientModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+        <form th:action="@{/recipes/new}" th:method="post" th:object="${recipe}">
+
+            <!--    ENTER A RECIPE TITLE   -->
+            <div class="form-group mb-3 px-4">
+                <label id="title">Title</label>
+                <input type="text" class="form-control" aria-label="Title"
+                       aria-describedby="title" th:field="*{title}" required placeholder="Your yummy title .."/>
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            </div>
+
+            <!--    ENTER RECIPE DESCRIPTION -->
+            <div class="form-group px-4">
+                <label>Description</label>
+                <textarea class="form-control" placeholder="your savory description .." aria-label="description" rows="3" th:field="*{description}" minlength="10"></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            </div>
+
+
+            <div class="form-row px-4">
+                <!--    ENTER PREP TIME IN MINUTES   -->
+                <div class="col-md-4 mb-3">
+                    <label id="prep-time">Prep-time</label>
+                    <input type="number" class="form-control" aria-label="Prep-time"
+                           aria-describedby="prep-time" th:field="*{prepTime}" min="0">
+                    <p th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                </div>
+
+                <!--    ENTER COOK TIME IN MINUTES   -->
+                <div class="col-md-4 mb-3">
+                    <label id="cook-time">Cook-time</label>
+                    <input type="number" class="form-control" aria-label="Cook-time"
+                           aria-describedby="cook-time" th:field="*{cookTime}" min="0">
+                    <p th:if="${#fields.hasErrors('cookTime')}" th:errors="*{cookTime}"></p>
+                </div>
+
+            <!--    ENTER NUMBER OF SERVINGS RECIPE PREPARES    -->
+                <div class="col-md-4 mb-3">
+                    <label id="servings">Servings</label>
+                    <input type="number" class="form-control" aria-label="Servings"
+                           aria-describedby="servings" th:field="*{servings}" min="1" max="20" value="1">
+                    <p th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                </div>
+            </div>
+
+            <!--    ENTER DIFFICULTY LEVEL    -->
+            <div class="form-group px-4">
+                <label>Difficulty</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty" id="easy" th:field="*{difficulty}" value="easy" checked>
+                    <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty" id="medium"
+                           th:field="*{difficulty}" value="medium">
+                    <label class="form-check-label mr-2" th:for="*{difficulty}">
+                        Medium
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty" id="hard"
+                           th:field="*{difficulty}" value="hard">
+                    <label class="form-check-label mr-2" th:for="*{difficulty}">
+                        Hard
+                    </label>
+                </div>
+                <p th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></p>
+            </div>
+
+            <!--    CATEGORIZE THE RECIPE   -->
+            <div class="form-group px-4">
+                <label id="cusine">Cusine</label>
+                <select name="categories" class="form-control" multiple>
+                    <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" th:field="*{categories}"></option>
+                </select>
+            </div>
+
+            <!--    ENTER COOKING DIRECTIONS  -->
+            <div class="form-group px-4">
+                <label id="directions">Directions</label>
+                <textarea class="form-control" placeholder="Step one create something delicious .." aria-label="directions" rows="5"
+                          th:field="*{directions}" minlength="20" required ></textarea>
+                <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" ></p>
+            </div>
+            <div class="form-group d-flex justify-content-center align-items-center">
+                <button sec:authorize="isAuthenticated()" th:if="${recipe.id == 0}" class="btn btn-red text-center rounded-pill nav-link shadow px-2" type="submit">
+                    Get Cooking
                 </button>
             </div>
-            <form id="deleteIngredient">
-                <div class="modal-body">
-                    <input name="id" type="hidden" value="'+recipeIngId+'"/>
-                    <p>Are you sure you want to trash this?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-red" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-green">Confirm</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Add Ingredient Modal -->
-<div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="ingredientModal" tabindex="-1"
-     role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ingredientModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="ingredientForm">
-                <div class="modal-body" id="ingredientModalContent">
-                    <div class="form-group">
-                        <input name="name" type="hidden" class="form-control" id="ingredientName">
-                    </div>
-                    <div class="container d-flex justify-content-center">
-                        <div class="form-group">
-                            <label class="green-text font-weight-bold">Amount</label>
-                            <div id="formQty" class="qty mt-1">
-                                <span class="minus"><i class="fas fa-minus-circle"></i></span>
-                                <input type="number" class="count" name="qty" value="1.0" step=".05" placeholder="0.05"
-                                       required>
-                                <span class="plus"><i class="fas fa-plus-circle"></i></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="green-text font-weight-bold">Unit</label>
-                            <div class="mt-1">
-                                <select name="unit" required>
-                                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                                    <option th:value="ounce">Ounce (oz)</option>
-                                    <option th:value="cup">Cup (c)</option>
-                                    <option th:value="pint">Pint (pt)</option>
-                                    <option th:value="quart">Quart (qt)</option>
-                                    <option th:value="gallon">Gallon (gal)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-red" data-dismiss="modal">Cancel</button>
-                    <div id="typeSubmit"></div>
-                </div>
-            </form>
-        </div>
-    </div>
+        </form>
+
 </div>
 <!--JS SCRIPTS-->
 <!--! MODALS-->
 <th:block th:include="partials/scripts :: scripts"></th:block>
-<script th:src="@{/js/ingredients.js}"></script>
 <script th:src="@{/js/recipes.js}"></script>
-<script th:src="@{/js/fraction_converter.js}"></script>
+
 </body>
 </html>

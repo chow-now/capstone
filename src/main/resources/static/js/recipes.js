@@ -53,6 +53,24 @@
     let imageUrl = document.getElementById('image-url');
     console.log(imageUrl)
 
+
+    // $("#deleteImage" + imageId).on('click', function () {
+    //     console.log($("#deleteImage" + imageId).val());
+    //     $.ajax({
+    //         url: "/recipes/image/" + imageId + "/delete",
+    //         method: "POST",
+    //         data: {imageUrl},
+    //         dataType: "text",
+    //
+    //         success: function () {
+    //             location.reload();
+    //         },
+    //         error: function () {
+    //             location.reload();
+    //         }
+    //     });
+    // });
+
     $(".delete-image").on('click', function () {
         console.log(this);
         $.post("/recipes/image/" + this.id + "/delete", function (data) {
@@ -61,6 +79,7 @@
         $(this).parent().hide();
 
     });
+
 
     // // PUBLISH RECIPE
     $("#recipePublish").on('click', function () {

@@ -118,16 +118,9 @@ public class RecipeController {
     public String showCreateRecipe(
             Model model)
     {
-        Recipe recipe = new Recipe();
-//        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
-//        recipe.setImages(imageDao.findAllByRecipe(recipe));
-
-        User currentUser = userServ.loggedInUser();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
-        model.addAttribute("recipe", recipe);
+        model.addAttribute("recipe", new Recipe());
+        model.addAttribute("user", userServ.loggedInUser());
         model.addAttribute("categories", categoryDao.findAll());
-
         return "recipes/new";
     }
 
@@ -142,22 +135,15 @@ public class RecipeController {
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
+            model.addAttribute("user", userServ.loggedInUser());
+            model.addAttribute("categories", categoryDao.findAll());
             return "recipes/new";
         }
-        // ADD FIELDS TO EXISTING RECIPE
-//        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
-//        recipe.setImages(recipeToBeSaved.getImages());
-
-
+        // Save the Recipe to the current User
         User currentUser = userServ.loggedInUser();
         recipeToBeSaved.setChef(currentUser);
         Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
-        model.addAttribute("recipe",dbRecipe);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
-        model.addAttribute("categories", categoryDao.findAll());
-
-        /** maybe change to return recipe/edit **/
         return "redirect:/recipes/"+dbRecipe.getId()+"/edit";
     }
 
@@ -205,7 +191,7 @@ public class RecipeController {
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
         recipeService.deleteRecipe(recipeDao.getOne(id));
-        return "redirect:/recipes";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/recipes/{id}/edit")
