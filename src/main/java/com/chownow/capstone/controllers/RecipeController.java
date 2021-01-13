@@ -77,41 +77,41 @@ public class RecipeController {
         viewModel.addAttribute("recipe", new SpoonApiDto());
         viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
 
-        if (term == null) {
-            List<Recipe> recipes = recipeDao.findAll();
-            viewModel.addAttribute("recipes", recipes);
-        } else {
-            List<Recipe> recipes = recipeDao.findAll();
-            List<Recipe> searchedRecipes = new ArrayList<>();
-
-            for (Recipe recipe : recipes) {
-
-                if (term != null) {
-                    if (recipe.getTitle().toLowerCase().contains(term.toLowerCase())) {
-                        searchedRecipes.add(recipe);
-                        continue;
-                    }
-                    String[] searchArray = term.replaceAll(", ", ",").split(",");
-                    ArrayList<String> ingredientArray = new ArrayList<>();
-
-                    recipe.getRecipeIngredients().forEach(ingredient -> {
-                        ingredientArray.add(ingredient.getIngredient());
-                    });
-                    //separate ingredient string into an array
-                    boolean searchFlag = true;
-                    for (String s : searchArray) {
-                        if (!ingredientArray.toString().toLowerCase().contains(s.toLowerCase())) {
-                            searchFlag = false;
-                            break;
-                        }
-                    }
-                    if (searchFlag) {
-                        searchedRecipes.add(recipe);
-                    }
-                }
-            }
-            viewModel.addAttribute("recipes", searchedRecipes);
-        }
+//        if (term == null) {
+//            List<Recipe> recipes = recipeDao.findAll();
+//            viewModel.addAttribute("recipes", recipes);
+//        } else {
+//            List<Recipe> recipes = recipeDao.findAll();
+//            List<Recipe> searchedRecipes = new ArrayList<>();
+//
+//            for (Recipe recipe : recipes) {
+//
+//                if (term != null) {
+//                    if (recipe.getTitle().toLowerCase().contains(term.toLowerCase())) {
+//                        searchedRecipes.add(recipe);
+//                        continue;
+//                    }
+//                    String[] searchArray = term.replaceAll(", ", ",").split(",");
+//                    ArrayList<String> ingredientArray = new ArrayList<>();
+//
+//                    recipe.getRecipeIngredients().forEach(ingredient -> {
+//                        ingredientArray.add(ingredient.getIngredient());
+//                    });
+//                    //separate ingredient string into an array
+//                    boolean searchFlag = true;
+//                    for (String s : searchArray) {
+//                        if (!ingredientArray.toString().toLowerCase().contains(s.toLowerCase())) {
+//                            searchFlag = false;
+//                            break;
+//                        }
+//                    }
+//                    if (searchFlag) {
+//                        searchedRecipes.add(recipe);
+//                    }
+//                }
+//            }
+//            viewModel.addAttribute("recipes", searchedRecipes);
+//        }
         return "recipes/index";
     }
 

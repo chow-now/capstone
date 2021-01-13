@@ -8,10 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -61,9 +58,21 @@ public class RecipeService {
 //            }
 //        }
 
-        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
-            return  "recipe already exists";
+        Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
+        if (existingRecipeEntity.isPresent()) {
+//            Optional <Recipe> existingRecipeChef = recipeDao.findBySpoonApiIdAndChef(recipe.getSpoonApiId());
+            Recipe isExisting = existingRecipeEntity.get();
+            if (isExisting.getChef().getId() == user.getId()) {
+                return "Recipe already exist for chef";
+            }
+            favDao.save(new Favorite(user, isExisting));
+            return isExisting.getId() + "";
         }
+
+
+//        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
+//            return  "recipe already exists";
+//        }
 
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){
@@ -146,7 +155,7 @@ public class RecipeService {
         recipeDao.save(recipeEntity);
 
         /** Create a Favorites entity object to be saved **/
-            favDao.save(new Favorite(user,recipeEntity));
+        favDao.save(new Favorite(user,recipeEntity));
 
         /** Create a Image entity object to be saved **/
         imageRepository.save(new Image(recipe.getImage(),recipeEntity));
