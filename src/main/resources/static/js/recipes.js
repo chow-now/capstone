@@ -30,6 +30,7 @@
         let data = new FormData($("#uploadImageForm")[0]);
         console.log(data);
         $("#imageUpload, #image_preview").hide();
+        loadSpinner();
         $.ajax({
             url: "/recipes/" + recipeId + "/upload",
             method: "POST",
@@ -41,7 +42,6 @@
             success: function () {
                 setTimeout(function () {
                     getRecipeImages();
-
                 },500)
             },
             error: function () {
@@ -323,6 +323,13 @@
             $.ajax({'url': '/recipes/'+recipeId+'/images'}).done(function (images) {
                 $('#renderImages').html(images);
             });
+        }
+
+        const loadSpinner = () =>{
+            let html = '<div class="d-flex justify-content-center align-items-center"><div class="spinner-grow text-warning" role="status">\n' +
+                '  <span class="sr-only">Loading...</span>\n' +
+                '</div></div>'
+            $('#renderImages').html(html);
         }
 
     })(jQuery);
