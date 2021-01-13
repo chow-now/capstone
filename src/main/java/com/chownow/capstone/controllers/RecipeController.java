@@ -70,7 +70,7 @@ public class RecipeController {
         viewModel.addAttribute("spoonApi", spoonApi);
         viewModel.addAttribute("recipe", new SpoonApiDto());
 
-        viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
+//        viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
 
 //        if (term == null) {
 //            List<Recipe> recipes = recipeDao.findAll();

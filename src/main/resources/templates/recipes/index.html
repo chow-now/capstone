@@ -32,27 +32,27 @@
     <span th:if= "${message != null}" th:text="${message}"></span>
 
     <!-- Display all recipes isPublished True from DB -->
-    <div class="recipes my-2 row row-cols-1 row-cols-md-4 g-5">
-        <div class="my-2" th:each="recipe : ${allrecipe}">
-            <div class="col my-2">
-                <div class="card my-2 h-100">
-                    <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
-                    <img class="card-img-top" th:src="${recipe.getImages().getUrl()}" alt="unavailable"/>
-                    <div class="card-body">
-                        <div>
-                            <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
-                        </div>
+<!--    <div class="recipes my-2 row row-cols-1 row-cols-md-4 g-5">-->
+<!--        <div class="my-2" th:each="recipe : ${allrecipe}">-->
+<!--            <div class="col my-2">-->
+<!--                <div class="card my-2 h-100">-->
+<!--                    <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>-->
+<!--                    <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>-->
+<!--                    <div class="card-body">-->
+<!--                        <div>-->
+<!--                            <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>-->
+<!--                        </div>-->
 
-                        <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
-                            <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
-                        </div>
+<!--                        <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">-->
+<!--                            <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>-->
+<!--                        </div>-->
 
-                        <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" th:attrappend="data-target=${recipe.id}">More info</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--                        <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" th:attrappend="data-target=${recipe.id}">More info</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 <!--    &lt;!&ndash;      Modal that will hold recipe details       &ndash;&gt;-->
 <!--    <div class="modal fade" id="#viewDBRecipeModal" tabindex="-1" role="dialog"-->
 <!--         aria-labelledby="recipeModalLongTitle" aria-hidden="true" th:attrappend="id=${recipe.id}">-->
@@ -112,9 +112,10 @@
 <!--    </div>-->
 <!--</div>-->
 
+
 <!-- // Results from SpoonAPI-->
 
-<div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
+<div class="recipes1 row row-cols-1 row-cols-md-4 g-5"></div>
 
 <!--- Modal to display recipe information - This can be changed later on --->
 <div
@@ -190,6 +191,8 @@
         </form>
     </div>
 </div>
+</div>
+
 
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
@@ -213,14 +216,14 @@
             type: 'GET',
             url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
             success: function (results) {
-                //console.log(results);
+                console.log(results);
                 let recipe = "";
 
                 recipe += `<div class="col-md-12">
                                 <h3 class="my-3 text-center">Results</h3>
                             </div>`;
 
-                $('.recipes').html(recipe);
+                $('.recipes1').html(recipe);
 
 
                 $.each(results, function (i, recipe) {
@@ -228,9 +231,9 @@
                         type: 'GET',
                         url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
                         success: function (singleRecipe) {
-                            //console.log(singleRecipe);
+                            console.log(singleRecipe);
 
-                            $('.recipes').append(
+                            $('.recipes1').append(
                                 `<div class="col">
                                     <div class="card my-2 h-100">
                                         <h5 class="card-title text-center">${singleRecipe.title}</h5>
@@ -244,7 +247,7 @@
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
-                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
+                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                     </div>
                                     </div>
                                 </div>`)
@@ -252,12 +255,12 @@
 
                             // Trigger Recipe Modal
                             $('.viewRecipe').unbind().click(function () {
-                                //console.log(this.id + " button clicked");
+                                console.log(this.id + " button clicked");
 
                                 $.ajax(`https://api.spoonacular.com/recipes/${this.id}/information?includeNutrition=false&apiKey=${spoonApi}`)
                                     .done(function (modalRecipe) {
                                         console.log(modalRecipe)
-                                        //console.log(modalRecipe.title)
+                                        console.log(modalRecipe.title)
 
                                         // Recipe Information
                                         let image = "";
