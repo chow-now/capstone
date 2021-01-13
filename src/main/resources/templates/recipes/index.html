@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="partials/head :: head('Results')">
     <meta charset="UTF-8">
     <title>Results</title>
@@ -16,14 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <!--  CUSTOM PROFILE CSS -->
-    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
-<body>
+<body style="background-color: #03b090">
 <header>
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
 <div class="form-outline">
-    <form class="w-50 mt-4 mx-auto" th:action="@{/recipes}" method="get">
+    <form class="w-50 my-4 mx-auto" th:action="@{/recipes}" method="get">
         <input type="text" class="form-control" id="main_search"
                placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term">
     </form>
@@ -31,11 +31,88 @@
     <!--    For Test-->
     <span th:if= "${message != null}" th:text="${message}"></span>
 
-    <!-- Display all recipes isPublished True -->
+    <!-- Display all recipes isPublished True from DB -->
+    <div class="recipes row row-cols-1 row-cols-md-4 g-5">
+        <div th:each="recipe : ${allrecipe}">
+            <div class="col my-2">
+                <div class="card my-2 h-100">
+                    <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
+                    <!--            <img class="card-img-top" th:attr="src=${recipe.image}" alt="unavailable"/>-->
+                    <div class="card-body">
+                        <div>
+                            <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
+                        </div>
+
+                        <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                            <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
+                        </div>
+
+                        <button class="btn btn-primary viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" th:attrappend="data-target=${recipe.id}">More info</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--      Modal that will hold recipe details       -->
+    <div class="modal fade" id="#viewDBRecipeModal" tabindex="-1" role="dialog"
+         aria-labelledby="recipeModalLongTitle" aria-hidden="true" th:attrappend="id=${recipe.id}">
+
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div sec:authorize="isAuthenticated()">
+                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5
+                                class="modal-title text-center profileFromRecipeAnchorTags"
+                                id="recipeModalLongTitle"
+                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>
+                        </a>
+                    </div>
+                    <div sec:authorize="isAnonymous()">
+                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5
+                                class="modal-title text-center profileFromRecipeAnchorTags"
+                                id="recipeModalLongTitle"
+                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>
+                        </a>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-image mx-auto">
+                    <!--    Image for recipe    -->
+<!--                    <img class="profileFromRecipeModuleImage img-fluid" th:attr="src=@{${recipe.recipeImageUrl}}"-->
+<!--                         alt="Recipe image">-->
+                </div>
+                <div class="modal-body">
+                    <!--    Display the recipes cuisines    -->
+                    <h5 class="modal-instructions-title profileFromRecipeText">Category</h5>
+                    <ul class="modal-cuisine d-flex p-0">
+                        <div th:each="category : ${recipe.categories}">
+                            <li class="mr-2" th:text="${category.name}"></li>
+                        </div>
+                    </ul>
+                    <!--      Display Ingredients title         -->
+                    <h5 class="modal-instructions-title profileFromRecipeText">Ingredients</h5>
+                    <!--    List displaying the ingredients    -->
+                    <ul class="ingredient-list-group p-0">
+                        <!--      Ingredients will display here dynamically      -->
+                        <div th:each="ingredient : ${recipe.ingredients}">
+                            <li class="list-group-item mt-1 mb-1" th:text="${ingredient.name}"></li>
+                        </div>
+                    </ul>
+                    <!--      Display Instructions-->
+                    <h5 class="modal-instructions-title profileFromRecipeText">Directions</h5>
+                    <!--      Instructions will display here dynamically      -->
+                    <div class="list-group-item mt-1 mb-1" th:text="${recipe.directions}"></div>
+                    <h5 class="modal-instructions-title profileFromRecipeText">Comments</h5>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-<!-- // Dump recipes here-->
+<!-- // Results from SpoonAAPI-->
 
 <div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
 
@@ -155,7 +232,7 @@
 
                             $('.recipes').append(
                                 `<div class="col">
-                                    <div class="card h-100">
+                                    <div class="card my-2 h-100">
                                         <h5 class="card-title text-center">${singleRecipe.title}</h5>
                                             <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
                                     <div class="card-body">

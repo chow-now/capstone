@@ -4,6 +4,7 @@ import com.chownow.capstone.models.SpoonApiDto;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,15 +47,18 @@ public class RecipeService {
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
         // Hard-coded for now
-        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getById((long)userDao.findAll().size()); // for the last user
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getById(user1.getId());
         //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
 
-//        if (user.getRecipes().contains(recipe.getSpoonApiId())) {
-//            return "Recipe already exists";
+        // Prevent duplicate favorites if user signed in
+//        for(Favorite fav : user.getFavorites()){
+//            if(recipe.getSpoonApiId() == fav.getSpoonApiId()){
+//                return "Already Exist";
+//            }
 //        }
 
         if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
@@ -88,6 +92,7 @@ public class RecipeService {
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setDifficulty("N/A");
+        recipeEntity.setPublished(true);
         recipeEntity.setDirections(recipe.getDirections());
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
         recipeEntity.setServings(Integer.parseInt(servings));
