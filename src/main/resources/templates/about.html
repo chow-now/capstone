@@ -15,8 +15,6 @@
     <style>
         .card-title{
             font-size: 1.5rem;
-
-
         }
         .overlay-content{
             position: absolute;
@@ -24,6 +22,9 @@
             background-color: #ffffff94;
             margin-left: 0;
             margin-right: 0;
+        }
+        .card{
+            border: none!important;
         }
     </style>
 </head>
@@ -37,7 +38,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-4 d-flex justify-content-center align-items-center px-3 my-3">
-            <div class="card rounded-card bg-light" style="width:17rem;">
+            <div class="card rounded-card bg-light shadow-sm" style="width:17rem;">
                 <img th:src="@{/img/mike-about.jpeg}"  class="card-img-top img-fluid rounded-top">
                    <div class=" row overlay-content d-flex justify-content-center align-items-center">
                        <div class="card-title ">Michael Klanica</div>
@@ -55,7 +56,7 @@
         </div>
 
         <div class="col-12 col-md-4 d-flex justify-content-center align-items-center  px-3 my-3 ">
-            <div class="card rounded-card bg-light" style="width:17rem;">
+            <div class="card rounded-card bg-light shadow-sm" style="width:17rem;">
                 <img th:src="@{/img/sahara-about.jpeg}" class="card-img-top img-fluid rounded-top">
                     <div class=" row overlay-content d-flex justify-content-center align-items-center">
                         <div class="card-title">
@@ -74,7 +75,7 @@
         </div>
 
         <div class="col-12 col-md-4 d-flex justify-content-center align-items-center px-3 my-3">
-            <div class="card rounded-card bg-light" style="width:17rem;">
+            <div class="card rounded-card bg-light shadow-sm" style="width:17rem;">
                 <img th:src="@{/img/robert-about.jpeg}" class="card-img-top img-fluid rounded-top">
                 <div class=" row overlay-content d-flex justify-content-center align-items-center">
                     <div class="card-title">Robert DelaRosa</div>
