@@ -64,17 +64,12 @@ public class RecipeController {
     @Autowired
     private FavoriteRepository favDao;
 
-//    @GetMapping("/recipes")
-//    public String index(Model model) {
-//        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
-//        return "recipes/index";
-//    }
-
     @GetMapping("/recipes")
     public String getRecipes(@RequestParam(required = false) String term, Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
         viewModel.addAttribute("recipe", new SpoonApiDto());
+
         viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
 
 //        if (term == null) {

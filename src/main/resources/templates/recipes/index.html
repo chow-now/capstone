@@ -32,12 +32,12 @@
     <span th:if= "${message != null}" th:text="${message}"></span>
 
     <!-- Display all recipes isPublished True from DB -->
-    <div class="recipes row row-cols-1 row-cols-md-4 g-5">
-        <div th:each="recipe : ${allrecipe}">
+    <div class="recipes my-2 row row-cols-1 row-cols-md-4 g-5">
+        <div class="my-2" th:each="recipe : ${allrecipe}">
             <div class="col my-2">
                 <div class="card my-2 h-100">
                     <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
-                    <!--            <img class="card-img-top" th:attr="src=${recipe.image}" alt="unavailable"/>-->
+                    <img class="card-img-top" th:src="${recipe.getImages().getUrl()}" alt="unavailable"/>
                     <div class="card-body">
                         <div>
                             <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
@@ -47,7 +47,7 @@
                             <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
                         </div>
 
-                        <button class="btn btn-primary viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" th:attrappend="data-target=${recipe.id}">More info</button>
+                        <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe" data-toggle="modal" data-target="#viewDBRecipeModal" th:attrappend="data-target=${recipe.id}">More info</button>
                     </div>
                 </div>
             </div>
@@ -244,10 +244,11 @@
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
-                                    <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
+                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                     </div>
                                     </div>
                                 </div>`)
+
 
                             // Trigger Recipe Modal
                             $('.viewRecipe').unbind().click(function () {
