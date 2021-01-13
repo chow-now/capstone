@@ -334,6 +334,10 @@ a.nostyle:visited {
     .main-nav div.media_button {
         display: block;
     }
+
+    #aboutUs{
+        background-image: none;
+    }
 }
 
 
