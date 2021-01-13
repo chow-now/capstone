@@ -64,11 +64,6 @@ public class RecipeController {
     @Autowired
     private FavoriteRepository favDao;
 
-//    @GetMapping("/recipes")
-//    public String index(Model model) {
-//        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
-//        return "recipes/index";
-//    }
 
     @GetMapping("/recipes")
     public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
@@ -205,8 +200,7 @@ public class RecipeController {
         if(!userServ.isOwner(recipe.getChef())){
             return "redirect:/recipes";
         }
-//        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
-//        recipe.setImages(imageDao.findAllByRecipe(recipe));
+
         model.addAttribute("recipe", recipe);
         model.addAttribute("user", currentUser);
         model.addAttribute("categories", categoryDao.findAll());
@@ -260,16 +254,11 @@ public class RecipeController {
         System.out.println("imgs "+recipeToBeSaved.getImages().size());
         System.out.println("resIng "+recipeToBeSaved.getRecipeIngredients().size());
         /** --------------------- **/
-//
-//        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
-//        recipe.setImages(recipeToBeSaved.getImages());
+
 
         recipe = recipeDao.save(recipe);
         model.addAttribute("recipe", recipe);
 
-//        User currentUser = userServ.loggedInUser();
-//        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
-//        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + recipe.getId() +"/edit";
     }
 
