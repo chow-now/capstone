@@ -196,11 +196,9 @@
                 <div>
                     <div class="card-body ">
                         <h3 class="my-3 text-center chow-font">Update your recipe images...</h3>
-                        <div class="col justify-content-center">
+                        <div class="col justify-content-center" id="renderImages">
                             <div class="row text-center justify-content-center">
                                 <div class="m-1" th:each="image : ${recipe.images}">
-                                    <!--                                    <div id="image-id" th:value="${image.id}" hidden></div>-->
-                                    <!--                                    <div id="image-url" th:value="${image.url}" hidden></div>-->
                                     <div class="image-preview">
                                         <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
                                              class="shadow-lg" style="border-radius: 15px; border: 5px solid rgb(255,
@@ -310,13 +308,36 @@
                             <label class="green-text font-weight-bold">Unit</label>
                             <div class="mt-1">
                                 <select name="unit" required>
-                                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                                    <option th:value="ounce">Ounce (oz)</option>
-                                    <option th:value="cup">Cup (c)</option>
-                                    <option th:value="pint">Pint (pt)</option>
-                                    <option th:value="quart">Quart (qt)</option>
-                                    <option th:value="gallon">Gallon (gal)</option>
+                                    <optgroup label="misc">
+                                        <option th:value="single">Single</option>
+                                        <option th:value="bunch">Bunch</option>
+                                    </optgroup>
+                                    <optgroup label="Volume">
+                                        <option th:value="drop">Drop</option>
+                                        <option th:value="teaspoon">Teaspoon (tsp)</option>
+                                        <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                                        <option th:value="cup">Cup (c)</option>
+                                        <option th:value="pint">Pint (pt)</option>
+                                        <option th:value="quart">Quart (qt)</option>
+                                        <option th:value="gallon">Gallon (gal)</option>
+                                        <option th:value="ml">Milliliter (mL)</option>
+                                        <option th:value="liter">Liter (L)</option>
+                                    </optgroup>
+                                    <optgroup label="Mass">
+                                        <option th:value="pinch">Pinch</option>
+                                        <option th:value="dash">Dash</option>
+                                        <option th:value="ounce">Ounce (oz)</option>
+                                        <option th:value="pound">Pound (lb)</option>
+                                        <option th:value="mg">Milligrams (mg)</option>
+                                        <option th:value="gram">Gram (g)</option>
+                                        <option th:value="kilo">Kilogram (kg)</option>
+                                    </optgroup>
+                                    <optgroup label="Length">
+                                        <option th:value="mm">mm</option>
+                                        <option th:value="cm">cm</option>
+                                        <option th:value="meter">Meter (m)</option>
+                                        <option th:value="inch">Inch (in)</option>
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>

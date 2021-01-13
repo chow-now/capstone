@@ -307,4 +307,12 @@ public class RecipeController {
        return "redirect:/recipes/" + id;
    }
 
+    // RECIPE Images RETURNS PARTIAL
+    @GetMapping("recipes/{id}/images")
+    public String getImages(@PathVariable (value="id") long id, Model model){
+        Recipe recipe = recipeDao.getOne(id);
+        model.addAttribute("recipe",recipe);
+        return "recipes/images :: recipeImages";
+    }
+
 }

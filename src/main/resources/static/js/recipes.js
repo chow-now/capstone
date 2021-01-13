@@ -22,28 +22,31 @@
     $("#recipePicture").on('change', function () {
         $("#imageUpload").show();
         readURL(this);
-        $('#imageUpload').on('click', function (e) {
-            e.preventDefault();
+    });
 
-            console.log("upload clicked");
-            let data = new FormData($("#uploadImageForm")[0]);
-            console.log(data);
-            $.ajax({
-                url: "/recipes/" + recipeId + "/upload",
-                method: "POST",
-                enctype: 'multipart/form-data',
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function () {
+    $('#imageUpload').on('click', function (e) {
+        e.preventDefault();
+        console.log("upload clicked");
+        let data = new FormData($("#uploadImageForm")[0]);
+        console.log(data);
+        $("#imageUpload, #image_preview").hide();
+        $.ajax({
+            url: "/recipes/" + recipeId + "/upload",
+            method: "POST",
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function () {
+                setTimeout(function () {
+                    getRecipeImages();
 
-                    location.reload();
-                },
-                error: function () {
+                },500)
+            },
+            error: function () {
 
-                }
-            });
+            }
         });
     });
 
@@ -52,8 +55,7 @@
 
     let imageUrl = document.getElementById('image-url');
     console.log(imageUrl)
-
-    $(".delete-image").on('click', function () {
+    $(document).on('click','.delete-image', function () {
         console.log(this);
         $.post("/recipes/image/" + this.id + "/delete", function (data) {
             console.log(data);
@@ -316,5 +318,11 @@
             }, 1500);
             return false;
         })
+
+        const getRecipeImages = ()=>{
+            $.ajax({'url': '/recipes/'+recipeId+'/images'}).done(function (images) {
+                $('#renderImages').html(images);
+            });
+        }
 
     })(jQuery);
