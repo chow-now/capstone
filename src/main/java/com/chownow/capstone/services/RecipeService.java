@@ -60,19 +60,16 @@ public class RecipeService {
 
         Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
         if (existingRecipeEntity.isPresent()) {
-//            Optional <Recipe> existingRecipeChef = recipeDao.findBySpoonApiIdAndChef(recipe.getSpoonApiId());
             Recipe isExisting = existingRecipeEntity.get();
-            if (isExisting.getChef().getId() == user.getId()) {
+            Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
+
+            if (existingRecipeChef != null) {
                 return "Recipe already exist for chef";
             }
             favDao.save(new Favorite(user, isExisting));
             return isExisting.getId() + "";
         }
 
-
-//        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
-//            return  "recipe already exists";
-//        }
 
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){

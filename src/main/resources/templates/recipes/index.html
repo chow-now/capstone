@@ -112,7 +112,7 @@
 <!--    </div>-->
 <!--</div>-->
 
-<!-- // Results from SpoonAAPI-->
+<!-- // Results from SpoonAPI-->
 
 <div class="recipes row row-cols-1 row-cols-md-4 g-5"></div>
 
@@ -244,7 +244,7 @@
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
-                                    <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>View</button>
+                                    <button class="btn btn-primary viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                     </div>
                                     </div>
                                 </div>`)
@@ -375,10 +375,6 @@
 
             }
         })
-
-// TODO: Start on fetching Categories (cuisines)
-// TODO: Work on Favorites, have fields saved to backend (PostMapping controller w/ dynamic params)
-
     }
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>
