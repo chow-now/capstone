@@ -26,5 +26,10 @@ public class HomeController {
         model.addAttribute("topRecipes",recipeServ.getTopFavorites());
         return "index";
     }
+
+    @GetMapping("/about-us")
+    public String showAbout(){
+        return "about";
+    }
 }
 

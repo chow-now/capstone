@@ -67,7 +67,7 @@ public class UserController {
         // validate if email already exists in db
         User existingEmail = userDao.getFirstByEmail(user.getEmail());
         if(existingEmail != null){
-            validation.rejectValue("email", "user.email", "Duplicate email " + user.getEmail());
+            validation.rejectValue("email", "user.email",  "email already registered");
         }
         // user model validations
         if (validation.hasErrors()) {
