@@ -116,9 +116,31 @@ input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #FFC107
 }
 
+/* This is the default state */
+.custom-radio .custom-control-label::before {
+    background-color:  #03b090;  /* chowgreen */
+}
+
+/* This is the checked state */
+.custom-radio .custom-control-input:checked~.custom-control-label::before,
+.custom-radio .custom-control-input:checked~.custom-control-label::after {
+    background-color: #fec82e;  /* chowyellow*/
+    border-radius: 50%;
+}
+
+/* active state i.e. displayed while the mouse is being pressed down */
+.custom-radio .custom-control-input:active ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #fec82e; /* chowyellow*/
+}
+
+/* the shadow; displayed while the element is in focus */
+.custom-radio .custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(255, 123, 255, 0.25); /* pink, 25% opacity */
+}
 /*login register css*/
 
-#loginBody, #registerBody{
+#loginBody, #registerBody, #aboutUs{
     background-image: url('/img/cn-bg.png');
     background-size: cover;
     background-position: center;
@@ -152,6 +174,16 @@ input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
  /*custom css*/
 .rounded-card {
     border-radius: 1.2rem!important;
+}
+
+.rounded-bottom{
+    border-bottom-left-radius: 1.2rem!important;
+    border-bottom-right-radius: 1.2rem!important;
+}
+
+.rounded-top{
+    border-top-left-radius: 1.2rem!important;
+    border-top-right-radius: 1.2rem!important;
 }
 
 .modal-content{
@@ -302,6 +334,10 @@ a.nostyle:visited {
     .main-nav div.media_button {
         display: block;
     }
+
+    #aboutUs{
+        background-image: none;
+    }
 }
 
 
@@ -364,6 +400,15 @@ a.nostyle:visited {
 .navTrigger.active i:nth-child(3) {
     -webkit-animation: inBtm 0.8s forwards;
     animation: inBtm 0.8s forwards;
+}
+
+.codeup{
+    background-image: url("/img/codeup.png");
+    height: 2em;
+    width: 2em;
+    background-position: center;
+    background-size: cover;
+    
 }
 
 @-webkit-keyframes inM {

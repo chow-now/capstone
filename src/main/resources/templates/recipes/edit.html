@@ -88,22 +88,23 @@
                         <!--    ENTER DIFFICULTY LEVEL    -->
                         <div class="form-group px-4">
                             <label>Difficulty</label><br>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
-                                       th:field="*{difficulty}" value="easy" checked>
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
+
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input class="custom-control-input" type="radio" name="difficulty" id="easy" th:field="*{difficulty}" value="easy" checked required>
+                                <label class="custom-control-label mr-2" for="easy" >Easy</label>
+
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="difficulty" id="medium"
-                                       th:field="*{difficulty}" value="medium">
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input class="custom-control-input" type="radio" name="difficulty" id="medium"
+                                       th:field="*{difficulty}" value="medium" required>
+                                <label class="custom-control-label mr-2" for="medium">
                                     Medium
                                 </label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="difficulty" id="hard"
-                                       th:field="*{difficulty}" value="hard">
-                                <label class="form-check-label mr-2" th:for="*{difficulty}">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input class="custom-control-input" type="radio" name="difficulty" id="hard"
+                                       th:field="*{difficulty}" value="hard" required>
+                                <label class="custom-control-label mr-2" for="hard">
                                     Hard
                                 </label>
                             </div>
