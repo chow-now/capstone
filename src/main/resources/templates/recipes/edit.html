@@ -29,8 +29,10 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h3 class="my-3 text-center chow-font">Do you needs to make changes?</h3>
-                            <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post" th:object="${recipe}">
-                                <button style="border: none;background-color: transparent" class="red-text"><i class="fas fa-backspace fa-2x"></i></button>
+                            <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post"
+                                  th:object="${recipe}">
+                                <button style="border: none;background-color: transparent" class="red-text"><i
+                                        class="fas fa-backspace fa-2x"></i></button>
                                 <p class="text-muted">Delete</p>
                             </form>
                         </div>
@@ -42,14 +44,17 @@
                         <div class="form-group mb-3 px-4">
                             <label id="title">Title</label>
                             <input type="text" class="form-control" aria-label="Title"
-                                   aria-describedby="title" th:field="*{title}" required placeholder="Your yummy title .."/>
+                                   aria-describedby="title" th:field="*{title}" required
+                                   placeholder="Your yummy title .."/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
 
                         <!--    ENTER RECIPE DESCRIPTION -->
                         <div class="form-group px-4">
                             <label>Description</label>
-                            <textarea class="form-control" placeholder="your savory description .." aria-label="description" rows="3" th:field="*{description}" minlength="10"></textarea>
+                            <textarea class="form-control" placeholder="your savory description .."
+                                      aria-label="description" rows="3" th:field="*{description}"
+                                      minlength="10"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
 
@@ -84,7 +89,8 @@
                         <div class="form-group px-4">
                             <label>Difficulty</label><br>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="difficulty" id="easy" th:field="*{difficulty}" value="easy" checked>
+                                <input class="form-check-input" type="radio" name="difficulty" id="easy"
+                                       th:field="*{difficulty}" value="easy" checked>
                                 <label class="form-check-label mr-2" th:for="*{difficulty}">Easy</label>
                             </div>
                             <div class="form-check form-check-inline">
@@ -108,20 +114,24 @@
                         <div class="form-group px-4">
                             <label id="cusine">Cusine</label>
                             <select name="categories" class="form-control" multiple>
-                                <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" th:field="*{categories}"></option>
+                                <option th:each="category : ${categories}" th:text="${category.name}"
+                                        th:value="${category.id}" th:field="*{categories}"></option>
                             </select>
                         </div>
 
                         <!--    ENTER COOKING DIRECTIONS  -->
                         <div class="form-group px-4">
                             <label id="directions">Directions</label>
-                            <textarea class="form-control" placeholder="Step one create something delicious .." aria-label="directions" rows="5"
-                                      th:field="*{directions}" minlength="20" required ></textarea>
-                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" ></p>
+                            <textarea class="form-control" placeholder="Step one create something delicious .."
+                                      aria-label="directions" rows="5"
+                                      th:field="*{directions}" minlength="20" required></textarea>
+                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center">
-                            <button sec:authorize="isAuthenticated()" class="btn btn-yellow text-center rounded-pill nav-link shadow-sm px-2" type="submit">
-                                Update 
+                            <button sec:authorize="isAuthenticated()"
+                                    class="btn btn-yellow text-center rounded-pill nav-link shadow-sm px-2"
+                                    type="submit">
+                                Update
                             </button>
                         </div>
 
@@ -134,7 +144,8 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add Ingredients</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add
+                            Ingredients</a>
                     </div>
                 </div>
             </div>
@@ -171,8 +182,9 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                            Step</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add
+                            Images
+                        </a>
                     </div>
                 </div>
             </div>
@@ -212,25 +224,36 @@
                                 </label>
                             </div>
                             <div class="text-center">
-                            <img th:id="image_preview" src="" class="shadow-lg"
-                                 style="display:none; border: 5px solid rgb(255, 255, 255);" width="200" height="200">
-                            <br>
+                                <img th:id="image_preview" src="" class="shadow-lg"
+                                     style="display:none; border: 5px solid rgb(255, 255, 255);" width="200"
+                                     height="200">
+                                <br>
 
-                            <button id="imageUpload" class="btn btn-sm btn-red p-1 m-2" style="display: none;">
-                                Upload</button>
+                                <button id="imageUpload" class="btn btn-sm btn-red p-1 m-2" style="display: none;">
+                                    Upload
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="form-group d-flex justify-content-end align-items-center mr-4">
-                <button id="recipePublish" class="btn btn-lg btn-yellow rounded-pill nav-link shadow-sm px-2">Publish
-                </button>
+                    <button type="button" id="recipePublish"
+                            class="btn btn-lg btn-yellow rounded-pill nav-link shadow-sm px-2">
+                        Publish Your Creation!
+                    </button>
+                    <br>
+                    <br>
                 </div>
+                <div id="successAlert" class="alert alert-success collapse">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>SUCCESS!</strong>
                 </div>
+            </div>
         </div>
     </div>
     </div>
 </main>
+
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
      role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
