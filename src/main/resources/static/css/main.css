@@ -140,7 +140,7 @@ input::-webkit-input-placeholder {/* Chrome/Opera/Safari/Edge */
 }
 /*login register css*/
 
-#loginBody, #registerBody{
+#loginBody, #registerBody, #aboutUs{
     background-image: url('/img/cn-bg.png');
     background-size: cover;
     background-position: center;
