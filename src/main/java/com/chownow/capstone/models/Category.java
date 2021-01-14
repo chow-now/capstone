@@ -29,7 +29,7 @@ public class Category {
     @Column(length = 100)
     private String icon;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Recipe> recipes = new HashSet<>();
 

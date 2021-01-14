@@ -17,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @Controller
@@ -65,7 +67,7 @@ public class UserController {
         // validate if email already exists in db
         User existingEmail = userDao.getFirstByEmail(user.getEmail());
         if(existingEmail != null){
-            validation.rejectValue("email", "user.email", "Duplicate email " + user.getEmail());
+            validation.rejectValue("email", "user.email",  "email already registered");
         }
         // user model validations
         if (validation.hasErrors()) {
@@ -107,33 +109,37 @@ public class UserController {
         if(user == null){
             return "redirect:/recipes";
         }
+        boolean isFollowing = false;
         // check if logged in user is following the profile owner
         if (followDao.findByUserAndFriend(currentUser, user) != null) {
-            model.addAttribute("isFollowing", true);
+            isFollowing = true;
         }
         model.addAttribute("user", user);
         // check if logged in user is the profile owner
         model.addAttribute("isOwner",userServ.isOwner(user));
-        System.out.println(recipeDao.findAllByChefAndIsPublishedFalse(user).size());
-        System.out.println(recipeDao.findAllByChefAndIsPublishedTrue(user).size());
+        model.addAttribute("isFollowing", isFollowing);
         model.addAttribute("drafts",recipeDao.findAllByChefAndIsPublishedFalse(user));
         model.addAttribute("published",recipeDao.findAllByChefAndIsPublishedTrue(user));
+
         return "users/profile";
     }
 
-    // GET LOGGED IN USER PROFILE
+    // GET LOGGED IN USER DASHBOARD
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
         User currentUser = userServ.loggedInUser();
         if(currentUser.getAdmin()){
             return "redirect:/admin";
         }
+        List<Recipe> currentSuggestions = recipeServ.getMatches(currentUser);
+        if(currentSuggestions.size()<currentUser.getSuggestedCount()){
+            currentUser.setSuggestedCount(currentSuggestions.size());
+            userDao.save(currentUser);
+        }
         model.addAttribute("isFollowing", true);
         model.addAttribute("user", currentUser);
         model.addAttribute("isOwner",true);
-        System.out.println("drafts: "+recipeDao.findAllByChefAndIsPublishedFalse(currentUser).size());
-        System.out.println("published: "+recipeDao.findAllByChefAndIsPublishedTrue(currentUser).size());
-
+        model.addAttribute("notificationCount",currentSuggestions.size());
         model.addAttribute("drafts",recipeDao.findAllByChefAndIsPublishedFalse(currentUser));
         model.addAttribute("published",recipeDao.findAllByChefAndIsPublishedTrue(currentUser));
 
@@ -160,7 +166,12 @@ public class UserController {
 
     // SUBMIT USER EDIT FORM
     @PostMapping("/users/{id}/edit")
-    public String editUser(@PathVariable(name="id") long id, @Valid User editUser,Errors validation,Model model) {
+    public String editUser(
+            @PathVariable(name="id") long id,
+            @Valid User editUser,
+            Errors validation,
+            Model model) {
+
         User user = userDao.getOne(id);
         // user model validations
         if (validation.hasErrors()) {
@@ -234,22 +245,36 @@ public class UserController {
     // Create a follow request
     @RequestMapping(value = "/users/follow", method = RequestMethod.POST, headers = "Content-Type=application/json")
     public @ResponseBody
-    Follow postFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
+    String toggleFollow(@RequestBody AjaxFollowRequest ajaxFollowRequest) {
         User currentUser = userServ.loggedInUser();
         User friend = userDao.getById(ajaxFollowRequest.getFriendId());
-        Follow dbFollow = null;
-        if (followDao.findByUserAndFriend(currentUser, friend) == null) {
-            dbFollow = followDao.save(new Follow(currentUser, friend));
+        Follow follow = followDao.findByUserAndFriend(currentUser, friend);
+        if (follow == null) {
+            followDao.save(new Follow(currentUser, friend));
+        }else{
+            followDao.delete(follow);
         }
-        return dbFollow;
+        return "done";
     }
 
     // USER RECIPE MATCHES RETURNS PARTIAL
     @GetMapping("users/{id}/matches")
     public String getMatches(@PathVariable (value="id") long userId, Model model){
         User user = userDao.getById(userId);
-        model.addAttribute("suggestions",recipeServ.getMatches(user));
+        List<Recipe> suggestions =  recipeServ.getMatches(user);
+        model.addAttribute("suggestions",suggestions);
         model.addAttribute("user",user);
         return "users/suggestions :: suggestions";
+    }
+
+    // UPDATE RECIPE MATCHES FOR NOTFICATIONS
+    @PostMapping("users/{id}/matches/update")
+    public @ResponseBody
+    Integer updateCount(@PathVariable (value="id") long userId){
+        User user = userDao.getById(userId);
+        List<Recipe> suggestions =  recipeServ.getMatches(user);
+        user.setSuggestedCount(suggestions.size());
+        userDao.save(user);
+        return user.getSuggestedCount();
     }
 }

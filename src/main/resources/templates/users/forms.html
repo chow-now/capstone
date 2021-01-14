@@ -6,14 +6,14 @@
     <title>Title</title>
 </head>
 <body>
-<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${user}">
+<form th:fragment="register" th:action="@{/register}" th:method="post" class="text-center px-3 py-4 green-text" th:object="${user}" required>
 
     <p class="h4 mb-4 chow-font">CHOW NOW</p>
 
     <div class="form-row mb-4">
         <div class="col">
             <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}">
+            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name" th:field="*{firstName}" required>
             <p class="red-text" th:if="${#fields.hasErrors('firstName')}" th:text="${'Invalid Name'}"></p>
         </div>
     </div>
@@ -21,7 +21,7 @@
     <!-- E-mail -->
     <div class="form-row mb-4">
         <div class="col">
-            <input type="email" id="defaultRegisterFormEmail" class="form-control" placeholder="E-mail" th:field="*{email}">
+            <input type="email" id="defaultRegisterFormEmail" class="form-control" placeholder="E-mail" th:field="*{email}" required>
             <p class="red-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
         </div>
     </div>
@@ -29,7 +29,7 @@
     <!-- Password -->
     <div class="form-row mb-4">
         <div class="col">
-            <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}">
+            <input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" th:field="*{password}" required>
             <p class="red-text" th:if="${#fields.hasErrors('password')}" th:text="${'Invalid Password'}"></p>
         </div>
     </div>
