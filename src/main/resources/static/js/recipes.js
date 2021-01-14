@@ -65,9 +65,10 @@
 
     // // PUBLISH RECIPE
     $('#recipePublish').on('click', function () {
-        $.post("/recipes/" + recipeId + "/publish", function (data) {
-            console.log(data);
-        });
+        // $.post("/recipes/" + recipeId + "/publish", function (data) {
+        //     console.log(data);
+        // });
+
         $('#successAlert').show('fade');
     });
 

@@ -284,12 +284,11 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/{id}/publish")
-    public @ResponseBody String publishRecipe(@PathVariable long id){
+    public String publishRecipe(@PathVariable long id){
         Recipe recipe = recipeDao.getOne(id);
         recipe.setPublished(true);
-        recipeDao.save(recipe);
-
-        return "publish successful";
+        recipe = recipeDao.save(recipe);
+        return "redirect:/recipes/" + recipe.getId();
     }
 
 

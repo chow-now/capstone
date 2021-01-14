@@ -237,10 +237,12 @@
                     </div>
                 </div>
                 <div class="form-group d-flex justify-content-end align-items-center mr-4">
-                    <button type="button" id="recipePublish"
-                            class="btn btn-lg btn-yellow rounded-pill nav-link shadow-sm px-2">
-                        Publish Your Creation!
-                    </button>
+                    <form th:action="@{/recipes/{id}/publish(id=${recipe.id})}" th:method="post">
+                        <button type="submit" id="recipePublish"
+                                class="btn btn-lg btn-yellow rounded-pill nav-link shadow-sm px-2">
+                            Publish Your Creation!
+                        </button>
+                    </form>
                     <br>
                     <br>
                 </div>
