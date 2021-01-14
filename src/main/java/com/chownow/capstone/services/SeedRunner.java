@@ -73,7 +73,7 @@ public class SeedRunner {
             seedUsers();
             LOGGER.info("USERS DONE");
             LOGGER.info("SEEDING FOLLOWS");
-            seedFollows();
+            //seedFollows();
             LOGGER.info("FOLLOWS DONE");
             LOGGER.info("SEEDING PANTRIES");
             seedPantries();
