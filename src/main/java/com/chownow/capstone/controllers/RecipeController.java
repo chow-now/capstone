@@ -70,11 +70,12 @@ public class RecipeController {
         viewModel.addAttribute("spoonApi", spoonApi);
         viewModel.addAttribute("recipe", new SpoonApiDto());
 
-//        viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
+        viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
 
 //        if (term == null) {
-//            List<Recipe> recipes = recipeDao.findAll();
-//            viewModel.addAttribute("recipes", recipes);
+//            List<Recipe> allrecipe = recipeDao.findAll();
+//            viewModel.addAttribute("allrecipe", allrecipe);
+//        }
 //        } else {
 //            List<Recipe> recipes = recipeDao.findAll();
 //            List<Recipe> searchedRecipes = new ArrayList<>();
