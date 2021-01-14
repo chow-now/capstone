@@ -91,7 +91,8 @@ body{
 }
 
 table{
-    font-family: 'Permanent Marker', cursive;}
+    /*font-family: 'Permanent Marker', cursive;*/
+}
 
 .follow-avatar{
     width: 10em;
