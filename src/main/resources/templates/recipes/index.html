@@ -54,62 +54,62 @@
         </div>
     </div>
     <!--      Modal that will hold recipe details       -->
-    <div class="modal fade" id="#viewDBRecipeModal" tabindex="-1" role="dialog"
-         aria-labelledby="recipeModalLongTitle" aria-hidden="true" th:attrappend="id=${recipe.id}">
+<!--    <div class="modal fade" id="#viewDBRecipeModal" tabindex="-1" role="dialog"-->
+<!--         aria-labelledby="recipeModalLongTitle" aria-hidden="true" th:attrappend="id=${recipe.id}">-->
 
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div sec:authorize="isAuthenticated()">
-                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5
-                                class="modal-title text-center profileFromRecipeAnchorTags"
-                                id="recipeModalLongTitle"
-                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>
-                        </a>
-                    </div>
-                    <div sec:authorize="isAnonymous()">
-                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5
-                                class="modal-title text-center profileFromRecipeAnchorTags"
-                                id="recipeModalLongTitle"
-                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>
-                        </a>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-image mx-auto">
-                    <!--    Image for recipe    -->
-<!--                    <img class="profileFromRecipeModuleImage img-fluid" th:attr="src=@{${recipe.recipeImageUrl}}"-->
-<!--                         alt="Recipe image">-->
-                </div>
-                <div class="modal-body">
-                    <!--    Display the recipes cuisines    -->
-                    <h5 class="modal-instructions-title profileFromRecipeText">Category</h5>
-                    <ul class="modal-cuisine d-flex p-0">
-                        <div th:each="category : ${recipe.categories}">
-                            <li class="mr-2" th:text="${category.name}"></li>
-                        </div>
-                    </ul>
-                    <!--      Display Ingredients title         -->
-                    <h5 class="modal-instructions-title profileFromRecipeText">Ingredients</h5>
-                    <!--    List displaying the ingredients    -->
-                    <ul class="ingredient-list-group p-0">
-                        <!--      Ingredients will display here dynamically      -->
-                        <div th:each="ingredient : ${recipe.ingredients}">
-                            <li class="list-group-item mt-1 mb-1" th:text="${ingredient.name}"></li>
-                        </div>
-                    </ul>
-                    <!--      Display Instructions-->
-                    <h5 class="modal-instructions-title profileFromRecipeText">Directions</h5>
-                    <!--      Instructions will display here dynamically      -->
-                    <div class="list-group-item mt-1 mb-1" th:text="${recipe.directions}"></div>
-                    <h5 class="modal-instructions-title profileFromRecipeText">Comments</h5>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--        <div class="modal-dialog modal-lg" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <div sec:authorize="isAuthenticated()">-->
+<!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
+<!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
+<!--                                id="recipeModalLongTitle"-->
+<!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <div sec:authorize="isAnonymous()">-->
+<!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
+<!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
+<!--                                id="recipeModalLongTitle"-->
+<!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-image mx-auto">-->
+<!--                    &lt;!&ndash;    Image for recipe    &ndash;&gt;-->
+<!--&lt;!&ndash;                    <img class="profileFromRecipeModuleImage img-fluid" th:attr="src=@{${recipe.recipeImageUrl}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                         alt="Recipe image">&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    &lt;!&ndash;    Display the recipes cuisines    &ndash;&gt;-->
+<!--                    <h5 class="modal-instructions-title profileFromRecipeText">Category</h5>-->
+<!--                    <ul class="modal-cuisine d-flex p-0">-->
+<!--                        <div th:each="category : ${recipe.categories}">-->
+<!--                            <li class="mr-2" th:text="${category.name}"></li>-->
+<!--                        </div>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash;      Display Ingredients title         &ndash;&gt;-->
+<!--                    <h5 class="modal-instructions-title profileFromRecipeText">Ingredients</h5>-->
+<!--                    &lt;!&ndash;    List displaying the ingredients    &ndash;&gt;-->
+<!--                    <ul class="ingredient-list-group p-0">-->
+<!--                        &lt;!&ndash;      Ingredients will display here dynamically      &ndash;&gt;-->
+<!--                        <div th:each="ingredient : ${recipe.ingredients}">-->
+<!--                            <li class="list-group-item mt-1 mb-1" th:text="${ingredient.name}"></li>-->
+<!--                        </div>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash;      Display Instructions&ndash;&gt;-->
+<!--                    <h5 class="modal-instructions-title profileFromRecipeText">Directions</h5>-->
+<!--                    &lt;!&ndash;      Instructions will display here dynamically      &ndash;&gt;-->
+<!--                    <div class="list-group-item mt-1 mb-1" th:text="${recipe.directions}"></div>-->
+<!--                    <h5 class="modal-instructions-title profileFromRecipeText">Comments</h5>-->
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 
@@ -201,9 +201,6 @@
 
     // In the head
     const spoonApi = document.querySelector('meta.spoonApi').content;
-    const spoonApiUri = `https://api.spoonacular.com/recipes/findByIngredients`;
-
-    //const chowNowApiUri = `https://chownow.com/recipes/findByIngredients`
 
     if (document.getElementById('main_search') == null) {
         console.log("yo, it's null");
@@ -213,52 +210,31 @@
         let url = new URL(urlSearchString);
         let searchParam = url.searchParams.get("term");
         searchString = searchParam.replace(/,|,\s/g, ",+");
-
-
         console.log("url string" + searchString);
 
-        // From Spoonacular
-        async function getSpoonResults(apiEndPoint){
-            const spoonResults = await $.ajax({
-                type: 'GET',
-                url: `${apiEndPoint}?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
-            })
-            return spoonResults
-        }
+        $.ajax({
+            type: 'GET',
+            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
+            success: function (results) {
+                console.log(results);
+                let recipe = "";
 
-        // From DB
-        async function getChowNowResults(apiEndPoint){
-            const chowResults = await $.ajax({
-                type: 'GET',
-                url: `${apiEndPoint}?ingredients=${searchString}&number=10&apiKey=${spoonApi}`
-            })
-            return chowResults
-        }
-
-        function renderResults(data) {
-            $.ajax({
-                type: 'GET',
-                url: `${api}?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
-                success: function (results) {
-                    console.log(results);
-                    let recipe = "";
-
-                    recipe += `<div class="col-md-12">
+                recipe += `<div class="col-md-12">
                                 <h3 class="my-3 text-center">Results</h3>
                             </div>`;
 
-                    $('.recipes1').html(recipe);
+                $('.recipes1').html(recipe);
 
 
-                    $.each(results, function (i, recipe) {
-                        $.ajax({
-                            type: 'GET',
-                            url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
-                            success: function (singleRecipe) {
-                                console.log(singleRecipe);
+                $.each(results, function (i, recipe) {
+                    $.ajax({
+                        type: 'GET',
+                        url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
+                        success: function (singleRecipe) {
+                            console.log(singleRecipe);
 
-                                $('.recipes1').append(
-                                    `<div class="col">
+                            $('.recipes1').append(
+                                `<div class="col">
                                     <div class="card my-2 h-100">
                                         <h5 class="card-title text-center">${singleRecipe.title}</h5>
                                             <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
@@ -277,137 +253,132 @@
                                 </div>`)
 
 
-                                // Trigger Recipe Modal
-                                $('.viewRecipe').unbind().click(function () {
-                                    console.log(this.id + " button clicked");
+                            // Trigger Recipe Modal
+                            $('.viewRecipe').unbind().click(function () {
+                                console.log(this.id + " button clicked");
 
-                                    $.ajax(`https://api.spoonacular.com/recipes/${this.id}/information?includeNutrition=false&apiKey=${spoonApi}`)
-                                        .done(function (modalRecipe) {
-                                            console.log(modalRecipe)
-                                            console.log(modalRecipe.title)
+                                $.ajax(`https://api.spoonacular.com/recipes/${this.id}/information?includeNutrition=false&apiKey=${spoonApi}`)
+                                    .done(function (modalRecipe) {
+                                        console.log(modalRecipe)
+                                        console.log(modalRecipe.title)
 
-                                            // Recipe Information
-                                            let image = "";
-                                            let summary = "";
-                                            let title = "";
-                                            let ingredients = "";
-                                            let instructions = "";
-                                            let category = "";
-                                            let prepTime = "";
-                                            let cookTime = "";
-                                            let servings = "";
+                                        // Recipe Information
+                                        let image = "";
+                                        let summary = "";
+                                        let title = "";
+                                        let ingredients = "";
+                                        let instructions = "";
+                                        let category = "";
+                                        let prepTime = "";
+                                        let cookTime = "";
+                                        let servings = "";
 
-                                            let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
-                                            let hiddenSpoonApiId = modalRecipe.id;
-                                            let hiddenImage = modalRecipe.image;
-                                            let hiddenPrepTime = modalRecipe.preparationMinutes;
-                                            let hiddenCook = modalRecipe.cookingMinutes;
-                                            let hiddenServings = modalRecipe.servings;
-                                            let hiddenSummary = modalRecipe.summary;
-                                            let hiddenCategories = "";
-                                            let hiddenIngredients = "";
-                                            let hiddenDirections = "";
+                                        let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
+                                        let hiddenSpoonApiId = modalRecipe.id;
+                                        let hiddenImage = modalRecipe.image;
+                                        let hiddenPrepTime = modalRecipe.preparationMinutes;
+                                        let hiddenCook = modalRecipe.cookingMinutes;
+                                        let hiddenServings = modalRecipe.servings;
+                                        let hiddenSummary = modalRecipe.summary;
+                                        let hiddenCategories = "";
+                                        let hiddenIngredients = "";
+                                        let hiddenDirections = "";
 
-                                            image += `<img class="img-fluid" src=${modalRecipe.image} alt="" />`;
+                                        image += `<img class="img-fluid" src=${modalRecipe.image} alt="" />`;
 
-                                            // a hrefs are not working with template literals
-                                            title += modalRecipe.title + ' by ' + '<a href="' + modalRecipe.sourceUrl + '">' + modalRecipe.sourceName + '</a>';
+                                        // a hrefs are not working with template literals
+                                        title += modalRecipe.title + ' by ' + '<a href="' + modalRecipe.sourceUrl + '">' + modalRecipe.sourceName + '</a>';
 
-                                            prepTime += `<p>${modalRecipe.preparationMinutes} mins</p>`;
+                                        prepTime += `<p>${modalRecipe.preparationMinutes} mins</p>`;
 
-                                            cookTime += `<p>${modalRecipe.cookingMinutes} mins</p>`;
+                                        cookTime += `<p>${modalRecipe.cookingMinutes} mins</p>`;
 
-                                            servings += `<p>${modalRecipe.servings} servings</p>`
+                                        servings += `<p>${modalRecipe.servings} servings</p>`
 
-                                            summary += `<p>${modalRecipe.summary}</p>`;
+                                        summary += `<p>${modalRecipe.summary}</p>`;
 
-                                            // Categories List
-                                            if (modalRecipe.cuisines.length == 0) {
-                                                category += `<li class="">Unknown category</li>`;
+                                        // Categories List
+                                        if (modalRecipe.cuisines.length == 0) {
+                                            category += `<li class="">Unknown category</li>`;
 
-                                                hiddenCategories = 'Unknown category';
-                                            } else {
-                                                for (let i = 0; i < modalRecipe.cuisines.length; i++) {
-                                                    category += `<li class="list-group">${modalRecipe.cuisines[i]}</li>`;
+                                            hiddenCategories = 'Unknown category';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.cuisines.length; i++) {
+                                                category += `<li class="list-group">${modalRecipe.cuisines[i]}</li>`;
 
-                                                    hiddenCategories += modalRecipe.cuisines[i] + '##'
-                                                }
+                                                hiddenCategories += modalRecipe.cuisines[i] + '##'
                                             }
+                                        }
 
-                                            // Ingredients List
-                                            if (modalRecipe.extendedIngredients.length == 0) {
-                                                ingredients += 'No ingredients recorded';
-                                                hiddenIngredients = 'No ingredients recorded';
-                                            } else {
-                                                for (let i = 0; i < modalRecipe.extendedIngredients.length; i++) {
-                                                    ingredients += `<li>${modalRecipe.extendedIngredients[i].amount}
+                                        // Ingredients List
+                                        if (modalRecipe.extendedIngredients.length == 0) {
+                                            ingredients += 'No ingredients recorded';
+                                            hiddenIngredients = 'No ingredients recorded';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.extendedIngredients.length; i++) {
+                                                ingredients += `<li>${modalRecipe.extendedIngredients[i].amount}
                                                                     ${modalRecipe.extendedIngredients[i].unit}
                                                                     ${modalRecipe.extendedIngredients[i].originalName}
                                                                 </li>`;
 
-                                                    hiddenIngredients += modalRecipe.extendedIngredients[i].amount + '@@' + modalRecipe.extendedIngredients[i].unit + '@@' + modalRecipe.extendedIngredients[i].originalName + '##';
-                                                }
+                                                hiddenIngredients += modalRecipe.extendedIngredients[i].amount + '@@' + modalRecipe.extendedIngredients[i].unit + '@@' + modalRecipe.extendedIngredients[i].originalName + '##';
                                             }
+                                        }
 
-                                            // Grab Instructions
-                                            if (modalRecipe.analyzedInstructions.length === 0) {
-                                                instructions += '<p>' + 'Sorry, directions not available' + '</p>';
-                                                instructions += '<p>' + 'You can find more information in the main' +
-                                                    '<a href="' + modalRecipe.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
+                                        // Grab Instructions
+                                        if (modalRecipe.analyzedInstructions.length === 0) {
+                                            instructions += '<p>' + 'Sorry, directions not available' + '</p>';
+                                            instructions += '<p>' + 'You can find more information in the main' +
+                                                '<a href="' + modalRecipe.sourceUrl + '">' + '<strong>' + " source." + '</strong>' + '</a>' + '</p>';
 
-                                                hiddenDirections = 'Sorry, directions not available';
-                                            } else {
-                                                for (let i = 0; i < modalRecipe.analyzedInstructions[0].steps.length; i++) {
-                                                    instructions += `<li class="list-group">
+                                            hiddenDirections = 'Sorry, directions not available';
+                                        } else {
+                                            for (let i = 0; i < modalRecipe.analyzedInstructions[0].steps.length; i++) {
+                                                instructions += `<li class="list-group">
                                                                     <p>${modalRecipe.analyzedInstructions[0].steps[i].number}.
-                                                                    <span>${modalRecipe.analyzedInstructions[0].steps[i].step}</span>
+                                                                        <span>${modalRecipe.analyzedInstructions[0].steps[i].step}</span>
                                                                     </p>
-                                                                    </li>`;
+                                                                 </li>`;
 
-                                                    hiddenDirections += modalRecipe.analyzedInstructions[0].steps[i].number + ' ' + modalRecipe.analyzedInstructions[0].steps[i].step + '##'
-                                                }
+                                                hiddenDirections += modalRecipe.analyzedInstructions[0].steps[i].number + ' ' + modalRecipe.analyzedInstructions[0].steps[i].step + '##'
                                             }
+                                        }
 
-                                            // Display to modal
-                                            $('.recipe-title').html(title);
-                                            $('.recipe-image').html(image);
-                                            $('.recipe-prep').html(prepTime);
-                                            $('.recipe-cook').html(cookTime);
-                                            $('.recipe-servings').html(servings);
-                                            $('.recipe-summary').html(summary);
-                                            $('.recipe-categories').html(category);
-                                            $('.recipe-ingredients').html(ingredients);
-                                            $('.recipe-directions').html(instructions);
+                                        // Display to modal
+                                        $('.recipe-title').html(title);
+                                        $('.recipe-image').html(image);
+                                        $('.recipe-prep').html(prepTime);
+                                        $('.recipe-cook').html(cookTime);
+                                        $('.recipe-servings').html(servings);
+                                        $('.recipe-summary').html(summary);
+                                        $('.recipe-categories').html(category);
+                                        $('.recipe-ingredients').html(ingredients);
+                                        $('.recipe-directions').html(instructions);
 
-                                            // Hidden Fields
-                                            $('#hidden-spoonApi-id').val(hiddenSpoonApiId);
-                                            $('#hidden-recipe-title').val(hiddenTitle);
-                                            $('#hidden-recipe-image').val(hiddenImage);
-                                            $('#hidden-recipe-prep').val(hiddenPrepTime);
-                                            $('#hidden-recipe-cook').val(hiddenCook);
-                                            $('#hidden-recipe-servings').val(hiddenServings);
-                                            $('#hidden-recipe-summary').val(hiddenSummary);
-                                            $('#hidden-recipe-categories').val(hiddenCategories);
-                                            $('#hidden-recipe-ingredients').val(hiddenIngredients);
-                                            $('#hidden-recipe-directions').val(hiddenDirections);
-                                        })
-                                })
-                            },
-                            complete: function () {
-                                console.log("FINISHED");
-                                $('.spinner-grow').hide();
-                                $('.spinner-grow').addClass('d-none');
-                            }
-                        })
+                                        // Hidden Fields
+                                        $('#hidden-spoonApi-id').val(hiddenSpoonApiId);
+                                        $('#hidden-recipe-title').val(hiddenTitle);
+                                        $('#hidden-recipe-image').val(hiddenImage);
+                                        $('#hidden-recipe-prep').val(hiddenPrepTime);
+                                        $('#hidden-recipe-cook').val(hiddenCook);
+                                        $('#hidden-recipe-servings').val(hiddenServings);
+                                        $('#hidden-recipe-summary').val(hiddenSummary);
+                                        $('#hidden-recipe-categories').val(hiddenCategories);
+                                        $('#hidden-recipe-ingredients').val(hiddenIngredients);
+                                        $('#hidden-recipe-directions').val(hiddenDirections);
+                                    })
+                            })
+                        },
+                        complete: function () {
+                            console.log("FINISHED");
+                            $('.spinner-grow').hide();
+                            $('.spinner-grow').addClass('d-none');
+                        }
                     })
+                })
 
-                }
-            })
-        }
-
-        const results = Promise.all(getSpoonResults(spoonApiUri), getChowNowResults(chowNowApiUri));
-
-        renderResults(results);
+            }
+        })
     }
 </script>
 <script th:src="@{/js/fraction_converter.js}"></script>
