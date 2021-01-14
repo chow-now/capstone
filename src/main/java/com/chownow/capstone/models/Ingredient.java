@@ -22,11 +22,11 @@ public class Ingredient {
     @Column(nullable = false, length = 1000)
     private String name;
 
-    @OneToMany(mappedBy = "ingredient")
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<PantryIngredient> pantryIngredients = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ingredient")
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
     
