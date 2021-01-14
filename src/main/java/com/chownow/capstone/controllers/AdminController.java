@@ -2,6 +2,7 @@ package com.chownow.capstone.controllers;
 
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
+import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AdminController {
@@ -35,6 +41,15 @@ public class AdminController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RecipeService recipeServ;
+
+	@Autowired
+	private PantryIngredientRepository pantryIngDao;
+
+	@Autowired
+	private RecipeIngredientRepository recipeIngDao;
 
 	@GetMapping("/admin")
 	public String getDashboard(Model model) {
@@ -68,7 +83,11 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/ingredients/{id}/delete")
+	@Transactional
 	public String deleteIngredient(@PathVariable long id){
+		Ingredient ingredient = ingredientDao.getOne(id);
+		pantryIngDao.deleteAllByIngredient(ingredient);
+		recipeIngDao.deleteAllByIngredient(ingredient);
 		ingredientDao.deleteById(id);
 		return "redirect:/admin";
 	}
@@ -92,7 +111,14 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/categories/{id}/delete")
+	@Transactional
 	public String deleteCategory(@PathVariable long id){
+		Category category = catDao.getOne(id);
+		for(Recipe r : category.getRecipes()){
+			r.getCategories().remove(category);
+			recipeDao.save(r);
+		}
+		catDao.save(category);
 		catDao.deleteById(id);
 		return "redirect:/admin";
 	}
@@ -141,7 +167,8 @@ public class AdminController {
 
 	@PostMapping("/admin/users/{id}/delete")
 	public String deleteUser(@PathVariable long id){
-		userDao.deleteById(id);
+		User user = userDao.getOne(id);
+		userServ.deleteUser(user);
 		return "redirect:/admin";
 	}
 
@@ -161,7 +188,7 @@ public class AdminController {
 
 	@PostMapping("/admin/recipes/{id}/delete")
 	public String deleteRecipe(@PathVariable long id){
-		recipeDao.deleteById(id);
+		recipeServ.deleteRecipe(recipeDao.getOne(id));
 		return "redirect:/admin";
 	}
 }

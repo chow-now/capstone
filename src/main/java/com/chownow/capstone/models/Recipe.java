@@ -1,19 +1,15 @@
 package com.chownow.capstone.models;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="recipes")
-//@JsonIdentityInfo(
-// generator = ObjectIdGenerators.PropertyGenerator.class,
-// property = "id")
 public class Recipe {
 
     @Id
@@ -71,19 +67,22 @@ public class Recipe {
     @JsonManagedReference(value="recipeRef")
     private User chef;
 
-    @OneToMany(
-            mappedBy = "recipe",
-            orphanRemoval = true,
-            cascade = CascadeType.PERSIST)
-    private List<Image> images = new ArrayList<>();
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
 
-    @OneToMany(
-            mappedBy = "recipe",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true
-    )
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @OneToMany(mappedBy = "recipe")
+    private Set<Image> images = new HashSet<>();
+
+    @OneToMany(mappedBy = "recipe")
     @JsonManagedReference
-    private List<RecipeIngredient> RecipeIngredients = new ArrayList<>();
+    private Set<RecipeIngredient> RecipeIngredients = new HashSet<>();
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -94,15 +93,10 @@ public class Recipe {
             joinColumns=@JoinColumn(name="recipe_id"),
             inverseJoinColumns=@JoinColumn(name="category_id")
     )
-    private Set<Category> categories = new HashSet<Category>();
+    private Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name="favorites",
-            joinColumns={@JoinColumn(name="recipe_id")},
-            inverseJoinColumns={@JoinColumn(name="user_id")}
-    )
-    private Set<User> favoritedBy = new HashSet<User>();
+    @OneToMany(mappedBy = "recipe")
+    private Set<Favorite> favoritedBy = new HashSet<>();
 
     public Recipe(){}
 
@@ -216,27 +210,27 @@ public class Recipe {
         this.categories = categories;
     }
 
-    public List<Image> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(Set<Image> images) {
         this.images = images;
     }
 
-    public Set<User> getFavoritedBy() {
+    public Set<Favorite> getFavoritedBy() {
         return favoritedBy;
     }
 
-    public void setFavoritedBy(Set<User> favoritedBy) {
+    public void setFavoritedBy(Set<Favorite> favoritedBy) {
         this.favoritedBy = favoritedBy;
     }
 
-    public List<RecipeIngredient> getRecipeIngredients() {
+    public Set<RecipeIngredient> getRecipeIngredients() {
         return RecipeIngredients;
     }
 
-    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+    public void setRecipeIngredients(Set<RecipeIngredient> recipeIngredients) {
         RecipeIngredients = recipeIngredients;
     }
 

@@ -20,7 +20,7 @@
 <header>
   <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
-<main>
+<main class="mb-5">
   <!--Main Container-->
     <!-- USER INFO -->
   <div th:each="ingredient : ${pantryIngredients}">
@@ -49,8 +49,7 @@
 
             <!-- FOLLOW USER BUTTON -->
             <div th:if="${not isOwner}">
-              <button th:if="${isFollowing}" class="btn btn-red rounded-pill" disabled> Following </button>
-              <button th:unless="${isFollowing}" id="addFriend" type="submit" class="btn btn-red rounded-pill"> Follow </button>
+              <button id="addFriend" type="submit" class="btn btn-red rounded-pill" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
             </div>
           </div>
         </div>
@@ -100,6 +99,7 @@
           <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#suggestionsTab" data-toggle="tab">
               <i class="fas fa-drumstick-bite fa-2x"></i>
+              <span id="notification" th:data-internalId="${user.suggestedCount}" th:text="${notificationCount > user.suggestedCount ? notificationCount - user.suggestedCount : ''}" class="badge badge-danger rounded-pill" ></span>
               <p class="text-black-50 mb-0 small">suggestions</p>
             </a>
           </li>
@@ -120,13 +120,17 @@
           </li>
           <li class="nav-item py-2">
             <div class="nav-link text-center" id="draftTab"  >
-              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span>
+              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span> <span th:text="${drafts.size() > 0 ? drafts.size() : ''}" class="badge badge-secondary rounded-pill" ></span>
             </div>
           </li>
         </ul>
 
         <div id="publishedRecipes" class="row justify-content-center">
           <div class="col-md-12">
+            <div class="text-center py-3" th:if="${published.size() < 1}">
+              <h5>Start Creating Some Recipes</h5>
+              <a class="btn btn-red btn-sm rounded-pill" href="/recipes/new" >Create</a>
+            </div>
           </div>
           <div th:each="recipe : ${published}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
@@ -189,25 +193,25 @@
 <!--      FAVORITES TAB-->
       <div class="tab-pane" id="favoritesTab">
         <div class="row justify-content-center py-5">
-          <div th:each="recipe : ${user.favorites}" class="align-items-center justify-content-around">
+          <div th:each="favorite : ${user.favorites}" class="align-items-center justify-content-around">
             <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
-              <a th:href="@{/recipes/{id}(id=${recipe.id})}">
-                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
+              <a th:href="@{/recipes/{id}(id=${favorite.recipe.id})}">
+                <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${favorite.recipe.images.size() > 0} ? ${favorite.recipe.images[0].url} : '/img/recipe-default.png' "/>
               </a>
               <div class="card-body bg-transparent">
-                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <h5 th:text="${favorite.recipe.title}" class="card-title font-weight-bold"></h5>
                 <div class="row align-items-baseline">
                   <div class="col-2">
-                    <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
-                      <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                    <a th:href="@{/users/{id}(id=${favorite.recipe.chef.id})}">
+                      <img th:src="${favorite.recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
                     </a>
                   </div>
                   <div class="col-6">
-                    <p th:text="${recipe.chef.firstName}"></p>
+                    <p th:text="${favorite.recipe.chef.firstName}"></p>
                   </div>
                   <div class="col-3">
-                    <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
-                      <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                    <div class="rounded-pill border text-center" style="width: 75px" >
+                      <i class="far fa-heart"></i> <span th:text="${favorite.recipe.favoritedBy.size()}"></span>
                     </div>
                   </div>
                 </div>
@@ -247,7 +251,7 @@
               <h3 th:text="${'Pantry'}" class="my-3 text-center chow-font green-text text-uppercase font-weight-bold"></h3>
             </div>
             <div class="search-box col-12 col-md-6">
-              <input id="ingredientSearch" type="text" placeholder="Search by Name" class="input-box">
+              <input id="ingredientSearch" type="text" placeholder="Add Ingredient" class="input-box">
               <div class="search-btn">
                 <i class="fa fa-plus" aria-hidden="true"></i>
               </div>

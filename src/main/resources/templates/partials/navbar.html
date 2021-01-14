@@ -18,6 +18,7 @@
                         </a>
                     </form>
                 </li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/about-us}">about us</a></li>
                 <li sec:authorize="isAnonymous()"><a th:href="@{/register}">register</a></li>
                 <li sec:authorize="isAnonymous()"><a th:href="@{/login}">login</a></li>
             </ul>

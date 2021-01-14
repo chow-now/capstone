@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="recipeImages" class="row text-center justify-content-center">
+    <div class="m-1" th:each="image : ${recipe.images}">
+        <div class="image-preview">
+            <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
+                 class="shadow-lg" style="border-radius: 15px; border: 5px solid rgb(255,255,255);"
+                 width="200"
+                 height="200">
+            <br>
+            <button th:id="${image.id}" th:value="${image.url}" class="delete-image btn btn-sm btn-red p-1 m-2">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

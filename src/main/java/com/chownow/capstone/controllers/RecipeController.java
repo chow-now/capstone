@@ -61,11 +61,9 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-//    @GetMapping("/recipes")
-//    public String index(Model model) {
-//        model.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
-//        return "recipes/index";
-//    }
+    @Autowired
+    private FavoriteRepository favDao;
+
 
     @GetMapping("/recipes")
     public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
@@ -98,9 +96,9 @@ public class RecipeController {
             System.out.println("Not Published.... redirecting");
             return "redirect:/recipes/"+recipe.getId()+"/edit";
         }
-        Set<User> favoritedBy = recipe.getFavoritedBy();
+        Favorite favorite = favDao.findByUserAndAndRecipe(currentUser,recipe);
         boolean canFavorite = true;
-        if(favoritedBy.contains(currentUser)){
+        if(favorite != null){
             System.out.println("Already favorited");
             canFavorite = false;
         }
@@ -112,14 +110,12 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/new")
-    public String showCreateRecipe(Model model) {
-        User currentUser = userServ.loggedInUser();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
+    public String showCreateRecipe(
+            Model model)
+    {
         model.addAttribute("recipe", new Recipe());
+        model.addAttribute("user", userServ.loggedInUser());
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("images", imageDao.findAll());
-        model.addAttribute("recipeIgredients", recipeIngDao.findAll());
         return "recipes/new";
     }
 
@@ -128,24 +124,22 @@ public class RecipeController {
     public String submitRecipe(
             @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
-            Model model
-    ) {
+            Model model) {
+
+        // RECIPE MODEL VALIDATIONS
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
+            model.addAttribute("user", userServ.loggedInUser());
+            model.addAttribute("categories", categoryDao.findAll());
             return "recipes/new";
         }
-
+        // Save the Recipe to the current User
         User currentUser = userServ.loggedInUser();
-        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
-        recipeDao.save(recipeToBeSaved);
+        recipeToBeSaved.setChef(currentUser);
+        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
 
-        model.addAttribute("recipe",recipeToBeSaved);
-        model.addAttribute("isOwner",userServ.isOwner(currentUser));
-        model.addAttribute("categories", categoryDao.findAll());
-//        model.addAttribute("images", imageDao.findAll());
-
-        return "recipes/new";
+        return "redirect:/recipes/"+dbRecipe.getId()+"/edit";
     }
 
     // CREATE A NEW RECIPE INGREDIENT
@@ -191,81 +185,110 @@ public class RecipeController {
 
     @PostMapping("/recipes/{id}/delete")
     public String deleteRecipe(@PathVariable long id) {
-        recipeDao.deleteById(id);
-        return "redirect:/recipes";
+        recipeService.deleteRecipe(recipeDao.getOne(id));
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/recipes/{id}/edit")
-    public String showEditRecipe(@PathVariable long id, Model model) {
-
-        model.addAttribute("recipe", recipeDao.getOne(id));
+    public String showEditRecipe(
+            @PathVariable long id,
+            Model model)
+    {
         User currentUser = userServ.loggedInUser();
-        model.addAttribute("images",imageDao.findAll());
-        model.addAttribute("user", currentUser);
-
         Recipe recipe = recipeDao.getOne(id);
-        User user = userDao.getOne(recipe.getChef().getId());
         // restrict access to owner redirects others
-        if(!userServ.isOwner(user)){
+        if(!userServ.isOwner(recipe.getChef())){
             return "redirect:/recipes";
         }
+
         model.addAttribute("recipe", recipe);
-        model.addAttribute("user", user);
+        model.addAttribute("user", currentUser);
         model.addAttribute("categories", categoryDao.findAll());
-        model.addAttribute("isOwner",userServ.isOwner(user));
+        model.addAttribute("isOwner",userServ.isOwner(recipe.getChef()));
         return "recipes/edit";
     }
 
     @PostMapping("/recipes/{id}/edit")
     public String editRecipe(
-            @ModelAttribute Recipe recipeToBeSaved,
+            @PathVariable long id,
+            @Valid @ModelAttribute Recipe recipeToBeSaved,
             Errors validation,
             Model model) {
-
+        // RECIPE MODEL VALIDATIONS
+        Recipe recipe = recipeDao.getOne(id);
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
             model.addAttribute("recipe", recipeToBeSaved);
-            return "recipes/" + recipeToBeSaved.getId() + "/edit";
+            model.addAttribute("user", userServ.loggedInUser());
+            model.addAttribute("categories", categoryDao.findAll());
+            model.addAttribute("isOwner",userServ.isOwner(recipe.getChef()));
+            return "recipes/edit";
         }
-        User currentUser = userServ.loggedInUser();
-        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
-        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
-        return "redirect:/recipes/" + dbRecipe.getId() +"/edit";
-    }
 
-    // UPLOAD RECIPE IMAGE
-//    @PostMapping("/recipes/{recipeId}/image/{imageId}/upload")
-//    public String uploadRecipeImage(
-//            @PathVariable long recipeId,
-//            @PathVariable long imageId,
-//            @RequestParam(value = "file") MultipartFile multipartFile,
-//            Model model){
-//        Recipe recipe = recipeDao.getOne(recipeId);
-//
-//        Image imageDb = imageDao.findAllById(imageId);
-//        if(imageDb.getUrl() != null && imageDb.getUrl().startsWith("https://s3")){
-//            s3.deleteFile(imageDb.getUrl());
-//        }
-//        s3.uploadRecipeImage(multipartFile, recipe);
-//        model.addAttribute("recipe",recipe);
-//        return "recipes/new";
-//    }
+
+
+        // ADD FIELDS TO EXISTING RECIPE
+
+//        model fields
+
+        System.out.println(recipeToBeSaved.getTitle());
+        recipe.setTitle(recipeToBeSaved.getTitle());
+        System.out.println(recipeToBeSaved.getDescription());
+        recipe.setDescription(recipeToBeSaved.getDescription());
+        System.out.println("ck "+recipeToBeSaved.getCookTime());
+        recipe.setCookTime(recipeToBeSaved.getCookTime());
+        System.out.println("pt "+recipeToBeSaved.getPrepTime());
+        recipe.setPrepTime(recipeToBeSaved.getPrepTime());
+        System.out.println(recipeToBeSaved.getServings());
+        recipe.setServings(recipeToBeSaved.getServings());
+        System.out.println(recipeToBeSaved.getDirections());
+        recipe.setDirections(recipeToBeSaved.getDirections());
+        System.out.println(recipeToBeSaved.getDifficulty());
+        recipe.setDifficulty(recipeToBeSaved.getDifficulty());
+        System.out.println("cats "+recipeToBeSaved.getCategories().size());
+        recipe.setCategories(recipeToBeSaved.getCategories());
+
+
+        /** this will be updated via its own forma and route **/
+//        relationships
+        System.out.println("imgs "+recipeToBeSaved.getImages().size());
+        System.out.println("resIng "+recipeToBeSaved.getRecipeIngredients().size());
+        /** --------------------- **/
+
+
+        recipe = recipeDao.save(recipe);
+        model.addAttribute("recipe", recipe);
+
+        return "redirect:/recipes/" + recipe.getId() +"/edit";
+    }
 
     @RequestMapping(value = "/recipes/{id}/upload", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
+    public String uploadRecipeImage(@PathVariable long id, @RequestParam("file") MultipartFile multipartFile,
                                                Model model){
         Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
-        model.addAttribute("recipe",recipe);
-        return new ResponseEntity<>(HttpStatus.OK);
+//        model.addAttribute("recipe",recipe);
+        return "uploaded";
     }
 
     @PostMapping("/recipes/image/{id}/delete")
-    @ResponseBody
-    public void deleteFile(@PathVariable long id, @RequestParam String imageUrl){
+    public @ResponseBody String deleteFile(@PathVariable long id){
+        Image image = imageDao.getOne(id);
+        if(image.getUrl() != null && image.getUrl().startsWith("https://s3")){
+            s3.deleteFile(image.getUrl());
+        }
         imageDao.deleteById(id);
-        s3.deleteFile(imageUrl);
+
+        return "success";
+    }
+
+    @PostMapping("/recipes/{id}/publish")
+    public String publishRecipe(@PathVariable long id){
+        Recipe recipe = recipeDao.getOne(id);
+        recipe.setPublished(true);
+        recipe = recipeDao.save(recipe);
+        return "redirect:/recipes/" + recipe.getId();
     }
 
 
@@ -274,15 +297,21 @@ public class RecipeController {
     public String toggleFavorite(@PathVariable long id){
        User currentUser = userServ.loggedInUser();
        Recipe recipe = recipeDao.getOne(id);
-       Set<User> favoritedBy = recipe.getFavoritedBy();
-       if(favoritedBy.contains(currentUser)){
-           favoritedBy.remove(currentUser);
+       Favorite favorite = favDao.findByUserAndAndRecipe(currentUser,recipe);
+       if(favorite != null){
+           favDao.delete(favorite);
        }else{
-           favoritedBy.add(currentUser);
+           favDao.save(new Favorite(currentUser,recipe));
        }
-       recipe.setFavoritedBy(favoritedBy);
-       userDao.save(currentUser);
        return "redirect:/recipes/" + id;
    }
+
+    // RECIPE Images RETURNS PARTIAL
+    @GetMapping("recipes/{id}/images")
+    public String getImages(@PathVariable (value="id") long id, Model model){
+        Recipe recipe = recipeDao.getOne(id);
+        model.addAttribute("recipe",recipe);
+        return "recipes/images :: recipeImages";
+    }
 
 }

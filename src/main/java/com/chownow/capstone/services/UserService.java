@@ -3,6 +3,7 @@ package com.chownow.capstone.services;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+
+import javax.transaction.Transactional;
 
 @Service
 public class UserService {
@@ -37,6 +40,21 @@ public class UserService {
 
     @Autowired
     private  ImageRepository imageDao;
+
+    @Autowired
+    private FavoriteRepository favDao;
+
+    @Autowired
+    private FollowRepository followDao;
+
+    @Autowired
+    private RecipeService recipeServ;
+
+    @Autowired
+    private PantryIngredientRepository panIngDao;
+    @Autowired
+    private AmazonService s3;
+
 
     public boolean isLoggedIn() {
         boolean isAnonymousUser =
@@ -97,4 +115,22 @@ public class UserService {
         return model;
     }
 
+    // delete user
+
+    @Transactional
+    public void deleteUser(User user){
+        for( Recipe recipe : user.getRecipes()){
+            recipeServ.deleteRecipe(recipe);
+        }
+        favDao.deleteAllByUser(user);
+        followDao.deleteAllByUser(user);
+        followDao.deleteAllByFriend(user);
+        panIngDao.deleteAllByPantry(user.getPantry());
+        pantryDao.delete(user.getPantry());
+        if(user.getAvatar() != null && user.getAvatar().startsWith("https://s3")){
+            s3.deleteFile(user.getAvatar());
+        }
+        userDao.save(user);
+        userDao.delete(user);
+    }
 }
