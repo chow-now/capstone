@@ -119,6 +119,7 @@ public class RecipeController {
                               Model viewModel){
 
         String message = recipeService.saveRecipe(recipe);
+
         // For testing/indicator
         viewModel.addAttribute("message", message);
         return "recipes/index";
