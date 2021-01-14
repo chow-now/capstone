@@ -51,6 +51,9 @@ public class SeedRunner {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private IngredientService ingServ;
+
+    @Autowired
     private FavoriteRepository favDao;
 
     private final Faker faker = new Faker();
@@ -370,21 +373,8 @@ public class SeedRunner {
     }
 
     public void getIngredients(){
-        JSONParser parser = new JSONParser();
-        ObjectMapper objectMapper = new ObjectMapper();
+        ingServ.createIngredients();
 
-        try {
-            Object jsonObject = parser.parse(new FileReader("src/main/resources/static/js/ingredients.json"));
-            JSONArray jsonArray = (JSONArray)jsonObject;
-            if (jsonArray != null) {
-                for(Object json : jsonArray){
-                    Ingredient i = objectMapper.readValue(json.toString(), Ingredient.class);
-                    ingredientDao.save(i);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public String toEnglish(String word) {
