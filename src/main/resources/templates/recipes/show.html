@@ -1,131 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:include="partials/head :: head('Show Recipe')">
+<head>
   <meta charset="UTF-8">
-  <title>Show Recipe</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/x-icon">
+  <title th:text="${recipe.title}"></title>
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <!--  MAIN CSS -->
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/recipe-view.css}">
 </head>
-<style>
-  /*share icons css */
-  .resp-sharing-button__link,
-  .resp-sharing-button__icon {
-    display: inline-block
-  }
 
-  .resp-sharing-button__link {
-    text-decoration: none;
-    color: black;
-    margin: 0.5em
-  }
 
-  .resp-sharing-button {
-    border-radius: 5px;
-    transition: 25ms ease-out;
-    padding: 0.5em 0.75em;
-    font-family: Helvetica Neue,Helvetica,Arial,sans-serif
-  }
-
-  .resp-sharing-button__icon svg {
-    width: 1em;
-    height: 1em;
-    margin-right: 0.4em;
-    vertical-align: top
-  }
-
-  .resp-sharing-button--small svg {
-    margin: 0;
-    vertical-align: middle
-  }
-
-  /* Non solid icons get a stroke */
-  .resp-sharing-button__icon {
-    stroke: #fff;
-    fill: none
-  }
-
-  /* Solid icons get a fill */
-  .resp-sharing-button__icon--solid,
-  .resp-sharing-button__icon--solidcircle {
-    fill:black;
-    stroke: none
-  }
-
-  /*recipe custom css*/
-  .recipe-image{
-    height: 600px;
-  }
-  .mobile-only{
-    display: none;
-  }
-  @media only screen and (max-width: 500px) {
-    .mobile-only{
-      display: block;
-    }
-    .not-mobile-only{
-      display: none;
-    }
-    #infoSection .col-4{
-      padding-left: 5px!important;
-      padding-right: 5px!important;
-    }
-    .card-body h5{
-      font-size: 1.2rem;
-    }
-  }
-  @media only screen and (max-width: 420px) {
-    .card-body h5{
-      font-size: .8rem;
-    }
-    .smallFont{
-      font-size: .7rem;
-    }
-  }
-  @media only screen and (max-width: 340px) {
-    .card-body h5{
-      font-size: .8rem;
-    }
-  }
-    @media only screen and (max-width: 768px) {
-    #imageSection{
-      padding-right: 0;
-      padding-left: 0;
-    }
-    .recipe-image{
-      width: 100% !important;
-      border-radius: 0!important;
-    }
-  }
-  @media only screen and (min-width: 769px) and (max-width: 1020px) {
-    .recipe-image{
-      width: 85% !important;
-      height: 450px;
-    }
-  }
-  @media only screen and (min-width: 1024px) and (max-width: 1920px) {
-    .recipe-image{
-      width: 80% !important;
-    }
-  }
-
-</style>
 <body class="bg-green">
 <header>
   <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
 <main>
   <div id="imageSection" class="container-fluid mt-4 py-4 bg-white">
-    <div class="row text-center px-2 my-4">
-      <div class="col-12"></div>
-      <div class="col-12">
-        <span th:text="${recipe.recipeIngredients.size()+' ingredients'}"></span>
-        <span>&#183</span>
-        <span th:text="${recipe.getCookTime() + ' min'}"></span>
-      </div>
-      <div class="col-12">
-        <h3 th:text="${recipe.title}"></h3>
-      </div>
-      <div class="col-12">
-        <span th:text="${recipe.favoritedBy.size()}"></span><span>&nbsp;<i class="far fa-bookmark"></i> </span>
+    <div class="container">
+      <div class="row text-center px-2 my-4">
+        <div class="col-12"></div>
+        <div class="col-12">
+          <span th:text="${recipe.recipeIngredients.size()+' ingredients'}"></span>
+          <span>&#183</span>
+          <span th:text="${recipe.getCookTime() + ' min'}"></span>
+        </div>
+        <div class="col-12">
+          <h3 th:text="${recipe.title}"></h3>
+        </div>
+        <div class="col-12">
+          <span th:text="${recipe.favoritedBy.size()}"></span><span>&nbsp;<i class="far fa-bookmark"></i> </span>
+        </div>
       </div>
     </div>
     <section>
@@ -230,18 +138,31 @@
       <div class="container justify-content-center align-items-center">
         <div class="servings my-3">
           <div class="not-mobile-only servings-label secondary-color my-2">Servings:</div>
-          <div class="d-flex justify-content-start align-items-center">
-            <div role="button" id="reduceServings">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-start align-items-center">
+              <div role="button" id="reduceServings">
                 <img alt="minus-servings" src="https://d2wtgwi3o396m5.cloudfront.net/static/images/minus-servings.c0b4f95ba822.svg">
-            </div>
-            <div id="servingAmount" class="h2 serving-size not-mobile-only" th:text="${recipe.servings}"></div>
-            <div class="mobile-only">
-              <span class="">Serves</span>
-              <span class="serving-size" th:text="${recipe.servings}"></span>
-            </div>
-            <div role="button" id="increaseServings">
+              </div>
+              <div id="servingAmount" class="h2 serving-size not-mobile-only" th:text="${recipe.servings}"></div>
+              <div class="mobile-only">
+                <span class="">Serves</span>
+                <span class="serving-size" th:text="${recipe.servings}"></span>
+              </div>
+              <div role="button" id="increaseServings">
                 <img alt="add-servings" src="https://d2wtgwi3o396m5.cloudfront.net/static/images/add-servings.acb91867470a.svg">
+              </div>
             </div>
+
+
+            <div class="d-flex align-items-center justify-content-center">
+              <div>
+                <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                  <img th:src="${recipe.chef.avatar}" class="rounded-circle shadow-sm follow-avatar" style="border: 5px solid rgb(255, 255, 255);width: 45px;height: 45px;" alt="avatar">
+                </a>
+                <p class="text-center"><small th:text="${recipe.chef.firstName}"></small> </p>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="d-flex justify-content-center">
@@ -267,57 +188,14 @@
         <div class="d-flex justify-content-start align-items-center my-3">
           <div class="h5" th:text="${recipe.directions}"></div>
         </div>
-
       </div>
     </div>
   </div>
-
 </main>
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/fraction_converter.js}"></script>
-<script>
-  // sets the intial servings amout for the recipe
-  const defaultServingSize = parseInt($("#servingAmount").text())
+<script th:src="@{/js/recipe-view.js}"></script>
 
-  // function to set the ingredient amount based on servings size
-  const changeIngredientAmount = (servings) => {
-    $(".rational").each(function (amount) {
-      // gets the intial ingredient amount
-      let ingAmt = parseFloat($(this).data('internalid'));
-      // finds what the ingredient amout would based on an individual serving size
-      let singleServingAmount = ingAmt / defaultServingSize;
-      // finds new amount based on single servings size * requested serving size
-      let newIngAmt = singleServingAmount * servings;
-      // renders it to the page
-      $(this).html(newIngAmt);
-    })
-    // converts all new ingredient amounts to franctions
-    convertAllRationals();
-  }
-
-  // reduces the amount  of servings
-  $("#reduceServings").click(function () {
-    let servings = parseInt($("#servingAmount").text());
-    if(servings > 1){
-      let newServing = servings-1;
-      $(".serving-size").html(newServing);
-      changeIngredientAmount(newServing);
-    }else{
-      $(".serving-size").html(1)
-    }
-  })
-
-  // increases the amount of servings
-  $("#increaseServings").click(function () {
-    let servings = parseInt($("#servingAmount").text());
-    let newServing = servings+1;
-    $(".serving-size").html(newServing);
-    changeIngredientAmount(newServing);
-
-  })
-
-
-</script>
 </body>
 </html>

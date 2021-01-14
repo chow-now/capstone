@@ -3,7 +3,7 @@
 <body>
     <div th:fragment="suggestions" class="row justify-content-center  py-5">
         <div th:each="recipe : ${suggestions}" class="align-items-center justify-content-around">
-            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card" style="width: 18rem;" >
+            <div class="h-100 px-2 my-2 border-none bg-transparent recipe-card  suggestions-card" style="width: 18rem;" >
                 <a th:href="@{/recipes/{id}(id=${recipe.id})}">
                     <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
                 </a>
@@ -19,7 +19,7 @@
                             <p th:text="${recipe.chef.firstName}"></p>
                         </div>
                         <div class="col-3">
-                            <div class="rounded-pill border text-center" style="width: 75px" data-toggle="tooltip" data-placement="right" data-html="true" th:title="${recipe.favoritedBy[0].firstName}">
+                            <div class="rounded-pill border text-center" style="width: 75px">
                                 <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
                             </div>
                         </div>
