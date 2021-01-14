@@ -191,4 +191,5 @@ public class AdminController {
 		recipeServ.deleteRecipe(recipeDao.getOne(id));
 		return "redirect:/admin";
 	}
+
 }

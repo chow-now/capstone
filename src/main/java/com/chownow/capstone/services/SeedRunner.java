@@ -85,7 +85,7 @@ public class SeedRunner {
             seedRecipes();
             LOGGER.info("RECIPES DONE");
             LOGGER.info("SEEDING PANTRY INGREDIENTS");
-            seedPantryIngredients();
+            //seedPantryIngredients();
             LOGGER.info("PANTRY INGREDIENTS DONE");
             LOGGER.info("SEEDING RECIPE INGREDIENTS");
             seedRecipeIngredients();

@@ -25,25 +25,25 @@ public class PantryIngredient {
 
     @ManyToOne
     @JsonIgnore
-    private Pantry pantry;
+    private Pantry ingredientPantry;
     
     @ManyToOne
     private Ingredient ingredient;
 
     public PantryIngredient(){}
 
-    public PantryIngredient(double amount, String unit, Pantry pantry, Ingredient ingredient) {
+    public PantryIngredient(double amount, String unit, Pantry ingredientPantry, Ingredient ingredient) {
         this.amount = amount;
         this.unit = unit;
-        this.pantry = pantry;
+        this.ingredientPantry = ingredientPantry;
         this.ingredient = ingredient;
     }
 
-    public PantryIngredient(long id, double amount, String unit, Pantry pantry, Ingredient ingredient) {
+    public PantryIngredient(long id, double amount, String unit, Pantry ingredientPantry, Ingredient ingredient) {
         this.id = id;
         this.amount = amount;
         this.unit = unit;
-        this.pantry = pantry;
+        this.ingredientPantry = ingredientPantry;
         this.ingredient = ingredient;
     }
 
@@ -72,11 +72,11 @@ public class PantryIngredient {
     }
 
     public Pantry getPantry() {
-        return pantry;
+        return ingredientPantry;
     }
 
     public void setPantry(Pantry pantry) {
-        this.pantry = pantry;
+        this.ingredientPantry = ingredientPantry;
     }
 
     public Ingredient getIngredient() {
