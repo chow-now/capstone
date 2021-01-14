@@ -73,7 +73,7 @@ public class SeedRunner {
             seedUsers();
             LOGGER.info("USERS DONE");
             LOGGER.info("SEEDING FOLLOWS");
-            //seedFollows();
+            seedFollows();
             LOGGER.info("FOLLOWS DONE");
             LOGGER.info("SEEDING PANTRIES");
             seedPantries();
@@ -82,7 +82,7 @@ public class SeedRunner {
             seedRecipes();
             LOGGER.info("RECIPES DONE");
             LOGGER.info("SEEDING PANTRY INGREDIENTS");
-            seedPantryIngredients();
+            //seedPantryIngredients();
             LOGGER.info("PANTRY INGREDIENTS DONE");
             LOGGER.info("SEEDING RECIPE INGREDIENTS");
             seedRecipeIngredients();
