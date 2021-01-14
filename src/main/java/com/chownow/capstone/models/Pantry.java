@@ -18,7 +18,7 @@ public class Pantry {
     @JsonIgnore
     private User owner;
 
-    @OneToMany(mappedBy = "ingredient_pantry", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pantry")
     private List<PantryIngredient> pantryIngredients = new ArrayList<>();
 
     public Pantry(){}
