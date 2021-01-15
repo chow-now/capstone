@@ -327,7 +327,7 @@
         }
 
         const loadSpinner = () =>{
-            let html = '<div class="d-flex justify-content-center align-items-center"><div class="spinner-grow text-warning" role="status">\n' +
+            let html = '<div class="d-flex justify-content-center align-items-center" style="height: 200px;"><div class="spinner-grow text-warning" role="status">\n' +
                 '  <span class="sr-only">Loading...</span>\n' +
                 '</div></div>'
             $('#renderImages').html(html);

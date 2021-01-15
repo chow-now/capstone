@@ -411,6 +411,14 @@ a.nostyle:visited {
     
 }
 
+/*.vertically-centered{*/
+/*    position: relative;*/
+/*    top: 50%;*/
+/*    -webkit-transform: translateY(-50%);*/
+/*    -ms-transform: translateY(-50%);*/
+/*    transform: translateY(-50%);*/
+/*}*/
+
 @-webkit-keyframes inM {
     50% {
         -webkit-transform: rotate(0deg);
