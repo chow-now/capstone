@@ -71,10 +71,10 @@ public class RecipeController {
 
         System.out.println("term = " + term);
         //viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
-        List<Recipe> searchedRecipes = recipeDao.findAll();
+        List<Recipe> searchedRecipes = recipeDao.findAllByIsPublishedTrue();
         if (term != null) {
             searchedRecipes = new ArrayList<>();
-            for (Recipe recipe : recipeDao.findAll()) {
+            for (Recipe recipe : recipeDao.findAllByIsPublishedTrue()) {
                     if (recipe.getTitle().toLowerCase().contains(term.toLowerCase())) {
                         searchedRecipes.add(recipe);
                         continue;
