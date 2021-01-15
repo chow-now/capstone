@@ -4,13 +4,11 @@ import com.chownow.capstone.models.SpoonApiDto;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -46,20 +44,32 @@ public class RecipeService {
     @Transactional // Do this sequentially
     public String saveRecipe(SpoonApiDto recipe){
         // Hard-coded for now
-        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userDao.getById((long)userDao.findAll().size()); // for the last user
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getById(user1.getId());
         //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
 
-//        if (user.getRecipes().contains(recipe.getSpoonApiId())) {
-//            return "Recipe already exists";
+        // Prevent duplicate favorites if user signed in
+//        for(Favorite fav : user.getFavorites()){
+//            if(recipe.getSpoonApiId() == fav.getSpoonApiId()){
+//                return "Already Exist";
+//            }
 //        }
 
-        if(user.getRecipes().stream().anyMatch(r->r.getSpoonApiId() == recipe.getSpoonApiId())) {
-            return  "recipe already exists";
+        Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
+        if (existingRecipeEntity.isPresent()) {
+            Recipe isExisting = existingRecipeEntity.get();
+            Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
+
+            if (existingRecipeChef != null) {
+                return "Recipe already exist for chef";
+            }
+            favDao.save(new Favorite(user, isExisting));
+            return isExisting.getId() + "";
         }
+
 
         /** Handles cookTime when it's null from the front-end **/
         if (recipe.getCook().equals("")){
@@ -88,6 +98,7 @@ public class RecipeService {
         recipeEntity.setDescription(recipe.getSummary());
         recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setDifficulty("N/A");
+        recipeEntity.setPublished(true);
         recipeEntity.setDirections(recipe.getDirections());
         recipeEntity.setPrepTime(Integer.parseInt(prepTime));
         recipeEntity.setServings(Integer.parseInt(servings));
@@ -141,7 +152,7 @@ public class RecipeService {
         recipeDao.save(recipeEntity);
 
         /** Create a Favorites entity object to be saved **/
-            favDao.save(new Favorite(user,recipeEntity));
+        favDao.save(new Favorite(user,recipeEntity));
 
         /** Create a Image entity object to be saved **/
         imageRepository.save(new Image(recipe.getImage(),recipeEntity));
