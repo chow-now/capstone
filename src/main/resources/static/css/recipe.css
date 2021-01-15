@@ -135,6 +135,14 @@ body{
     box-shadow: 0 -0.1rem 3rem rgba(0,0,0,0.175)!important;
 }
 
+.h-100{
+    height: calc(100% - 200px);
+}
+
+.tab-content{
+    width: 100% !important;
+}
+
 @media only screen and (max-width: 500px) {
     .fas{
         font-size: 1rem;

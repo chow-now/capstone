@@ -63,6 +63,9 @@
     .card-body h5{
         font-size: 1.2rem;
     }
+    .recipe-image {
+        height: 500px;
+    }
 }
 @media only screen and (max-width: 420px) {
     .card-body h5{
@@ -89,12 +92,12 @@
 }
 @media only screen and (min-width: 769px) and (max-width: 1020px) {
     .recipe-image{
-        width: 85% !important;
+        /*width: 85% !important;*/
         height: 450px;
     }
 }
 @media only screen and (min-width: 1024px) and (max-width: 1920px) {
     .recipe-image{
-        width: 80% !important;
+        /*width: 80% !important;*/
     }
 }
