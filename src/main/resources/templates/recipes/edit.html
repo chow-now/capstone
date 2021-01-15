@@ -24,15 +24,17 @@
         <div class="tab-content bg-light tab-card rounded-card shadow-lg my-4 p-3" id="myTabContent">
             <!--    ADD RECIPE INFO TAB-->
             <div class="tab-pane fade show active" id="addInfo" role="tabpanel" aria-labelledby="add-info-tab">
+
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h3 class="my-3 text-center chow-font">Do you needs to make changes?</h3>
+                        <h3 class="my-3 text-center chow-font">Do you need to make changes?</h3>
                         <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post"
                               th:object="${recipe}">
                             <button style="border: none;background-color: transparent" class="red-text"><i
                                     class="fas fa-backspace fa-2x"></i></button>
                             <p class="text-muted">Delete</p>
                         </form>
+
                     </div>
                     <p id="recipe-id" th:text="${recipe.id}" hidden></p>
 

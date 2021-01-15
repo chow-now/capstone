@@ -344,5 +344,4 @@ public class RecipeController {
         model.addAttribute("recipe",recipe);
         return "recipes/images :: recipeImages";
     }
-
 }
