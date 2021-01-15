@@ -36,14 +36,14 @@
         </div>
       </div>
     </div>
-    <section>
-      <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+    <div class="d-flex justify-content-center">
+      <div id="carouselIndicators" class="carousel carousel-fade" data-ride="false">
         <ol class="carousel-indicators">
-          <li th:each="image,index : ${recipe.images}" data-target="#carouselIndicators" th:data-slide-to="${index.count -1}" th:class="${index.count eq 1 ? 'active' : ''}"></li>
+          <li th:each="image,index : ${recipe.images}" data-target="#carouselIndicators" th:data-slide-to="${index.count -1}" th:class="${index.count eq 0 ? 'active' : ''}"></li>
         </ol>
         <div class="carousel-inner">
-          <div th:each="image,index : ${recipe.images}" th:class="${index.count eq 1 ? 'carousel-item active' : 'carousel-item'} + ${' d-flex justify-content-center'}">
-            <img class="d-block w-75 rounded-card recipe-image" th:src="${image.url}" alt="">
+          <div th:each="image,index : ${recipe.images}" th:class="${index.count eq 1 ? 'carousel-item active' : 'carousel-item'} + ${''}">
+            <img class="w-100 rounded-card recipe-image " th:src="${image.url}" alt="">
           </div>
         </div>
         <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
@@ -55,8 +55,8 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
-    </section>
-    <div class="container px-2">
+    </div>
+    <div class="container">
       <div id="mediaShare">
         <div class="row justify-content-around">
           <form th:unless="${isOwner}" method="post" th:action="@{/recipes/{id}/favorite(id=${recipe.id})}">
