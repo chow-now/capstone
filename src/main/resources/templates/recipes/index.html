@@ -46,7 +46,7 @@
 
 
     <!-- Error Alert-->
-    <span th:if= "${message != null}" th:text="${message}"></span>
+<!--    <span th:if= "${message != null}" th:text="${message}"></span>-->
 
 
     <!-- Display all recipes from DB -->
@@ -137,67 +137,54 @@
 <!-- // Results from SpoonAPI-->
 <!--- Modal to display recipe information --->
 <div class="container d-none" id="recipeSpoonApi">
-    <div class="recipes1 row row-cols-1 row-cols-md-4 g-5"></div>
-    <div
-        class="modal fade"
-        id="viewRecipeModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-lg">
-        <form th:action="@{/recipes}" th:object="${recipe}" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
-                    <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    ><span>&times;</span></button>
-                </div>
+    <div class="recipes1 my-2 row row-cols-1 row-cols-md-4 g-5"></div>
+        <div class="modal fade" id="viewRecipeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form th:action="@{/recipes}" th:object="${recipe}" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                        </div>
 
-                <!-- Display Image -->
-                <div class="recipe-image mx-auto"></div>
+                            <!-- Display Image -->
+                            <div class="recipe-image mx-auto"></div>
 
-                <div class="modal-body">
-                    <!-- Display Prep Time -->
-                    <h4>Prep Time</h4>
-                    <div class="recipe-prep"></div>
+                        <div class="modal-body">
+                            <!-- Display Prep Time -->
+                            <h4>Prep Time</h4>
+                            <div class="recipe-prep"></div>
 
-                    <!-- Display Cook Time -->
-                    <h4>Cook Time</h4>
-                    <div class="recipe-cook"></div>
+                            <!-- Display Cook Time -->
+                            <h4>Cook Time</h4>
+                            <div class="recipe-cook"></div>
 
-                    <!-- Display summary -->
-                    <h4>Summary</h4>
-                    <div class="recipe-summary"></div>
+                            <!-- Display summary -->
+                            <h4>Summary</h4>
+                            <div class="recipe-summary"></div>
 
-                    <!-- Display Categories by cuisines: im planning to change this into pills for future -->
-                    <h4>Categories</h4>
-                    <ul class="recipe-categories"></ul>
+                            <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                            <h4>Categories</h4>
+                            <ul class="recipe-categories"></ul>
 
-                    <!-- Display current servings -->
-                    <h4>Servings</h4>
-                    <div class="recipe-servings"></div>
+                            <!-- Display current servings -->
+                            <h4>Servings</h4>
+                            <div class="recipe-servings"></div>
 
-                    <!-- Display Ingredients -->
-                    <h4>Ingredients</h4>
-                    <ul class="recipe-ingredients"></ul>
+                            <!-- Display Ingredients -->
+                            <h4>Ingredients</h4>
+                            <ul class="recipe-ingredients"></ul>
 
-                    <!-- Display Instructions -->
-                    <h4>Directions</h4>
-                    <ol class="recipe-directions"></ol>
+                            <!-- Display Instructions -->
+                            <h4>Directions</h4>
+                            <ol class="recipe-directions"></ol>
+                        </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
-                </div>
-            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
+                        </div>
+                    </div>
             <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
             <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
             <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
@@ -254,8 +241,8 @@
                             console.log(singleRecipe);
 
                             $('.recipes1').append(
-                                `<div class="col">
-                                    <div class="spoonResultsCard my-2 h-100">
+                                `<div class="col my-3">
+                                    <div class="spoonResultsCard card my-2 h-100">
                                         <h5 class="card-title text-center">${singleRecipe.title}</h5>
                                             <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
                                     <div class="card-body">
