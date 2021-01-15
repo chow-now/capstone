@@ -69,20 +69,12 @@ public class RecipeController {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
 
-
+        System.out.println("term = " + term);
         //viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
-
-        if (term == null) {
-            List<Recipe> allrecipe = recipeDao.findAll();
-            viewModel.addAttribute("allrecipe", allrecipe);
-        }
-         else {
-            List<Recipe> recipes = recipeDao.findAll();
-            List<Recipe> searchedRecipes = new ArrayList<>();
-
-            for (Recipe recipe : recipes) {
-
-                if (term != null) {
+        List<Recipe> searchedRecipes = recipeDao.findAll();
+        if (term != null) {
+            searchedRecipes = new ArrayList<>();
+            for (Recipe recipe : recipeDao.findAll()) {
                     if (recipe.getTitle().toLowerCase().contains(term.toLowerCase())) {
                         searchedRecipes.add(recipe);
                         continue;
@@ -91,7 +83,7 @@ public class RecipeController {
                     ArrayList<String> ingredientArray = new ArrayList<>();
 
                     recipe.getRecipeIngredients().forEach(ingredient -> {
-                        ingredientArray.add(String.valueOf(ingredient.getIngredient()));
+                        ingredientArray.add(ingredient.getIngredient().getName());
                     });
 
                     //separate ingredient string into an array
@@ -105,11 +97,10 @@ public class RecipeController {
                     if (searchFlag) {
                         searchedRecipes.add(recipe);
                     }
-                }
             }
            // viewModel.addAttribute("recipes", searchedRecipes);
-            viewModel.addAttribute("Newrecipe", searchedRecipes);
         }
+        viewModel.addAttribute("recipeResultsDB", searchedRecipes);
         return "recipes/index";
     }
 
