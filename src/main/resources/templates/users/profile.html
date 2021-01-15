@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -21,11 +22,11 @@
 <main class="mb-5">
   <!--Main Container-->
     <!-- USER INFO -->
-  <div th:each="ingredient : ${pantryIngredients}">
-    <p th:text="${ingredient}"></p>
-  </div>
-    <div class="container mt-4">
-      <div class="row px-2">
+    <div th:each="ingredient : ${pantryIngredients}">
+      <p th:text="${ingredient}"></p>
+    </div>
+    <div class="container mt-4 pt-5">
+      <div class="row px-2 pt-md-5">
         <!-- IF HAS PROFILE PICTURE -->
         <div class="col-4 col-sm-3 px-lg-5 mb-4 text-center">
           <img width="100%" th:src="${user.avatar}" class="rounded-circle shadow-sm" style="border: 5px solid rgb(255, 255, 255);">
@@ -58,28 +59,28 @@
       <div class="container">
         <ul class="nav nav-tabs row align-items-center justify-content-center">
           <!--        recipes-->
-          <li class="nav-item col-4 col-md-2 px-0" id="userRecipes" data-toggle="tooltip" data-placement="top" title="Recipes">
+          <li class="nav-item col-4 col-md-2 px-0" id="userRecipes" title="Recipes">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
               <p class="text-black-50 mb-0 small">recipes</p>
             </a>
           </li>
           <!--        favorites-->
-          <li class="nav-item col-4 col-md-2 px-0" id="userFavorites" data-toggle="tooltip" data-placement="top" title="Favorites">
+          <li class="nav-item col-4 col-md-2 px-0" id="userFavorites" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
               <p class="text-black-50 mb-0 small">favorites</p>
             </a>
           </li>
           <!--        followers-->
-          <li class="nav-item col-4 col-md-2 px-0" id="userFollowers" data-toggle="tooltip" data-placement="top" title="Followers">
+          <li class="nav-item col-4 col-md-2 px-0" id="userFollowers" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
               <p class="text-black-50 mb-0 small">followers</p>
             </a>
           </li>
           <!--        following-->
-          <li class="nav-item col-4 col-md-2 px-0" id="userFollowing" data-toggle="tooltip" data-placement="top" title="Following">
+          <li class="nav-item col-4 col-md-2 px-0" id="userFollowing">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
               <p class="text-black-50 mb-0 small">following</p>
@@ -87,14 +88,14 @@
           </li>
           <!--            PROFILE OWNER ONLY TABS-->
           <!--        pantry-->
-          <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="userPantry" data-toggle="tooltip" data-placement="top" title="Pantry">
+          <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="userPantry" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#pantryTab" data-toggle="tab">
               <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
               <p class="text-black-50 mb-0 small">pantry</p>
             </a>
           </li>
           <!--        suggested recipes based on pantry-->
-          <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="suggestions" data-toggle="tooltip" data-placement="top" title="Suggestions">
+          <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="suggestions" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#suggestionsTab" data-toggle="tab">
               <i class="fas fa-drumstick-bite fa-2x"></i>
               <span id="notification" th:data-internalId="${user.suggestedCount}" th:text="${notificationCount > user.suggestedCount ? notificationCount - user.suggestedCount : ''}" class="badge badge-danger rounded-pill" ></span>
@@ -106,26 +107,27 @@
       </div>
 <!--      !DASHBOARD TABS-->
     </div>
-  <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
-    <div class="tab-content ">
+  <div class="d-flex justify-content-center align-items-center ">
+    <div class="container bg-light tab-card rounded-card shadow-lg mb-5">
+    <div class="tab-content  ">
 <!--      RECIPES TAB-->
       <div class="tab-pane active" id="recipesTab">
         <ul sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav row align-items-center justify-content-center">
           <li class="nav-item py-2">
             <div class="nav-link text-center" id="publishedTab" >
-              <span class="text-black-50 mb-0 small font-weight-bold">Recipes</span>
+              <span class="text-black-50 mb-0 font-weight-bold">Recipes</span>
             </div>
           </li>
           <li class="nav-item py-2">
             <div class="nav-link text-center" id="draftTab"  >
-              <span class="text-black-50 mb-0 small font-weight-bold">Drafts</span> <span th:text="${drafts.size() > 0 ? drafts.size() : ''}" class="badge badge-secondary rounded-pill" ></span>
+              <span class="text-black-50 mb-0 font-weight-bold">Drafts</span> <span th:text="${drafts.size() > 0 ? drafts.size() : ''}" class="badge badge-secondary rounded-pill" ></span>
             </div>
           </li>
         </ul>
 
         <div id="publishedRecipes" class="row justify-content-center">
-          <div class="col-md-12">
-            <div class="text-center py-3" th:if="${published.size() < 1}">
+          <div class="col-md-12 py-3">
+            <div class="text-center " th:if="${published.size() < 1}">
               <h5>Start Creating Some Recipes</h5>
               <a class="btn btn-red btn-sm rounded-pill" href="/recipes/new" >Create</a>
             </div>
@@ -136,7 +138,7 @@
                 <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
               </a>
               <div class="card-body bg-transparent">
-                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <h5 th:text="${recipe.title}" class="card-title truncate font-weight-bold"></h5>
                 <div class="row align-items-baseline">
                   <div class="col-2">
                     <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
@@ -157,7 +159,7 @@
           </div>
         </div>
         <div sec:authorize="isAuthenticated()" th:if="${isOwner}" id="draftRecipes" class="row justify-content-center d-none">
-          <div class="col-md-12">
+          <div class="col-md-12 py-5">
 <!--            <h3 th:text="${user.firstName + 's Recipes'}" class="my-3 text-center green-text text-uppercase font-weight-bold"></h3>-->
           </div>
           <div th:each="recipe : ${drafts}" class="align-items-center justify-content-around">
@@ -166,7 +168,7 @@
                 <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
               </a>
               <div class="card-body bg-transparent">
-                <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+                <h5 th:text="${recipe.title}" class="card-title truncate font-weight-bold"></h5>
                 <div class="row align-items-baseline">
                   <div class="col-2">
                     <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
@@ -197,7 +199,7 @@
                 <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${favorite.recipe.images.size() > 0} ? ${favorite.recipe.images[0].url} : '/img/recipe-default.png' "/>
               </a>
               <div class="card-body bg-transparent">
-                <h5 th:text="${favorite.recipe.title}" class="card-title font-weight-bold"></h5>
+                <h5 th:text="${favorite.recipe.title}" class="card-title truncate font-weight-bold"></h5>
                 <div class="row align-items-baseline">
                   <div class="col-2">
                     <a th:href="@{/users/{id}(id=${favorite.recipe.chef.id})}">
@@ -260,7 +262,7 @@
               <div id="searchResults" class="container text-center"></div>
             </div>
           </div>
-          <div class="my-3">
+          <div class="px-4 my-3 d-flex justify-content-center align-items-center">
             <table id="ingredientsTable" class="table d-none table-borderless" >
               <thead class="text-black-50">
               <tr>

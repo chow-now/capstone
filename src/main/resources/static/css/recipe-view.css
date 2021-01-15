@@ -43,6 +43,10 @@
 }
 
 /*recipe custom css*/
+
+.fa-bookmark{
+    font-weight: 800;
+}
 .recipe-image{
     height: 600px;
 }
@@ -92,12 +96,19 @@
 }
 @media only screen and (min-width: 769px) and (max-width: 1020px) {
     .recipe-image{
-        /*width: 85% !important;*/
+        width: 85% !important;
         height: 450px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
+
 @media only screen and (min-width: 1024px) and (max-width: 1920px) {
     .recipe-image{
-        /*width: 80% !important;*/
+        width: 80% !important;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

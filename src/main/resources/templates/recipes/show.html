@@ -43,7 +43,7 @@
         </ol>
         <div class="carousel-inner">
           <div th:each="image,index : ${recipe.images}" th:class="${index.count eq 1 ? 'carousel-item active' : 'carousel-item'} + ${''}">
-            <img class="w-100 rounded-card recipe-image " th:src="${image.url}" alt="">
+            <img class=" rounded-card recipe-image " th:src="${image.url}" alt="">
           </div>
         </div>
         <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
@@ -59,9 +59,12 @@
     <div class="container">
       <div id="mediaShare">
         <div class="row justify-content-around">
-          <form th:unless="${isOwner}" method="post" th:action="@{/recipes/{id}/favorite(id=${recipe.id})}">
-            <button  type="submit" id="addFavorite" style="background-color: transparent;border: none;"><i class="far fa-bookmark"></i> <span th:text="${canFavorite ? 'Save':'Forget'}"></span> </button>
-          </form>
+          <div class="d-flex justify-content-center align-items-center">
+            <form th:unless="${isOwner}" method="post" th:action="@{/recipes/{id}/favorite(id=${recipe.id})}">
+              <button  class="font-weight-bold" type="submit" id="addFavorite" style="background-color: transparent;border: none;"><i class="far fa-bookmark"></i> <span th:text="${canFavorite ? 'Save':'Forget'}"></span> </button>
+            </form>
+          </div>
+
           <!-- EDIT PROFILE LINK -->
           <div class="text-center p-2">
             <a th:href="@{/recipes/{id}/edit(id=${recipe.id})}" sec:authorize="isAuthenticated()" th:if="${isOwner}" class="btn btn-red rounded-pill">Edit Recipe</a>
