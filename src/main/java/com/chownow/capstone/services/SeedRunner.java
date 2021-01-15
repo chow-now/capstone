@@ -224,9 +224,9 @@ public class SeedRunner {
             LOGGER.info("title = " + spoonApiId);
             String title= faker.food().dish();
             LOGGER.info("title = " + title);
-            String description = faker.friends().quote();
+            String description = faker.lorem().sentence();
             LOGGER.info("description = " + description);
-            String directions = faker.buffy().quotes();
+            String directions = faker.lorem().paragraph();
             LOGGER.info("directions = " + directions);
             String difficulty = levels.get(faker.number().numberBetween(0,3));
             LOGGER.info("difficulty = " + difficulty);
@@ -304,13 +304,10 @@ public class SeedRunner {
 
         for(long i = 1; i <= recipesSize; i++){
             Recipe recipe = recipeDao.getFirstById(i);
-            int max = faker.number().numberBetween(0,4);
-            String word = recipe.getTitle().split(" ")[0];
-            word = toEnglish(word);
-            for(int j = 0;j < max; j++){
-                Image image = new Image(randomImg(word),recipe);
-                imageDao.save(image);
-            }
+            int max = faker.number().numberBetween(1,20);
+            String url = "/img/food_img/food" + max + ".jpeg";
+            Image image = new Image( url, recipe);
+            imageDao.save(image);
         }
     }
 
