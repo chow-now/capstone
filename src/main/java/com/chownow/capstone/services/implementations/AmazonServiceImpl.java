@@ -84,7 +84,6 @@ public class AmazonServiceImpl implements AmazonService {
             s3Client.putObject(new PutObjectRequest(s3Bucket, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
             /* confirm temp file is deleted */
             LOGGER.info(file.delete() ? "TEMP FILE DELETED" : "TEMP FILE NOT DELETED");
-            System.out.println("temp file is deleted: "+ file.delete());
             /* update user avatar url */
             user.setAvatar(fileUrl);
             userDao.save(user);

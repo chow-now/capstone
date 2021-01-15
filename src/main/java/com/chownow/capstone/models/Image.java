@@ -3,7 +3,7 @@ package com.chownow.capstone.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
+
 
 @Entity
 @Table(name="images")

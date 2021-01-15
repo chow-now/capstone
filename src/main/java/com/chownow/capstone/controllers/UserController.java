@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 @Controller
@@ -201,19 +200,16 @@ public class UserController {
         boolean canUpdate = true;
         // if new password and confirmation dont match set error
         if(!newPassword.equals(passwordConfirmation)){
-            System.out.println("passwords dont match");
             canUpdate = false;
             model.addAttribute("notMatch", true );
         }
         // if password fails regex set error
         if(!newPassword.matches(passValidation)){
-            System.out.println("invalid password");
             canUpdate = false;
             model.addAttribute("invalidPassword",true);
         }
         // if errors redirect to edit page
         if(!canUpdate){
-            System.out.println("cant update");
             model.addAttribute("user",user);
             return "users/edit";
         }
