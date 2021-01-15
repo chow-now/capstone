@@ -30,15 +30,24 @@
 
         <!-- Tab [Results] -->
 <div class="container">
-    <div class="row d-flex justify-content-center align-items-center">
-        <div class="" type="button" id="communityDBTab">Community</div>
-        <div class="" type="button" id="recipeApiTab">Spoon</div>
-    </div>
+    <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
+        <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
+            <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
+                <p class="text-black-50 mb-0">Community</p>
+            </a>
+        </li>
+        <li class="btn btn-yellow btn-sm mx-2" type="button" id="recipeApiTab">
+            <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
+                <p class="text-black-50 mb-0">Spoon</p>
+            </a>
+        </li>
+    </ul>
 </div>
 
 
     <!-- Error Alert-->
     <span th:if= "${message != null}" th:text="${message}"></span>
+
 
     <!-- Display all recipes from DB -->
     <div class="container" id="recipesDB">
@@ -57,7 +66,7 @@
                             <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
                         </div>
 
-                        <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe" data-toggle="modal" th:data-target="${'#viewDBRecipeModal' + recipe.id}">More info</button>
+                        <a th:href="@{/recipes/{id}(id=${ recipe.id })}" class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe">More info</a>
                     </div>
                 </div>
             </div>
@@ -122,17 +131,11 @@
             </div>
         </div>
 
-
     </div>
 
 
-
-
-
-
-
 <!-- // Results from SpoonAPI-->
-<!--- Modal to display recipe information - This can be changed later on --->
+<!--- Modal to display recipe information --->
 <div class="container d-none" id="recipeSpoonApi">
     <div class="recipes1 row row-cols-1 row-cols-md-4 g-5"></div>
     <div
@@ -142,17 +145,17 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
 >
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <form th:action="@{/recipes}" th:object="${recipe}" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
                     <button
                             type="button"
-                            class="btn-close"
+                            class="close"
                             data-dismiss="modal"
                             aria-label="Close"
-                    ></button>
+                    ><span>&times;</span></button>
                 </div>
 
                 <!-- Display Image -->
@@ -192,7 +195,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         Close
                     </button>
-                    <button type="submit" class="btn btn-primary">Add to favorites</button>
+                    <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
                 </div>
             </div>
             <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
@@ -237,7 +240,7 @@
                 let recipe = "";
 
                 recipe += `<div class="col-md-12">
-                                <h3 class="my-3 text-center">Results</h3>
+                                <h3 class="my-3 text-center"></h3>
                             </div>`;
 
                 $('.recipes1').html(recipe);
@@ -403,7 +406,7 @@
 
         // button to show the drafts
         $("#communityDBTab").click(function () {
-            if($("#recipesDB").hasClass("d-none")){// if the draft div is hidded
+            if($("#recipesDB").hasClass("d-none")){// if the draft div is hidden
                 $("#recipesDB").removeClass("d-none"); // div where drafts are
                 $("#recipeSpoonApi").addClass("d-none");// div where published are
             }
@@ -419,6 +422,7 @@
 
     }
 </script>
+<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/fraction_converter.js}"></script>
 </body>
 </html>
