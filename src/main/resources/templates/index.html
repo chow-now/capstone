@@ -55,7 +55,7 @@
         <img class="card-img-top shadow" style="border-radius:1.5rem!important" th:src="${recipe.images.size() > 0} ? ${recipe.images[0].url} : '/img/recipe-default.png' "/>
       </a>
       <div class="card-body bg-transparent">
-        <h5 th:text="${recipe.title}" class="card-title font-weight-bold"></h5>
+        <h5 th:text="${recipe.title}" class="card-title font-weight-bold truncate"></h5>
         <div class="row align-items-baseline top-subcategories">
           <div class="col-2">
             <a th:href="@{/users/{id}(id=${recipe.chef.id})}">

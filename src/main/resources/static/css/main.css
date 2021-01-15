@@ -279,6 +279,13 @@ a.nostyle:visited {
     transition: all 0.4s ease;
 }
 
+.truncate {
+    width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media screen and (min-width: 768px) and (max-width: 1200px) {
     .main-nav.container {
         margin: 0!important;
@@ -294,6 +301,12 @@ a.nostyle:visited {
         color: #fff;
         line-height: 65px;
         font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 360px){
+    .main-nav div.logo{
+        padding-left: 0.3rem;
     }
 }
 
@@ -411,13 +424,7 @@ a.nostyle:visited {
     
 }
 
-/*.vertically-centered{*/
-/*    position: relative;*/
-/*    top: 50%;*/
-/*    -webkit-transform: translateY(-50%);*/
-/*    -ms-transform: translateY(-50%);*/
-/*    transform: translateY(-50%);*/
-/*}*/
+
 
 @-webkit-keyframes inM {
     50% {
