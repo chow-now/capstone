@@ -55,8 +55,8 @@
         <div class="my-2" th:each="recipe : ${recipeResultsDB}">
             <div class="col my-2">
                 <div class="card my-2 h-100">
-                    <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
                     <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>
+                    <h4 class="card-title m-2"><span th:text="${recipe.title}"></span></h4>
                     <div class="card-body">
                         <div>
                             <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
@@ -200,10 +200,7 @@
 </div>
 </div>
 
-
-
 <th:block th:include="partials/scripts :: scripts"></th:block>
-
 <script th:inline="javascript">
 
     // In the head
@@ -243,18 +240,18 @@
                             $('.recipes1').append(
                                 `<div class="col my-3">
                                     <div class="spoonResultsCard card my-2 h-100">
-                                        <h5 class="card-title text-center">${singleRecipe.title}</h5>
-                                            <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
+                                        <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
+                                        <h4 class="card-title m-2">${singleRecipe.title}</h4>
                                     <div class="card-body">
                                         <div>
-                                            <h6 class="mb3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
+                                            <h6 class="mb-3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
                                         </div>
 
-                                    <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                                    <div class="mb-2" style="height:200px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
-                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
+                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 mt-3 btn-block viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                     </div>
                                     </div>
                                 </div>`)
