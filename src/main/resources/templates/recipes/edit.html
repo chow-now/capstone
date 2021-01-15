@@ -28,10 +28,11 @@
                 <div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your
-                                recipe info.</h3>
-                            <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post" th:object="${recipe}">
-                                <button style="border: none;background-color: transparent" class="red-text"><i class="fas fa-backspace fa-2x"></i></button>
+                            <h3 class="my-3 text-center chow-font">Do you needs to make changes?</h3>
+                            <form th:action="@{/recipes/{id}/delete(id=${recipe.id})}" th:method="post"
+                                  th:object="${recipe}">
+                                <button style="border: none;background-color: transparent" class="red-text"><i
+                                        class="fas fa-backspace fa-2x"></i></button>
                                 <p class="text-muted">Delete</p>
                             </form>
                         </div>
@@ -43,14 +44,17 @@
                         <div class="form-group mb-3 px-4">
                             <label id="title">Title</label>
                             <input type="text" class="form-control" aria-label="Title"
-                                   aria-describedby="title" th:field="*{title}" required placeholder="Your yummy title .."/>
+                                   aria-describedby="title" th:field="*{title}" required
+                                   placeholder="Your yummy title .."/>
                             <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                         </div>
 
                         <!--    ENTER RECIPE DESCRIPTION -->
                         <div class="form-group px-4">
                             <label>Description</label>
-                            <textarea class="form-control" placeholder="your savory description .." aria-label="description" rows="3" th:field="*{description}" minlength="10"></textarea>
+                            <textarea class="form-control" placeholder="your savory description .."
+                                      aria-label="description" rows="3" th:field="*{description}"
+                                      minlength="10"></textarea>
                             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                         </div>
 
@@ -84,9 +88,11 @@
                         <!--    ENTER DIFFICULTY LEVEL    -->
                         <div class="form-group px-4">
                             <label>Difficulty</label><br>
+
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input class="custom-control-input" type="radio" name="difficulty" id="easy" th:field="*{difficulty}" value="easy" checked required>
                                 <label class="custom-control-label mr-2" for="easy" >Easy</label>
+
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input class="custom-control-input" type="radio" name="difficulty" id="medium"
@@ -109,20 +115,24 @@
                         <div class="form-group px-4">
                             <label id="cusine">Cusine</label>
                             <select name="categories" class="form-control" multiple>
-                                <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" th:field="*{categories}"></option>
+                                <option th:each="category : ${categories}" th:text="${category.name}"
+                                        th:value="${category.id}" th:field="*{categories}"></option>
                             </select>
                         </div>
 
                         <!--    ENTER COOKING DIRECTIONS  -->
                         <div class="form-group px-4">
                             <label id="directions">Directions</label>
-                            <textarea class="form-control" placeholder="Step one create something delicious .." aria-label="directions" rows="5"
-                                      th:field="*{directions}" minlength="20" required ></textarea>
-                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}" ></p>
+                            <textarea class="form-control" placeholder="Step one create something delicious .."
+                                      aria-label="directions" rows="5"
+                                      th:field="*{directions}" minlength="20" required></textarea>
+                            <p th:if="${#fields.hasErrors('directions')}" th:errors="*{directions}"></p>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center">
-                            <button sec:authorize="isAuthenticated()" class="btn btn-yellow text-center rounded-pill nav-link shadow-sm px-2" type="submit">
-                                Update 
+                            <button sec:authorize="isAuthenticated()"
+                                    class="btn btn-yellow text-center rounded-pill nav-link shadow-sm px-2"
+                                    type="submit">
+                                Update
                             </button>
                         </div>
 
@@ -135,7 +145,8 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a id="userRecipe" href="#recipeTab" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add Ingredients</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add
+                            Ingredients</a>
                     </div>
                 </div>
             </div>
@@ -144,8 +155,7 @@
             <div class="tab-pane pb-3" id="recipeTab">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your recipe
-                            ingredients.</h3>
+                        <h3 class="my-3 text-center chow-font">Add Ingredients to your recipe...</h3>
                         <div class="text-center">
                             <input type="button" id="showIngredientForm" class="btn btn-green btn-sm rounded-pill"
                                    value="Add New Ingredient"/>
@@ -173,8 +183,9 @@
                     <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item" role="presentation">
                         <a th:if="${recipe.id != 0}" href="#addImages" data-toggle="tab" role="tab"
                            aria-controls="nav-ingredients"
-                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Next
-                            Step</a>
+                           aria-selected="false" class="btn btn-red rounded-pill m-2 float-right nav-link shadow">Add
+                            Images
+                        </a>
                     </div>
                 </div>
             </div>
@@ -183,16 +194,15 @@
             <div class="tab-pane fade" id="addImages" role="tabpanel" aria-labelledby="add-images-tab">
                 <div>
                     <div class="card-body ">
-                        <h3 class="my-3 text-center green-text text-uppercase font-weight-bold">Edit your recipe
-                            images.</h3>
-                        <div class="col justify-content-center">
-                            <div class="row text-center">
+                        <h3 class="my-3 text-center chow-font">Update your recipe images...</h3>
+                        <div class="col justify-content-center" id="renderImages">
+                            <div class="row text-center justify-content-center">
                                 <div class="m-1" th:each="image : ${recipe.images}">
-                                    <!--                                    <div id="image-id" th:value="${image.id}" hidden></div>-->
-                                    <!--                                    <div id="image-url" th:value="${image.url}" hidden></div>-->
                                     <div class="image-preview">
                                         <img th:id="'image_upload_preview' + ${image.id}" th:src="${image.url}"
-                                             class="shadow-lg" style="border: 5px solid rgb(255, 255, 255);" width="200"
+                                             class="shadow-lg" style="border-radius: 15px; border: 5px solid rgb(255,
+                                             255, 255);"
+                                             width="200"
                                              height="200">
                                         <br>
 
@@ -212,20 +222,39 @@
                                         accept=".jpg,.png,.jpeg" name="file" type='file' id="recipePicture" hidden/>
                                 </label>
                             </div>
-                            <img th:id="image_preview" src="" class="shadow-lg"
-                                 style="display:none; border: 5px solid rgb(255, 255, 255);" width="200" height="200">
-                            <br>
+                            <div class="text-center">
+                                <img th:id="image_preview" src="" class="shadow-lg"
+                                     style="display:none; border: 5px solid rgb(255, 255, 255);" width="200"
+                                     height="200">
+                                <br>
 
-                            <button id="imageUpload" class="btn btn-sm btn-red" style="display: none;">Upload</button>
+                                <button id="imageUpload" class="btn btn-sm btn-red p-1 m-2" style="display: none;">
+                                    Upload
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <button id="recipePublish" class="btn btn-sm btn-red">Publish</button>
+                <div class="form-group d-flex justify-content-end align-items-center mr-4">
+                    <form th:action="@{/recipes/{id}/publish(id=${recipe.id})}" th:method="post">
+                        <button type="submit" id="recipePublish"
+                                class="btn btn-lg btn-yellow rounded-pill nav-link shadow-sm px-2">
+                            Publish Your Creation!
+                        </button>
+                    </form>
+                    <br>
+                    <br>
+                </div>
+                <div id="successAlert" class="alert alert-success collapse">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <strong>SUCCESS!</strong>
+                </div>
             </div>
         </div>
     </div>
     </div>
 </main>
+
 <!--Delete Ingredient Modal-->
 <div sec:authorize="isAuthenticated()" th:if="${isOwner}" class="modal fade" id="deleteIngredientModal" tabindex="-1"
      role="dialog" aria-labelledby="deleteIngredientModalLabel" aria-hidden="true">
@@ -280,13 +309,36 @@
                             <label class="green-text font-weight-bold">Unit</label>
                             <div class="mt-1">
                                 <select name="unit" required>
-                                    <option th:value="teaspoon">Teaspoon (tsp)</option>
-                                    <option th:value="tablespoon">Tablespoon (Tbsp)</option>
-                                    <option th:value="ounce">Ounce (oz)</option>
-                                    <option th:value="cup">Cup (c)</option>
-                                    <option th:value="pint">Pint (pt)</option>
-                                    <option th:value="quart">Quart (qt)</option>
-                                    <option th:value="gallon">Gallon (gal)</option>
+                                    <optgroup label="misc">
+                                        <option th:value="single">Single</option>
+                                        <option th:value="bunch">Bunch</option>
+                                    </optgroup>
+                                    <optgroup label="Volume">
+                                        <option th:value="drop">Drop</option>
+                                        <option th:value="teaspoon">Teaspoon (tsp)</option>
+                                        <option th:value="tablespoon">Tablespoon (Tbsp)</option>
+                                        <option th:value="cup">Cup (c)</option>
+                                        <option th:value="pint">Pint (pt)</option>
+                                        <option th:value="quart">Quart (qt)</option>
+                                        <option th:value="gallon">Gallon (gal)</option>
+                                        <option th:value="ml">Milliliter (mL)</option>
+                                        <option th:value="liter">Liter (L)</option>
+                                    </optgroup>
+                                    <optgroup label="Mass">
+                                        <option th:value="pinch">Pinch</option>
+                                        <option th:value="dash">Dash</option>
+                                        <option th:value="ounce">Ounce (oz)</option>
+                                        <option th:value="pound">Pound (lb)</option>
+                                        <option th:value="mg">Milligrams (mg)</option>
+                                        <option th:value="gram">Gram (g)</option>
+                                        <option th:value="kilo">Kilogram (kg)</option>
+                                    </optgroup>
+                                    <optgroup label="Length">
+                                        <option th:value="mm">mm</option>
+                                        <option th:value="cm">cm</option>
+                                        <option th:value="meter">Meter (m)</option>
+                                        <option th:value="inch">Inch (in)</option>
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>

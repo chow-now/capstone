@@ -22,28 +22,31 @@
     $("#recipePicture").on('change', function () {
         $("#imageUpload").show();
         readURL(this);
-        $('#imageUpload').on('click', function (e) {
-            e.preventDefault();
+    });
 
-            console.log("upload clicked");
-            let data = new FormData($("#uploadImageForm")[0]);
-            console.log(data);
-            $.ajax({
-                url: "/recipes/" + recipeId + "/upload",
-                method: "POST",
-                enctype: 'multipart/form-data',
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function () {
+    $('#imageUpload').on('click', function (e) {
+        e.preventDefault();
+        console.log("upload clicked");
+        let data = new FormData($("#uploadImageForm")[0]);
+        console.log(data);
+        $("#imageUpload, #image_preview").hide();
+        loadSpinner();
+        $.ajax({
+            url: "/recipes/" + recipeId + "/upload",
+            method: "POST",
+            enctype: 'multipart/form-data',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function () {
+                setTimeout(function () {
+                    getRecipeImages();
+                },500)
+            },
+            error: function () {
 
-                    location.reload();
-                },
-                error: function () {
-
-                }
-            });
+            }
         });
     });
 
@@ -52,42 +55,22 @@
 
     let imageUrl = document.getElementById('image-url');
     console.log(imageUrl)
-
-
-    // $("#deleteImage" + imageId).on('click', function () {
-    //     console.log($("#deleteImage" + imageId).val());
-    //     $.ajax({
-    //         url: "/recipes/image/" + imageId + "/delete",
-    //         method: "POST",
-    //         data: {imageUrl},
-    //         dataType: "text",
-    //
-    //         success: function () {
-    //             location.reload();
-    //         },
-    //         error: function () {
-    //             location.reload();
-    //         }
-    //     });
-    // });
-
-    $(".delete-image").on('click', function () {
+    $(document).on('click','.delete-image', function () {
         console.log(this);
         $.post("/recipes/image/" + this.id + "/delete", function (data) {
             console.log(data);
         })
         $(this).parent().hide();
-
     });
-
 
     // // PUBLISH RECIPE
-    $("#recipePublish").on('click', function () {
-        $.post("/recipes/" + recipeId + "/publish", function (data) {
-            console.log(data);
-        });
-    });
+    $('#recipePublish').on('click', function () {
+        // $.post("/recipes/" + recipeId + "/publish", function (data) {
+        //     console.log(data);
+        // });
 
+        $('#successAlert').show('fade');
+    });
 
         // RECIPE AJAX
         let recipeInventory;
@@ -336,5 +319,18 @@
             }, 1500);
             return false;
         })
+
+        const getRecipeImages = ()=>{
+            $.ajax({'url': '/recipes/'+recipeId+'/images'}).done(function (images) {
+                $('#renderImages').html(images);
+            });
+        }
+
+        const loadSpinner = () =>{
+            let html = '<div class="d-flex justify-content-center align-items-center"><div class="spinner-grow text-warning" role="status">\n' +
+                '  <span class="sr-only">Loading...</span>\n' +
+                '</div></div>'
+            $('#renderImages').html(html);
+        }
 
     })(jQuery);

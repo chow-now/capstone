@@ -63,7 +63,7 @@ public class RecipeController {
 
     @Autowired
     private FavoriteRepository favDao;
-
+    
     @GetMapping("/recipes")
     public String getRecipes(@RequestParam(required = false) String term, Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", term);
@@ -240,8 +240,7 @@ public class RecipeController {
         if(!userServ.isOwner(recipe.getChef())){
             return "redirect:/recipes";
         }
-//        recipe.setRecipeIngredients(recipeIngDao.findAllByRecipe(recipe));
-//        recipe.setImages(imageDao.findAllByRecipe(recipe));
+
         model.addAttribute("recipe", recipe);
         model.addAttribute("user", currentUser);
         model.addAttribute("categories", categoryDao.findAll());
@@ -295,16 +294,11 @@ public class RecipeController {
         System.out.println("imgs "+recipeToBeSaved.getImages().size());
         System.out.println("resIng "+recipeToBeSaved.getRecipeIngredients().size());
         /** --------------------- **/
-//
-//        recipe.setRecipeIngredients(recipeToBeSaved.getRecipeIngredients());
-//        recipe.setImages(recipeToBeSaved.getImages());
+
 
         recipe = recipeDao.save(recipe);
         model.addAttribute("recipe", recipe);
 
-//        User currentUser = userServ.loggedInUser();
-//        recipeToBeSaved.setChef(userDao.getOne(currentUser.getId()));
-//        Recipe dbRecipe = recipeDao.save(recipeToBeSaved);
         return "redirect:/recipes/" + recipe.getId() +"/edit";
     }
 
@@ -330,12 +324,11 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/{id}/publish")
-    public @ResponseBody String publishRecipe(@PathVariable long id){
+    public String publishRecipe(@PathVariable long id){
         Recipe recipe = recipeDao.getOne(id);
         recipe.setPublished(true);
-        recipeDao.save(recipe);
-
-        return "publish successful";
+        recipe = recipeDao.save(recipe);
+        return "redirect:/recipes/" + recipe.getId();
     }
 
 
@@ -352,5 +345,13 @@ public class RecipeController {
        }
        return "redirect:/recipes/" + id;
    }
+
+    // RECIPE Images RETURNS PARTIAL
+    @GetMapping("recipes/{id}/images")
+    public String getImages(@PathVariable (value="id") long id, Model model){
+        Recipe recipe = recipeDao.getOne(id);
+        model.addAttribute("recipe",recipe);
+        return "recipes/images :: recipeImages";
+    }
 
 }
