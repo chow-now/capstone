@@ -9,7 +9,6 @@
                 <div class="text-center">
                     <a class="login-signup-toggle text-decoration-none">Already a member? Log in</a>
                 </div>
-<!--                <form th:replace="users/forms :: register"></form>-->
             </div>
         </div>
     </div>
@@ -22,7 +21,28 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <form th:replace="users/forms :: login"></form>
+                <form action="/login" method="POST" class="text-center px-3 py-4 green-text">
+
+                    <p class="h4 mb-4 chow-font">CHOW NOW</p>
+
+                    <!-- E-mail -->
+                    <div class="form-row mb-4">
+                        <div class="col">
+                            <input type="email" id="defaultLoginFormEmail" name="username" class="form-control mb-2" placeholder="E-mail" required>
+                        </div>
+                    </div>
+                    <!-- Password -->
+                    <div class="form-row mb-2">
+                        <div class="col">
+                            <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" name="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <!-- Login button -->
+                    <button class="btn btn-green rounded-pill" type="submit" value="Log In">Login</button>
+                    <!-- Social login -->
+                    <div class="or-seperator"><i>or sign in with:</i></div>
+                    <a href="/oauth2/authorization/google" class=" text-danger" role="button"><i class="fab fa-google light-blue-text"></i></a>
+                </form>
                 <div class="text-center">
                     <a class="login-signup-toggle text-decoration-none">Not on ChowNow? Sign up</a>
                 </div>
