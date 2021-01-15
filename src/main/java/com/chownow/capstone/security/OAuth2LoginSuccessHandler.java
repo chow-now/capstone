@@ -35,7 +35,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String name = oAuth2User.getName();
         User dbUser = userDao.getUserByEmail(email);
         if(dbUser == null){
-            System.out.println("REGISTERING USER");
             //register as new user
             User user = new User(email,name,randomPassword(30));
             user.setAuthProvider(AuthenticationProvider.GOOGLE);
@@ -44,10 +43,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             User regUser = userDao.save(user);
             pantryDao.save(new Pantry(user));
             userServ.authenticate(regUser);
-            System.out.println("USERS ID: "+regUser.getId());
             response.sendRedirect("/dashboard");
         }else{
-            System.out.println("GETTING USER");
             // update existing customer
             if(!dbUser.getAuthProvider().toString().equalsIgnoreCase("google")){
                 dbUser.setAuthProvider(AuthenticationProvider.GOOGLE);
@@ -61,7 +58,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     // random auto hashed password to give the user when logged in with Oauth
     public static String randomPassword(int len) {
-        System.out.println("IN AUTO HASH");
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
                 +"lmnopqrstuvwxyz!@#$%&0123456789";
         Random rnd = new Random();

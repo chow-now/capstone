@@ -72,7 +72,4 @@
         }
         lastScrollTop = st;
     }
-
-    console.log(window.location.href);
-
 })(jQuery);

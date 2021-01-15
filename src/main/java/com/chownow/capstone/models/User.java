@@ -54,7 +54,6 @@ public class User {
 	@Column(columnDefinition = "TEXT")
 	private String aboutMe;
 
-
 	@Column
 	@JsonIgnore
 	private Boolean isAdmin = false;

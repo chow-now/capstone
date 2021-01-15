@@ -9,8 +9,6 @@ import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.chownow.capstone.services.AmazonService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -256,36 +254,15 @@ public class RecipeController {
             return "recipes/edit";
         }
 
-
-
         // ADD FIELDS TO EXISTING RECIPE
-
-//        model fields
-
-        System.out.println(recipeToBeSaved.getTitle());
         recipe.setTitle(recipeToBeSaved.getTitle());
-        System.out.println(recipeToBeSaved.getDescription());
         recipe.setDescription(recipeToBeSaved.getDescription());
-        System.out.println("ck "+recipeToBeSaved.getCookTime());
         recipe.setCookTime(recipeToBeSaved.getCookTime());
-        System.out.println("pt "+recipeToBeSaved.getPrepTime());
         recipe.setPrepTime(recipeToBeSaved.getPrepTime());
-        System.out.println(recipeToBeSaved.getServings());
         recipe.setServings(recipeToBeSaved.getServings());
-        System.out.println(recipeToBeSaved.getDirections());
         recipe.setDirections(recipeToBeSaved.getDirections());
-        System.out.println(recipeToBeSaved.getDifficulty());
         recipe.setDifficulty(recipeToBeSaved.getDifficulty());
-        System.out.println("cats "+recipeToBeSaved.getCategories().size());
         recipe.setCategories(recipeToBeSaved.getCategories());
-
-
-        /** this will be updated via its own forma and route **/
-//        relationships
-        System.out.println("imgs "+recipeToBeSaved.getImages().size());
-        System.out.println("resIng "+recipeToBeSaved.getRecipeIngredients().size());
-        /** --------------------- **/
-
 
         recipe = recipeDao.save(recipe);
         model.addAttribute("recipe", recipe);
@@ -299,7 +276,6 @@ public class RecipeController {
                                                Model model){
         Recipe recipe = recipeDao.getOne(id);
         s3.uploadRecipeImage(multipartFile, recipe);
-//        model.addAttribute("recipe",recipe);
         return "uploaded";
     }
 

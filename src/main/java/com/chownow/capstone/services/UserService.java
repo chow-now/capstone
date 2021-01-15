@@ -3,7 +3,6 @@ package com.chownow.capstone.services;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

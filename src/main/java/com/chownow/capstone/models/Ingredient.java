@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="ingredients")
-
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

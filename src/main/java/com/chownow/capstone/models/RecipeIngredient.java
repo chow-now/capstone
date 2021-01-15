@@ -1,11 +1,8 @@
 package com.chownow.capstone.models;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Entity
 @Table(name="recipe_ingredients")
