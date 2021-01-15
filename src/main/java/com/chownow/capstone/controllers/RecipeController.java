@@ -63,14 +63,44 @@ public class RecipeController {
 
     @Autowired
     private FavoriteRepository favDao;
-
-
+    
     @GetMapping("/recipes")
-    public String getRecipes(@RequestParam(required = false) String term,Model viewModel) throws InterruptedException, ParseException, IOException {
+    public String getRecipes(@RequestParam(required = false) String term, Model viewModel) throws InterruptedException, ParseException, IOException {
         viewModel.addAttribute("term", term);
         viewModel.addAttribute("spoonApi", spoonApi);
-        viewModel.addAttribute("recipe", new SpoonApiDto());
-        //viewModel.addAttribute("recipes", recipeDao.findAllByIsPublishedTrue());
+
+        System.out.println("term = " + term);
+        //viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
+        List<Recipe> searchedRecipes = recipeDao.findAll();
+        if (term != null) {
+            searchedRecipes = new ArrayList<>();
+            for (Recipe recipe : recipeDao.findAll()) {
+                    if (recipe.getTitle().toLowerCase().contains(term.toLowerCase())) {
+                        searchedRecipes.add(recipe);
+                        continue;
+                    }
+                    String[] searchArray = term.replaceAll(", ", ",").split(",");
+                    ArrayList<String> ingredientArray = new ArrayList<>();
+
+                    recipe.getRecipeIngredients().forEach(ingredient -> {
+                        ingredientArray.add(ingredient.getIngredient().getName());
+                    });
+
+                    //separate ingredient string into an array
+                    boolean searchFlag = true;
+                    for (String s : searchArray) {
+                        if (!ingredientArray.toString().toLowerCase().contains(s.toLowerCase())) {
+                            searchFlag = false;
+                            break;
+                        }
+                    }
+                    if (searchFlag) {
+                        searchedRecipes.add(recipe);
+                    }
+            }
+           // viewModel.addAttribute("recipes", searchedRecipes);
+        }
+        viewModel.addAttribute("recipeResultsDB", searchedRecipes);
         return "recipes/index";
     }
 
@@ -80,6 +110,7 @@ public class RecipeController {
                               Model viewModel){
 
         String message = recipeService.saveRecipe(recipe);
+
         // For testing/indicator
         viewModel.addAttribute("message", message);
         return "recipes/index";
