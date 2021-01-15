@@ -68,7 +68,6 @@ public class RecipeController {
         viewModel.addAttribute("spoonApi", spoonApi);
 
         System.out.println("term = " + term);
-        //viewModel.addAttribute("allrecipe", recipeDao.findAllByIsPublishedTrue());
         List<Recipe> searchedRecipes = recipeDao.findAllByIsPublishedTrue();
         if (term != null) {
             searchedRecipes = new ArrayList<>();
@@ -96,13 +95,12 @@ public class RecipeController {
                         searchedRecipes.add(recipe);
                     }
             }
-           // viewModel.addAttribute("recipes", searchedRecipes);
         }
         viewModel.addAttribute("recipeResultsDB", searchedRecipes);
         return "recipes/index";
     }
 
-    /** List results **/
+    /** Save Spoonacular API - Favorites **/
     @PostMapping("/recipes")
     public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
                               Model viewModel){
@@ -110,8 +108,8 @@ public class RecipeController {
         String message = recipeService.saveRecipe(recipe);
 
         // For testing/indicator
-        viewModel.addAttribute("message", message);
-        return "recipes/index";
+        //viewModel.addAttribute("message", message);
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/recipes/{id}")

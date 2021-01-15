@@ -21,14 +21,14 @@
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
 <div class="form-outline">
-    <form class="w-50 my-4 mx-auto" th:action="@{/recipes}" method="get">
+    <form class="w-50 my-5 mx-auto" th:action="@{/recipes}" method="get">
         <input type="text" class="form-control" id="main_search"
                placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term" th:value="${term}">
     </form>
 <!--    <h1 th:text="${recipeResultsDB.size()}"></h1>-->
 </div>
 
-        <!-- Tab [Results] -->
+        <!-- Results Toggle -->
 <div class="container">
     <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
         <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
@@ -38,7 +38,7 @@
         </li>
         <li class="btn btn-yellow btn-sm mx-2" type="button" id="recipeApiTab">
             <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
-                <p class="text-black-50 mb-0">Spoon</p>
+                <p class="text-black-50 mb-0">Spoonacular</p>
             </a>
         </li>
     </ul>
@@ -46,7 +46,7 @@
 
 
     <!-- Error Alert-->
-    <span th:if= "${message != null}" th:text="${message}"></span>
+<!--    <span th:if= "${message != null}" th:text="${message}"></span>-->
 
 
     <!-- Display all recipes from DB -->
@@ -55,14 +55,14 @@
         <div class="my-2" th:each="recipe : ${recipeResultsDB}">
             <div class="col my-2">
                 <div class="card my-2 h-100">
-                    <h5 class="card-title text-center"><span th:text="${recipe.title}"></span></h5>
                     <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>
+                    <h4 class="card-title m-2"><span th:text="${recipe.title}"></span></h4>
                     <div class="card-body">
                         <div>
                             <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
                         </div>
 
-                        <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                        <div class="mb-2" style="height:200px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                             <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
                         </div>
 
@@ -137,67 +137,54 @@
 <!-- // Results from SpoonAPI-->
 <!--- Modal to display recipe information --->
 <div class="container d-none" id="recipeSpoonApi">
-    <div class="recipes1 row row-cols-1 row-cols-md-4 g-5"></div>
-    <div
-        class="modal fade"
-        id="viewRecipeModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-lg">
-        <form th:action="@{/recipes}" th:object="${recipe}" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
-                    <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    ><span>&times;</span></button>
-                </div>
+    <div class="recipes1 my-2 row row-cols-1 row-cols-md-3 g-5"></div>
+        <div class="modal fade" id="viewRecipeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form th:action="@{/recipes}" th:object="${recipe}" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                        </div>
 
-                <!-- Display Image -->
-                <div class="recipe-image mx-auto"></div>
+                            <!-- Display Image -->
+                            <div class="recipe-image mx-auto"></div>
 
-                <div class="modal-body">
-                    <!-- Display Prep Time -->
-                    <h4>Prep Time</h4>
-                    <div class="recipe-prep"></div>
+                        <div class="modal-body">
+                            <!-- Display Prep Time -->
+                            <h4>Prep Time</h4>
+                            <div class="recipe-prep"></div>
 
-                    <!-- Display Cook Time -->
-                    <h4>Cook Time</h4>
-                    <div class="recipe-cook"></div>
+                            <!-- Display Cook Time -->
+                            <h4>Cook Time</h4>
+                            <div class="recipe-cook"></div>
 
-                    <!-- Display summary -->
-                    <h4>Summary</h4>
-                    <div class="recipe-summary"></div>
+                            <!-- Display summary -->
+                            <h4>Summary</h4>
+                            <div class="recipe-summary"></div>
 
-                    <!-- Display Categories by cuisines: im planning to change this into pills for future -->
-                    <h4>Categories</h4>
-                    <ul class="recipe-categories"></ul>
+                            <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                            <h4>Categories</h4>
+                            <ul class="recipe-categories"></ul>
 
-                    <!-- Display current servings -->
-                    <h4>Servings</h4>
-                    <div class="recipe-servings"></div>
+                            <!-- Display current servings -->
+                            <h4>Servings</h4>
+                            <div class="recipe-servings"></div>
 
-                    <!-- Display Ingredients -->
-                    <h4>Ingredients</h4>
-                    <ul class="recipe-ingredients"></ul>
+                            <!-- Display Ingredients -->
+                            <h4>Ingredients</h4>
+                            <ul class="recipe-ingredients"></ul>
 
-                    <!-- Display Instructions -->
-                    <h4>Directions</h4>
-                    <ol class="recipe-directions"></ol>
+                            <!-- Display Instructions -->
+                            <h4>Directions</h4>
+                            <ol class="recipe-directions"></ol>
+                        </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
-                </div>
-            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
+                        </div>
+                    </div>
             <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
             <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
             <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
@@ -213,10 +200,7 @@
 </div>
 </div>
 
-
-
 <th:block th:include="partials/scripts :: scripts"></th:block>
-
 <script th:inline="javascript">
 
     // In the head
@@ -254,20 +238,20 @@
                             console.log(singleRecipe);
 
                             $('.recipes1').append(
-                                `<div class="col">
-                                    <div class="spoonResultsCard my-2 h-100">
-                                        <h5 class="card-title text-center">${singleRecipe.title}</h5>
-                                            <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
+                                `<div class="col my-3">
+                                    <div class="spoonResultsCard card my-2">
+                                        <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
+                                        <h4 class="card-title m-2" style="font-weight: bold">${singleRecipe.title}</h4>
                                     <div class="card-body">
                                         <div>
-                                            <h6 class="mb3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
+                                            <h6 class="mb-3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
                                         </div>
 
-                                    <div class="scroll mb-2" style="height:200px; overflow-y: scroll;">
+                                    <div class="mb-2" style="height:200px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
-                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
+                                    <button class="btn btn-red text-center rounded-pill nav-link shadow px-2 mt-3 btn-block viewRecipe" data-toggle="modal" data-target="#viewRecipeModal" id=${singleRecipe.id}>More info</button>
                                     </div>
                                     </div>
                                 </div>`)

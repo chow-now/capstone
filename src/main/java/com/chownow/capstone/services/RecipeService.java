@@ -51,23 +51,17 @@ public class RecipeService {
         String prepTime;
         String servings;
 
-        // Prevent duplicate favorites if user signed in
-//        for(Favorite fav : user.getFavorites()){
-//            if(recipe.getSpoonApiId() == fav.getSpoonApiId()){
-//                return "Already Exist";
-//            }
-//        }
-
+        // Prevent duplicates for Favorites and Recipe tables
         Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
         if (existingRecipeEntity.isPresent()) {
             Recipe isExisting = existingRecipeEntity.get();
             Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
 
             if (existingRecipeChef != null) {
-                return "Recipe already exist for chef";
+                return "redirect:/dashboard";
             }
             favDao.save(new Favorite(user, isExisting));
-            return isExisting.getId() + "";
+            return "redirect:/dashboard";
         }
 
 
