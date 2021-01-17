@@ -29,7 +29,7 @@ document.addEventListener('scroll', () => {
             $("#showRegistration").removeClass("toggle-reg");
             setTimeout(function() {
                 $("#registerModal").modal("toggle");
-            }, 1000);
+            }, 2500);
         }
     }
 })
