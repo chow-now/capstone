@@ -171,7 +171,7 @@
         <div class="d-flex justify-content-center">
           <div class="w-100 btn btn-green text-center rounded-pill">Ingredients List</div>
         </div>
-        <table id="ingredientsTable" class="table " >
+        <table id="ingredientsTable" class="table table-responsive-sm" >
           <tbody>
             <tr th:each="ingredient : ${recipe.recipeIngredients}">
               <td class="text-center" style="font-family: corsa;"><span th:data-internalid="${ingredient.amount}" class="rational" th:text="${ingredient.amount}"></span><span th:text="${' ' + ingredient.unit}"></span></td>
