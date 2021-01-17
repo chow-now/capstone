@@ -1,204 +1,70 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
-***
-***
-***
-*** To avoid retyping too much info. Do a search and replace for the following:
-*** github_username, repo_name, twitter_handle, email, project_title, project_description
--->
 
+<img width="1054" alt="Screen Shot 2021-01-16 at 10 31 13 PM" src="https://user-images.githubusercontent.com/40813295/104831049-b1dff200-584a-11eb-97d8-ceefe2e88d9a.png">
 
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/chow-now/capstonee">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">ChowNow</h3>
-
-  <p align="center">
-    Don't know how to cook? We've got you covered, just input ingredients you have in your pantry, or search and ChowNow will provide you with plethora of recipies and the steps to follow in order
-     to have a delisous meal
-    <br />
-    <a href="https://github.com/chow-now/capstone"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p>
+<b></b>
+<b></b>
+<p align="center"> 
+ChowNow is a full-stack Java application, built on the Spring Boot framework. This web seeks to create a community of users who can easily create, share, find and save recipes based on the ingredients in their virtual pantries.
 </p>
 
+## Table of Contents
+1. [Demo](https://github.com/chow-now/capstone#demo)
+2. [Technologies Applied](https://github.com/chow-now/capstone#libraries-and-utilities-applied)
+3. [Setup Instruction](https://github.com/chow-now/capstone#setup-instruction)
+4. [Contribution](https://github.com/chow-now/capstone#contribution)
+### Demo
+[ChowNow.xyz](https://www.chownow.xyz)
+                         
+### Technologies
+- Oauth2 [link](https://oauth.net/2/)
+- AWS S3 [link](https://aws.amazon.com/s3/)
+- Spoonacular API [link](https://spoonacular.com/food-api)
+- Bootstrap [link](https://getbootstrap.com/)
+- jQuery [link](https://jquery.com/)
+- Spring Boot 
+- Hibernate ORM + JPA
+- Thymeleaf
+- MySQL
 
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
+### Setup Instruction
+
+1. Clone this repo locally.
+1. Create an `application.properties` file with valid credentials for a MySQL connection
+1. Make sure to start a MySQL server.
+1. This project requires an AWS S3 Bucket and access keys
+1. This project requires Spoon API access key
+1. THis project requires Google Oauth 2 setup and client keys
+1. Add any API keys needed to test the full functionality. Use the `application.properties.example` as a template.
+1. Seed file will run on initial startup to populate data in the database.
+
+### Contribution
+**This list is in alphabetical order**
+<details>
+  <summary>Sahara Tijol  <a href="https://github.com/saharatijol" target="_blank">GitHub</a></summary>
+  
+  1.   
+  2. 
+  3. 
+  4. 
+  5. 
 </details>
 
+<details>
+  <summary>Michael Klanica <a href="https://github.com/michaelklanica" target="_blank">GitHub</a></summary>
 
+  1.  
+  2. 
+  3. 
+  4. 
+</details>
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+<details>
+  <summary>Robert De laRosa <a href="https://github.com/rdelarosa3" target="_blank">GitHub</a></summary>
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
-
-
-### Built With
-
-* [Spring](https://spring.io/projects/spring-boot)
-* [Maven](https://maven.apache.org/)
-* [Java ]()
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-To get a local copy up and running follow these simple steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone git@github.com:chow-now/capstone.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Michael Klanica - [@Michael Klanica](https://github.com/michaelklanica) - email
-
-Sahara Name - [@saharatijol](https://github.com/saharatijol) - sahara.tijol@gmail.com
-
-Robert - [@rdelarosa3](https://github.com/rdelarosa3) - email
-
-Patrick Larkin - [@Patrick-Larkin](https://github.com/Patrick-Larkin) - patricklarkin995@gmail.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-
-* []()
-* []()
-* []()
-
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
+  1. Implementation of Spring Security 
+  2. Integration of AWS S3 for remote file storage
+  3. Implementation and setup for Oauth2 with Google 
+  4. UX/UI design using JS, CSS, JQuery, and Bootstrap libraries
+</details>
+ 
