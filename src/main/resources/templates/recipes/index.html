@@ -193,7 +193,7 @@
 
         $.ajax({
             type: 'GET',
-            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=25&apiKey=${spoonApi}`,
+            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
             success: function (results) {
 
                 let recipe = "";
@@ -268,7 +268,29 @@
 
                                         title += modalRecipe.title;
 
-                                        prepTime += `<div class="container">
+                                        if (modalRecipe.preparationMinutes == undefined || modalRecipe.cookingMinutes == undefined) {
+                                            prepTime += `<div class="container">
+                                                        <div id="infoSection" class="row text-center mx-auto">
+                                                            <div class="col-6">
+                                                                <div class="card rounded-card" style="height: 7em;">
+                                                                <div class="card-body">
+                                                                    <h5  class="text-dark font-weight-bold">N/A MINS</h5>
+                                                                    <div class="smallFont" style="font-family: corsa" >prep time</div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="card rounded-card" style="height: 7em;">
+                                                                <div class="card-body">
+                                                                    <h5 class="text-dark font-weight-bold">N/A MINS</h5>
+                                                                    <div class="smallFont" style="font-family: corsa" >cook time</div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                        </div>`;
+                                        } else {
+                                            prepTime += `<div class="container">
                                                         <div id="infoSection" class="row text-center mx-auto">
                                                             <div class="col-6">
                                                                 <div class="card rounded-card" style="height: 7em;">
@@ -288,6 +310,7 @@
                                                             </div>
                                                             </div>
                                                         </div>`;
+                                        }
 
                                         servings += `<p>${modalRecipe.servings} servings</p>`
 
@@ -295,7 +318,7 @@
 
                                         // Categories List
                                         if (modalRecipe.cuisines.length == 0) {
-                                            category += `<li class="">Unknown category</li>`;
+                                            category += `<li class="">Categories are unavailable at this time.</li>`;
 
                                             hiddenCategories = 'Unknown category';
                                         } else {
