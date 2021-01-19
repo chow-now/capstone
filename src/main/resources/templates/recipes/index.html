@@ -5,8 +5,6 @@
     <title>Results</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
     <title>Dashboard</title>
     <link th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/x-icon">
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
@@ -29,10 +27,9 @@
             Search
         </button>
     </form>
-<!--    <h1 th:text="${recipeResultsDB.size()}"></h1>-->
 </div>
 
-        <!-- Results Toggle -->
+<!-- Results Toggle -->
 <div class="container">
     <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
         <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
@@ -85,72 +82,12 @@
                         </div>
 
                         <a th:href="@{/recipes/{id}(id=${ recipe.id })}" class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe">More info</a>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        <!--      Modal that will hold recipe details       -->
-        <div class="modal fade" th:each="modalRecipeDB : ${recipeResultsDB}" th:id="${'viewDBRecipeModal' + modalRecipeDB.id}" tabindex="-1" role="dialog"
-             aria-labelledby="recipeModalLongTitle" aria-hidden="true" >
-
-            <div class="modal-dialog modal-lg" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Test</h1>
-                        <!--                    <div sec:authorize="isAuthenticated()">-->
-                        <!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
-                        <!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
-                        <!--                                id="recipeModalLongTitle"-->
-                        <!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
-                        <!--                        </a>-->
-                        <!--                    </div>-->
-                        <!--                    <div sec:authorize="isAnonymous()">-->
-                        <!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
-                        <!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
-                        <!--                                id="recipeModalLongTitle"-->
-                        <!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
-                        <!--                        </a>-->
-                        <!--                    </div>-->
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-image mx-auto">
-                        <!--    Image for recipe    -->
-                        <!--                    <img class="profileFromRecipeModuleImage img-fluid" th:attr="src=@{${recipe.recipeImageUrl}}"-->
-                        <!--                         alt="Recipe image">-->
-                    </div>
-                    <div class="modal-body">
-                        <!--    Display the recipes cuisines    -->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Category</h5>
-                        <ul class="modal-cuisine d-flex p-0">
-                            <!--                        <div th:each="category : ${recipe.categories}">-->
-                            <!--                            <li class="mr-2" th:text="${category.name}"></li>-->
-                            <!--                        </div>-->
-                        </ul>
-                        <!--      Display Ingredients title         -->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Ingredients</h5>
-                        <!--    List displaying the ingredients    -->
-                        <ul class="ingredient-list-group p-0">
-                            <!--      Ingredients will display here dynamically      -->
-                            <!--                        <div th:each="ingredient : ${recipe.ingredients}">-->
-                            <!--                            <li class="list-group-item mt-1 mb-1" th:text="${ingredient.name}"></li>-->
-                            <!--                        </div>-->
-                        </ul>
-                        <!--      Display Instructions-->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Directions</h5>
-                        <!--      Instructions will display here dynamically      -->
-                        <!--                    <div class="list-group-item mt-1 mb-1" th:text="${recipe.directions}"></div>-->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Comments</h5>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 
 <!-- // Results from SpoonAPI-->
 <!--- Modal to display recipe information --->
