@@ -58,10 +58,10 @@ public class RecipeService {
             Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
 
             if (existingRecipeChef != null) {
-                return "redirect:/dashboard";
+                return "redirect:/recipes/" + isExisting.getId();
             }
             favDao.save(new Favorite(user, isExisting));
-            return "redirect:/dashboard";
+            return "redirect:/recipes/" + isExisting.getId();
         }
 
 
