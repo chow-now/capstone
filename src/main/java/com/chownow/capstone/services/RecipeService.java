@@ -46,7 +46,6 @@ public class RecipeService {
         // Hard-coded for now
         User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getById(user1.getId());
-        //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
@@ -58,10 +57,10 @@ public class RecipeService {
             Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
 
             if (existingRecipeChef != null) {
-                return "redirect:/dashboard";
+                return "redirect:/recipes/" + isExisting.getId();
             }
             favDao.save(new Favorite(user, isExisting));
-            return "redirect:/dashboard";
+            return "redirect:/recipes/" + isExisting.getId();
         }
 
 
