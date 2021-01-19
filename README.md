@@ -53,11 +53,10 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 <details>
   <summary>Sahara Tijol  <a href="https://github.com/saharatijol" target="_blank">GitHub</a></summary>
   
-  1.   
-  2. 
-  3. 
-  4. 
-  5. 
+  1. Integration of Spoonacular API through AJAX requests  
+  2. Implement fetching data from Spoonacular API from front-end then transfer that data to our back-end.
+  3. Implemented search functionality using a single search input form that retrieves results from 2 sources.
+  4. Styled recipes/index view using CSS, JQuery and Bootstrap 
 </details>
 
 <details>
