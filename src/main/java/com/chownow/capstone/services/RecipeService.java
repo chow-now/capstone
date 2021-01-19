@@ -88,7 +88,7 @@ public class RecipeService {
         /** Create a recipe entity object to be saved **/
         Recipe recipeEntity = new Recipe();
         recipeEntity.setCookTime(Integer.parseInt(cookTime));
-        recipeEntity.setDescription(recipe.getSummary());
+        recipeEntity.setDescription(recipe.getSummary().replaceAll("<[^>]*>", ""));
         recipeEntity.setSpoonApiId(recipe.getSpoonApiId());
         recipeEntity.setDifficulty("N/A");
         recipeEntity.setPublished(true);

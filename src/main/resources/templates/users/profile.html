@@ -62,28 +62,28 @@
           <li class="nav-item col-4 col-md-2 px-0" id="userRecipes" title="Recipes">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#recipesTab" data-toggle="tab">
               <i class="fas fa-utensils fa-2x"></i>
-              <p class="text-black-50 mb-0 small">recipes</p>
+              <p class="text-white mb-0 small">recipes</p>
             </a>
           </li>
           <!--        favorites-->
           <li class="nav-item col-4 col-md-2 px-0" id="userFavorites" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#favoritesTab" data-toggle="tab">
               <i class="fas fa-bookmark fa-2x"></i>
-              <p class="text-black-50 mb-0 small">favorites</p>
+              <p class="text-white mb-0 small">favorites</p>
             </a>
           </li>
           <!--        followers-->
           <li class="nav-item col-4 col-md-2 px-0" id="userFollowers" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#followersTab" data-toggle="tab">
               <i class="fas fa-users fa-2x"></i>
-              <p class="text-black-50 mb-0 small">followers</p>
+              <p class="text-white mb-0 small">followers</p>
             </a>
           </li>
           <!--        following-->
           <li class="nav-item col-4 col-md-2 px-0" id="userFollowing">
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#followingTab" data-toggle="tab">
               <i class="fas fa-user-plus fa-2x"></i>
-              <p class="text-black-50 mb-0 small">following</p>
+              <p class="text-white mb-0 small">following</p>
             </a>
           </li>
           <!--            PROFILE OWNER ONLY TABS-->
@@ -91,7 +91,7 @@
           <li sec:authorize="isAuthenticated()" th:if="${isOwner}" class="nav-item col-4 col-md-2 px-0" id="userPantry" >
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#pantryTab" data-toggle="tab">
               <i class="fas fa-lemon"></i><i class="fas fa-apple-alt fa-2x"></i><i class="fas fa-carrot"></i>
-              <p class="text-black-50 mb-0 small">pantry</p>
+              <p class="text-white mb-0 small">pantry</p>
             </a>
           </li>
           <!--        suggested recipes based on pantry-->
@@ -99,7 +99,7 @@
             <a class="nav-link dashtab nav-tab-shadow text-center" href="#suggestionsTab" data-toggle="tab">
               <i class="fas fa-drumstick-bite fa-2x"></i>
               <span id="notification" th:data-internalId="${user.suggestedCount}" th:text="${notificationCount > user.suggestedCount ? notificationCount - user.suggestedCount : ''}" class="badge badge-danger rounded-pill" ></span>
-              <p class="text-black-50 mb-0 small">suggestions</p>
+              <p class="text-white mb-0 small">suggestions</p>
             </a>
           </li>
         </ul>

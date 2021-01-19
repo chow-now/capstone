@@ -147,6 +147,9 @@ body{
     .fas{
         font-size: 1rem;
     }
+    .btn-w-50{
+        width: 50% !important;
+    }
 }
 
 @media only screen and (min-width: 1101px) {
