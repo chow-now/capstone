@@ -9,7 +9,7 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 
 ## Table of Contents
 1. [Demo](https://github.com/chow-now/capstone#demo)
-2. [Technologies Applied](https://github.com/chow-now/capstone#libraries-and-utilities-applied)
+2. [Technologies Applied](https://github.com/chow-now/capstone#technologies)
 3. [Setup Instruction](https://github.com/chow-now/capstone#setup-instruction)
 4. [Contribution](https://github.com/chow-now/capstone#contribution)
 ### Demo
@@ -40,15 +40,6 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 
 ### Contribution
 **This list is in alphabetical order**
-<details>
-  <summary>Sahara Tijol  <a href="https://github.com/saharatijol" target="_blank">GitHub</a></summary>
-  
-  1.   
-  2. 
-  3. 
-  4. 
-  5. 
-</details>
 
 <details>
   <summary>Michael Klanica <a href="https://github.com/michaelklanica" target="_blank">GitHub</a></summary>
@@ -57,6 +48,16 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
   2. 
   3. 
   4. 
+</details>
+
+<details>
+  <summary>Sahara Tijol  <a href="https://github.com/saharatijol" target="_blank">GitHub</a></summary>
+  
+  1.   
+  2. 
+  3. 
+  4. 
+  5. 
 </details>
 
 <details>

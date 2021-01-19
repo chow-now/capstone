@@ -5,15 +5,12 @@
     <title>Results</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
-    <title>Dashboard</title>
     <link th:href="@{/img/favicon.png}" rel="shortcut icon" type="image/x-icon">
     <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <!--  CUSTOM PROFILE CSS -->
+    <!--  CUSTOM CSS -->
     <link rel="stylesheet" th:href="@{/css/recipe.css}">
 </head>
 <body style="background-color: #03b090">
@@ -21,14 +18,17 @@
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
 <div class="form-outline">
-    <form class="w-50 my-5 mx-auto" th:action="@{/recipes}" method="get">
-        <input type="text" class="form-control" id="main_search"
+    <form class="w-50 my-5 mx-auto d-flex" th:action="@{/recipes}" method="get">
+        <input type="text" class="form-control rounded-pill px-3" id="main_search"
                placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term" th:value="${term}">
+        <button type="submit" id="recipePublish"
+                class="btn btn-red rounded-pill nav-link shadow-sm px-3 ml-2">
+            Search
+        </button>
     </form>
-<!--    <h1 th:text="${recipeResultsDB.size()}"></h1>-->
 </div>
 
-        <!-- Results Toggle -->
+<!-- Results Toggle -->
 <div class="container">
     <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
         <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
@@ -44,25 +44,37 @@
     </ul>
 </div>
 
-
     <!-- Error Alert-->
 <!--    <span th:if= "${message != null}" th:text="${message}"></span>-->
 
-
     <!-- Display all recipes from DB -->
     <div class="container" id="recipesDB">
-        <div class="all-recipes my-2 row row-cols-1 row-cols-md-4 g-5">
+        <div class="all-recipes my-2 row row-cols-1 row-cols-md-3 g-5">
         <div class="my-2" th:each="recipe : ${recipeResultsDB}">
             <div class="col my-2">
-                <div class="card my-2 h-100">
+                <div class="card shadow my-2">
                     <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>
-                    <h4 class="card-title m-2"><span th:text="${recipe.title}"></span></h4>
+                    <h4 class="card-title m-2 truncate"><span th:text="${recipe.title}"></span></h4>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="btn-sm btn-yellow rounded-pill m-2"><span th:text="${recipe.difficulty}"></span></div>
+                    </div>
                     <div class="card-body">
-                        <div>
-                            <h6 class="mb3"><span th:text="${recipe.difficulty}"></span></h6>
+                        <div class="row align-items-baseline">
+                            <div class="col-2">
+                                <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                                    <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <p th:text="${recipe.chef.firstName}"></p>
+                            </div>
+                            <div class="col-3">
+                                <div class="rounded-pill border text-center" style="width: 75px">
+                                    <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="mb-2" style="height:200px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        <div class="mb-2" style="height:100px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                             <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
                         </div>
 
@@ -72,64 +84,6 @@
             </div>
         </div>
     </div>
-        <!--      Modal that will hold recipe details       -->
-        <div class="modal fade" th:each="modalRecipeDB : ${recipeResultsDB}" th:id="${'viewDBRecipeModal' + modalRecipeDB.id}" tabindex="-1" role="dialog"
-             aria-labelledby="recipeModalLongTitle" aria-hidden="true" >
-
-            <div class="modal-dialog modal-lg" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1>Test</h1>
-                        <!--                    <div sec:authorize="isAuthenticated()">-->
-                        <!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
-                        <!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
-                        <!--                                id="recipeModalLongTitle"-->
-                        <!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
-                        <!--                        </a>-->
-                        <!--                    </div>-->
-                        <!--                    <div sec:authorize="isAnonymous()">-->
-                        <!--                        <a th:href="@{|/profile/${recipe.user.id}|}"><h5-->
-                        <!--                                class="modal-title text-center profileFromRecipeAnchorTags"-->
-                        <!--                                id="recipeModalLongTitle"-->
-                        <!--                                th:text="${recipe.title + ' | Posted by: ' + recipe.user.username}"></h5>-->
-                        <!--                        </a>-->
-                        <!--                    </div>-->
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-image mx-auto">
-                        <!--    Image for recipe    -->
-                        <!--                    <img class="profileFromRecipeModuleImage img-fluid" th:attr="src=@{${recipe.recipeImageUrl}}"-->
-                        <!--                         alt="Recipe image">-->
-                    </div>
-                    <div class="modal-body">
-                        <!--    Display the recipes cuisines    -->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Category</h5>
-                        <ul class="modal-cuisine d-flex p-0">
-                            <!--                        <div th:each="category : ${recipe.categories}">-->
-                            <!--                            <li class="mr-2" th:text="${category.name}"></li>-->
-                            <!--                        </div>-->
-                        </ul>
-                        <!--      Display Ingredients title         -->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Ingredients</h5>
-                        <!--    List displaying the ingredients    -->
-                        <ul class="ingredient-list-group p-0">
-                            <!--      Ingredients will display here dynamically      -->
-                            <!--                        <div th:each="ingredient : ${recipe.ingredients}">-->
-                            <!--                            <li class="list-group-item mt-1 mb-1" th:text="${ingredient.name}"></li>-->
-                            <!--                        </div>-->
-                        </ul>
-                        <!--      Display Instructions-->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Directions</h5>
-                        <!--      Instructions will display here dynamically      -->
-                        <!--                    <div class="list-group-item mt-1 mb-1" th:text="${recipe.directions}"></div>-->
-                        <h5 class="modal-instructions-title profileFromRecipeText">Comments</h5>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
@@ -142,42 +96,52 @@
             <div class="modal-dialog modal-lg">
                 <form th:action="@{/recipes}" th:object="${recipe}" method="post">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="recipe-title" id="exampleModalLabel">Modal title</h5>
+                        <div class="modal-header text-center">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
                         </div>
 
-                            <!-- Display Image -->
-                            <div class="recipe-image mx-auto"></div>
+                        <!-- Display header -->
+                        <div class="recipe-title-header container"></div>
+                        <!-- Display Image -->
+                        <div class="recipe-image mx-auto mt-1"></div>
 
                         <div class="modal-body">
-                            <!-- Display Prep Time -->
-                            <h4>Prep Time</h4>
-                            <div class="recipe-prep"></div>
+                            <div class="container">
+                                <!-- Display summary -->
+                                <div class="container">
+                                    <div class="w-100 btn btn-green rounded-pill mb-2">Summary</div>
+                                    <div class="recipe-summary"></div>
+                                    <div class="recipe-prep"></div>
+                                </div>
 
-                            <!-- Display Cook Time -->
-                            <h4>Cook Time</h4>
-                            <div class="recipe-cook"></div>
+                                <!-- Display current servings -->
+                                <div class="container my-1">
+                                    <h4>Servings</h4>
+                                    <div class="recipe-servings"></div>
+                                </div>
+                                <!-- Display Ingredients -->
+                                <div class="container">
+                                    <div class="w-100 btn btn-green rounded-pill mb-2">Ingredients List</div>
+                                    <div class="container">
+                                        <ul class="recipe-ingredients"></ul>
+                                    </div>
+                                </div>
 
-                            <!-- Display summary -->
-                            <h4>Summary</h4>
-                            <div class="recipe-summary"></div>
-
-                            <!-- Display Categories by cuisines: im planning to change this into pills for future -->
-                            <h4>Categories</h4>
-                            <ul class="recipe-categories"></ul>
-
-                            <!-- Display current servings -->
-                            <h4>Servings</h4>
-                            <div class="recipe-servings"></div>
-
-                            <!-- Display Ingredients -->
-                            <h4>Ingredients</h4>
-                            <ul class="recipe-ingredients"></ul>
-
-                            <!-- Display Instructions -->
-                            <h4>Directions</h4>
-                            <ol class="recipe-directions"></ol>
+                                <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                                <div class="container">
+                                    <h4>Categories</h4>
+                                    <div class="container">
+                                        <ul class="recipe-categories d-flex justify-content-start align-items-center"></ul>
+                                    </div>
+                                </div>
+                                <!-- Display Instructions -->
+                                    <div class="container">
+                                        <div class="w-100 btn btn-green rounded-pill mb-2">Directions</div>
+                                        <div class="container">
+                                            <ol class="recipe-directions"></ol>
+                                        </div>
+                                    </div>
+                            </div>
                         </div>
 
                         <div class="modal-footer">
@@ -185,6 +149,7 @@
                             <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
                         </div>
                     </div>
+
             <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
             <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
             <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
@@ -207,20 +172,20 @@
     const spoonApi = document.querySelector('meta.spoonApi').content;
 
     if (document.getElementById('main_search') == null) {
-        console.log("yo, it's null");
+        //console.log("yo, it's null");
     } else {
         let searchString;
         let urlSearchString = window.location.href;
         let url = new URL(urlSearchString);
         let searchParam = url.searchParams.get("term");
         searchString = searchParam.replace(/,|,\s/g, ",+");
-        console.log("url string" + searchString);
+        //console.log("url string" + searchString);
 
         $.ajax({
             type: 'GET',
-            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=10&apiKey=${spoonApi}`,
+            url: `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchString}&number=25&apiKey=${spoonApi}`,
             success: function (results) {
-                console.log(results);
+
                 let recipe = "";
 
                 recipe += `<div class="col-md-12">
@@ -235,19 +200,18 @@
                         type: 'GET',
                         url: `https://api.spoonacular.com/recipes/${recipe.id}/information?apiKey=${spoonApi}&includeNutrition=false`,
                         success: function (singleRecipe) {
-                            console.log(singleRecipe);
+                            //console.log(singleRecipe);
 
                             $('.recipes1').append(
                                 `<div class="col my-3">
-                                    <div class="spoonResultsCard card my-2">
+                                    <div class="spoonResultsCard card shadow my-2">
                                         <img class="card-img-top" src=${singleRecipe.image} alt="unavailable"/>
-                                        <h4 class="card-title m-2" style="font-weight: bold">${singleRecipe.title}</h4>
+                                        <h4 class="card-title m-2 truncate" style="font-weight: bold">${singleRecipe.title}</h4>
                                     <div class="card-body">
                                         <div>
                                             <h6 class="mb-3">${recipe.usedIngredientCount}/${recipe.usedIngredientCount + recipe.missedIngredientCount} ingredients</h6>
                                         </div>
-
-                                    <div class="mb-2" style="height:200px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <div class="mb-2" style="height:100px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
                                         <p style="line-height: 20px;">${singleRecipe.summary}</p>
                                     </div>
 
@@ -263,8 +227,6 @@
 
                                 $.ajax(`https://api.spoonacular.com/recipes/${this.id}/information?includeNutrition=false&apiKey=${spoonApi}`)
                                     .done(function (modalRecipe) {
-                                        console.log(modalRecipe)
-                                        console.log(modalRecipe.title)
 
                                         // Recipe Information
                                         let image = "";
@@ -274,8 +236,8 @@
                                         let instructions = "";
                                         let category = "";
                                         let prepTime = "";
-                                        let cookTime = "";
                                         let servings = "";
+                                        let ingCook = "";
 
                                         let hiddenTitle = modalRecipe.title + ' by ' + modalRecipe.sourceName;
                                         let hiddenSpoonApiId = modalRecipe.id;
@@ -290,12 +252,32 @@
 
                                         image += `<img class="img-fluid" src=${modalRecipe.image} alt="" />`;
 
-                                        // a hrefs are not working with template literals
-                                        title += modalRecipe.title + ' by ' + '<a href="' + modalRecipe.sourceUrl + '">' + modalRecipe.sourceName + '</a>';
+                                        ingCook += `<div class="recipe-header mt-3">
+                                                        <p class="text-center my-0">${modalRecipe.extendedIngredients.length} ingredients<span> &#183 </span> ${modalRecipe.readyInMinutes} min</p>
+                                                    <h3 class="text-center mt-0 mb-3" id="exampleModalLabel">${modalRecipe.title}</h3> </div>`
 
-                                        prepTime += `<p>${modalRecipe.preparationMinutes} mins</p>`;
+                                        title += modalRecipe.title;
 
-                                        cookTime += `<p>${modalRecipe.cookingMinutes} mins</p>`;
+                                        prepTime += `<div class="container">
+                                                        <div id="infoSection" class="row text-center mx-auto">
+                                                            <div class="col-6">
+                                                                <div class="card rounded-card" style="height: 7em;">
+                                                                <div class="card-body">
+                                                                    <h5  class="text-dark font-weight-bold">${modalRecipe.preparationMinutes} MINS</h5>
+                                                                    <div class="smallFont" style="font-family: corsa" >prep time</div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="card rounded-card" style="height: 7em;">
+                                                                <div class="card-body">
+                                                                    <h5 class="text-dark font-weight-bold">${modalRecipe.cookingMinutes} MINS</h5>
+                                                                    <div class="smallFont" style="font-family: corsa" >cook time</div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                        </div>`;
 
                                         servings += `<p>${modalRecipe.servings} servings</p>`
 
@@ -308,7 +290,7 @@
                                             hiddenCategories = 'Unknown category';
                                         } else {
                                             for (let i = 0; i < modalRecipe.cuisines.length; i++) {
-                                                category += `<li class="list-group">${modalRecipe.cuisines[i]}</li>`;
+                                                category += `<li class="btn btn-yellow rounded-pill m-2 text-center">${modalRecipe.cuisines[i]}</li>`;
 
                                                 hiddenCategories += modalRecipe.cuisines[i] + '##'
                                             }
@@ -320,7 +302,7 @@
                                             hiddenIngredients = 'No ingredients recorded';
                                         } else {
                                             for (let i = 0; i < modalRecipe.extendedIngredients.length; i++) {
-                                                ingredients += `<li>${modalRecipe.extendedIngredients[i].amount}
+                                                ingredients += `<li class="ml-3">${modalRecipe.extendedIngredients[i].amount}
                                                                     ${modalRecipe.extendedIngredients[i].unit}
                                                                     ${modalRecipe.extendedIngredients[i].originalName}
                                                                 </li>`;
@@ -349,10 +331,10 @@
                                         }
 
                                         // Display to modal
+                                        $('.recipe-title-header').html(ingCook);
                                         $('.recipe-title').html(title);
                                         $('.recipe-image').html(image);
                                         $('.recipe-prep').html(prepTime);
-                                        $('.recipe-cook').html(cookTime);
                                         $('.recipe-servings').html(servings);
                                         $('.recipe-summary').html(summary);
                                         $('.recipe-categories').html(category);
@@ -374,12 +356,11 @@
                             })
                         },
                         complete: function () {
-                            console.log("FINISHED");
                             $('.spinner-grow').hide();
                             $('.spinner-grow').addClass('d-none');
                             setTimeout(function() {
                                 let spoonCard = document.getElementsByClassName('spoonResultsCard');
-                                console.log(spoonCard.length);
+                                //console.log(spoonCard.length);
                             }, 1000)
                         }
                     })
@@ -390,17 +371,17 @@
 
         // button to show community results
         $("#communityDBTab").click(function () {
-            if($("#recipesDB").hasClass("d-none")){// if the draft div is hidden
-                $("#recipesDB").removeClass("d-none"); // div where drafts are
-                $("#recipeSpoonApi").addClass("d-none");// div where published are
+            if($("#recipesDB").hasClass("d-none")){
+                $("#recipesDB").removeClass("d-none");
+                $("#recipeSpoonApi").addClass("d-none");
             }
         });
 
         // button to show API results
         $("#recipeApiTab").click(function () {
-            if($("#recipeSpoonApi").hasClass("d-none")){ // if the published div is hidden
-                $("#recipesDB").addClass("d-none");// hide the drafts div
-                $("#recipeSpoonApi").removeClass("d-none");// show the published div
+            if($("#recipeSpoonApi").hasClass("d-none")){
+                $("#recipesDB").addClass("d-none");
+                $("#recipeSpoonApi").removeClass("d-none");
             }
         });
 
