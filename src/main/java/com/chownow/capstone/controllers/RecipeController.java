@@ -102,7 +102,10 @@ public class RecipeController {
 
     /** Save Spoonacular API - Favorites **/
     @PostMapping("/recipes")
-    public String saveRecipes(@ModelAttribute SpoonApiDto recipe){
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe, Model viewModel){
+
+        String saveRecipe = recipeService.saveRecipe(recipe);
+
         User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getById(user1.getId());
         Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
