@@ -3,12 +3,12 @@ package com.chownow.capstone.controllers;
 import com.chownow.capstone.models.*;
 import com.chownow.capstone.repos.*;
 
-
 import com.chownow.capstone.services.RecipeService;
 import com.chownow.capstone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import com.chownow.capstone.services.AmazonService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -102,13 +102,20 @@ public class RecipeController {
 
     /** Save Spoonacular API - Favorites **/
     @PostMapping("/recipes")
-    public String saveRecipes(@ModelAttribute SpoonApiDto recipe,
-                              Model viewModel){
+    public String saveRecipes(@ModelAttribute SpoonApiDto recipe){
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDao.getById(user1.getId());
+        Optional<Recipe> existingRecipeEntity = recipeDao.findBySpoonApiId(recipe.getSpoonApiId());
+        if (existingRecipeEntity.isPresent()) {
+            Recipe isExisting = existingRecipeEntity.get();
+            Favorite existingRecipeChef = favDao.findByUserAndAndRecipe(user, isExisting);
 
-        String message = recipeService.saveRecipe(recipe);
-
-        // For testing/indicator
-        //viewModel.addAttribute("message", message);
+            if (existingRecipeChef != null) {
+                return "redirect:/recipes/" + isExisting.getId();
+            }
+            favDao.save(new Favorite(user, isExisting));
+            return "redirect:/recipes/" + isExisting.getId();
+        }
         return "redirect:/dashboard";
     }
 

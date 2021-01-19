@@ -46,7 +46,6 @@ public class RecipeService {
         // Hard-coded for now
         User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userDao.getById(user1.getId());
-        //User currentUser = userServ.loggedInUser();
         String cookTime;
         String prepTime;
         String servings;
