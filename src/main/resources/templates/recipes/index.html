@@ -17,153 +17,161 @@
 <header>
     <nav th:replace="partials/navbar.html :: nav"></nav>
 </header>
-<div class="form-outline">
-    <form class="w-50 my-5 mx-auto d-flex" th:action="@{/recipes}" method="get">
-        <input type="text" class="form-control rounded-pill px-3" id="main_search"
-               placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term" th:value="${term}">
-        <button type="submit" id="recipePublish"
-                class="btn btn-red rounded-pill nav-link shadow-sm px-3 ml-2">
-            Search
-        </button>
-    </form>
-</div>
-
-<!-- Results Toggle -->
-<div class="container">
-    <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
-        <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
-            <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
-                <p class="text-black-50 mb-0">Community</p>
-            </a>
-        </li>
-        <li class="btn btn-yellow btn-sm mx-2" type="button" id="recipeApiTab">
-            <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
-                <p class="text-black-50 mb-0">Spoonacular</p>
-            </a>
-        </li>
-    </ul>
-</div>
-
-    <!-- Error Alert-->
-<!--    <span th:if= "${message != null}" th:text="${message}"></span>-->
-
-    <!-- Display all recipes from DB -->
-    <div class="container" id="recipesDB">
-        <div class="all-recipes my-2 row row-cols-1 row-cols-md-3 g-5">
-        <div class="my-2" th:each="recipe : ${recipeResultsDB}">
-            <div class="col my-2">
-                <div class="card shadow my-2">
-                    <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>
-                    <h4 class="card-title m-2 truncate"><span th:text="${recipe.title}"></span></h4>
-                    <div class="d-flex justify-content-start align-items-center">
-                        <div class="btn-sm btn-yellow rounded-pill m-2"><span th:text="${recipe.difficulty}"></span></div>
+<div class="pt-5">
+        <div class="form-outline container pt-md-5">
+            <form  th:action="@{/recipes}" th:method="GET">
+                <div class="row d-flex justify-content-center align-items-center ">
+                    <div class="col-12 col-md-2"></div>
+                    <div class="col-12 col-md-8 mb-2 mb-md-5 mb-sm-2 d-flex justify-content-center align-items-center align-items-md-end">
+                        <input type="text" class="form-control rounded-pill" id="main_search"
+                               placeholder="Enter ingredients ex. tomato, lettuce, apple" name="term" th:value="${term}">
                     </div>
-                    <div class="card-body">
-                        <div class="row align-items-baseline">
-                            <div class="col-2">
-                                <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
-                                    <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <p th:text="${recipe.chef.firstName}"></p>
-                            </div>
-                            <div class="col-3">
-                                <div class="rounded-pill border text-center" style="width: 75px">
-                                    <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-2" style="height:100px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
-                        </div>
+                    <div class="col-12 col-md-2 mb-4 mb-md-5 d-flex justify-content-center justify-content-md-start align-items-center px-md-0">
+                        <button type="submit" id="recipePublish" class=" btn-w-50 btn btn-red rounded-pill nav-link shadow-sm ">
+                            Search
+                        </button>
+                    </div>
 
-                        <a th:href="@{/recipes/{id}(id=${ recipe.id })}" class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe">More info</a>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Results Toggle -->
+        <div class="container">
+            <ul class="row d-flex justify-content-center align-items-center btn-group-sm btn-group-toggle" data-toggle="buttons">
+                <li class="btn btn-yellow btn-sm active mx-2" type="button" id="communityDBTab">
+                    <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
+                        <p class="text-black-50 mb-0">Community</p>
+                    </a>
+                </li>
+                <li class="btn btn-yellow btn-sm mx-2" type="button" id="recipeApiTab">
+                    <a class="nav-link resultsTab nav-tab-shadow text-center" href="" data-toggle="tab">
+                        <p class="text-black-50 mb-0">Spoonacular</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Error Alert-->
+        <!--    <span th:if= "${message != null}" th:text="${message}"></span>-->
+        <!-- Display all recipes from DB -->
+        <div class="container" id="recipesDB">
+            <div class="all-recipes my-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
+                <div class="my-2" th:each="recipe : ${recipeResultsDB}">
+                    <div class="col my-2">
+                        <div class="card shadow my-2">
+                            <img class="card-img-top" th:if= "${recipe.getImages().size() >= 1}" th:src="${recipe.getImages()[0].getUrl()}" alt="unavailable"/>
+                            <h4 class="card-title m-2 truncate"><span th:text="${recipe.title}"></span></h4>
+                            <div class="d-flex justify-content-start align-items-center">
+                                <div class="btn-sm btn-yellow rounded-pill m-2"><span th:text="${recipe.difficulty}"></span></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-baseline">
+                                    <div class="col-2">
+                                        <a th:href="@{/users/{id}(id=${recipe.chef.id})}">
+                                            <img th:src="${recipe.chef.avatar}" class="rounded-circle" style="width: 40px;height: 40px">
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <p th:text="${recipe.chef.firstName}"></p>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="rounded-pill border text-center" style="width: 75px">
+                                            <i class="far fa-heart"></i> <span th:text="${recipe.favoritedBy.size()}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-2" style="height:100px; display: -webkit-box; max-width: 300px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <p style="line-height: 20px;"><span th:text="${recipe.description}"></span></p>
+                                </div>
+
+                                <a th:href="@{/recipes/{id}(id=${ recipe.id })}" class="btn btn-red text-center rounded-pill nav-link shadow px-2 viewDBRecipe">More info</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
-    </div>
 
-    </div>
+        <!-- // Results from SpoonAPI-->
+        <!--- Modal to display recipe information --->
+        <div class="container d-none" id="recipeSpoonApi">
+            <div class="recipes1 my-2 row row-cols-1 row-cols-md-3 g-5"></div>
+            <div class="modal fade" id="viewRecipeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form th:action="@{/recipes}" th:object="${recipe}" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                            </div>
 
+                            <!-- Display header -->
+                            <div class="recipe-title-header container"></div>
+                            <!-- Display Image -->
+                            <div class="recipe-image mx-auto mt-1"></div>
 
-<!-- // Results from SpoonAPI-->
-<!--- Modal to display recipe information --->
-<div class="container d-none" id="recipeSpoonApi">
-    <div class="recipes1 my-2 row row-cols-1 row-cols-md-3 g-5"></div>
-        <div class="modal fade" id="viewRecipeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <form th:action="@{/recipes}" th:object="${recipe}" method="post">
-                    <div class="modal-content">
-                        <div class="modal-header text-center">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
-                        </div>
-
-                        <!-- Display header -->
-                        <div class="recipe-title-header container"></div>
-                        <!-- Display Image -->
-                        <div class="recipe-image mx-auto mt-1"></div>
-
-                        <div class="modal-body">
-                            <div class="container">
-                                <!-- Display summary -->
+                            <div class="modal-body">
                                 <div class="container">
-                                    <div class="w-100 btn btn-green rounded-pill mb-2">Summary</div>
-                                    <div class="recipe-summary"></div>
-                                    <div class="recipe-prep"></div>
-                                </div>
-
-                                <!-- Display current servings -->
-                                <div class="container my-1">
-                                    <h4>Servings</h4>
-                                    <div class="recipe-servings"></div>
-                                </div>
-                                <!-- Display Ingredients -->
-                                <div class="container">
-                                    <div class="w-100 btn btn-green rounded-pill mb-2">Ingredients List</div>
+                                    <!-- Display summary -->
                                     <div class="container">
-                                        <ul class="recipe-ingredients"></ul>
+                                        <div class="w-100 btn btn-green rounded-pill mb-2">Summary</div>
+                                        <div class="recipe-summary"></div>
+                                        <div class="recipe-prep"></div>
                                     </div>
-                                </div>
 
-                                <!-- Display Categories by cuisines: im planning to change this into pills for future -->
-                                <div class="container">
-                                    <h4>Categories</h4>
-                                    <div class="container">
-                                        <ul class="recipe-categories d-flex justify-content-start align-items-center"></ul>
+                                    <!-- Display current servings -->
+                                    <div class="container my-1">
+                                        <h4>Servings</h4>
+                                        <div class="recipe-servings"></div>
                                     </div>
-                                </div>
-                                <!-- Display Instructions -->
+                                    <!-- Display Ingredients -->
+                                    <div class="container">
+                                        <div class="w-100 btn btn-green rounded-pill mb-2">Ingredients List</div>
+                                        <div class="container">
+                                            <ul class="recipe-ingredients"></ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Display Categories by cuisines: im planning to change this into pills for future -->
+                                    <div class="container">
+                                        <h4>Categories</h4>
+                                        <div class="container">
+                                            <ul class="recipe-categories d-flex justify-content-start align-items-center"></ul>
+                                        </div>
+                                    </div>
+                                    <!-- Display Instructions -->
                                     <div class="container">
                                         <div class="w-100 btn btn-green rounded-pill mb-2">Directions</div>
                                         <div class="container">
                                             <ol class="recipe-directions"></ol>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
                             </div>
                         </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-yellow" sec:authorize="isAuthenticated()">Add to favorites</button>
-                        </div>
-                    </div>
-
-            <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
-            <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
-            <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
-            <input type="hidden" id="hidden-recipe-prep" th:name="prep" value=""/>
-            <input type="hidden" id="hidden-recipe-cook" th:name="cook" value=""/>
-            <input type="hidden" id="hidden-recipe-servings" th:name="servings" value=""/>
-            <input type="hidden" id="hidden-recipe-summary" th:name="summary" value=""/>
-            <input type="hidden" id="hidden-recipe-categories" th:name="categories" value=""/>
-            <input type="hidden" id="hidden-recipe-ingredients" th:name="ingredients" value=""/>
-            <input type="hidden" id="hidden-recipe-directions" th:name="directions" value=""/>
-        </form>
+                        <input type="hidden" id="hidden-spoonApi-id" th:name="spoonApiId" value=""/>
+                        <input type="hidden" id="hidden-recipe-title" th:name="title" value=""/>
+                        <input type="hidden" id="hidden-recipe-image" th:name="image" value=""/>
+                        <input type="hidden" id="hidden-recipe-prep" th:name="prep" value=""/>
+                        <input type="hidden" id="hidden-recipe-cook" th:name="cook" value=""/>
+                        <input type="hidden" id="hidden-recipe-servings" th:name="servings" value=""/>
+                        <input type="hidden" id="hidden-recipe-summary" th:name="summary" value=""/>
+                        <input type="hidden" id="hidden-recipe-categories" th:name="categories" value=""/>
+                        <input type="hidden" id="hidden-recipe-ingredients" th:name="ingredients" value=""/>
+                        <input type="hidden" id="hidden-recipe-directions" th:name="directions" value=""/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-</div>
 
 <th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:inline="javascript">
@@ -178,7 +186,9 @@
         let urlSearchString = window.location.href;
         let url = new URL(urlSearchString);
         let searchParam = url.searchParams.get("term");
-        searchString = searchParam.replace(/,|,\s/g, ",+");
+        if(searchParam != null){
+            searchString = searchParam.replace(/,|,\s/g, ",+");
+        }
         //console.log("url string" + searchString);
 
         $.ajax({
@@ -387,7 +397,6 @@
 
     }
 </script>
-<th:block th:include="partials/scripts :: scripts"></th:block>
 <script th:src="@{/js/fraction_converter.js}"></script>
 </body>
 </html>
