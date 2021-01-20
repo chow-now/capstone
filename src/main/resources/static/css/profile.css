@@ -214,6 +214,15 @@ table{
     .fas{
         font-size: 1rem;
     }
+    .recipe-card{
+        width: 100vw!important;
+    }
+}
+@media only screen and (min-width: 501px) and (max-width: 767px) {
+
+    .recipe-card{
+        width: 30rem!important;
+    }
 }
 
 @media only screen and (min-width: 1101px) {
@@ -222,6 +231,7 @@ table{
         height: 10vw;
         object-fit: cover;
     }
+    
 }
 @media only screen and (max-width: 1100px) {
     .card-img-top {
@@ -230,15 +240,8 @@ table{
         object-fit: cover;
     }
 }
-@media only screen and (max-width: 547px) {
-    .recipe-card {
-        width: 100vh !important;
-    }
-}
 @media only screen and (max-width: 767px) {
-    .recipe-card{
-        width: auto!important;
-    }
+
     .card-img-top {
         width: 100%;
         height: 43vw;
