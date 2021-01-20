@@ -44,10 +44,10 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 <details>
   <summary>Michael Klanica <a href="https://github.com/michaelklanica" target="_blank">GitHub</a></summary>
 
-  1.  
-  2. 
-  3. 
-  4. 
+  1. Implementation of dynamic form using Thymeleaf.
+  2. Integration of AWS S3 for storing images. 
+  3. Styling form using CSS and Bootstrap.
+  4. Accessing database info using Ajax requests.
 </details>
 
 <details>
