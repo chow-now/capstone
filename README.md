@@ -37,7 +37,7 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 1. Make sure to start a MySQL server.
 1. This project requires an AWS S3 Bucket and access keys
 1. This project requires Spoon API access key
-1. THis project requires Google Oauth 2 setup and client keys
+1. This project requires Google Oauth 2 setup and client keys
 1. Add any API keys needed to test the full functionality. Use the `application.properties.example` as a template.
 1. Seed file will run on initial startup to populate data in the database.
 
