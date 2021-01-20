@@ -4,7 +4,7 @@
 <b></b>
 <b></b>
 <p align="center"> 
-ChowNow is a full-stack Java application, built on the Spring Boot framework. This web seeks to create a community of users who can easily create, share, find and save recipes based on the ingredients in their virtual pantries.
+ChowNow is a full-stack Java application, built on the Spring Boot framework. This web app seeks to create a community of users who can easily create, share, find and save recipes based on the ingredients in their virtual pantries.
 </p>
 
 ## Table of Contents
