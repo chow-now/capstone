@@ -66,6 +66,6 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
   2. Integration of AWS S3 for remote file storage
   3. Implementation and setup for Oauth2 with Google 
   4. UX/UI design using JS, CSS, JQuery, and Bootstrap libraries
-  5. Creation and admin dashboard
+  5. Creation and admin dashboard with DataTables plugin
 </details>
  
