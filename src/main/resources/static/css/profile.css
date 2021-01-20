@@ -230,9 +230,14 @@ table{
         object-fit: cover;
     }
 }
+@media only screen and (max-width: 547px) {
+    .recipe-card {
+        width: 100vh !important;
+    }
+}
 @media only screen and (max-width: 767px) {
     .recipe-card{
-        width: 100vw!important;
+        width: auto!important;
     }
     .card-img-top {
         width: 100%;
