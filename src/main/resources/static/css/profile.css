@@ -232,7 +232,7 @@ table{
 }
 @media only screen and (max-width: 767px) {
     .recipe-card{
-        width: 100%!important;
+        width: 100vw!important;
     }
     .card-img-top {
         width: 100%;
