@@ -16,7 +16,6 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 [ChowNow.xyz](https://www.chownow.xyz)
 
 ![chownow-demo](https://user-images.githubusercontent.com/40813295/105200128-1e861580-5b05-11eb-9dda-1f61da491904.gif)
-![CHOW 360](https://user-images.githubusercontent.com/40813295/105704661-c1a7a800-5ed4-11eb-90c6-51ff68b6606e.png)
 
                          
 ### Technologies
@@ -74,3 +73,4 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
   5. Creation and admin dashboard with DataTables plugin
 </details>
  
+![CHOW 360](https://user-images.githubusercontent.com/40813295/105704661-c1a7a800-5ed4-11eb-90c6-51ff68b6606e.png)
