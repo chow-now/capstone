@@ -15,8 +15,9 @@ ChowNow is a full-stack Java application, built on the Spring Boot framework. Th
 ### Demo
 [ChowNow.xyz](https://www.chownow.xyz)
 
-
 ![chownow-demo](https://user-images.githubusercontent.com/40813295/105200128-1e861580-5b05-11eb-9dda-1f61da491904.gif)
+![CHOW 360](https://user-images.githubusercontent.com/40813295/105704661-c1a7a800-5ed4-11eb-90c6-51ff68b6606e.png)
+
                          
 ### Technologies
 - Oauth2 [link](https://oauth.net/2/)
